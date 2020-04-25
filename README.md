@@ -1,7 +1,7 @@
 ![Github Action](https://github.com/duocun/duocun-mall/workflows/build/badge.svg)
 [![Node version](https://img.shields.io/badge/npm-v6.9.0-green)](http://nodejs.org/download/)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
-
+[![HitCount](http://hits.dwyl.com/duocun/duocun-mall.svg)](http://hits.dwyl.com/duocun/duocun-mall)
 # duocun-mall
 
 **duocun-mall** is a shopping mall frontend using [duocun-api](https://github.com/duocun/duocun-api) as its backend
