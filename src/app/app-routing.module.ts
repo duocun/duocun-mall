@@ -13,8 +13,11 @@ const routes: Routes = [
       import("./pages/cart/cart.module").then((m) => m.CartPageModule)
   },
   {
-    path: 'my-account',
-    loadChildren: () => import('./pages/my-account/my-account.module').then( m => m.MyAccountPageModule)
+    path: "my-account",
+    loadChildren: () =>
+      import("./pages/my-account/my-account.module").then(
+        (m) => m.MyAccountPageModule
+      )
   }
 ];
 @NgModule({

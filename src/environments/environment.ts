@@ -4,7 +4,10 @@
 
 export const environment = {
   production: false,
-  api: "https://localhost:8000"
+  api: "https://localhost:8000",
+  storageKey: {
+    auth: "DUOCUN-AUTH-TOKEN"
+  }
 };
 
 /*
