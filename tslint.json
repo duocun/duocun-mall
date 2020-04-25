@@ -83,6 +83,7 @@
       "app",
       "page",
       "kebab-case"
-    ]
+    ],
+    "prettier": true
   }
 }
