@@ -1,7 +1,8 @@
 {
   "name": "duocun-mall",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {},
+    "cordova": {}
   },
   "type": "angular"
 }
