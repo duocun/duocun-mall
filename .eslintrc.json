@@ -10,6 +10,7 @@
     "sourceType": "module"
   },
   "rules": {
+    "linebreak-style": 0,
     "@typescript-eslint/explicit-function-return-type": "off"
   }
 }
