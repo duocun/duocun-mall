@@ -1,0 +1,7 @@
+{
+  "name": "duocun-mall",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
