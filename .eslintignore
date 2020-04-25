@@ -1,0 +1,4 @@
+**/*.spec.js
+**/*.spec.ts
+**/*.test.js
+**/*.test.ts
