@@ -17,7 +17,18 @@
 git clone https://github.com/duocun/duocun-mall.git
 cd duocun-mall
 npm i
-ionic serve
+```
+
+## Serve
+
+```console
+npm run start
+```
+
+You can set a different port:
+
+```console
+ionic serve --port 5002
 ```
 
 ## Test
