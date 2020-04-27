@@ -61,6 +61,15 @@
   </ng-container>
 </ion-content>
 
+<ng-template #slidePlaceholder>
+  <ion-slides>
+    <ion-slide>
+      <ion-img src="assets/img/no-image.png" [alt]="product.name">
+      </ion-img>
+    </ion-slide>
+  </ion-slides>
+</ng-template>
+
 <ng-template #skeleton>
   <div class="wrapper-image-slide">
     <ion-slides>
