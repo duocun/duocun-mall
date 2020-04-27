@@ -35,5 +35,4 @@ export class ProductPage implements OnInit {
   getPictureUrl(product: ProductInterface, idx: number) {
     return getPictureUrl(product, idx);
   }
-
 }

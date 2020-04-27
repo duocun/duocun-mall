@@ -39,7 +39,9 @@ const routes: Routes = [
       {
         path: "",
         loadChildren: () =>
-          import("../merchant/merchant.module").then((m) => m.MerchantPageModule)
+          import("../merchant/merchant.module").then(
+            (m) => m.MerchantPageModule
+          )
       }
     ]
   },

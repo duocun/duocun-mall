@@ -50,7 +50,6 @@ export interface MerchantInterface {
   orderEndTime: string; // do not save to db
 }
 
-
 export function getPictureUrl(merchant: MerchantInterface) {
   if (merchant.pictures && merchant.pictures.length) {
     return environment.media + merchant.pictures[0].url;
