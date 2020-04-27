@@ -2,10 +2,22 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ApiService } from "src/app/services/api/api.service";
 import { ProductInterface, getPictureUrl } from "src/app/models/product.model";
-import { CartItemInterface } from "src/app/models/cart.model";
+import { CartItemInterface, CartInterface } from "src/app/models/cart.model";
 import { MerchantInterface } from "src/app/models/merchant.model";
 import { CartService } from "src/app/services/cart/cart.service";
+import { LocationService } from "src/app/services/location/location.service";
+import { LocationInterface } from "src/app/models/location.model";
+import * as moment from "moment";
+import { DeliveryService } from "src/app/services/delivery/delivery.service";
+import { DeliveryDateTimeInterface } from "src/app/models/delivery.model";
 
+const baseTimeList = ["11:00"];
+export const AppType = {
+  FOOD_DELIVERY: "F",
+  GROCERY: "G",
+  FRESH: "F",
+  TELECOM: "T"
+};
 @Component({
   selector: "app-product",
   templateUrl: "./product.page.html",
@@ -16,15 +28,26 @@ export class ProductPage implements OnInit {
   merchant: MerchantInterface;
   product: ProductInterface;
   item: CartItemInterface;
+  location: LocationInterface;
+  isInRange: boolean;
+  schedules: Array<DeliveryDateTimeInterface>;
+  deliveryIdx: number; // schedule index
   constructor(
     private route: ActivatedRoute,
     private api: ApiService,
-    private cart: CartService
+    private cartSvc: CartService,
+    private locationSvc: LocationService,
+    private deliverySvc: DeliveryService
   ) {
     this.loading = true;
+    this.isInRange = false;
+    this.deliveryIdx = -1;
   }
 
   ngOnInit() {
+    this.locationSvc.getLocation().subscribe((location: LocationInterface) => {
+      this.location = location;
+    });
     this.updateData();
   }
 
@@ -39,6 +62,7 @@ export class ProductPage implements OnInit {
               .geth("Restaurants/qFind", { _id: data.merchantId })
               .then((merchants: Array<MerchantInterface>) => {
                 this.merchant = merchants[0];
+                const orderEndList = this.merchant.rules.map((r) => r.orderEnd);
                 if (this.merchant) {
                   this.item = {
                     productId: this.product._id,
@@ -49,7 +73,28 @@ export class ProductPage implements OnInit {
                     cost: this.product.cost,
                     quantity: 1
                   };
-                  this.loading = false;
+                  this.api
+                    .geth("MerchantSchedules/availables", {
+                      merchantId: data.merchantId,
+                      location: this.location
+                    })
+                    .then((schedules: any[]) => {
+                      if (schedules && schedules.length > 0) {
+                        this.isInRange = true;
+                        const dows = schedules[0].rules.map(
+                          (r) => +r.deliver.dow
+                        );
+                        const bs = this.getBaseDateList(orderEndList, dows);
+                        this.schedules = this.getDeliverySchedule(
+                          this.merchant,
+                          bs,
+                          baseTimeList
+                        );
+                      } else {
+                        this.isInRange = false;
+                      }
+                      this.loading = false;
+                    });
                 }
               });
           } else {
@@ -67,11 +112,35 @@ export class ProductPage implements OnInit {
     this.item.quantity = event.value;
   }
 
+  handleSelectDeliveryDateTime(event) {
+    this.deliveryIdx = event.detail.value;
+  }
+
   getPictureUrl(product: ProductInterface, idx: number) {
     return getPictureUrl(product, idx);
   }
 
   addToCart() {
-    this.cart.addItem(this.item);
+    this.cartSvc.addItem(this.item);
+  }
+
+  getBaseDateList(orderEndList, deliverDowList) {
+    const myDateTime = moment().format("YYYY-MM-DDTHH:mm:ss") + ".000Z";
+
+    const bs = this.deliverySvc.getBaseDateList(
+      myDateTime,
+      orderEndList,
+      deliverDowList
+    );
+    return bs.map((b) => b.toISOString());
+  }
+
+  getDeliverySchedule(merchant, baseList, deliverTimeList) {
+    if (merchant.delivers) {
+      const myDateTime = moment.utc().format("YYYY-MM-DD HH:mm:ss");
+      return this.deliverySvc.getSpecialSchedule(myDateTime, merchant.delivers);
+    } else {
+      return this.deliverySvc.getDeliverySchedule(baseList, deliverTimeList);
+    }
   }
 }

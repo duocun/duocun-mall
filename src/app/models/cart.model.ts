@@ -1,3 +1,5 @@
+import { DeliveryDateTimeInterface } from "./delivery.model";
+
 export interface CartItemInterface {
   productId: string;
   productName: string; // product name
@@ -6,6 +8,7 @@ export interface CartItemInterface {
   price: number;
   cost: number;
   quantity: number;
+  delivery?: DeliveryDateTimeInterface;
 }
 
 export interface CartInterface {

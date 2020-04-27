@@ -44,7 +44,7 @@ export interface MerchantInterface {
   pictures?: any[];
   address?: any;
   onSchedule?: boolean;
-
+  rules?: any[];
   phases: PhaseInterface[];
   orderEnded: boolean; // do not save to db
   orderEndTime: string; // do not save to db

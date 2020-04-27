@@ -14,3 +14,11 @@
     font-size: 1.25rem;
   }
 }
+.item-delivery {
+  ion-label {
+    min-width: 35%;
+  }
+  ion-select {
+    min-width: 65%;
+  }
+}

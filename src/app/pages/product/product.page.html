@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabs/browse"></ion-back-button>
     </ion-buttons>
-    <ion-title>product</ion-title>
+    <ion-title *ngIf="!loading" localValue [data]="product" key="name"></ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -21,21 +21,14 @@
 
     <!-- BEGIN TITLE AND DESCRIPTION -->
     <div class="product-detail ion-padding">
-      <h3 localValue [data]="product" [key]="'name'"></h3>
-      <p localValue [data]="product" [key]="'description'"></p>
+      <h3 localValue [data]="product" key="name"></h3>
+      <p localValue [data]="product" key="description"></p>
     </div>
     <!--  END TITLE AND DESCRIPTION  -->
 
     <ion-row class="row-purchase">
-      <!-- BEGIN QUANTITY TOUCHSPIN -->
-      <ion-col size="12">
-        <ion-row class="row-touchspin ion-padding">
-          <ion-label translate="Quantity"></ion-label>
-          <div class="wrapper-touchspin">
-            <ion-touchspin size="md" [initialValue]="1" (valueChange)="handleQuantityChange($event)">
-            </ion-touchspin>
-          </div>
-        </ion-row>
+      <!-- BEGIN PRICE LABEL -->
+      <ion-col size="6">
         <ion-row class="row-price ion-padding">
           <ion-label>
             <span translate="Price"></span>
@@ -43,9 +36,30 @@
           </ion-label>
         </ion-row>
       </ion-col>
-      <!--  END  QUANTITY TOUCHSPIN -->
+      <!--  END PRICE LABEL  -->
+      <!-- BEGIN QUANTITY TOUCHSPIN -->
+      <ion-col size="6">
+        <ion-row class="row-touchspin ion-padding">
+          <ion-label translate="Quantity"></ion-label>
+          <div class="wrapper-touchspin">
+            <ion-touchspin size="md" [initialValue]="1" (valueChange)="handleQuantityChange($event)">
+            </ion-touchspin>
+          </div>
+        </ion-row>
+      </ion-col>
+      <!--  END QUANTITY TOUCHSPIN  -->
+      <!-- BEGIN SCHEDULE SELECT -->
+      <ion-item *ngIf="isInRange && schedules" class="item-delivery w-100">
+        <ion-label translate="Delivery Time"></ion-label>
+        <ion-select [value]="deliveryIdx" (ionChange)="handleSelectDeliveryDateTime($event)">
+          <ion-select-option *ngFor="let schedule of schedules; index as key" [value]="key">
+            {{schedule.date | moment:"YYYY-MM-DD ddd"}}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+      <!--  END SCHEDULE SELECT  -->
       <!-- BEGIN PURCHASE BUTTONS -->
-      <ion-col size="12">
+      <ion-col size="12" *ngIf="isInRange && schedules && schedules.length">
         <ion-row class="ion-padding">
           <ion-col>
             <ion-button size="medium" expand="full" (click)="addToCart()">
