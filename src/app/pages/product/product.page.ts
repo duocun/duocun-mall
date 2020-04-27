@@ -2,6 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ApiService } from "src/app/services/api/api.service";
 import { ProductInterface, getPictureUrl } from "src/app/models/product.model";
+import { CartItemInterface } from "src/app/models/cart.model";
+import { MerchantInterface } from "src/app/models/merchant.model";
 
 @Component({
   selector: "app-product",
@@ -10,8 +12,9 @@ import { ProductInterface, getPictureUrl } from "src/app/models/product.model";
 })
 export class ProductPage implements OnInit {
   loading: boolean;
+  merchant: MerchantInterface;
   product: ProductInterface;
-
+  item: CartItemInterface;
   constructor(private route: ActivatedRoute, private api: ApiService) {
     this.loading = true;
   }
@@ -26,13 +29,40 @@ export class ProductPage implements OnInit {
       this.api.get(`products/${productId}`).then((observable) => {
         observable.subscribe((data: ProductInterface) => {
           this.product = data;
+          this.api
+            .geth("Restaurants/qFind", { _id: data.merchantId })
+            .then((merchants: Array<MerchantInterface>) => {
+              this.merchant = merchants[0];
+              this.item = {
+                productId: this.product._id,
+                productName: this.product.name,
+                merchantId: this.merchant._id,
+                merchantName: this.merchant.name,
+                price: this.product.price,
+                cost: this.product.cost,
+                quantity: 1
+              };
+              this.loading = false;
+            });
           this.loading = false;
         });
       });
     });
   }
 
+  handleQuantityChange(event: {
+    value: number;
+    action: "up" | "down" | "set";
+  }) {
+    this.item.quantity = event.value;
+  }
+
   getPictureUrl(product: ProductInterface, idx: number) {
     return getPictureUrl(product, idx);
   }
+
+  addToCart() {
+    
+  }
+
 }

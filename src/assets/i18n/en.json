@@ -2,5 +2,8 @@
   "Home": "Home",
   "Cart": "Cart",
   "My Account": "My Account",
-  "Input Delivery Address": "Input Delivery Address"
+  "Input Delivery Address": "Input Delivery Address",
+  "Quantity": "Quantity",
+  "Price": "Price",
+  "Add to Cart": "Add to Cart"
 }

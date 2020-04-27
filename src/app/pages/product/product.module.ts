@@ -9,6 +9,9 @@ import { ProductPageRoutingModule } from "./product-routing.module";
 import { ProductPage } from "./product.page";
 import { IonImageModule } from "src/app/components/ion-image/ion-image.module";
 import { LocalValueDirectiveModule } from "src/app/directives/local-value.module";
+import { TouchspinModule } from "src/app/components/touchspin/touchspin.module";
+import { PricePipeModule } from "src/app/pipes/price/price.module";
+import { TranslateModule } from "@ngx-translate/core";
 
 @NgModule({
   imports: [
@@ -17,7 +20,10 @@ import { LocalValueDirectiveModule } from "src/app/directives/local-value.module
     IonicModule,
     ProductPageRoutingModule,
     IonImageModule,
-    LocalValueDirectiveModule
+    LocalValueDirectiveModule,
+    TouchspinModule,
+    PricePipeModule,
+    TranslateModule.forChild()
   ],
   declarations: [ProductPage]
 })

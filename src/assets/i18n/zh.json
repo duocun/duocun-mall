@@ -2,5 +2,8 @@
   "Home": "首页",
   "Cart": "购物车",
   "My Account": "我的帐户",
-  "Input Delivery Address": "输入送货地址"
+  "Input Delivery Address": "输入送货地址",
+  "Quantity": "数量",
+  "Price": "价格",
+  "Add to Cart": "加入购物车"
 }

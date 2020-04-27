@@ -26,6 +26,38 @@
     </div>
     <!--  END TITLE AND DESCRIPTION  -->
 
+    <ion-row class="row-purchase">
+      <!-- BEGIN QUANTITY TOUCHSPIN -->
+      <ion-col size="12">
+        <ion-row class="row-touchspin ion-padding">
+          <ion-label translate="Quantity"></ion-label>
+          <div class="wrapper-touchspin">
+            <ion-touchspin size="md" [initialValue]="1" (valueChange)="handleQuantityChange($event)">
+            </ion-touchspin>
+          </div>
+        </ion-row>
+        <ion-row class="row-price ion-padding">
+          <ion-label>
+            <span translate="Price"></span>
+            <span>{{item|price}}</span>
+          </ion-label>
+        </ion-row>
+      </ion-col>
+      <!--  END  QUANTITY TOUCHSPIN -->
+      <!-- BEGIN PURCHASE BUTTONS -->
+      <ion-col size="12">
+        <ion-row class="ion-padding">
+          <ion-col>
+            <ion-button size="medium" expand="full" (click)="addToCart()">
+              <ion-icon slot="start" name="cart-outline"></ion-icon>
+              {{"Add to Cart"|translate}}
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+      <!--  END PURCHASE BUTTONS -->
+    </ion-row>
+
   </ng-container>
 </ion-content>
 

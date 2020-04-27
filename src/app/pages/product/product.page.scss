@@ -1,0 +1,16 @@
+.row-touchspin {
+  ion-label {
+    margin-right: 1rem;
+  }
+  .wrapper-touchspin {
+    width: 96px;
+  }
+}
+.row-price {
+  ion-label > span:first-child {
+    margin-right: 1rem;
+  }
+  ion-label > span:last-child {
+    font-size: 1.25rem;
+  }
+}

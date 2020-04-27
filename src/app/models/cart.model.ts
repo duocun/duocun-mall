@@ -1,4 +1,3 @@
-
 export interface CartItemInterface {
   productId: string;
   productName: string; // product name

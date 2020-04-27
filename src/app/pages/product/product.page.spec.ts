@@ -7,6 +7,8 @@ import { IonImageModule } from "src/app/components/ion-image/ion-image.module";
 import { RouterModule } from "@angular/router";
 import { HttpClientModule } from "@angular/common/http";
 import { IonicStorageModule } from "@ionic/storage";
+import { TouchspinModule } from "src/app/components/touchspin/touchspin.module";
+import { PricePipeModule } from "src/app/pipes/price/price.module";
 
 describe("ProductPage", () => {
   let component: ProductPage;
@@ -21,7 +23,9 @@ describe("ProductPage", () => {
         IonImageModule,
         RouterModule.forRoot([]),
         HttpClientModule,
-        IonicStorageModule.forRoot()
+        IonicStorageModule.forRoot(),
+        TouchspinModule,
+        PricePipeModule
       ]
     }).compileComponents();
 
