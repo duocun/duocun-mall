@@ -8,6 +8,10 @@ import { BrowsePageRoutingModule } from "./browse-routing.module";
 
 import { BrowsePage } from "./browse.page";
 import { TranslateModule } from "@ngx-translate/core";
+import { HttpClientModule } from "@angular/common/http";
+import { LocationSearchModule } from "src/app/components/location-search/location-search.module";
+import { LocalValueDirectiveModule } from "src/app/directives/local-value.module";
+import { IonImageModule } from "src/app/components/ion-image/ion-image.module";
 
 @NgModule({
   imports: [
@@ -15,7 +19,11 @@ import { TranslateModule } from "@ngx-translate/core";
     FormsModule,
     IonicModule,
     BrowsePageRoutingModule,
-    TranslateModule.forChild()
+    TranslateModule.forChild(),
+    HttpClientModule,
+    LocationSearchModule,
+    LocalValueDirectiveModule,
+    IonImageModule
   ],
   declarations: [BrowsePage]
 })

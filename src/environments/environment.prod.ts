@@ -3,5 +3,6 @@ export const environment = {
   api: "https://duocun.com.cn/api",
   storageKey: {
     auth: "DUOCUN-AUTH-TOKEN"
-  }
+  },
+  media: "https://duocun.com.cn/media/"
 };

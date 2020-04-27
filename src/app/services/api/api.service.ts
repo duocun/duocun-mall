@@ -48,6 +48,29 @@ export class ApiService {
       return this.http.get(url);
     }
   }
+
+  // get with header
+  async geth(url, param = null, auth = true, isRelative = true) {
+    if (isRelative) {
+      url = this.buildUrl(url);
+    }
+    let headers;
+    if (auth) {
+      const authHeader = await this.buildAuthHeader();
+      headers = authHeader.headers ? authHeader.headers : new HttpHeaders();
+    } else {
+      headers = new HttpHeaders();
+    }
+    headers = headers.append("data", JSON.stringify(param));
+    return new Promise((resolve, reject) => {
+      this.http
+        .get(url, { headers })
+        .toPromise()
+        .then((resp: any) => {
+          resolve(resp);
+        });
+    });
+  }
   async post(url, param = null, auth = true, isRelative = true) {
     if (isRelative) {
       url = this.buildUrl(url);

@@ -18,6 +18,7 @@ export class AppComponent {
   ) {
     this.initializeApp();
     this.translator.setDefaultLang("zh");
+    this.translator.use("zh");
   }
 
   initializeApp() {
