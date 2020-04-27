@@ -4,6 +4,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { LocationInterface } from "src/app/models/location.model";
 import { MerchantInterface } from "src/app/models/merchant.model";
 import { getPictureUrl } from "src/app/models/merchant.model";
+import { LocationService } from "src/app/services/location/location.service";
 @Component({
   selector: "app-browse",
   templateUrl: "./browse.page.html",
@@ -11,26 +12,36 @@ import { getPictureUrl } from "src/app/models/merchant.model";
 })
 export class BrowsePage implements OnInit {
   merchants: Array<MerchantInterface>;
-
-  constructor(private api: ApiService, private lang: TranslateService) {
+  location: LocationInterface;
+  constructor(
+    private api: ApiService,
+    private lang: TranslateService,
+    private loc: LocationService
+  ) {
     this.merchants = [];
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.loc.getLocation().subscribe((location: LocationInterface) => {
+      if (location) {
+        this.api
+          .get("/Areas/G/my", { lat: location.lat, lng: location.lng })
+          .then((observable) => {
+            observable.subscribe((resp: { code: string; data: any }) => {
+              if (resp.code === "success") {
+                this.loadMerchants(resp.data._id);
+              }
+            });
+          });
+      }
+    });
+  }
 
   handleLocationSelect(event: {
     address: string;
     location: LocationInterface;
   }) {
-    this.api
-      .get("/Areas/G/my", { lat: event.location.lat, lng: event.location.lng })
-      .then((observable) => {
-        observable.subscribe((resp: { code: string; data: any }) => {
-          if (resp.code === "success") {
-            this.loadMerchants(resp.data._id);
-          }
-        });
-      });
+    this.loc.setLocation(event.location);
   }
 
   loadMerchants(areaId: string) {
