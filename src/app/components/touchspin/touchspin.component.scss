@@ -1,0 +1,53 @@
+$font-size-sm: 1rem;
+$font-size-md: 1.5rem;
+$font-size-lg: 2rem;
+
+.touchspin {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  .input-touchspin {
+    display: inline-block;
+    border-bottom: 1px solid #e7e7e7;
+    text-align: center;
+    z-index: 1;
+    --padding-bottom:0;
+    --padding-top: 0;
+    --padding-end: 0;
+    --padding-start: 0;
+  }
+  .btn-touchspin {
+    position: absolute;
+    cursor: pointer;
+    z-index: 2;
+    &.btn-touchspin-up {
+      right:0;
+      color: #387ef5;
+    }
+    &.btn-touchspin-down {
+      left: 0;
+      color: #ef473a;
+    }
+  }
+  &.sm {
+    line-height: $font-size-sm;
+    font-size: $font-size-sm;
+    
+  }
+  &.md {
+    line-height: $font-size-md;
+    font-size: $font-size-sm;
+    .btn-touchspin {
+      font-size: $font-size-md;
+    }
+    
+  }
+  &.lg {
+    line-height: $font-size-lg;
+    font-size: $font-size-md;
+    .btn-touchspin {
+      font-size: $font-size-lg;
+    }
+  }
+}
