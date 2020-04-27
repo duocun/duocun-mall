@@ -57,6 +57,17 @@ const routes: Routes = [
     ]
   },
   {
+    path: "order",
+    component: HomePage,
+    children: [
+      {
+        path: "",
+        loadChildren: () =>
+          import("../order/order.module").then((m) => m.OrderPageModule)
+      }
+    ]
+  },
+  {
     path: "",
     redirectTo: "/tabs/browse"
   }
