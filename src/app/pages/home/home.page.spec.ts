@@ -5,6 +5,7 @@ import { HomePage } from "./home.page";
 import { TranslateModule } from "@ngx-translate/core";
 import { RouterModule } from "@angular/router";
 import { HttpClientModule } from "@angular/common/http";
+import { IonicStorageModule } from "@ionic/storage";
 
 describe("HomePage", () => {
   let component: HomePage;
@@ -17,7 +18,8 @@ describe("HomePage", () => {
         HttpClientModule,
         IonicModule.forRoot(),
         TranslateModule.forRoot(),
-        RouterModule.forRoot([])
+        RouterModule.forRoot([]),
+        IonicStorageModule.forRoot()
       ]
     }).compileComponents();
 

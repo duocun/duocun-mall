@@ -3,6 +3,13 @@ export interface PlaceTermInterface {
   value: string;
 }
 
+export interface GeoPointInterface {
+  lat?: number;
+  lng?: number;
+  type?: string;
+  coordinates?: number[];
+}
+
 export interface StructuredAddressInterface {
   main_text: string;
   secondary_text: string;
