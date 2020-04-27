@@ -1,0 +1,13 @@
+<ion-img
+  *ngIf="!error"
+  [src]="src"
+  (ionError)="ionError()"
+  (ionImgDidLoad)="ionImgDidLoad()"
+  [alt]="alt"
+  [attr.style]="safeStyle"
+></ion-img>
+<ion-img *ngIf="loading"
+  [src]="placeholderSrc"
+  [alt]="alt"
+  [attr.style]="safeStyle"
+></ion-img>
