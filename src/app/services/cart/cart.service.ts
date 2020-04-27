@@ -4,7 +4,8 @@ import { Platform } from "@ionic/angular";
 import {
   CartInterface,
   CartItemInterface,
-  areEqualCartItems
+  areEqualCartItems,
+  getCartQuantity
 } from "src/app/models/cart.model";
 import { environment } from "src/environments/environment";
 import { BehaviorSubject } from "rxjs";
@@ -34,6 +35,7 @@ export class CartService {
   }
 
   saveCart() {
+    this.cart.quantity = getCartQuantity(this.cart);
     this.cart$.next(this.cart);
     return this.storage.set(environment.storageKey.cart, this.cart);
   }

@@ -25,3 +25,11 @@ export function areEqualCartItems(
 ) {
   return one.productId === other.productId;
 }
+
+export function getCartQuantity(cart: CartInterface) {
+  let quantity = 0;
+  if (cart.items) {
+    cart.items.forEach((item) => (quantity += item.quantity));
+  }
+  return quantity;
+}
