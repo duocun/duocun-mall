@@ -6,7 +6,8 @@ export const environment = {
   production: false,
   api: "http://localhost:8000/api",
   storageKey: {
-    auth: "DUOCUN-AUTH-TOKEN"
+    auth: "DUOCUN-AUTH-TOKEN",
+    cart: "DUOCUN-CART"
   },
   media: "https://duocun.com.cn/media/"
 };

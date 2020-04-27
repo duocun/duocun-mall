@@ -9,6 +9,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { IonicStorageModule } from "@ionic/storage";
 import { TouchspinModule } from "src/app/components/touchspin/touchspin.module";
 import { PricePipeModule } from "src/app/pipes/price/price.module";
+import { TranslateModule } from "@ngx-translate/core";
 
 describe("ProductPage", () => {
   let component: ProductPage;
@@ -25,7 +26,8 @@ describe("ProductPage", () => {
         HttpClientModule,
         IonicStorageModule.forRoot(),
         TouchspinModule,
-        PricePipeModule
+        PricePipeModule,
+        TranslateModule.forRoot()
       ]
     }).compileComponents();
 

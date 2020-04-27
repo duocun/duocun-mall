@@ -4,6 +4,7 @@ import { ApiService } from "src/app/services/api/api.service";
 import { ProductInterface, getPictureUrl } from "src/app/models/product.model";
 import { CartItemInterface } from "src/app/models/cart.model";
 import { MerchantInterface } from "src/app/models/merchant.model";
+import { CartService } from "src/app/services/cart/cart.service";
 
 @Component({
   selector: "app-product",
@@ -15,7 +16,11 @@ export class ProductPage implements OnInit {
   merchant: MerchantInterface;
   product: ProductInterface;
   item: CartItemInterface;
-  constructor(private route: ActivatedRoute, private api: ApiService) {
+  constructor(
+    private route: ActivatedRoute,
+    private api: ApiService,
+    private cart: CartService
+  ) {
     this.loading = true;
   }
 
@@ -28,23 +33,28 @@ export class ProductPage implements OnInit {
       const productId = params.id;
       this.api.get(`products/${productId}`).then((observable) => {
         observable.subscribe((data: ProductInterface) => {
-          this.product = data;
-          this.api
-            .geth("Restaurants/qFind", { _id: data.merchantId })
-            .then((merchants: Array<MerchantInterface>) => {
-              this.merchant = merchants[0];
-              this.item = {
-                productId: this.product._id,
-                productName: this.product.name,
-                merchantId: this.merchant._id,
-                merchantName: this.merchant.name,
-                price: this.product.price,
-                cost: this.product.cost,
-                quantity: 1
-              };
-              this.loading = false;
-            });
-          this.loading = false;
+          if (data) {
+            this.product = data;
+            this.api
+              .geth("Restaurants/qFind", { _id: data.merchantId })
+              .then((merchants: Array<MerchantInterface>) => {
+                this.merchant = merchants[0];
+                if (this.merchant) {
+                  this.item = {
+                    productId: this.product._id,
+                    productName: this.product.name,
+                    merchantId: this.merchant._id,
+                    merchantName: this.merchant.name,
+                    price: this.product.price,
+                    cost: this.product.cost,
+                    quantity: 1
+                  };
+                  this.loading = false;
+                }
+              });
+          } else {
+            this.loading = false;
+          }
         });
       });
     });
@@ -62,7 +72,6 @@ export class ProductPage implements OnInit {
   }
 
   addToCart() {
-    
+    this.cart.addItem(this.item);
   }
-
 }

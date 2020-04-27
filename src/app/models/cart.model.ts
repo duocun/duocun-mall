@@ -12,9 +12,16 @@ export interface CartInterface {
   clientId?: string;
   clientName?: string;
   clientPhoneNumber?: string;
-  merchantId: string;
+  merchantId?: string;
   merchantName?: string;
   price?: number;
   quantity?: number;
-  items: CartItemInterface[];
+  items?: CartItemInterface[];
+}
+
+export function areEqualCartItems(
+  one: CartItemInterface,
+  other: CartItemInterface
+) {
+  return one.productId === other.productId;
 }
