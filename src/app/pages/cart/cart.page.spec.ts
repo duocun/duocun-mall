@@ -10,7 +10,7 @@ import { PricePipeModule } from "src/app/pipes/price/price.module";
 import { MomentPipeModule } from "src/app/pipes/moment/moment.module";
 import { TouchspinModule } from "src/app/components/touchspin/touchspin.module";
 import { IonicStorageModule } from "@ionic/storage";
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from "@angular/common/http";
 
 describe("CartPage", () => {
   let component: CartPage;
