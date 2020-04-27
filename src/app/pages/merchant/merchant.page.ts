@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ApiService } from "src/app/services/api/api.service";
 import { MerchantInterface } from "src/app/models/merchant.model";
-import { ProductInterface } from "src/app/models/product.model";
+import { ProductInterface, getPictureUrl } from "src/app/models/product.model";
 import { ActivatedRoute } from "@angular/router";
 import { environment } from "src/environments/environment";
 @Component({
@@ -43,11 +43,7 @@ export class MerchantPage implements OnInit {
     });
   }
 
-  getPictureUrl(product: any) {
-    if (product.pictures && product.pictures.length) {
-      return environment.media + product.pictures[0].url;
-    } else {
-      return "";
-    }
+  getPictureUrl(product: ProductInterface) {
+    return getPictureUrl(product);
   }
 }

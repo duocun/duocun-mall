@@ -2,14 +2,15 @@ import { Component, OnInit } from "@angular/core";
 import { ApiService } from "src/app/services/api/api.service";
 import { TranslateService } from "@ngx-translate/core";
 import { LocationInterface } from "src/app/models/location.model";
-import { environment } from "src/environments/environment";
+import { MerchantInterface } from "src/app/models/merchant.model";
+import { getPictureUrl } from "src/app/models/merchant.model";
 @Component({
   selector: "app-browse",
   templateUrl: "./browse.page.html",
   styleUrls: ["./browse.page.scss"]
 })
 export class BrowsePage implements OnInit {
-  merchants: Array<any>;
+  merchants: Array<MerchantInterface>;
 
   constructor(private api: ApiService, private lang: TranslateService) {
     this.merchants = [];
@@ -57,11 +58,7 @@ export class BrowsePage implements OnInit {
     });
   }
 
-  getPictureUrl(merchant: any) {
-    if (merchant.pictures && merchant.pictures.length) {
-      return environment.media + merchant.pictures[0].url;
-    } else {
-      return "";
-    }
+  getPictureUrl(merchant: MerchantInterface) {
+    return getPictureUrl(merchant);
   }
 }

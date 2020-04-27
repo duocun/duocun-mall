@@ -1,5 +1,5 @@
 import { MerchantInterface } from "./merchant.model";
-
+import { environment } from "src/environments/environment";
 export enum ProductStatus {
   ACTIVE = 1,
   INACTIVE,
@@ -29,4 +29,12 @@ export interface ProductInterface {
 
   merchant?: MerchantInterface; // join account table from find()
   merchantAccount?: any; // join account table from find()
+}
+
+export function getPictureUrl(product: any, idx = 0) {
+  if (product.pictures && product.pictures.length) {
+    return environment.media + product.pictures[idx].url;
+  } else {
+    return "";
+  }
 }

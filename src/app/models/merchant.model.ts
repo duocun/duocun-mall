@@ -1,6 +1,6 @@
 import { GeoPointInterface } from "./location.model";
 import { ProductInterface } from "./product.model";
-
+import { environment } from "src/environments/environment";
 export const MerchantType = {
   RESTAURANT: "R",
   GROCERY: "G",
@@ -48,4 +48,13 @@ export interface MerchantInterface {
   phases: PhaseInterface[];
   orderEnded: boolean; // do not save to db
   orderEndTime: string; // do not save to db
+}
+
+
+export function getPictureUrl(merchant: MerchantInterface) {
+  if (merchant.pictures && merchant.pictures.length) {
+    return environment.media + merchant.pictures[0].url;
+  } else {
+    return "";
+  }
 }

@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button defaultHref="/tabs/browse"></ion-back-button>
     </ion-buttons>
     <ion-title *ngIf="!loading" localValue [data]="merchant" key="name"></ion-title>
   </ion-toolbar>
@@ -12,7 +12,7 @@
     <ng-container *ngIf="products.length < 7; Else thumbnailMode">
       <ion-row>
         <ion-col *ngFor="let product of products" size="6">
-          <ion-card class="ion-no-margin">
+          <ion-card class="ion-no-margin" [routerLink]="['/products', product._id]">
             <ion-card-content>
               <div class="ion-margin-bottom">
                 <app-ion-image
@@ -35,7 +35,7 @@
 
 <ng-template #thumbnailMode>
   <ion-list lines="none">
-    <ion-item *ngFor="let product of products">
+    <ion-item *ngFor="let product of products" [routerLink]="['/products', product._id]">
       <ion-thumbnail slot="start">
         <app-ion-image
           [src]="getPictureUrl(product)"

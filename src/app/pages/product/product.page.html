@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/browse"></ion-back-button>
+    </ion-buttons>
+    <ion-title>product</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ng-container *ngIf="!loading; Else skeleton">
+    <!-- BEGIN PRODUCT IMAGE SLIDER -->
+    <div class="image-slide-container">
+      <ion-slides *ngIf="product.pictures && product.pictures.length; Else slidePlaceholder">
+        <ion-slide *ngFor="let image of product.pictures; index as idx">
+          <app-ion-image [src]="getPictureUrl(product, idx)" [alt]="product.name"></app-ion-image>
+        </ion-slide>
+      </ion-slides>
+    </div>
+    <!--  END PRODUCT IMAGE SLIDER  -->
+
+    <!-- BEGIN TITLE AND DESCRIPTION -->
+    <div class="product-detail ion-padding">
+      <h3 localValue [data]="product" [key]="'name'"></h3>
+      <p localValue [data]="product" [key]="'description'"></p>
+    </div>
+    <!--  END TITLE AND DESCRIPTION  -->
+
+  </ng-container>
+</ion-content>
+
+<ng-template #skeleton>
+  <div class="wrapper-image-slide">
+    <ion-slides>
+      <ion-slide>
+        <ion-img src="assets/img/no-image.png"></ion-img>
+      </ion-slide>
+    </ion-slides>
+  </div>
+  <div class="product-detail ion-padding">
+    <div><ion-skeleton-text animated style="height: 1.5rem;" class="ion-margin-bottom"></ion-skeleton-text></div>
+    <div><ion-skeleton-text animated style="width: 80%; height: 1.2rem;"></ion-skeleton-text></div>
+    <div><ion-skeleton-text animated style="width: 50%; height: 1.2rem;"></ion-skeleton-text></div>
+    <div><ion-skeleton-text animated style="width: 50%; height: 1.2rem;"></ion-skeleton-text></div>
+  </div>
+</ng-template>
