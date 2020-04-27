@@ -13,5 +13,8 @@
   "No data to display": "没有数据显示",
   "Clear Cart": "全部清空",
   "Checkout": "去结算",
-  "Confirm Order": "确认订单"
+  "Confirm Order": "确认订单",
+  "order_page_title": "蔬果蛋奶直送",
+  "order_page_notice_1": "如果您在公寓或办公大楼内，请在大厅取货，我们不会进入大楼。 在市区，我们的汽车将停在建筑物附近的路边。",
+  "order_page_notice_2": "请保持电话畅通。"
 }

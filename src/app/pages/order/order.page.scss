@@ -1,0 +1,10 @@
+.order-notice {
+  list-style: none;
+  font-size: 0.75rem;
+  padding-left: 0;
+  color: #eb445a;
+  li:before {
+    content: "*";
+    margin-right: .5rem;
+  }
+}
