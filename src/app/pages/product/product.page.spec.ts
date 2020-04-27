@@ -10,7 +10,7 @@ import { IonicStorageModule } from "@ionic/storage";
 import { TouchspinModule } from "src/app/components/touchspin/touchspin.module";
 import { PricePipeModule } from "src/app/pipes/price/price.module";
 import { TranslateModule } from "@ngx-translate/core";
-import { MomentPipeModule } from 'src/app/pipes/moment/moment.module';
+import { MomentPipeModule } from "src/app/pipes/moment/moment.module";
 
 describe("ProductPage", () => {
   let component: ProductPage;

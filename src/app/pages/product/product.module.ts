@@ -12,7 +12,7 @@ import { LocalValueDirectiveModule } from "src/app/directives/local-value.module
 import { TouchspinModule } from "src/app/components/touchspin/touchspin.module";
 import { PricePipeModule } from "src/app/pipes/price/price.module";
 import { TranslateModule } from "@ngx-translate/core";
-import { MomentPipeModule } from 'src/app/pipes/moment/moment.module';
+import { MomentPipeModule } from "src/app/pipes/moment/moment.module";
 
 @NgModule({
   imports: [
