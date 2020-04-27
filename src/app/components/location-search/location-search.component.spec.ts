@@ -1,18 +1,18 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { IonicModule } from "@ionic/angular";
 
-import { LocationSearchComponent } from './location-search.component';
-import { HttpClientModule } from '@angular/common/http';
+import { LocationSearchComponent } from "./location-search.component";
+import { HttpClientModule } from "@angular/common/http";
 import { IonicStorageModule } from "@ionic/storage";
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule } from "@ngx-translate/core";
 
-describe('LocationSearchComponent', () => {
+describe("LocationSearchComponent", () => {
   let component: LocationSearchComponent;
   let fixture: ComponentFixture<LocationSearchComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LocationSearchComponent ],
+      declarations: [LocationSearchComponent],
       imports: [
         IonicModule.forRoot(),
         HttpClientModule,
@@ -26,7 +26,7 @@ describe('LocationSearchComponent', () => {
     fixture.detectChanges();
   }));
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

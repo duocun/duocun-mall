@@ -1,31 +1,28 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
+import { Component, OnInit, Input } from "@angular/core";
+import { DomSanitizer, SafeStyle } from "@angular/platform-browser";
 
 @Component({
-  selector: 'app-ion-image',
-  templateUrl: './ion-image.component.html',
-  styleUrls: ['./ion-image.component.scss'],
+  selector: "app-ion-image",
+  templateUrl: "./ion-image.component.html",
+  styleUrls: ["./ion-image.component.scss"]
 })
 export class IonImageComponent implements OnInit {
-
-  @Input('src') src: string;
-  @Input('alt') alt: string;
-  @Input('style') style: string;
+  @Input("src") src: string;
+  @Input("alt") alt: string;
+  @Input("style") style: string;
   placeholderSrc: string;
   loading: boolean;
   error: boolean;
-  safeStyle: SafeStyle
-  constructor(
-    private sanitizer: DomSanitizer
-  ) {
-      
-   }
+  safeStyle: SafeStyle;
+  constructor(private sanitizer: DomSanitizer) {}
 
   ngOnInit() {
     this.loading = true;
     this.placeholderSrc = "assets/img/no-image.png";
     this.error = false;
-    this.safeStyle = this.sanitizer.bypassSecurityTrustStyle(<string> this.style);
+    this.safeStyle = this.sanitizer.bypassSecurityTrustStyle(
+      <string>this.style
+    );
   }
 
   ionImgDidLoad() {
@@ -35,5 +32,4 @@ export class IonImageComponent implements OnInit {
   ionError() {
     this.error = true;
   }
-  
 }

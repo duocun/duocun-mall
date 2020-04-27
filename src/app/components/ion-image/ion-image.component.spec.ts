@@ -1,15 +1,15 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { IonicModule } from "@ionic/angular";
 
-import { IonImageComponent } from './ion-image.component';
+import { IonImageComponent } from "./ion-image.component";
 
-describe('IonImageComponent', () => {
+describe("IonImageComponent", () => {
   let component: IonImageComponent;
   let fixture: ComponentFixture<IonImageComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ IonImageComponent ],
+      declarations: [IonImageComponent],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
@@ -18,7 +18,7 @@ describe('IonImageComponent', () => {
     fixture.detectChanges();
   }));
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
