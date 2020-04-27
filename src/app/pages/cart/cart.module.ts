@@ -7,9 +7,26 @@ import { IonicModule } from "@ionic/angular";
 import { CartPageRoutingModule } from "./cart-routing.module";
 
 import { CartPage } from "./cart.page";
+import { TranslateModule } from "@ngx-translate/core";
+import { IonImageModule } from "src/app/components/ion-image/ion-image.module";
+import { LocalValueDirectiveModule } from "src/app/directives/local-value.module";
+import { PricePipeModule } from "src/app/pipes/price/price.module";
+import { MomentPipeModule } from "src/app/pipes/moment/moment.module";
+import { TouchspinModule } from "src/app/components/touchspin/touchspin.module";
 
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule, CartPageRoutingModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    CartPageRoutingModule,
+    TranslateModule.forChild(),
+    IonImageModule,
+    LocalValueDirectiveModule,
+    PricePipeModule,
+    MomentPipeModule,
+    TouchspinModule
+  ],
   declarations: [CartPage]
 })
 export class CartPageModule {}

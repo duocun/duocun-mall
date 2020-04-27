@@ -27,7 +27,7 @@ export class CartService {
 
   initCart() {
     this.storage.get(environment.storageKey.cart).then((cartData: any) => {
-      if (cartData && cartData.clientId) {
+      if (cartData) {
         this.cart = cartData;
         this.cart$.next(this.cart);
       }

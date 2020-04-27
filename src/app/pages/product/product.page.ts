@@ -126,6 +126,7 @@ export class ProductPage implements OnInit {
   addToCart() {
     if (this.isInRange && this.schedules && this.schedules.length) {
       this.item.delivery = this.schedules[this.deliveryIdx];
+      this.item.product = this.product;
       if (this.item.delivery) {
         this.cartSvc.addItem(this.item);
       } else {

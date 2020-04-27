@@ -9,5 +9,8 @@
   "Delivery Time": "送货时间",
   "Confirm": "确认",
   "Please select delivery time": "请选择送货时间",
-  "Notice": "通知"
+  "Notice": "通知",
+  "No data to display": "没有数据显示",
+  "Clear Cart": "全部清空",
+  "Checkout": "去结算"
 }

@@ -1,9 +1,57 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>cart</ion-title>
+    <ion-title translate="Cart"></ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ng-container *ngIf="cart.items.length > 0 ; Else emptyCart">
+    <ion-list lines="none">
+      <ion-item *ngFor="let item of cart.items; index as itemIdx" class="ion-margin-top ion-margin-bottom">
+        <ion-thumbnail slot="start">
+          <app-ion-image
+            [src]="getPictureUrl(item.product)"
+            [alt]="item.product.name"
+            [routerLink]="['/products', item.product._id]" routerLinkActive="router-link-active"
+            style="height: 100%; object-fit: cover;"
+          >
+        </app-ion-image>
+        </ion-thumbnail>
+        <ion-label>
+          <h3 localValue [data]="item.product" key="name"></h3>
+          <p *ngIf="item.delivery">{{item.delivery.date|moment:"YYYY-MM-DD ddd"}}</p>
+          <p>{{cartItemSubtotal(item)|price}}</p>
+        </ion-label>
+        <ion-touchspin
+          slot="end"
+          style="width:72px"
+          size="sm"
+          [initialValue]="item.quantity"
+          [minimumValue]="0"
+          (valueChange)="handleCartItemQuantityChange(itemIdx, $event.value)"
+        >
+        </ion-touchspin>
+      </ion-item>
+    </ion-list>
+    <ion-row class="ion-padding">
+      <ion-col size="6">
+        <ion-button expand="full" size="small" color="secondary" translate="Clear Cart" (click)="handleClearCart()">
+          <ion-icon name="trash-bin-outline" class="ion-margin-end"></ion-icon>
+          {{"Clear Cart"|translate}}
+        </ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button expand="full" size="small" color="primary">
+          <ion-icon name="cash-outline" class="ion-margin-end"></ion-icon>
+          {{"Checkout"|translate}}
+        </ion-button>
+      </ion-col>
+    </ion-row>    
+  </ng-container>
 </ion-content>
+
+<ng-template #emptyCart>
+  <ion-row class="ion-padding">
+    <ion-col class="ion-text-center" translate="No data to display"></ion-col>
+  </ion-row>
+</ng-template>

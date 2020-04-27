@@ -1,6 +1,8 @@
 import { DeliveryDateTimeInterface } from "./delivery.model";
+import { ProductInterface } from "./product.model";
 
 export interface CartItemInterface {
+  product?: ProductInterface;
   productId: string;
   productName: string; // product name
   merchantId: string;
@@ -35,4 +37,8 @@ export function getCartQuantity(cart: CartInterface) {
     cart.items.forEach((item) => (quantity += item.quantity));
   }
   return quantity;
+}
+
+export function getCartItemSubtotal(item: CartItemInterface) {
+  return item.price * item.quantity;
 }
