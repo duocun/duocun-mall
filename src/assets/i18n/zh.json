@@ -6,5 +6,8 @@
   "Quantity": "数量",
   "Price": "价格",
   "Add to Cart": "加入购物车",
-  "Delivery Time": "送货时间"
+  "Delivery Time": "送货时间",
+  "Confirm": "确认",
+  "Please select delivery time": "请选择送货时间",
+  "Notice": "通知"
 }

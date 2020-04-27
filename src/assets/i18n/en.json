@@ -6,5 +6,8 @@
   "Quantity": "Quantity",
   "Price": "Price",
   "Add to Cart": "Add to Cart",
-  "Delivery Time": "Delivery Time"
+  "Delivery Time": "Delivery Time",
+  "Confirm": "Confirm",
+  "Please select delivery time": "Please select delivery time",
+  "Notice": "Notice"
 }

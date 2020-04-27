@@ -10,7 +10,8 @@ import { LocationInterface } from "src/app/models/location.model";
 import * as moment from "moment";
 import { DeliveryService } from "src/app/services/delivery/delivery.service";
 import { DeliveryDateTimeInterface } from "src/app/models/delivery.model";
-
+import { AlertController } from "@ionic/angular";
+import { TranslateService } from "@ngx-translate/core";
 const baseTimeList = ["11:00"];
 export const AppType = {
   FOOD_DELIVERY: "F",
@@ -37,7 +38,9 @@ export class ProductPage implements OnInit {
     private api: ApiService,
     private cartSvc: CartService,
     private locationSvc: LocationService,
-    private deliverySvc: DeliveryService
+    private deliverySvc: DeliveryService,
+    private alert: AlertController,
+    private translator: TranslateService
   ) {
     this.loading = true;
     this.isInRange = false;
@@ -121,7 +124,14 @@ export class ProductPage implements OnInit {
   }
 
   addToCart() {
-    this.cartSvc.addItem(this.item);
+    if (this.isInRange && this.schedules && this.schedules.length) {
+      this.item.delivery = this.schedules[this.deliveryIdx];
+      if (this.item.delivery) {
+        this.cartSvc.addItem(this.item);
+      } else {
+        this.showAlert("Notice", "Please select delivery time", "Confirm");
+      }
+    }
   }
 
   getBaseDateList(orderEndList, deliverDowList) {
@@ -142,5 +152,17 @@ export class ProductPage implements OnInit {
     } else {
       return this.deliverySvc.getDeliverySchedule(baseList, deliverTimeList);
     }
+  }
+
+  showAlert(header, message, button) {
+    this.translator.get([header, message, button]).subscribe((dict) => {
+      this.alert
+        .create({
+          header: dict[header],
+          message: dict[message],
+          buttons: [dict[button]]
+        })
+        .then((alert) => alert.present());
+    });
   }
 }
