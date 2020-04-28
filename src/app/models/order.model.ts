@@ -1,8 +1,8 @@
 import { LocationInterface, AddressInterface } from "./location.model";
 import { CartInterface } from "./cart.model";
 import { PaymentMethod, PaymentStatus } from "./payment.model";
-import { AccountInterface } from './account.model';
-import { MerchantInterface } from './merchant.model';
+import { AccountInterface } from "./account.model";
+import { MerchantInterface } from "./merchant.model";
 export const OrderType = {
   FOOD_DELIVERY: "F",
   MOBILE_PLAN_SETUP: "MS",
