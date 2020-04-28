@@ -1,12 +1,12 @@
 <ion-tabs>
 
   <ion-tab-bar slot="bottom">
-    <ion-tab-button routerLink="/tabs/browse">
+    <ion-tab-button tab="browse">
       <ion-icon name="home-outline"></ion-icon>
       <ion-label translate="Home"></ion-label>
     </ion-tab-button>
 
-    <ion-tab-button routerLink="/tabs/cart">
+    <ion-tab-button tab="cart">
       <ion-icon name="cart-outline"></ion-icon>
       <ion-label translate="Cart"></ion-label>
       <ion-badge *ngIf="cart && cart.items && cart.items.length">
@@ -14,7 +14,7 @@
       </ion-badge>
     </ion-tab-button>
 
-    <ion-tab-button routerLink="/tabs/my-account">
+    <ion-tab-button tab="my-account">
       <ion-icon name="person-circle"></ion-icon>
       <ion-label translate="My Account"></ion-label>
     </ion-tab-button>

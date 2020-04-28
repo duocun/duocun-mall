@@ -1,5 +1,8 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/browse" text=""></ion-back-button>
+    </ion-buttons>
     <ion-title *ngIf="!loading" localValue [data]="product" key="name"></ion-title>
   </ion-toolbar>
 </ion-header>

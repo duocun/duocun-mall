@@ -33,41 +33,6 @@ const routes: Routes = [
     ]
   },
   {
-    path: "merchants",
-    component: HomePage,
-    children: [
-      {
-        path: "",
-        loadChildren: () =>
-          import("../merchant/merchant.module").then(
-            (m) => m.MerchantPageModule
-          )
-      }
-    ]
-  },
-  {
-    path: "products",
-    component: HomePage,
-    children: [
-      {
-        path: "",
-        loadChildren: () =>
-          import("../product/product.module").then((m) => m.ProductPageModule)
-      }
-    ]
-  },
-  {
-    path: "order",
-    component: HomePage,
-    children: [
-      {
-        path: "",
-        loadChildren: () =>
-          import("../order/order.module").then((m) => m.OrderPageModule)
-      }
-    ]
-  },
-  {
     path: "",
     redirectTo: "/tabs/browse"
   }

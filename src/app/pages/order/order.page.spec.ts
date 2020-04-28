@@ -9,6 +9,7 @@ import { PricePipeModule } from "src/app/pipes/price/price.module";
 import { MomentPipeModule } from "src/app/pipes/moment/moment.module";
 import { IonicStorageModule } from "@ionic/storage";
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 describe("OrderPage", () => {
   let component: OrderPage;
@@ -25,7 +26,8 @@ describe("OrderPage", () => {
         LocalValueDirectiveModule,
         PricePipeModule,
         MomentPipeModule,
-        IonicStorageModule.forRoot()
+        IonicStorageModule.forRoot(),
+        RouterModule.forRoot([])
       ]
     }).compileComponents();
 
