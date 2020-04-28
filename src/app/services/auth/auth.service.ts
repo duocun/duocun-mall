@@ -3,16 +3,26 @@ import { Injectable } from "@angular/core";
 import { Storage } from "@ionic/storage";
 import { BehaviorSubject } from "rxjs";
 import { environment } from "src/environments/environment";
+import { AccountInterface } from "src/app/models/account.model";
+import { HttpClient } from "@angular/common/http";
+
 @Injectable({
   providedIn: "root"
 })
 export class AuthService {
   authState = new BehaviorSubject(true);
-
-  constructor(private storage: Storage, private platform: Platform) {
+  account: AccountInterface | null;
+  account$: BehaviorSubject<AccountInterface>;
+  constructor(
+    private storage: Storage,
+    private platform: Platform,
+    private http: HttpClient
+  ) {
     this.platform.ready().then(() => {
       this.checkToken();
     });
+    this.account = null;
+    this.account$ = new BehaviorSubject<AccountInterface>(this.account);
   }
 
   checkToken() {
@@ -26,13 +36,25 @@ export class AuthService {
   }
 
   login(token: unknown) {
-    return this.storage.set(environment.storageKey.auth, token).then(() => {
-      this.authState.next(true);
-    });
+    this.http
+      .get(`${environment.api}/Accounts/G/token/${token}`)
+      .subscribe((resp: { code: string; data: AccountInterface }) => {
+        if (resp.code === "success") {
+          this.account = resp.data;
+          this.storage.set(environment.storageKey.auth, token).then(() => {
+            this.account$.next(this.account);
+            this.authState.next(true);
+          });
+        } else {
+          this.logout();
+        }
+      });
   }
 
   logout() {
     return this.storage.remove(environment.storageKey.auth).then(() => {
+      this.account = null;
+      this.account$.next(this.account);
       this.authState.next(false);
     });
   }
@@ -48,5 +70,9 @@ export class AuthService {
           resolve("");
         });
     });
+  }
+
+  getAccount() {
+    return this.account$;
   }
 }

@@ -61,25 +61,19 @@ export class HomePage implements OnInit {
     if (!tokenId) {
       this.authSvc.getToken().then((tokenId) => {
         if (tokenId) {
-          this.getCurrentAccount(tokenId);
+          this.authSvc.login(tokenId);
         }
       });
     } else {
-      this.getCurrentAccount(tokenId);
+      this.authSvc.login(tokenId);
     }
-  }
-
-  getCurrentAccount(tokenId: any) {
-    this.api.get(`Accounts/G/token/${tokenId}`).then((observable) => {
-      observable.subscribe((resp: { code: string; data: AccountInterface }) => {
-        if (resp.code === "success") {
-          this.account = resp.data;
-          this.authSvc.login(tokenId);
-        } else {
-          this.authSvc.logout();
-          this.showAlert("Notice", "Login failed", "OK");
-        }
-      });
+    this.authSvc.getAccount().subscribe((account) => {
+      this.account = account;
+    });
+    this.authSvc.authState.subscribe((isLoggedIn: boolean) => {
+      if (!isLoggedIn) {
+        this.showAlert("Notice", "Login failed", "OK");
+      }
     });
   }
 
