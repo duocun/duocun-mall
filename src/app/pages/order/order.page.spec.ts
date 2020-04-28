@@ -8,6 +8,7 @@ import { LocalValueDirectiveModule } from "src/app/directives/local-value.module
 import { PricePipeModule } from "src/app/pipes/price/price.module";
 import { MomentPipeModule } from "src/app/pipes/moment/moment.module";
 import { IonicStorageModule } from "@ionic/storage";
+import { FormsModule } from '@angular/forms';
 
 describe("OrderPage", () => {
   let component: OrderPage;
@@ -17,6 +18,7 @@ describe("OrderPage", () => {
     TestBed.configureTestingModule({
       declarations: [OrderPage],
       imports: [
+        FormsModule,
         IonicModule.forRoot(),
         TranslateModule.forRoot(),
         HttpClientModule,
