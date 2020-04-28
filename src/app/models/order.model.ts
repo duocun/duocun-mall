@@ -1,6 +1,8 @@
 import { LocationInterface, AddressInterface } from "./location.model";
 import { CartInterface } from "./cart.model";
-
+import { PaymentMethod, PaymentStatus } from "./payment.model";
+import { AccountInterface } from './account.model';
+import { MerchantInterface } from './merchant.model';
 export const OrderType = {
   FOOD_DELIVERY: "F",
   MOBILE_PLAN_SETUP: "MS",
@@ -86,6 +88,20 @@ export interface OrderSummaryInterface {
   total: number;
 }
 
+// cart items grouped by merchantId , date and time
+export interface CartItemGroupInterface {
+  merchantId: string;
+  date: string;
+  time: string;
+  items: Array<{
+    productId: string;
+    price: number;
+    quantity: number;
+    cost?: number;
+    taxRate?: number;
+  }>;
+}
+
 export interface ChargeInterface extends OrderSummaryInterface {
   payable: number;
   balance: number;
@@ -101,15 +117,48 @@ export function getChargeItems(cart: CartInterface): Array<any> {
   });
 }
 
-export function getOrderGroups(cart: CartInterface) {
-  const orders = [];
+export function getChargeFromCartItemGroup(
+  cartItemGroup: CartItemGroupInterface,
+  overRangeCharge: number
+) {
+  let price = 0;
+  let cost = 0;
+  let tax = 0;
+
+  cartItemGroup.items.map((x) => {
+    price += x.price * x.quantity;
+    cost += x.cost * x.quantity;
+    tax += Math.ceil(x.price * x.quantity * x.taxRate) / 100;
+  });
+
+  const tips = 0;
+  const groupDiscount = 0;
+  const overRangeTotal = Math.round(overRangeCharge * 100) / 100;
+
+  return {
+    price,
+    cost,
+    tips,
+    tax,
+    overRangeCharge: overRangeTotal,
+    deliveryCost: 0, // merchant.deliveryCost,
+    deliveryDiscount: 0, // merchant.deliveryCost,
+    groupDiscount, // groupDiscount,
+    total: price + tax + tips - groupDiscount + overRangeTotal
+  };
+}
+
+export function getCartItemGroups(cart: CartInterface) {
+  const groups = [];
   cart.items.forEach((cartItem) => {
-    const order = orders.find(
+    const group = groups.find(
       (o) =>
-        o.date === cartItem.delivery.date && o.time === cartItem.delivery.time
+        o.date === cartItem.delivery.date &&
+        o.time === cartItem.delivery.time &&
+        o.merchantId === cartItem.product.merchantId
     );
-    if (order) {
-      order.items.push({
+    if (group) {
+      group.items.push({
         productId: cartItem.productId,
         quantity: cartItem.quantity,
         price: cartItem.price,
@@ -117,7 +166,8 @@ export function getOrderGroups(cart: CartInterface) {
         taxRate: cartItem.product.taxRate
       });
     } else {
-      orders.push({
+      groups.push({
+        merchantId: cartItem.product.merchantId,
         date: cartItem.delivery.date,
         time: cartItem.delivery.time,
         items: [
@@ -132,11 +182,66 @@ export function getOrderGroups(cart: CartInterface) {
       });
     }
   });
-  return orders;
+  return groups;
+}
+
+export function createOrder(
+  account: AccountInterface,
+  merchant: MerchantInterface,
+  items: Array<any>,
+  location: LocationInterface,
+  deliverDate: string,
+  deliverTime: string,
+  charge,
+  note: string,
+  paymentMethod: string,
+  lang: string
+): OrderInterface {
+  // const sCreated = moment().toISOString();
+  // const { deliverDate, deliverTime } = this.getDeliveryDateTimeByPhase(sCreated, merchant.phases, delivery.dateType);
+  const status =
+    paymentMethod === PaymentMethod.CREDIT_CARD ||
+    paymentMethod === PaymentMethod.WECHAT
+      ? OrderStatus.TEMP
+      : OrderStatus.NEW; // prepay need Driver to confirm finished
+
+  const paymentStatus =
+    paymentMethod === PaymentMethod.PREPAY
+      ? PaymentStatus.PAID
+      : PaymentStatus.UNPAID;
+
+  const order = {
+    clientId: account._id,
+    clientName: account.username,
+    merchantId: merchant._id,
+    merchantName: lang === "zh" ? merchant.name : merchant.nameEN,
+    items,
+    location,
+    pickupTime: "10:00",
+    deliverDate,
+    deliverTime,
+    type: OrderType.GROCERY,
+    status,
+    paymentStatus,
+    paymentMethod,
+    note,
+    price: Math.round(charge.price * 100) / 100,
+    cost: Math.round(charge.cost * 100) / 100,
+    deliveryCost: Math.round(charge.deliveryCost * 100) / 100,
+    deliveryDiscount: Math.round(charge.deliveryCost * 100) / 100,
+    groupDiscount: Math.round(charge.groupDiscount * 100) / 100,
+    overRangeCharge: Math.round(charge.overRangeCharge * 100) / 100,
+    total: Math.round(charge.total * 100) / 100,
+    tax: Math.round(charge.tax * 100) / 100,
+    tips: Math.round(charge.tips * 100) / 100,
+    defaultPickupTime: account.pickup ? account.pickup : ""
+  };
+
+  return order;
 }
 
 export function getOrderSummary(
-  orderGroups: Array<any>,
+  orderGroups: Array<CartItemGroupInterface>,
   overRangeCharge: number
 ): OrderSummaryInterface {
   let totalPrice = 0;

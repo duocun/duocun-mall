@@ -89,7 +89,7 @@
       <ion-label position="floating" translate="Phone Number"></ion-label>
       <ion-input [(ngModel)]="account.phone" readonly></ion-input>
     </ion-item>
-    <ion-item class="ion-padding" class="item-address">
+    <ion-item class="ion-padding" class="item-address" style="display:none;">
       <ion-label position="floating" translate="Address"></ion-label>
       <ion-input [(ngModel)]="address"></ion-input>
     </ion-item>
@@ -99,12 +99,22 @@
     </ion-item>
   </ng-container>
   <!--  END ORDER FORM  -->
+  
   <!-- BEGIN PAYMENT FORM -->
-  <ng-container *ngIf="summary">
-    <ion-row class="ion-padding">
+  <ng-container *ngIf="!error; Else errorMsg">
+    <ion-row class="ion-padding" *ngIf="account && charge && !loading">
+      <!-- BEGIN WECHAT PAY BUTTON -->
       <ion-col size="12" align="center">
-        <ion-button color="success" size="medium" expand="full" translate="Wechat Pay"></ion-button>
+        <ion-button 
+          color="success" 
+          size="medium" 
+          expand="full" 
+          translate="Wechat Pay"
+          [disabled]="processing"
+        ></ion-button>
       </ion-col>
+      <!--  END WECHAT PAY BUTTON  -->
+      <!-- BEGIN STRIPE FORM -->
       <ion-col size="12" align="center" class="ion-margin-top">
         <ion-label 
           position="stacked" 
@@ -125,10 +135,22 @@
           color="primary" 
           size="medium" 
           expand="full"
+          translate="Stripe"
+          [disabled]="processing"
           (click)="stripeCard.createToken()"
-        >Stripe</ion-button>
+        >
+        </ion-button>
       </ion-col>
+      <!--  END STRIPE FORM  -->
     </ion-row>
   </ng-container>
-  <!-- BEGIN PAYMENT FORM -->
+  <!--  END PAYMENT FORM  -->
 </ion-content>
+
+<ng-template #errorMsg>
+  <ion-row class="ion-padding" *ngIf="error">
+    <ion-col align="center">
+      <ion-label [translate]="error.message"></ion-label>
+    </ion-col>
+  </ion-row>
+</ng-template>

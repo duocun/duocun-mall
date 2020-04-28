@@ -28,6 +28,7 @@
   "Payable": "总共应付",
   "Notes": "备注",
   "Wechat Pay": "微信支付",
+  "Stripe": "Stripe",
   "Login failed": "登陆失败",
   "Deliver To": "配送到",
   "Phone Number": "手机号码",

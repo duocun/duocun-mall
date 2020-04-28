@@ -28,6 +28,7 @@
     "@ionic/storage": "^2.2.0",
     "@ngx-translate/core": "^12.1.2",
     "@ngx-translate/http-loader": "^4.0.0",
+    "@stripe/stripe-js": "^1.4.0",
     "cordova-plugin-geolocation": "^4.0.2",
     "cordova-sqlite-storage": "^5.0.0",
     "core-js": "^2.5.4",
