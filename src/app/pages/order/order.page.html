@@ -74,4 +74,16 @@
     <ion-textarea [(ngModel)]="notes"></ion-textarea>
   </ion-item>
   <!--  END ORDER NOTE  -->
+  <!-- BEGIN PAYMENT FORM -->
+  <ng-container *ngIf="summary">
+    <ion-row class="ion-padding">
+      <ion-col size="6" align="center">
+        <ion-button color="success" size="small" expand="full" translate="Wechat Pay"></ion-button>
+      </ion-col>
+      <ion-col size="6" align="center">
+        <ion-button color="primary" size="small" expand="full">Stripe</ion-button>
+      </ion-col>
+    </ion-row>
+  </ng-container>
+  <!-- BEGIN PAYMENT FORM -->
 </ion-content>
