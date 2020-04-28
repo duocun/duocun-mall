@@ -28,7 +28,7 @@
   "Payable": "总共应付",
   "Notes": "备注",
   "Wechat Pay": "微信支付",
-  "Stripe": "Stripe",
+  "Stripe": "银行卡",
   "Login failed": "登陆失败",
   "Deliver To": "配送到",
   "Phone Number": "手机号码",
@@ -39,5 +39,10 @@
   "Your card's security code is invalid.": "您的卡的安全码无效。",
   "Your postal code is incomplete": "您的邮递区号不完整。",
   "Your card number is incomplete.": "您的卡号不完整",
-  "Your card's expiration date is incomplete.": "您的卡的到期日期不完整。"
+  "Your card's expiration date is incomplete.": "您的卡的到期日期不完整。",
+  "Cannot create order": "创建订单失败",
+  "Payment failed": "付款失败",
+  "Cannot save payment": "无法保存付款",
+  "Cannot save orders": "无法保存订单",
+  "Pay by Deposit": "用余额付款"
 }

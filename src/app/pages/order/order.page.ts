@@ -47,6 +47,7 @@ export class OrderPage implements OnInit {
   loading: boolean;
   processing: boolean;
   error: OrderErrorInterface | null;
+  PaymentMethod = PaymentMethod;
   constructor(
     private cartSvc: CartService,
     private authSvc: AuthService,
@@ -64,7 +65,7 @@ export class OrderPage implements OnInit {
   }
 
   async ngOnInit() {
-    this.paymentMethod = PaymentMethod.WECHAT;
+    this.paymentMethod = PaymentMethod.CREDIT_CARD;
     this.authSvc.getAccount().subscribe((account) => {
       this.account = account;
       this.setCharge();

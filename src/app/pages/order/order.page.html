@@ -103,17 +103,6 @@
   <!-- BEGIN PAYMENT FORM -->
   <ng-container *ngIf="!error; Else errorMsg">
     <ion-row class="ion-padding" *ngIf="account && charge && !loading">
-      <!-- BEGIN WECHAT PAY BUTTON -->
-      <ion-col size="12" align="center">
-        <ion-button 
-          color="success" 
-          size="medium" 
-          expand="full" 
-          translate="Wechat Pay"
-          [disabled]="processing"
-        ></ion-button>
-      </ion-col>
-      <!--  END WECHAT PAY BUTTON  -->
       <!-- BEGIN STRIPE FORM -->
       <ion-col size="12" align="center" class="ion-margin-top">
         <ion-label 
@@ -142,6 +131,30 @@
         </ion-button>
       </ion-col>
       <!--  END STRIPE FORM  -->
+      <!-- BEGIN WECHAT PAY BUTTON -->
+      <ion-col size="12" align="center">
+        <ion-button 
+          color="success" 
+          size="medium" 
+          expand="full" 
+          translate="Wechat Pay"
+          [disabled]="processing"
+        ></ion-button>
+      </ion-col>
+      <!--  END WECHAT PAY BUTTON  -->
+      <!-- BEGIN PAY BY DEPOSIT BUTTON -->
+      <ion-col size="12" align="center" *ngIf="paymentMethod === PaymentMethod.PREPAY">
+        <ion-button
+          color="tertiary"
+          size="medium"
+          expand="full"
+          translate="Pay by Deposit"
+          [disabled]="processing"
+        >
+        </ion-button>
+      </ion-col>
+      <!--  END PAY BY DEPOSIT BUTTON  -->
+      
     </ion-row>
   </ng-container>
   <!--  END PAYMENT FORM  -->
