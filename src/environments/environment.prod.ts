@@ -6,5 +6,6 @@ export const environment = {
     cart: "DUOCUN-CART",
     location: "DUOCUN-LOCATION"
   },
-  media: "https://duocun.com.cn/media/"
+  media: "https://duocun.com.cn/media/",
+  stripe: "pk_live_vV7H1l4X9k2r8uf6JDf9lGsb"
 };

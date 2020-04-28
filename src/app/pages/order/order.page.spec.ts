@@ -10,6 +10,8 @@ import { MomentPipeModule } from "src/app/pipes/moment/moment.module";
 import { IonicStorageModule } from "@ionic/storage";
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { environment } from "src/environments/environment";
+import { StripeModule } from 'stripe-angular';
 
 describe("OrderPage", () => {
   let component: OrderPage;
@@ -27,7 +29,8 @@ describe("OrderPage", () => {
         PricePipeModule,
         MomentPipeModule,
         IonicStorageModule.forRoot(),
-        RouterModule.forRoot([])
+        RouterModule.forRoot([]),
+        StripeModule.forRoot(environment.stripe)
       ]
     }).compileComponents();
 

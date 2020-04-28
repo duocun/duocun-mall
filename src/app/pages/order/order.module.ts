@@ -11,6 +11,8 @@ import { TranslateModule } from "@ngx-translate/core";
 import { LocalValueDirectiveModule } from "src/app/directives/local-value.module";
 import { MomentPipeModule } from "src/app/pipes/moment/moment.module";
 import { PricePipeModule } from "src/app/pipes/price/price.module";
+import { StripeModule } from "stripe-angular";
+import { environment } from "src/environments/environment";
 
 @NgModule({
   imports: [
@@ -21,7 +23,8 @@ import { PricePipeModule } from "src/app/pipes/price/price.module";
     TranslateModule.forChild(),
     LocalValueDirectiveModule,
     MomentPipeModule,
-    PricePipeModule
+    PricePipeModule,
+    StripeModule.forRoot(environment.stripe)
   ],
   declarations: [OrderPage]
 })

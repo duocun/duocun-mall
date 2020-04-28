@@ -94,11 +94,31 @@
   <!-- BEGIN PAYMENT FORM -->
   <ng-container *ngIf="summary">
     <ion-row class="ion-padding">
-      <ion-col size="6" align="center">
-        <ion-button color="success" size="small" expand="full" translate="Wechat Pay"></ion-button>
+      <ion-col size="12" align="center">
+        <ion-button color="success" size="medium" expand="full" translate="Wechat Pay"></ion-button>
       </ion-col>
-      <ion-col size="6" align="center">
-        <ion-button color="primary" size="small" expand="full">Stripe</ion-button>
+      <ion-col size="12" align="center" class="ion-margin-top">
+        <ion-label 
+          position="stacked" 
+          color="danger" 
+          class="ion-margin-bottom ion-text-center"
+          *ngIf="stripeError" 
+          [translate]="stripeError.message"
+        >
+        </ion-label>
+        <stripe-card
+          #stripeCard
+          [(invalid)]="stripeError"
+          (tokenChange)="stripePay($event)"
+        ></stripe-card>
+      </ion-col>
+      <ion-col size="12" align="center">
+        <ion-button 
+          color="primary" 
+          size="medium" 
+          expand="full"
+          (click)="stripeCard.createToken()"
+        >Stripe</ion-button>
       </ion-col>
     </ion-row>
   </ng-container>

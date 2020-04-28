@@ -31,5 +31,12 @@
   "Login failed": "Login failed",
   "Deliver To": "Deliver To",
   "Phone Number": "Phone Number",
-  "Address": "Address"
+  "Address": "Address",
+  "Your card number is invalid.": "Your card number is invalid.",
+  "Your card's expiration date is in the past.": "Your card's expiration date is in the past.",
+  "Your card's expiration year is in the past.": "Your card's expiration year is in the past.",
+  "Your card's security code is invalid.": "Your card's security code is invalid.",
+  "Your postal code is incomplete": "Your postal code is incomplete",
+  "Your card number is incomplete.": "Your card number is incomplete.",
+  "Your card's expiration date is incomplete.": "Your card's expiration date is incomplete."
 }

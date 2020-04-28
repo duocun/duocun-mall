@@ -10,7 +10,8 @@ export const environment = {
     cart: "DUOCUN-CART",
     location: "DUOCUN-LOCATION"
   },
-  media: "https://duocun.com.cn/media/"
+  media: "https://duocun.com.cn/media/",
+  stripe: "pk_test_FsGoacByMF8lGNcVKveNZFSy00ATWTilJp"
 };
 
 /*

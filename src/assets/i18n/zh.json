@@ -31,5 +31,12 @@
   "Login failed": "登陆失败",
   "Deliver To": "配送到",
   "Phone Number": "手机号码",
-  "Address": "地址"
+  "Address": "地址",
+  "Your card number is invalid.": "您的卡号无效。",
+  "Your card's expiration date is in the past.": "您的卡的过期日期是过去的日期。",
+  "Your card's expiration year is in the past.": "您的卡的有效期限是过去。",
+  "Your card's security code is invalid.": "您的卡的安全码无效。",
+  "Your postal code is incomplete": "您的邮递区号不完整。",
+  "Your card number is incomplete.": "您的卡号不完整",
+  "Your card's expiration date is incomplete.": "您的卡的到期日期不完整。"
 }
