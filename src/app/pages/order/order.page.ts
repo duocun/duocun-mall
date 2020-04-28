@@ -116,9 +116,6 @@ export class OrderPage implements OnInit {
   }
 
   stripePay(token: StripeToken) {
-    if (!this.stripe || !this.loading) {
-      return;
-    }
     this.paymentMethod = PaymentMethod.CREDIT_CARD;
     this.processing = true;
     this.stripe
@@ -144,6 +141,7 @@ export class OrderPage implements OnInit {
                   observable.subscribe((resp: any) => {
                     if (resp.err === PaymentError.NONE) {
                       this.showAlert("Notice", "Payment success", "OK");
+                      this.cartSvc.clearCart();
                     } else {
                       this.showAlert("Notice", "Payment failed", "OK");
                     }
@@ -167,6 +165,11 @@ export class OrderPage implements OnInit {
             this.processing = false;
           });
       });
+  }
+
+  wechatPay() {
+    this.paymentMethod = PaymentMethod.WECHAT;
+    // TO DO: implement Wechat Pay
   }
 
   showAlert(header, message, button) {

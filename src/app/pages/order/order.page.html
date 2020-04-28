@@ -125,7 +125,7 @@
           size="medium" 
           expand="full"
           translate="Stripe"
-          [disabled]="processing"
+          [disabled]="!stripe || loading || processing"
           (click)="stripeCard.createToken()"
         >
         </ion-button>
@@ -138,7 +138,8 @@
           size="medium" 
           expand="full" 
           translate="Wechat Pay"
-          [disabled]="processing"
+          [disabled]="loading || processing"
+          (click)="wechatPay()"
         ></ion-button>
       </ion-col>
       <!--  END WECHAT PAY BUTTON  -->
