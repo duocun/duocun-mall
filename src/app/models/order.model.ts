@@ -86,6 +86,11 @@ export interface OrderSummaryInterface {
   total: number;
 }
 
+export interface ChargeInterface extends OrderSummaryInterface {
+  payable: number;
+  balance: number;
+}
+
 export function getChargeItems(cart: CartInterface): Array<any> {
   return cart.items.map((cartItem) => {
     return {

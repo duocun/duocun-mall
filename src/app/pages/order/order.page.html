@@ -31,34 +31,42 @@
     </ion-col>
     <!--  END CHARGE ITEMS  -->
     <!-- BEGIN CHARGE SUMMARY -->
-    <ion-col size="5" class="col-charge-summary" *ngIf="summary">
+    <ion-col size="5" class="col-charge-summary" *ngIf="charge">
       <ion-row>
         <ion-col size="7" translate="Subtotal"></ion-col>
-        <ion-col size="5">{{summary.price|price}}</ion-col>
+        <ion-col size="5">{{charge.price|price}}</ion-col>
       </ion-row>
       <ion-row>
         <ion-col size="7" translate="Delivery Fee"></ion-col>
-        <ion-col size="5">{{summary.deliveryCost|price}}</ion-col>
+        <ion-col size="5">{{charge.deliveryCost|price}}</ion-col>
       </ion-row>
       <ion-row>
         <ion-col size="7" translate="Tax"></ion-col>
-        <ion-col size="5">{{summary.tax|price}}</ion-col>
+        <ion-col size="5">{{charge.tax|price}}</ion-col>
       </ion-row>
       <ion-row>
         <ion-col size="7" translate="Tips"></ion-col>
-        <ion-col size="5">{{summary.tips|price}}</ion-col>
+        <ion-col size="5">{{charge.tips|price}}</ion-col>
       </ion-row>
       <ion-row>
         <ion-col size="7" translate="Delivery Fee Discount"></ion-col>
-        <ion-col size="5">{{-summary.deliveryDiscount|price}}</ion-col>
+        <ion-col size="5">{{-charge.deliveryDiscount|price}}</ion-col>
+      </ion-row>
+      <ion-row *ngIf="charge.overRangeCharge">
+        <ion-col size="7" translate="Out-of-Range Charge"></ion-col>
+        <ion-col size="5">{{charge.overRangeCharge|price}}</ion-col>
       </ion-row>
       <ion-row>
-        <ion-col size="7" translate="Out-of-Range Charge"></ion-col>
-        <ion-col size="5">{{summary.overRangeCharge|price}}</ion-col>
+        <ion-col size="7" translate="Total"></ion-col>
+        <ion-col size="5">{{charge.total|price}}</ion-col>
+      </ion-row>
+      <ion-row  *ngIf="charge.balance">
+        <ion-col size="7" translate="Balance"></ion-col>
+        <ion-col size="5">{{charge.balance|price}}</ion-col>
       </ion-row>
       <ion-row class="border">
-        <ion-col size="7" translate="Total"></ion-col>
-        <ion-col size="5">{{summary.total|price}}</ion-col>
+        <ion-col size="7" translate="Payable"></ion-col>
+        <ion-col size="5">{{charge.payable|price}}</ion-col>
       </ion-row>
     </ion-col>
     <!--  END CHARGE SUMMARY  -->
