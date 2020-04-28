@@ -68,12 +68,26 @@
     </ul>
   </ion-row>
   <!--  END NOTCIE  -->
-  <!-- BEGIN ORDER NOTE -->
-  <ion-item class="ion-padding" class="item-notes">
-    <ion-label position="floating" translate="Notes"></ion-label>
-    <ion-textarea [(ngModel)]="notes"></ion-textarea>
-  </ion-item>
-  <!--  END ORDER NOTE  -->
+  <!-- BEGIN ORDER FORM -->
+  <ng-container *ngIf="account">
+    <ion-item>
+      <ion-label position="floating" translate="Deliver To"></ion-label>
+      <ion-input [(ngModel)]="account.username" readonly></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating" translate="Phone Number"></ion-label>
+      <ion-input [(ngModel)]="account.phone" readonly></ion-input>
+    </ion-item>
+    <ion-item class="ion-padding" class="item-address">
+      <ion-label position="floating" translate="Address"></ion-label>
+      <ion-input [(ngModel)]="address"></ion-input>
+    </ion-item>
+    <ion-item class="ion-padding" class="item-notes">
+      <ion-label position="floating" translate="Notes"></ion-label>
+      <ion-textarea [(ngModel)]="notes"></ion-textarea>
+    </ion-item>
+  </ng-container>
+  <!--  END ORDER FORM  -->
   <!-- BEGIN PAYMENT FORM -->
   <ng-container *ngIf="summary">
     <ion-row class="ion-padding">
