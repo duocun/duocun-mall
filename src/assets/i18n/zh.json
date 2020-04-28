@@ -16,5 +16,14 @@
   "Confirm Order": "确认订单",
   "order_page_title": "蔬果蛋奶直送",
   "order_page_notice_1": "如果您在公寓或办公大楼内，请在大厅取货，我们不会进入大楼。 在市区，我们的汽车将停在建筑物附近的路边。",
-  "order_page_notice_2": "请保持电话畅通。"
+  "order_page_notice_2": "请保持电话畅通。",
+  "Subtotal": "商品总额",
+  "Delivery Fee": "运费",
+  "Tax": "税费",
+  "Tips": "小费",
+  "Delivery Fee Discount": "运费折扣",
+  "Out-of-Range Charge": "超范围服务费",
+  "Total": "总计",
+  "Balance": "当前余额",
+  "Payable": "总共应付"
 }

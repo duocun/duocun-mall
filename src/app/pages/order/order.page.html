@@ -10,6 +10,60 @@
       <h3 translate="order_page_title"></h3>
     </ion-col>
   </ion-row>
+  <ion-row class="ion-padding row-charge">
+    <!-- BEGIN CHARGE ITEMS -->
+    <ion-col size="7">
+      <ion-row *ngFor="let item of chargeItems" class="row-charge-item">
+        <ion-col size="7">
+          <div><label localValue [data]="item" key="name"></label></div>
+          <div><label>{{item.date|moment: "YYYY-MM-DD ddd"}}</label></div>
+        </ion-col>
+        <ion-col size="2">
+          <span>&times; {{item.quantity}}</span>
+        </ion-col>
+        <ion-col size="3">
+          {{(item.price * item.quantity) | price}}
+        </ion-col>
+      </ion-row>
+    </ion-col>
+    <!--  END CHARGE ITEMS  -->
+    <!-- BEGIN CHARGE SUMMARY -->
+    <ion-col size="5" class="col-charge-summary" *ngIf="summary">
+      <ion-row>
+        <ion-col size="7" translate="Subtotal"></ion-col>
+        <ion-col size="5">{{summary.price|price}}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="7" translate="Delivery Fee"></ion-col>
+        <ion-col size="5">{{summary.deliveryCost|price}}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="7" transalte="Tax"></ion-col>
+        <ion-col size="5">{{summary.tax|price}}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="7" translate="Tips"></ion-col>
+        <ion-col size="5">{{summary.tips|price}}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="7" translate="Delivery Fee Discount"></ion-col>
+        <ion-col size="5">{{-summary.deliveryDiscount|price}}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="7" translate="Out-of-Range Charge"></ion-col>
+        <ion-col size="5">{{summary.overRangeCharge|price}}</ion-col>
+      </ion-row>
+      <ion-row class="border">
+        <ion-col size="7" translate="Total"></ion-col>
+        <ion-col size="5">{{summary.total|price}}</ion-col>
+      </ion-row>
+      <!-- <ion-row>
+        <ion-col size="7" translate="Payable"></ion-col>
+        <ion-col size="5">{{summary.payable|price}}</ion-col>
+      </ion-row> -->
+    </ion-col>
+    <!--  END CHARGE SUMMARY  -->
+  </ion-row>
   <ion-row class="ion-padding">
     <ul class="order-notice">
       <li translate="order_page_notice_1"></li>

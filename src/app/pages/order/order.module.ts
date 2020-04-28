@@ -8,6 +8,9 @@ import { OrderPageRoutingModule } from "./order-routing.module";
 
 import { OrderPage } from "./order.page";
 import { TranslateModule } from "@ngx-translate/core";
+import { LocalValueDirectiveModule } from "src/app/directives/local-value.module";
+import { MomentPipeModule } from "src/app/pipes/moment/moment.module";
+import { PricePipeModule } from "src/app/pipes/price/price.module";
 
 @NgModule({
   imports: [
@@ -15,7 +18,10 @@ import { TranslateModule } from "@ngx-translate/core";
     FormsModule,
     IonicModule,
     OrderPageRoutingModule,
-    TranslateModule.forChild()
+    TranslateModule.forChild(),
+    LocalValueDirectiveModule,
+    MomentPipeModule,
+    PricePipeModule
   ],
   declarations: [OrderPage]
 })

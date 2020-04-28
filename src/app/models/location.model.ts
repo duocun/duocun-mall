@@ -15,6 +15,22 @@ export interface StructuredAddressInterface {
   secondary_text: string;
 }
 
+export interface AddressInterface {
+  formattedAddress?: string;
+  unit?: number;
+  streetName?: string;
+  streetNumber?: string;
+  location?: GeoPointInterface;
+  sublocality?: string;
+  city?: string;
+  province?: string;
+  country?: string;
+  postalCode?: string;
+  created?: Date;
+  modified?: Date;
+  _id?: number;
+}
+
 export interface LocationInterface {
   placeId: string;
   city?: string;

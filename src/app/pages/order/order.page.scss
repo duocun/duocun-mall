@@ -8,3 +8,17 @@
     margin-right: .5rem;
   }
 }
+.row-charge-item {
+  font-size: 0.75rem;
+  ion-row {
+    margin: 0;
+    padding: 0;
+  }
+}
+.col-charge-summary {
+  font-size: 0.75rem;
+  .border {
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+  }
+}

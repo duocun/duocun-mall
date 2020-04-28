@@ -29,6 +29,7 @@ export interface ProductInterface {
 
   merchant?: MerchantInterface; // join account table from find()
   merchantAccount?: any; // join account table from find()
+  taxRate: number;
 }
 
 export function getPictureUrl(product: any, idx = 0) {

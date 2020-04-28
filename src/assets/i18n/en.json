@@ -16,5 +16,14 @@
   "Confirm Order": "Confirm Order",
   "order_page_title": "Vegetables, fruits, egg and milk direct delivery",
   "order_page_notice_1": "If you are in condo or office building, Please pickup at the hall, we will not enter the building. In Downtown, our car will stop at the road side near the building.",
-  "order_page_notice_2": "Please turn on your phone to answering status."
+  "order_page_notice_2": "Please turn on your phone to answering status.",
+  "Subtotal": "Subtotal",
+  "Delivery Fee": "Delivery Fee",
+  "Tax": "Tax",
+  "Tips": "Tips",
+  "Delivery Fee Discount": "Delivery Fee Discount",
+  "Out-of-Range Charge": "Out-of-Range Charge",
+  "Total": "Total",
+  "Balance": "Balance",
+  "Payable": "Payable"
 }
