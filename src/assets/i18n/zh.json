@@ -25,5 +25,6 @@
   "Out-of-Range Charge": "超范围服务费",
   "Total": "总计",
   "Balance": "当前余额",
-  "Payable": "总共应付"
+  "Payable": "总共应付",
+  "Notes": "备注"
 }

@@ -12,6 +12,7 @@ export class OrderPage implements OnInit {
   order: Order.OrderInterface;
   orderGroups: Array<any>;
   summary: Order.OrderSummaryInterface;
+  notes: string;
   constructor(private cartSvc: CartService) {}
 
   ngOnInit() {
