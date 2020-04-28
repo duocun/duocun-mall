@@ -44,27 +44,4 @@ describe("ApiService", () => {
     });
   });
 
-  describe("buildAuthHeader", () => {
-    it("should return empty object when user is not authenticated", (done) => {
-      const auth: AuthService = TestBed.get(AuthService);
-      const api: ApiService = TestBed.get(ApiService);
-      auth.logout().then(() => {
-        api.buildAuthHeader().then((header) => {
-          expect(header).toEqual({});
-          done();
-        });
-      });
-    });
-    it("should return http header object when user is authenticated", (done) => {
-      const auth: AuthService = TestBed.get(AuthService);
-      const api: ApiService = TestBed.get(ApiService);
-      auth.login("my token").then(() => {
-        api.buildAuthHeader().then((header) => {
-          const headers = header.headers;
-          expect(headers.get("Authorization")).toEqual("Bearer my token");
-          done();
-        });
-      });
-    });
-  });
 });
