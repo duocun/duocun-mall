@@ -27,5 +27,6 @@
   "Balance": "当前余额",
   "Payable": "总共应付",
   "Notes": "备注",
-  "Wechat Pay": "微信支付"
+  "Wechat Pay": "微信支付",
+  "Login failed": "登陆失败"
 }
