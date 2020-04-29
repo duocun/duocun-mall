@@ -55,5 +55,9 @@
   "Delivery Date": "Delivery Date",
   "Delivery Address": "Delivery Address",
   "Merchant Name": "Merchant Name",
-  "Loading...": "Loading..."
+  "Loading...": "Loading...",
+  "Date": "Date",
+  "Description": "Description",
+  "Credit": "Credit",
+  "Debit": "Debit"
 }

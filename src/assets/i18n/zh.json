@@ -55,5 +55,9 @@
   "Delivery Date": "收货日期",
   "Delivery Address": "收货地址",
   "Merchant Name": "商户名称",
-  "Loading...": "载入中..."
+  "Loading...": "载入中...",
+  "Date": "日期",
+  "Description": "说明",
+  "Credit": "贷方",
+  "Debit": "借方"
 }
