@@ -18,6 +18,7 @@ import { environment } from "src/environments/environment";
 import { loadStripe, Stripe, StripeError } from "@stripe/stripe-js";
 import { MerchantInterface } from "src/app/models/merchant.model";
 import { LocationInterface } from "src/app/models/location.model";
+import { formatLocation } from "src/app/models/location.model";
 import { LocationService } from "src/app/services/location/location.service";
 
 interface OrderErrorInterface {
@@ -72,6 +73,7 @@ export class OrderPage implements OnInit {
     });
     this.locSvc.getLocation().subscribe((location) => {
       this.location = location;
+      this.address = formatLocation(location);
     });
     this.cartSvc.getCart().subscribe((cart) => {
       this.cart = cart;

@@ -67,6 +67,16 @@ export function formatAddress(place: PlaceInterface): string {
   return address;
 }
 
+export function formatLocation(location: LocationInterface): string {
+  const addressFormats = [];
+  ["streetNumber", "streetName", "subLocality", "city", "province"].forEach(
+    (key) => {
+      addressFormats.push(location[key] ? location[key] : "");
+    }
+  );
+  return addressFormats.join(" ");
+}
+
 export function getLocationFromGeocode(geocodeResult): LocationInterface {
   const addr = geocodeResult && geocodeResult.address_components;
   const oLocation = geocodeResult.geometry.location;
