@@ -75,4 +75,9 @@ export class AuthService {
   getAccount() {
     return this.account$;
   }
+
+  async updateData() {
+    const token = await this.getToken();
+    this.login(token);
+  }
 }
