@@ -49,5 +49,10 @@
   "You are not logged in": "你没有登录",
   "Change Phone": "更改电话",
   "Order History": "订单历史",
-  "Transaction History": "交易记录"
+  "Transaction History": "交易记录",
+  "Order Code": "订单代码",
+  "Order Date": "订单日期",
+  "Delivery Date": "收货日期",
+  "Delivery Address": "收货地址",
+  "Merchant Name": "商户名称"
 }

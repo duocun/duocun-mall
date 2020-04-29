@@ -49,5 +49,10 @@
   "You are not logged in": "You are not logged in",
   "Change Phone": "Change Phone",
   "Order History": "Order History",
-  "Transaction History": "Transaction History"
+  "Transaction History": "Transaction History",
+  "Order Code": "Order Code",
+  "Order Date": "Order Date",
+  "Delivery Date": "Delivery Date",
+  "Delivery Address": "Delivery Address",
+  "Merchant Name": "Merchant Name"
 }

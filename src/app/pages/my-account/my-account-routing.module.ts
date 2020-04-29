@@ -7,6 +7,13 @@ const routes: Routes = [
   {
     path: "",
     component: MyAccountPage
+  },
+  {
+    path: "order-history",
+    loadChildren: () =>
+      import("../order-history/order-history.module").then(
+        (m) => m.OrderHistoryPageModule
+      )
   }
 ];
 

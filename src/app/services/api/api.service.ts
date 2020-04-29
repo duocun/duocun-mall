@@ -50,10 +50,8 @@ export class ApiService {
   }
 
   // get with header
-  async geth(url, param = null, auth = true, isRelative = true) {
-    if (isRelative) {
-      url = this.buildUrl(url);
-    }
+  async geth(url, param = null, auth = true, key = "data") {
+    url = this.buildUrl(url);
     let headers;
     if (auth) {
       const authHeader = await this.buildAuthHeader();
@@ -61,7 +59,7 @@ export class ApiService {
     } else {
       headers = new HttpHeaders();
     }
-    headers = headers.append("data", JSON.stringify(param));
+    headers = headers.append(key, JSON.stringify(param));
     return new Promise((resolve, reject) => {
       this.http
         .get(url, { headers })
