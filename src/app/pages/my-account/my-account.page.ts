@@ -1,11 +1,9 @@
 import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
 import { AuthService } from "src/app/services/auth/auth.service";
 import { AccountInterface } from "src/app/models/account.model";
 import { TranslateService } from "@ngx-translate/core";
 import { environment } from "src/environments/environment";
 import { Storage } from "@ionic/storage";
-import { AlertController } from "@ionic/angular";
 @Component({
   selector: "app-my-account",
   templateUrl: "./my-account.page.html",
@@ -17,9 +15,7 @@ export class MyAccountPage implements OnInit {
   constructor(
     private authSvc: AuthService,
     private translator: TranslateService,
-    private storage: Storage,
-    private alert: AlertController,
-    private router: Router
+    private storage: Storage
   ) {}
 
   ngOnInit() {
