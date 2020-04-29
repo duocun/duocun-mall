@@ -8,5 +8,34 @@
 </ion-header>
 
 <ion-content>
-
+  <ion-row class="row-heading">
+    <ion-col size="3" translate="Date"></ion-col>
+    <ion-col size="3" translate="Description"></ion-col>
+    <ion-col size="2" translate="Credit"></ion-col>
+    <ion-col size="2" translate="Debit"></ion-col>
+    <ion-col size="2" translate="Balance"></ion-col>
+  </ion-row>
+  <ion-row class="row-body" *ngIf="!loading; Else skeleton">
+    <ng-container *ngFor="let transaction of transactions">
+      <ion-col size="3">{{transaction.date | moment: 'YYYY-MM-DD ddd'}}</ion-col>
+      <ion-col size="3">{{transaction.description}}</ion-col>
+      <ion-col size="2">{{transaction.consumed | price}}</ion-col>
+      <ion-col size="2">{{transaction.paid | price}}</ion-col>
+      <ion-col size="2">{{transaction.balance | price}}</ion-col>
+    </ng-container>
+  </ion-row>
+  <ion-infinite-scroll threshold="96px" (ionInfinite)="loadData($event)" [disabled]="scrollDisabled">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      [loadingText]="'Loading...'|translate">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>
+
+<ng-template #skeleton>
+  <ion-row class="row-body">
+    <ion-col size="12" *ngFor="let i of [1,2,3,4,5]">
+      <ion-skeleton-text animated style="height: 1.5rem;"></ion-skeleton-text>
+    </ion-col>
+  </ion-row>
+</ng-template>

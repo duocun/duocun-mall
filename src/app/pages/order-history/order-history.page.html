@@ -108,7 +108,7 @@
     <ion-infinite-scroll threshold="96px" (ionInfinite)="loadData($event)" [disabled]="scrollDisabled">
       <ion-infinite-scroll-content
         loadingSpinner="bubbles"
-        loadingText="Loading more data...">
+        [loadingText]="'Loading...'|translate">
       </ion-infinite-scroll-content>
     </ion-infinite-scroll>
   </ng-container>

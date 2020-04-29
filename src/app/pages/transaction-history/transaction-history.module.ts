@@ -8,6 +8,8 @@ import { TransactionHistoryPageRoutingModule } from "./transaction-history-routi
 
 import { TransactionHistoryPage } from "./transaction-history.page";
 import { TranslateModule } from "@ngx-translate/core";
+import { PricePipeModule } from "src/app/pipes/price/price.module";
+import { MomentPipeModule } from "src/app/pipes/moment/moment.module";
 
 @NgModule({
   imports: [
@@ -15,7 +17,9 @@ import { TranslateModule } from "@ngx-translate/core";
     FormsModule,
     IonicModule,
     TransactionHistoryPageRoutingModule,
-    TranslateModule.forChild()
+    TranslateModule.forChild(),
+    PricePipeModule,
+    MomentPipeModule
   ],
   declarations: [TransactionHistoryPage]
 })

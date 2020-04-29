@@ -30,7 +30,6 @@ export class OrderHistoryPage implements OnInit {
     this.authSvc.getAccount().subscribe((account: AccountInterface) => {
       if (account && account._id) {
         this.accountId = account._id;
-        this.loading = false;
         this.updatePage(null);
       }
     });
@@ -53,10 +52,10 @@ export class OrderHistoryPage implements OnInit {
       )
       .then((data: { orders: Array<OrderInterface>; total: number }) => {
         this.orders = [...this.orders, ...data.orders];
+        this.loading = false;
         if (event) {
           event.target.complete();
           if (this.orders.length === data.total) {
-            console.log("order length and total matching disabled");
             this.scrollDisabled = true;
           }
         }

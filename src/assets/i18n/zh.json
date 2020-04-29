@@ -54,5 +54,6 @@
   "Order Date": "订单日期",
   "Delivery Date": "收货日期",
   "Delivery Address": "收货地址",
-  "Merchant Name": "商户名称"
+  "Merchant Name": "商户名称",
+  "Loading...": "载入中..."
 }
