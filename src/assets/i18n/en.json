@@ -59,5 +59,10 @@
   "Date": "Date",
   "Description": "Description",
   "Credit": "Credit",
-  "Debit": "Debit"
+  "Debit": "Debit",
+  "Account Setting": "Account Setting",
+  "Old Phone Number": "Old Phone Number",
+  "New Phone Number": "New Phone Number",
+  "Please input phone number": "Please input phone number",
+  "Save": "Save"
 }

@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/my-account" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title translate="Change Phone"></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ng-container *ngIf="account">
+    <ion-list class="ion-margin-top">
+      <ion-item>
+        <ion-label translate="Old Phone Number"></ion-label>
+        <ion-label>{{account.phone}}</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label position="stacked" translate="New Phone Number"></ion-label>
+        <ion-input [(ngModel)]="model.phone"></ion-input>
+      </ion-item>
+    </ion-list>
+    <ion-row class="ion-padding">
+      <ion-col size="12" align="center">
+        <ion-button color="primary" translate="Save" expand="full" (click)="handleSave()"></ion-button>
+      </ion-col>
+    </ion-row>
+  </ng-container>
+</ion-content>

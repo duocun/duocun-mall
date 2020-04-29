@@ -47,7 +47,7 @@
   "Pay by Deposit": "用余额付款",
   "Language": "语言",
   "You are not logged in": "你没有登录",
-  "Change Phone": "更改电话",
+  "Change Phone": "更改手机号码",
   "Order History": "订单历史",
   "Transaction History": "交易记录",
   "Order Code": "订单代码",
@@ -59,5 +59,10 @@
   "Date": "日期",
   "Description": "说明",
   "Credit": "贷方",
-  "Debit": "借方"
+  "Debit": "借方",
+  "Account Setting": "账户设置",
+  "Old Phone Number": "您当前手机号为",
+  "New Phone Number": "请在以下更新您的手机号",
+  "Please input phone number": "请输入手机号码",
+  "Save": "保存"
 }

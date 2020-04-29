@@ -21,6 +21,13 @@ const routes: Routes = [
       import("../transaction-history/transaction-history.module").then(
         (m) => m.TransactionHistoryPageModule
       )
+  },
+  {
+    path: "setting",
+    loadChildren: () =>
+      import("../account-setting/account-setting.module").then(
+        (m) => m.AccountSettingPageModule
+      )
   }
 ];
 
