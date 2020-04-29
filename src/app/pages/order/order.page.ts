@@ -72,8 +72,10 @@ export class OrderPage implements OnInit {
       this.setCharge();
     });
     this.locSvc.getLocation().subscribe((location) => {
-      this.location = location;
-      this.address = formatLocation(location);
+      if (location) {
+        this.location = location;
+        this.address = formatLocation(location);
+      }
     });
     this.cartSvc.getCart().subscribe((cart) => {
       this.cart = cart;
