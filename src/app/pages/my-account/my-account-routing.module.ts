@@ -14,6 +14,13 @@ const routes: Routes = [
       import("../order-history/order-history.module").then(
         (m) => m.OrderHistoryPageModule
       )
+  },
+  {
+    path: "transaction-history",
+    loadChildren: () =>
+      import("../transaction-history/transaction-history.module").then(
+        (m) => m.TransactionHistoryPageModule
+      )
   }
 ];
 
