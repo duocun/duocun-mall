@@ -70,11 +70,11 @@ export class HomePage implements OnInit {
     this.authSvc.getAccount().subscribe((account) => {
       this.account = account;
     });
-    this.authSvc.authState.subscribe((isLoggedIn: boolean) => {
-      if (!isLoggedIn) {
-        this.showAlert("Notice", "Login failed", "OK");
-      }
-    });
+    // this.authSvc.authState.subscribe((isLoggedIn: boolean) => {
+    //   if (!isLoggedIn) {
+    //     this.showAlert("Notice", "Login failed", "OK");
+    //   }
+    // });
   }
 
   handleCreditByWeChat(params: ParamMap) {

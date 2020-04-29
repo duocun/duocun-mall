@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 
 import { BrowsePage } from "./browse.page";
+import { AuthGuard } from "src/app/guards/auth.guard";
 
 const routes: Routes = [
   {
@@ -20,6 +21,7 @@ const routes: Routes = [
   },
   {
     path: "order",
+    canActivate: [AuthGuard],
     loadChildren: () =>
       import("../order/order.module").then((m) => m.OrderPageModule)
   }
