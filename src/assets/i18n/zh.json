@@ -44,5 +44,6 @@
   "Payment failed": "付款失败",
   "Cannot save payment": "无法保存付款",
   "Cannot save orders": "无法保存订单",
-  "Pay by Deposit": "用余额付款"
+  "Pay by Deposit": "用余额付款",
+  "Language": "语言"
 }

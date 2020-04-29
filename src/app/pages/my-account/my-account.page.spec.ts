@@ -5,8 +5,8 @@ import { MyAccountPage } from "./my-account.page";
 import { HttpClientModule } from "@angular/common/http";
 import { TranslateModule } from "@ngx-translate/core";
 import { PricePipeModule } from "src/app/pipes/price/price.module";
-import { IonImageModule } from 'src/app/components/ion-image/ion-image.module';
-import { IonicStorageModule } from '@ionic/storage';
+import { IonImageModule } from "src/app/components/ion-image/ion-image.module";
+import { IonicStorageModule } from "@ionic/storage";
 
 describe("MyAccountPage", () => {
   let component: MyAccountPage;

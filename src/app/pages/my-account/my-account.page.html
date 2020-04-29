@@ -15,11 +15,21 @@
     <ion-col size="12" class="ion-margin-top" align="center">
       <ion-label>{{account.username}}</ion-label>
     </ion-col>
-    <ion-col size="12" class="ion-margin-top" align="center">
-      <ion-label class="ion-margin-end" translate="Balance"></ion-label>
-      <ion-label>{{account.balance|price}}</ion-label>
-    </ion-col>
+    
   </ion-row>
+  <ion-list>
+    <ion-item>
+      <ion-label translate="Balance"></ion-label>
+      <ion-label>{{account.balance|price}}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label translate="Language"></ion-label>
+      <ion-select [value]="lang" (ionChange)="handleLangChange($event)">
+        <ion-select-option value="en">English</ion-select-option>
+        <ion-select-option value="zh">中文</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
 </ion-content>
 
 <ng-template #emptyAccount>

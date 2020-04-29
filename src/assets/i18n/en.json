@@ -44,5 +44,6 @@
   "Payment failed": "Payment failed",
   "Cannot save payment": "Cannot save payment",
   "Cannot save orders": "Cannot save orders",
-  "Pay by Deposit": "Pay by Deposit"
+  "Pay by Deposit": "Pay by Deposit",
+  "Language": "Language"
 }

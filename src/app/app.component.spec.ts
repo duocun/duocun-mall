@@ -11,6 +11,7 @@ import { AppComponent } from "./app.component";
 
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { createTranslateLoader } from "./app.module";
+import { IonicStorageModule } from "@ionic/storage";
 
 describe("AppComponent", () => {
   let statusBarSpy, splashScreenSpy, platformReadySpy, platformSpy;
@@ -32,7 +33,8 @@ describe("AppComponent", () => {
             useFactory: createTranslateLoader,
             deps: [HttpClient]
           }
-        })
+        }),
+        IonicStorageModule.forRoot()
       ],
       providers: [
         { provide: StatusBar, useValue: statusBarSpy },

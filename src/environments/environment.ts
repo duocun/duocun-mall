@@ -8,10 +8,12 @@ export const environment = {
   storageKey: {
     auth: "DUOCUN-AUTH-TOKEN",
     cart: "DUOCUN-CART",
-    location: "DUOCUN-LOCATION"
+    location: "DUOCUN-LOCATION",
+    lang: "DUOCUN-I18N"
   },
   media: "https://duocun.com.cn/media/",
-  stripe: "pk_test_FsGoacByMF8lGNcVKveNZFSy00ATWTilJp"
+  stripe: "pk_test_FsGoacByMF8lGNcVKveNZFSy00ATWTilJp",
+  defaultLang: "zh"
 };
 
 /*
