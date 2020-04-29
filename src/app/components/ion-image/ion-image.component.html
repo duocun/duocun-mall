@@ -6,8 +6,10 @@
   [alt]="alt"
   [attr.style]="safeStyle"
 ></ion-img>
-<ion-img *ngIf="loading"
-  [src]="placeholderSrc"
-  [alt]="alt"
-  [attr.style]="safeStyle"
-></ion-img>
+<div style="position:relative; height: 100%;" *ngIf="loading">
+  <ion-img 
+    [src]="placeholderSrc"
+    [alt]="alt"
+    [attr.style]="safeStyle"
+  ></ion-img>
+</div>
