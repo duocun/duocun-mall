@@ -45,5 +45,9 @@
   "Cannot save payment": "Cannot save payment",
   "Cannot save orders": "Cannot save orders",
   "Pay by Deposit": "Pay by Deposit",
-  "Language": "Language"
+  "Language": "Language",
+  "You are not logged in": "You are not logged in",
+  "Change Phone": "Change Phone",
+  "Order History": "Order History",
+  "Transaction History": "Transaction History"
 }

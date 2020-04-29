@@ -1,0 +1,15 @@
+
+.card-link {
+  --background: #fcfcfc;
+  ion-card-header {
+    ion-icon {
+      height: 36px;
+      width: 36px;
+    }
+  }
+  ion-card-content {
+    h3 {
+      font-size: 1.125rem;
+    }
+  }
+}

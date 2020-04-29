@@ -45,5 +45,9 @@
   "Cannot save payment": "无法保存付款",
   "Cannot save orders": "无法保存订单",
   "Pay by Deposit": "用余额付款",
-  "Language": "语言"
+  "Language": "语言",
+  "You are not logged in": "你没有登录",
+  "Change Phone": "更改电话",
+  "Order History": "订单历史",
+  "Transaction History": "交易记录"
 }

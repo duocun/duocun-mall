@@ -39,8 +39,16 @@ body {
       }
   }
   background-color: #eee;
-
 }
 .w-100 {
   width: 100%;
+}
+.ion-text-primary {
+  color: var(--ion-color-primary)
+}
+.ion-text-success {
+  color: var(--ion-color-success)
+}
+.ion-text-tertiary {
+  color: var(--ion-color-tertiary)
 }
