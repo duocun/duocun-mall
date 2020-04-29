@@ -1,9 +1,10 @@
 import { Component, OnInit } from "@angular/core";
-import { TransactionInterface } from "src/app/models/transaction.model";
+import { TransactionRepInterface } from "src/app/models/transaction.model";
 import { getTransactionDescription } from "src/app/models/transaction.model";
 import { AuthService } from "src/app/services/auth/auth.service";
 import { AccountInterface } from "src/app/models/account.model";
 import { ApiService } from "src/app/services/api/api.service";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "app-transaction-history",
@@ -12,12 +13,16 @@ import { ApiService } from "src/app/services/api/api.service";
 })
 export class TransactionHistoryPage implements OnInit {
   loading: boolean;
-  transactions: Array<TransactionInterface>;
+  transactions: Array<TransactionRepInterface>;
   accountId: string;
   page: number;
   pageLength: number;
   scrollDisabled: boolean;
-  constructor(private authSvc: AuthService, private api: ApiService) {
+  constructor(
+    private authSvc: AuthService,
+    private api: ApiService,
+    private translator: TranslateService
+  ) {
     this.loading = true;
     this.transactions = [];
     this.page = 1;
@@ -46,7 +51,9 @@ export class TransactionHistoryPage implements OnInit {
         {
           $or: [
             {
-              fromId: this.accountId,
+              fromId: this.accountId
+            },
+            {
               toId: this.accountId
             }
           ],
@@ -60,12 +67,18 @@ export class TransactionHistoryPage implements OnInit {
       .then(
         (resp: {
           total: number;
-          transactions: Array<TransactionInterface>;
+          transactions: Array<TransactionRepInterface>;
         }) => {
           this.transactions = [
             ...this.transactions,
             ...resp.transactions.map((tr) => {
-              tr.description = getTransactionDescription(tr, this.accountId);
+              tr.description = getTransactionDescription(
+                tr,
+                this.accountId,
+                this.translator.currentLang
+              );
+              tr.consumed = tr.toId === this.accountId ? tr.amount : 0;
+              tr.paid = tr.fromId === this.accountId ? tr.amount : 0;
               return tr;
             })
           ];
