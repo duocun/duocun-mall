@@ -91,6 +91,17 @@ export class ApiService {
       return this.http.put(url, param);
     }
   }
+  async patch(url, param = null, auth = true, isRelative = true) {
+    if (isRelative) {
+      url = this.buildUrl(url);
+    }
+    if (auth) {
+      const authHeader = await this.buildAuthHeader();
+      return this.http.patch(url, param, authHeader);
+    } else {
+      return this.http.patch(url, param);
+    }
+  }
   async delete(url, param = null, auth = true, isRelative = true) {
     if (isRelative) {
       url = this.buildUrl(url, param);
