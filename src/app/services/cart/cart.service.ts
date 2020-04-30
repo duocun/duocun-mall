@@ -84,9 +84,35 @@ export class CartService {
     }
   }
 
+  getItemQuantity(item: CartItemInterface) {
+    const existingItemIdx = this.cart.items.findIndex((existing) =>
+      areEqualCartItems(existing, item)
+    );
+    if (existingItemIdx !== -1) {
+      return this.cart.items[existingItemIdx].quantity;
+    }
+    return 0;
+  }
+
+  setItem(item: CartItemInterface) {
+    const existingItemIdx = this.cart.items.findIndex((existing) =>
+      areEqualCartItems(existing, item)
+    );
+    if (existingItemIdx !== -1) {
+      if (item.quantity < 1) {
+        this.setItemQuantity(existingItemIdx, 0);
+      } else {
+        this.cart.items[existingItemIdx] = item;
+        this.saveCart();
+      }
+    } else {
+      this.cart.items.push(item);
+      this.saveCart();
+    }
+  }
+
   clearCart() {
     this.cart = { items: [] };
-    this.cart$.next(this.cart);
     this.saveCart();
   }
 }

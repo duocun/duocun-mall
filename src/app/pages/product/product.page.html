@@ -28,48 +28,33 @@
 
     <ion-row class="row-purchase">
       <!-- BEGIN PRICE LABEL -->
-      <ion-col size="6">
+      <ion-col size="12">
         <ion-row class="row-price ion-padding">
           <ion-label>
             <span translate="Price"></span>
-            <span>{{item|price}}</span>
+            <span>{{product|price}}</span>
           </ion-label>
         </ion-row>
       </ion-col>
       <!--  END PRICE LABEL  -->
-      <!-- BEGIN QUANTITY TOUCHSPIN -->
-      <ion-col size="6">
-        <ion-row class="row-touchspin ion-padding">
-          <ion-label translate="Quantity"></ion-label>
-          <div class="wrapper-touchspin">
-            <ion-touchspin size="md" [initialValue]="1" (valueChange)="handleQuantityChange($event)">
-            </ion-touchspin>
-          </div>
-        </ion-row>
-      </ion-col>
-      <!--  END QUANTITY TOUCHSPIN  -->
-      <!-- BEGIN SCHEDULE SELECT -->
-      <ion-item *ngIf="isInRange && schedules" class="item-delivery w-100">
-        <ion-label translate="Delivery Time"></ion-label>
-        <ion-select [value]="deliveryIdx" (ionChange)="handleSelectDeliveryDateTime($event)">
-          <ion-select-option *ngFor="let schedule of schedules; index as key" [value]="key">
-            {{schedule.date | moment:"YYYY-MM-DD ddd"}}
-          </ion-select-option>
-        </ion-select>
-      </ion-item>
-      <!--  END SCHEDULE SELECT  -->
-      <!-- BEGIN PURCHASE BUTTONS -->
-      <ion-col size="12" *ngIf="isInRange && schedules && schedules.length">
-        <ion-row class="ion-padding">
-          <ion-col>
-            <ion-button size="medium" expand="full" (click)="addToCart()">
-              <ion-icon slot="start" name="cart-outline"></ion-icon>
-              {{"Add to Cart"|translate}}
-            </ion-button>
-          </ion-col>
-        </ion-row>
-      </ion-col>
-      <!--  END PURCHASE BUTTONS -->
+      <ng-container *ngIf="isInRange && schedules">
+        <ion-item *ngFor="let schedule of schedules" class="w-100" lines="none">
+          <ion-row class="ion-no-margin ion-no-padding">
+            <ion-col size="6">
+              <ion-label>{{schedule.date | moment:"YYYY-MM-DD ddd"}}</ion-label>
+            </ion-col>
+            <ion-col size="6" align="end">
+              <ion-touchspin 
+                style="width: 96px;" 
+                size="md" 
+                [initialValue]="getItemQuantity(schedule)" 
+                minimumValue="0" 
+                (valueChange)="handleQuantityChange($event, schedule)"
+              ></ion-touchspin>
+            </ion-col>
+          </ion-row>
+        </ion-item>
+      </ng-container>
       <ion-col size="12" *ngIf="!location">
         <ion-row class="ion-padding">
           <ion-col align="center">
@@ -83,7 +68,6 @@
         </ion-row>
       </ion-col>
     </ion-row>
-
   </ng-container>
 </ion-content>
 

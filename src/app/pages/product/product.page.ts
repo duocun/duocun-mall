@@ -74,7 +74,8 @@ export class ProductPage implements OnInit {
                     merchantName: this.merchant.name,
                     price: this.product.price,
                     cost: this.product.cost,
-                    quantity: 1
+                    quantity: 0,
+                    product: this.product
                   };
                   this.api
                     .geth("MerchantSchedules/availables", {
@@ -108,31 +109,34 @@ export class ProductPage implements OnInit {
     });
   }
 
-  handleQuantityChange(event: {
-    value: number;
-    action: "up" | "down" | "set";
-  }) {
-    this.item.quantity = event.value;
+  handleQuantityChange(event, schedule: DeliveryDateTimeInterface) {
+    const item = { ...this.item };
+    item.quantity = event.value;
+    item.delivery = schedule;
+    this.cartSvc.setItem(item);
   }
 
-  handleSelectDeliveryDateTime(event) {
-    this.deliveryIdx = event.detail.value;
+  buildItem(delivery): CartItemInterface {
+    const item = {
+      productId: this.product._id,
+      productName: this.product.name,
+      merchantId: this.merchant._id,
+      merchantName: this.merchant.name,
+      price: this.product.price,
+      cost: this.product.cost,
+      quantity: 0,
+      product: this.product,
+      delivery
+    };
+    return item;
+  }
+
+  getItemQuantity(delivery) {
+    return this.cartSvc.getItemQuantity(this.buildItem(delivery));
   }
 
   getPictureUrl(product: ProductInterface, idx: number) {
     return getPictureUrl(product, idx);
-  }
-
-  addToCart() {
-    if (this.isInRange && this.schedules && this.schedules.length) {
-      this.item.delivery = this.schedules[this.deliveryIdx];
-      this.item.product = this.product;
-      if (this.item.delivery) {
-        this.cartSvc.addItem(this.item);
-      } else {
-        this.showAlert("Notice", "Please select delivery time", "Confirm");
-      }
-    }
   }
 
   getBaseDateList(orderEndList, deliverDowList) {
