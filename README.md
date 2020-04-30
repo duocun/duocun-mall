@@ -17,6 +17,7 @@
 git clone https://github.com/duocun/duocun-mall.git
 cd duocun-mall
 npm i
+npm i -g ionic
 ```
 
 ## Serve
