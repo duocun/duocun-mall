@@ -6,7 +6,7 @@ import { LocationInterface } from "src/app/models/location.model";
 import { formatLocation } from "src/app/models/location.model";
 import { getLocationFromGeocode } from "src/app/models/location.model";
 import { AuthService } from "src/app/services/auth/auth.service";
-
+import { LocationService } from "src/app/services/location/location.service";
 @Component({
   selector: "location-search",
   templateUrl: "./location-search.component.html",
@@ -22,12 +22,18 @@ export class LocationSearchComponent implements OnInit {
   constructor(
     private api: ApiService,
     private lang: TranslateService,
-    private auth: AuthService
+    private auth: AuthService,
+    private locSvc: LocationService
   ) {}
 
   ngOnInit() {
     this.placeList = [];
     this.listVisible = false;
+    this.locSvc.getLocation().subscribe((location: LocationInterface) => {
+      if (location) {
+        this.search = this.formatLocation(location);
+      }
+    });
     this.auth.getAccount().subscribe((account) => {
       if (!account) {
         return;
@@ -49,24 +55,29 @@ export class LocationSearchComponent implements OnInit {
     });
   }
 
-  handleSearch({ detail }) {
-    this.search = detail.value;
+  handleSearch(event: any) {
+    if (event.detail.value === this.search) {
+      return;
+    }
+    this.search = event.detail.value;
     if (!this.search || this.search.length < 3) {
       if (this.locationHistory && this.locationHistory.length) {
         this.listVisible = true;
       }
       return;
     }
-    this.api.get(`/Locations/Places/${this.search}`).then((observable) => {
-      observable.subscribe((data: any) => {
-        this.placeList = data;
-        if (this.placeList.length) {
-          this.listVisible = true;
-        } else {
-          this.listVisible = false;
-        }
+    this.api
+      .get(`/Locations/Places/${event.detail.value}`)
+      .then((observable) => {
+        observable.subscribe((data: any) => {
+          this.placeList = data;
+          if (this.placeList.length) {
+            this.listVisible = true;
+          } else {
+            this.listVisible = false;
+          }
+        });
       });
-    });
   }
 
   handleFocus() {
@@ -85,15 +96,14 @@ export class LocationSearchComponent implements OnInit {
     return formatLocation(location);
   }
 
-  handlePlaceClick(place: PlaceInterface) {
-    const address = this.formatAddress(place);
+  handlePlaceClick(place: PlaceInterface, address: string) {
     if (!place.location) {
       this.api.get(`/Locations/Geocodes/${address}`).then((observable) => {
         observable.subscribe((loc: any) => {
           if (loc[0]) {
             this.onSelect.emit({
               address,
-              location: getLocationFromGeocode(loc[0])
+              location: getLocationFromGeocode(loc[1] ? loc[1] : loc[0])
             });
           }
         });
@@ -102,13 +112,16 @@ export class LocationSearchComponent implements OnInit {
       this.onSelect.emit({ address, location: place.location });
     }
     this.listVisible = false;
+    this.search = address;
   }
 
   handleLocationClick(location: LocationInterface) {
+    const address = this.formatLocation(location);
     this.onSelect.emit({
-      address: this.formatLocation(location),
+      address,
       location
     });
     this.listVisible = false;
+    this.search = address;
   }
 }

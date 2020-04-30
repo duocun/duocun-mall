@@ -41,6 +41,7 @@ export interface LocationInterface {
   streetName?: string;
   streetNumber?: string;
   subLocality?: string;
+  address?: string;
 }
 
 export interface PlaceInterface {
@@ -68,6 +69,9 @@ export function formatAddress(place: PlaceInterface): string {
 }
 
 export function formatLocation(location: LocationInterface): string {
+  if (location.address) {
+    return location.address;
+  }
   const addressFormats = [];
   ["streetNumber", "streetName", "subLocality", "city", "province"].forEach(
     (key) => {

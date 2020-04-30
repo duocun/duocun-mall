@@ -1,4 +1,5 @@
 import { DeliveryDateTimeInterface } from "./delivery.model";
+import { areEqualDeliveryDateTime } from "./delivery.model";
 import { ProductInterface } from "./product.model";
 
 export interface CartItemInterface {
@@ -28,7 +29,16 @@ export function areEqualCartItems(
   one: CartItemInterface,
   other: CartItemInterface
 ) {
-  return one.productId === other.productId;
+  if (one.productId !== other.productId) {
+    return false;
+  }
+  if (!one.delivery && !other.delivery) {
+    return one.productId === other.productId;
+  }
+  if ((!one.delivery && other.delivery) || (one.delivery && !other.delivery)) {
+    return false;
+  }
+  return areEqualDeliveryDateTime(one.delivery, other.delivery);
 }
 
 export function getCartQuantity(cart: CartInterface) {

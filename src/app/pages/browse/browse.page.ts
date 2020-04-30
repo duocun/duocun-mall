@@ -41,7 +41,7 @@ export class BrowsePage implements OnInit {
     address: string;
     location: LocationInterface;
   }) {
-    this.loc.setLocation(event.location);
+    this.loc.setLocation(event.location, event.address);
   }
 
   loadMerchants(areaId: string) {
