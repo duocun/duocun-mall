@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { CartService } from "src/app/services/cart/cart.service";
 import { CartInterface } from "src/app/models/cart.model";
-import { ActivatedRoute, ParamMap } from "@angular/router";
+import { ActivatedRoute, ParamMap, Router } from "@angular/router";
 import { AuthService } from "src/app/services/auth/auth.service";
 import { ApiService } from "src/app/services/api/api.service";
 import { AccountInterface } from "src/app/models/account.model";
@@ -17,9 +17,15 @@ export class HomePage implements OnInit {
   clientId: string;
   page: string;
   account: AccountInterface;
+  /**
+   * prevents permanent redirecting
+   * Ionic tab routing does not clear query params
+   */
+  redirecting: boolean;
   constructor(
     private cartService: CartService,
     private route: ActivatedRoute,
+    private router: Router,
     private authSvc: AuthService,
     private api: ApiService,
     private alert: AlertController,
@@ -27,6 +33,7 @@ export class HomePage implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.redirecting = true;
     this.handleQueryParams();
     this.initCart();
   }
@@ -35,16 +42,21 @@ export class HomePage implements OnInit {
     this.route.queryParamMap.subscribe((paramAsMap: ParamMap) => {
       this.clientId = paramAsMap.get("cid");
       this.page = paramAsMap.get("p");
-      switch (this.page) {
-        case "b":
-          this.handleCreditByWeChat(paramAsMap);
-          break;
-        case "h":
-          this.handleWeChatPay(paramAsMap);
-          break;
-        default:
-          this.initAccount(paramAsMap);
-          break;
+      if (this.redirecting) {
+        this.redirecting = !this.redirecting;
+        switch (this.page) {
+          case "b":
+            this.handleCreditByWeChat(paramAsMap);
+            break;
+          case "h":
+            this.handleWeChatPay(paramAsMap);
+            break;
+          default:
+            this.initAccount(paramAsMap);
+            break;
+        }
+      } else {
+        this.initAccount(paramAsMap);
       }
     });
   }
@@ -78,11 +90,23 @@ export class HomePage implements OnInit {
   }
 
   handleCreditByWeChat(params: ParamMap) {
-    console.log("handleCreditByWeChat called");
+    if (this.clientId) {
+      // trusting clientId from query param is dangerous
+      // a mailcious attacker can impersonate other user with acquired clientId
+    } else {
+      this.authSvc.updateData();
+      this.router.navigate(["/tabs/my-account/transaction-history"]);
+    }
   }
 
   handleWeChatPay(params: ParamMap) {
-    console.log("handleWeChatPay called");
+    if (this.clientId) {
+      // trusting clientId from query param is dangerous
+      // a mailcious attacker can impersonate other user with acquired clientId
+    } else {
+      this.authSvc.updateData();
+      this.router.navigate(["/tabs/my-account/order-history"]);
+    }
   }
 
   showAlert(header, message, button) {
