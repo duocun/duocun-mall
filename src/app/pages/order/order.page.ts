@@ -20,6 +20,7 @@ import { MerchantInterface } from "src/app/models/merchant.model";
 import { LocationInterface } from "src/app/models/location.model";
 import { formatLocation } from "src/app/models/location.model";
 import { LocationService } from "src/app/services/location/location.service";
+import { ContextService } from "src/app/services/context/context.service";
 
 interface OrderErrorInterface {
   type: "order" | "payment";
@@ -49,19 +50,24 @@ export class OrderPage implements OnInit {
   processing: boolean;
   error: OrderErrorInterface | null;
   PaymentMethod = PaymentMethod;
+  appCode: string | undefined;
   constructor(
     private cartSvc: CartService,
     private authSvc: AuthService,
     private api: ApiService,
     private alert: AlertController,
     private translator: TranslateService,
-    private locSvc: LocationService
+    private locSvc: LocationService,
+    private contextSvc: ContextService
   ) {
     this.loading = true;
     this.error = null;
     this.processing = false;
     loadStripe(environment.stripe).then((stripe) => {
       this.stripe = stripe;
+    });
+    this.contextSvc.getContext().subscribe((context) => {
+      this.appCode = context.get("appCode");
     });
   }
 
@@ -173,6 +179,13 @@ export class OrderPage implements OnInit {
 
   wechatPay() {
     this.paymentMethod = PaymentMethod.WECHAT;
+    this.processing = true;
+    this.payBySnappay(
+      this.appCode,
+      this.account._id,
+      this.orders,
+      this.charge.payable
+    );
     // TO DO: implement Wechat Pay
   }
 
@@ -232,5 +245,36 @@ export class OrderPage implements OnInit {
       payable: this.charge.payable,
       paymentNote: ""
     });
+  }
+
+  payBySnappay(
+    appCode: string,
+    accountId: string,
+    orders: Array<Order.OrderInterface>,
+    amount: number
+  ) {
+    this.api
+      .post("ClientPayments/payBySnappay", {
+        appCode,
+        paymentActionCode: "P",
+        accountId,
+        orders,
+        amount
+      })
+      .then((observable) => {
+        observable.subscribe((resp: any) => {
+          if (resp.err === PaymentError.NONE) {
+            window.location.href = resp.url;
+          } else {
+            this.showAlert("Notice", "Payment failed", "OK");
+            this.processing = false;
+          }
+        });
+      })
+      .catch((e) => {
+        console.error(e);
+        this.showAlert("Notice", "Payment failed", "OK");
+        this.processing = false;
+      });
   }
 }

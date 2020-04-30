@@ -7,6 +7,7 @@ import { ApiService } from "src/app/services/api/api.service";
 import { AccountInterface } from "src/app/models/account.model";
 import { AlertController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
+import { ContextService } from "src/app/services/context/context.service";
 @Component({
   selector: "app-home",
   templateUrl: "./home.page.html",
@@ -29,7 +30,8 @@ export class HomePage implements OnInit {
     private authSvc: AuthService,
     private api: ApiService,
     private alert: AlertController,
-    private translator: TranslateService
+    private translator: TranslateService,
+    private context: ContextService
   ) {}
 
   ngOnInit() {
@@ -70,6 +72,9 @@ export class HomePage implements OnInit {
   initAccount(params: ParamMap) {
     const tokenId: string = params.get("token");
     const appCode = params.get("state");
+    if (appCode) {
+      this.context.set("appCode", appCode);
+    }
     if (!tokenId) {
       this.authSvc.getToken().then((tokenId) => {
         if (tokenId) {
