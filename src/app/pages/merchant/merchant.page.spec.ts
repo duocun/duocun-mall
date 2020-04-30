@@ -8,6 +8,7 @@ import { PricePipeModule } from "src/app/pipes/price/price.module";
 import { HttpClientModule } from "@angular/common/http";
 import { IonicStorageModule } from "@ionic/storage";
 import { RouterModule } from "@angular/router";
+import { TranslateModule } from '@ngx-translate/core';
 
 describe("MerchantPage", () => {
   let component: MerchantPage;
@@ -23,7 +24,8 @@ describe("MerchantPage", () => {
         PricePipeModule,
         HttpClientModule,
         IonicStorageModule.forRoot(),
-        RouterModule.forRoot([])
+        RouterModule.forRoot([]),
+        TranslateModule.forRoot()
       ]
     }).compileComponents();
 

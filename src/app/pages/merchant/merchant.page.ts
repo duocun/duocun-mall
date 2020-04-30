@@ -2,8 +2,12 @@ import { Component, OnInit } from "@angular/core";
 import { ApiService } from "src/app/services/api/api.service";
 import { MerchantInterface } from "src/app/models/merchant.model";
 import { ProductInterface, getPictureUrl } from "src/app/models/product.model";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { environment } from "src/environments/environment";
+import { LocationInterface } from "src/app/models/location.model";
+import { LocationService } from "src/app/services/location/location.service";
+import { TranslateService } from "@ngx-translate/core";
+import { AlertController } from "@ionic/angular";
 @Component({
   selector: "app-merchant",
   templateUrl: "./merchant.page.html",
@@ -13,12 +17,23 @@ export class MerchantPage implements OnInit {
   loading: boolean;
   merchant: MerchantInterface;
   products: Array<ProductInterface>;
+  location: LocationInterface;
 
-  constructor(private api: ApiService, private route: ActivatedRoute) {
+  constructor(
+    private api: ApiService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private locSvc: LocationService,
+    private translator: TranslateService,
+    private alert: AlertController
+  ) {
     this.loading = true;
   }
 
   ngOnInit() {
+    this.locSvc.getLocation().subscribe((location) => {
+      this.location = location;
+    });
     this.updateData();
   }
 
@@ -41,6 +56,34 @@ export class MerchantPage implements OnInit {
         );
       });
     });
+  }
+
+  onProductClick(product: ProductInterface) {
+    if (!this.location) {
+      const header = "Notice";
+      const message = "Please select delivery address";
+      const button = "OK";
+      this.translator.get([header, message, button]).subscribe((dict) => {
+        this.alert
+          .create({
+            header: dict[header],
+            message: dict[message],
+            buttons: [
+              {
+                text: dict[button],
+                handler: () => {
+                  this.router.navigate(["/tabs/browse"]);
+                }
+              }
+            ]
+          })
+          .then((alert) => {
+            alert.present();
+          });
+      });
+    } else {
+      this.router.navigate(["/tabs/browse/products", product._id]);
+    }
   }
 
   getPictureUrl(product: ProductInterface) {

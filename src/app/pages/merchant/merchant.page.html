@@ -12,7 +12,7 @@
     <ng-container *ngIf="products.length < 7; Else thumbnailMode">
       <ion-row>
         <ion-col *ngFor="let product of products" size="6">
-          <ion-card class="ion-no-margin" [routerLink]="['/tabs/browse/products', product._id]">
+          <ion-card class="ion-no-margin" (click)="onProductClick(product)">
             <ion-card-content>
               <div class="ion-margin-bottom">
                 <app-ion-image
@@ -35,7 +35,7 @@
 
 <ng-template #thumbnailMode>
   <ion-list lines="none">
-    <ion-item *ngFor="let product of products" [routerLink]="['/tabs/browse/products', product._id]">
+    <ion-item *ngFor="let product of products" (click)="onProductClick(product)">
       <ion-thumbnail slot="start">
         <app-ion-image
           [src]="getPictureUrl(product)"
