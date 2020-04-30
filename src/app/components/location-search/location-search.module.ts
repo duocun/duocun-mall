@@ -5,8 +5,16 @@ import { FormsModule } from "@angular/forms";
 
 import { IonicModule } from "@ionic/angular";
 import { LocationSearchComponent } from "./location-search.component";
+import { TranslateModule } from "@ngx-translate/core";
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule, HttpClientModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    HttpClientModule,
+    HttpClientModule,
+    TranslateModule.forChild()
+  ],
   declarations: [LocationSearchComponent],
   exports: [LocationSearchComponent]
 })

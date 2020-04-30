@@ -3,7 +3,7 @@
     <ion-searchbar 
       debounce="500" 
       animated 
-      [placeholder]="searchPlaceholder" 
+      placeholder="{{'Input delivery address'|translate}}" 
       (ionChange)="handleSearch($event)"
       (ionCancel)="listVisible = false"
       (ionClear)="listVisible=false; placeList=[]"

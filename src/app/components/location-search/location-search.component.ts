@@ -14,7 +14,6 @@ import { AuthService } from "src/app/services/auth/auth.service";
 })
 export class LocationSearchComponent implements OnInit {
   listVisible: boolean;
-  searchPlaceholder: string;
   placeList: Array<PlaceInterface>;
   locationHistory: Array<LocationInterface>;
   search: string;
@@ -47,13 +46,6 @@ export class LocationSearchComponent implements OnInit {
             return data.location;
           });
         });
-    });
-    this.initLang();
-  }
-
-  initLang() {
-    this.lang.get("Input Delivery Address").subscribe((dic: any) => {
-      this.searchPlaceholder = dic;
     });
   }
 
