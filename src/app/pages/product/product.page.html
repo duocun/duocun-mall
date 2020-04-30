@@ -70,6 +70,18 @@
         </ion-row>
       </ion-col>
       <!--  END PURCHASE BUTTONS -->
+      <ion-col size="12" *ngIf="!location">
+        <ion-row class="ion-padding">
+          <ion-col align="center">
+            <ion-label 
+              translate="Please select delivery address"
+              routerLink="['/tabs/browse']"
+              class="ion-text-danger"
+            >
+            </ion-label>
+          </ion-col>
+        </ion-row>
+      </ion-col>
     </ion-row>
 
   </ng-container>

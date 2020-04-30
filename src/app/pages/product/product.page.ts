@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ApiService } from "src/app/services/api/api.service";
 import { ProductInterface, getPictureUrl } from "src/app/models/product.model";
-import { CartItemInterface, CartInterface } from "src/app/models/cart.model";
+import { CartItemInterface } from "src/app/models/cart.model";
 import { MerchantInterface } from "src/app/models/merchant.model";
 import { CartService } from "src/app/services/cart/cart.service";
 import { LocationService } from "src/app/services/location/location.service";

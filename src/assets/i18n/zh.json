@@ -65,5 +65,6 @@
   "New Phone Number": "请在以下更新您的手机号",
   "Please input phone number": "请输入手机号码",
   "Save": "保存",
-  "Input delivery address": "输入收货地址"
+  "Input delivery address": "输入收货地址",
+  "Please select delivery address": "请选择收货地址"
 }

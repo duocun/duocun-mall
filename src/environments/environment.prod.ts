@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  api: "https://duocun.com.cn/api",
+  api: "http://52.68.71.21:8000/api",
   storageKey: {
     auth: "DUOCUN-AUTH-TOKEN",
     cart: "DUOCUN-CART",
@@ -8,6 +8,6 @@ export const environment = {
     lang: "DUOCUN-I18N"
   },
   media: "https://duocun.com.cn/media/",
-  stripe: "pk_live_vV7H1l4X9k2r8uf6JDf9lGsb",
+  stripe: "pk_test_FsGoacByMF8lGNcVKveNZFSy00ATWTilJp",
   defaultLang: "zh"
 };

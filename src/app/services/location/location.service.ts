@@ -12,11 +12,7 @@ export class LocationService {
   private location: LocationInterface;
   private location$: BehaviorSubject<LocationInterface>;
   constructor(private storage: Storage, private platform: Platform) {
-    this.location = {
-      lat: 43.761539,
-      lng: -79.411079,
-      placeId: ""
-    };
+    this.location = null;
     this.location$ = new BehaviorSubject<LocationInterface>(this.location);
     this.initLocation();
   }
