@@ -61,5 +61,5 @@ prettier --write src/**/*.ts
 # Deployment
 
 ```console
-ionic build --prod --base-href=/mall
+ionic build --prod
 ```
