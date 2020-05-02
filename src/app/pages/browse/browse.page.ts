@@ -50,7 +50,6 @@ export class BrowsePage implements OnInit {
           if (resp.code === "success") {
             this.categories = resp.data;
             if (this.categories.length) {
-              this.selectedCategoryId = this.categories[0]._id;
               this.getProducts();
             }
           }
@@ -84,6 +83,12 @@ export class BrowsePage implements OnInit {
     }
   }
 
+  showAll() {
+    this.loading = true;
+    this.selectedCategoryId = "";
+    this.getProducts();
+  }
+
   handleSelectCategory(category: CategoryInterface) {
     this.loading = true;
     this.selectedCategoryId = category._id;
@@ -94,10 +99,14 @@ export class BrowsePage implements OnInit {
     this.api
       .geth(
         "Products",
-        {
-          categoryId: this.selectedCategoryId,
-          merchantId: { $in: this.availableMerchantIds }
-        },
+        this.selectedCategoryId
+          ? {
+              categoryId: this.selectedCategoryId,
+              merchantId: { $in: this.availableMerchantIds }
+            }
+          : {
+              merchantId: { $in: this.availableMerchantIds }
+            },
         true,
         "filter"
       )

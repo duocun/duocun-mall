@@ -12,7 +12,17 @@
   ></ion-searchbar>
   <ng-container *ngIf="viewMode === 'category-only'; Else segmentMode">
     <ion-row class="ion-padding-start ion-padding-end ion-margin-bottom">
-      <ion-col *ngFor="let category of categories.slice(0,11)" size="3" class="ion-no-margin ion-no-padding">
+      <ion-col size="3" class="ion-nomargin ion-no-padding">
+        <ion-button
+          color="danger"
+          size="small"
+          expand="full"
+          translate="All"
+          (click)="showAll()"
+        >
+        </ion-button>
+      </ion-col>
+      <ion-col *ngFor="let category of categories.slice(0,10)" size="3" class="ion-no-margin ion-no-padding">
         <ion-button
           [color]="selectedCategoryId === category._id ? 'success' : 'light'"
           [disabled]="!availableMerchantIds || !availableMerchantIds.length"
@@ -25,12 +35,11 @@
         >
         </ion-button>
       </ion-col>
-      <ion-col *ngIf="categories.length >= 12" size="3" class="ion-no-margin ion-no-padding">
+      <ion-col *ngIf="categories.length >= 11" size="3" class="ion-no-margin ion-no-padding">
         <ion-button
           color="tertiary"
           size="small"
           expand="full"
-          (click)="selectedCategoryId = 'more'"
           style="text-align: center; font-weight: 600;"
           localValue
           routerLink="/tabs/browse/all-categories"
