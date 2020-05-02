@@ -107,7 +107,8 @@
   <!-- BEGIN PAYMENT FORM -->
   <ng-container *ngIf="!error; Else errorMsg">
     <ion-row class="ion-padding" *ngIf="account && charge && !loading">
-      <!-- BEGIN STRIPE FORM -->
+      <ng-container *ngIf="paymentMethod !== PaymentMethod.PREPAY">
+        <!-- BEGIN STRIPE FORM -->
       <ion-col size="12" align="center" class="ion-margin-top">
         <ion-label 
           position="stacked" 
@@ -148,6 +149,7 @@
         ></ion-button>
       </ion-col>
       <!--  END WECHAT PAY BUTTON  -->
+      </ng-container>
       <!-- BEGIN PAY BY DEPOSIT BUTTON -->
       <ion-col size="12" align="center" *ngIf="paymentMethod === PaymentMethod.PREPAY">
         <ion-button
@@ -156,6 +158,7 @@
           expand="full"
           translate="Pay by Deposit"
           [disabled]="processing"
+          (click)="payByDeposit()"
         >
         </ion-button>
       </ion-col>

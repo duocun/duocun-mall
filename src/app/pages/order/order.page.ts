@@ -21,6 +21,7 @@ import { LocationInterface } from "src/app/models/location.model";
 import { formatLocation } from "src/app/models/location.model";
 import { LocationService } from "src/app/services/location/location.service";
 import { ContextService } from "src/app/services/context/context.service";
+import { Router } from "@angular/router";
 
 interface OrderErrorInterface {
   type: "order" | "payment";
@@ -58,7 +59,8 @@ export class OrderPage implements OnInit {
     private alert: AlertController,
     private translator: TranslateService,
     private locSvc: LocationService,
-    private contextSvc: ContextService
+    private contextSvc: ContextService,
+    private router: Router
   ) {
     this.loading = true;
     this.error = null;
@@ -154,6 +156,9 @@ export class OrderPage implements OnInit {
                       if (resp.err === PaymentError.NONE) {
                         this.showAlert("Notice", "Payment success", "OK");
                         this.cartSvc.clearCart();
+                        this.router.navigate([
+                          "/tabs/my-account/order-history"
+                        ]);
                       } else {
                         this.showAlert("Notice", "Payment failed", "OK");
                       }
@@ -194,6 +199,16 @@ export class OrderPage implements OnInit {
           );
         }
       );
+    });
+  }
+
+  payByDeposit() {
+    this.saveOrders(this.orders).then((observable) => {
+      observable.subscribe(() => {
+        this.showAlert("Notice", "Payment success", "OK");
+        this.cartSvc.clearCart();
+        this.router.navigate(["/tabs/my-account/order-history"]);
+      });
     });
   }
 
@@ -280,6 +295,7 @@ export class OrderPage implements OnInit {
       .then((observable) => {
         observable.subscribe((resp: any) => {
           if (resp.err === PaymentError.NONE) {
+            this.cartSvc.clearCart();
             window.location.href = resp.url;
           } else {
             this.showAlert("Notice", "Payment failed", "OK");
