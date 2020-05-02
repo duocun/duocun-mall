@@ -256,7 +256,7 @@ export class OrderPage implements OnInit {
     amount: number
   ) {
     const returnUrl =
-      window.location.host + `/mall?p=h&cId=${this.account._id}`;
+      window.location.origin + `/mall?p=h&cId=${this.account._id}`;
     this.api
       .post("ClientPayments/payBySnappay", {
         appCode,
