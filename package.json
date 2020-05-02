@@ -2,7 +2,7 @@
   "name": "duocun-mall",
   "version": "0.0.1",
   "author": "bravemaster619",
-  "homepage": "https://duocun.com.cn/mall",
+  "homepage": "https://duocun.ca/mall",
   "scripts": {
     "ng": "ng",
     "start": "ionic serve --port 5008",
