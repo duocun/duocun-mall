@@ -13,7 +13,9 @@ import { LocationSearchModule } from "src/app/components/location-search/locatio
 import { LocalValueDirectiveModule } from "src/app/directives/local-value.module";
 import { IonImageModule } from "src/app/components/ion-image/ion-image.module";
 import { MerchantListComponent } from "./merchant-list/merchant-list.component";
-import { CategoryListComponent } from "./category-list/category-list.component";
+import { ProductListModule } from "src/app/components/product-list/product-list.module";
+import { PricePipeModule } from "src/app/pipes/price/price.module";
+import { CategoryListModule } from "./category-list/category-list.module";
 
 @NgModule({
   imports: [
@@ -25,8 +27,11 @@ import { CategoryListComponent } from "./category-list/category-list.component";
     HttpClientModule,
     LocationSearchModule,
     LocalValueDirectiveModule,
-    IonImageModule
+    IonImageModule,
+    ProductListModule,
+    PricePipeModule,
+    CategoryListModule
   ],
-  declarations: [BrowsePage, MerchantListComponent, CategoryListComponent]
+  declarations: [BrowsePage, MerchantListComponent]
 })
 export class BrowsePageModule {}

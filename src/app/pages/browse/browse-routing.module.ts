@@ -26,6 +26,13 @@ const routes: Routes = [
       import("../order/order.module").then((m) => m.OrderPageModule)
   },
   {
+    path: "all-categories",
+    loadChildren: () =>
+      import("./categories/categories.module").then(
+        (m) => m.CategoriesPageModule
+      )
+  },
+  {
     path: "categories",
     loadChildren: () =>
       import("../category/category.module").then((m) => m.CategoryPageModule)

@@ -1,6 +1,30 @@
+ion-searchbar {
+  padding: 1rem;
+}
 .sc-ion-searchbar-ios-h {
   -webkit-padding-start: 1rem;
   padding-inline-start: 1rem;
   -webkit-padding-end: 1rem;
   padding-inline-end: 1rem;
+}
+.card-product {
+  border: 1px solid #ccc;
+  ion-card-content {
+    padding: 0.5rem;
+    .wrapper-product-img {
+      margin-top: -10px;
+      margin-left: -10px;
+      margin-right: -10px;
+      margin-bottom: 5px;
+    }
+    ion-label {
+      h3 {
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+      p {
+        font-size: 0.75rem;
+      }
+    }
+  }
 }
