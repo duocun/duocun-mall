@@ -3,6 +3,7 @@ import { CartInterface } from "./cart.model";
 import { PaymentMethod, PaymentStatus } from "./payment.model";
 import { AccountInterface } from "./account.model";
 import { MerchantInterface } from "./merchant.model";
+
 export const OrderType = {
   FOOD_DELIVERY: "F",
   MOBILE_PLAN_SETUP: "MS",
@@ -68,7 +69,7 @@ export interface OrderInterface {
   payable?: number; // total - balance
   price?: number;
   cost?: number;
-
+  paymentId?: string;
   defaultPickupTime?: string;
   dateType?: string; // 'today', 'tomorrow'
   delivered?: Date; // obsoleted

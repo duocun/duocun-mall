@@ -145,26 +145,29 @@ export class OrderPage implements OnInit {
         const paymentMethodId = res.paymentMethod.id;
         this.saveOrders(this.orders)
           .then((observable) => {
-            observable.subscribe((newOrders: Array<Order.OrderInterface>) => {
-              this.savePayment(newOrders, paymentMethodId)
-                .then((observable) => {
-                  observable.subscribe((resp: any) => {
-                    if (resp.err === PaymentError.NONE) {
-                      this.showAlert("Notice", "Payment success", "OK");
-                      this.cartSvc.clearCart();
-                    } else {
-                      this.showAlert("Notice", "Payment failed", "OK");
-                    }
+            observable.subscribe(
+              (resp: { code: string; data: Array<Order.OrderInterface> }) => {
+                const newOrders = resp.data;
+                this.savePayment(newOrders, paymentMethodId)
+                  .then((observable) => {
+                    observable.subscribe((resp: any) => {
+                      if (resp.err === PaymentError.NONE) {
+                        this.showAlert("Notice", "Payment success", "OK");
+                        this.cartSvc.clearCart();
+                      } else {
+                        this.showAlert("Notice", "Payment failed", "OK");
+                      }
+                    });
+                  })
+                  .catch((e) => {
+                    console.error(e);
+                    this.error = {
+                      type: "payment",
+                      message: "Cannot save payment"
+                    };
                   });
-                })
-                .catch((e) => {
-                  console.error(e);
-                  this.error = {
-                    type: "payment",
-                    message: "Cannot save payment"
-                  };
-                });
-            });
+              }
+            );
           })
           .catch((e) => {
             console.error(e);
@@ -180,13 +183,18 @@ export class OrderPage implements OnInit {
   wechatPay() {
     this.paymentMethod = PaymentMethod.WECHAT;
     this.processing = true;
-    this.payBySnappay(
-      this.appCode,
-      this.account._id,
-      this.orders,
-      this.charge.payable
-    );
-    // TO DO: implement Wechat Pay
+    this.saveOrders(this.orders).then((observable) => {
+      observable.subscribe(
+        (resp: { code: string; data: Array<Order.OrderInterface> }) => {
+          this.payBySnappay(
+            this.appCode,
+            this.account._id,
+            resp.data,
+            this.charge.payable
+          );
+        }
+      );
+    });
   }
 
   showAlert(header, message, button) {
@@ -257,6 +265,7 @@ export class OrderPage implements OnInit {
   ) {
     const returnUrl =
       window.location.origin + `/mall?p=h&cId=${this.account._id}`;
+    const paymentId = orders ? orders[0].paymentId : null;
     this.api
       .post("ClientPayments/payBySnappay", {
         appCode,
@@ -264,7 +273,9 @@ export class OrderPage implements OnInit {
         accountId,
         orders,
         amount,
-        returnUrl
+        returnUrl,
+        paymentId,
+        merchantNames: orders.map((order) => order.merchantName)
       })
       .then((observable) => {
         observable.subscribe((resp: any) => {
