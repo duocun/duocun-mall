@@ -130,6 +130,7 @@ export class ProductPage implements OnInit {
   }
 
   addItemsToCart() {
+    console.log(this.items);
     this.items.forEach((item) => {
       this.cartSvc.setItem(item);
     });
@@ -190,6 +191,7 @@ export class ProductPage implements OnInit {
   }
 
   initItems() {
+    this.items = [];
     this.schedules.forEach((delivery) => {
       const tempItem = { ...this.item };
       tempItem.delivery = delivery;
