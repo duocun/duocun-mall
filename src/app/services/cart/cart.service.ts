@@ -106,7 +106,9 @@ export class CartService {
         this.saveCart();
       }
     } else {
-      this.cart.items.push(item);
+      if (item.quantity > 0) {
+        this.cart.items.push(item);
+      }
       this.saveCart();
     }
   }
