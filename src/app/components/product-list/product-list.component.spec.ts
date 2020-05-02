@@ -1,37 +1,29 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { IonicModule } from "@ionic/angular";
 
-import { MerchantPage } from "./merchant.page";
+import { ProductListComponent } from "./product-list.component";
 import { LocalValueDirectiveModule } from "src/app/directives/local-value.module";
 import { IonImageModule } from "src/app/components/ion-image/ion-image.module";
 import { PricePipeModule } from "src/app/pipes/price/price.module";
-import { HttpClientModule } from "@angular/common/http";
-import { IonicStorageModule } from "@ionic/storage";
-import { RouterModule } from "@angular/router";
 import { TranslateModule } from "@ngx-translate/core";
-import { ProductListModule } from "src/app/components/product-list/product-list.module";
 
-describe("MerchantPage", () => {
-  let component: MerchantPage;
-  let fixture: ComponentFixture<MerchantPage>;
+describe("ProductListComponent", () => {
+  let component: ProductListComponent;
+  let fixture: ComponentFixture<ProductListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [MerchantPage],
+      declarations: [ProductListComponent],
       imports: [
         IonicModule.forRoot(),
         LocalValueDirectiveModule,
         IonImageModule,
         PricePipeModule,
-        HttpClientModule,
-        IonicStorageModule.forRoot(),
-        RouterModule.forRoot([]),
-        TranslateModule.forRoot(),
-        ProductListModule
+        TranslateModule.forRoot()
       ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(MerchantPage);
+    fixture = TestBed.createComponent(ProductListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

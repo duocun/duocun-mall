@@ -1,0 +1,84 @@
+<ng-container *ngIf="!loading; Else skeleton">
+  <ng-container *ngIf="products.length < 7; Else thumbnailMode">
+    <ion-row *ngIf="products.length > 0; Else empty">
+      <ion-col *ngFor="let product of products" size="6">
+        <ion-card class="ion-no-margin" (click)="handleClick(product)">
+          <ion-card-content>
+            <div class="ion-margin-bottom">
+              <app-ion-image
+                [src]="getPictureUrl(product)"
+                [alt]="product.name"
+                style="height:180px; object-fit:cover;"
+              ></app-ion-image>
+            </div>
+            <ion-label>
+              <h3 localValue [data]="product" [key]="'name'"></h3>
+              <p>{{product|price}}</p>
+            </ion-label>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ng-container>
+</ng-container>
+
+<ng-template #empty>
+  <ion-row class="ion-padding">
+    <ion-col size="12" align="center">
+      <ion-label translate="No data to display"></ion-label>
+    </ion-col>
+  </ion-row>
+</ng-template>
+
+<ng-template #thumbnailMode>
+  <ion-list lines="none">
+    <ion-item *ngFor="let product of products" (click)="handleClick(product)">
+      <ion-thumbnail slot="start">
+        <app-ion-image
+          [src]="getPictureUrl(product)"
+          [alt]="product.name"
+          style="height:100%; object-fit:cover;"
+        ></app-ion-image>
+      </ion-thumbnail>
+      <ion-label>
+        <h3 localValue [data]="product" [key]="'name'"></h3>
+        <p>{{product|price}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ng-template>
+
+<ng-template #skeleton>
+  <ion-row *ngFor="let idx of [1,2,3]">
+    <ion-col size="6">
+      <ion-card class="ion-no-margin">
+        <ion-card-content>
+          <div class="featured-product-image-container ion-margin-bottom">
+            <app-ion-image
+              src="assets/img/no-image.png"
+              alt="awesome product"
+            ></app-ion-image>
+          </div>
+          <ion-skeleton-text animated></ion-skeleton-text>
+          <ion-skeleton-text animated style="width:80%"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width:60%"></ion-skeleton-text>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+    <ion-col size="6">
+      <ion-card class="ion-no-margin">
+        <ion-card-content>
+          <div class="featured-product-image-container ion-margin-bottom">
+            <app-ion-image
+              src="assets/img/no-image.png"
+              alt="awesome product"
+            ></app-ion-image>
+          </div>
+          <ion-skeleton-text animated></ion-skeleton-text>
+          <ion-skeleton-text animated style="width:80%"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width:60%"></ion-skeleton-text>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+</ng-template>

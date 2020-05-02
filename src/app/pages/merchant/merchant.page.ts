@@ -3,7 +3,6 @@ import { ApiService } from "src/app/services/api/api.service";
 import { MerchantInterface } from "src/app/models/merchant.model";
 import { ProductInterface, getPictureUrl } from "src/app/models/product.model";
 import { ActivatedRoute, Router } from "@angular/router";
-import { environment } from "src/environments/environment";
 import { LocationInterface } from "src/app/models/location.model";
 import { LocationService } from "src/app/services/location/location.service";
 import { TranslateService } from "@ngx-translate/core";

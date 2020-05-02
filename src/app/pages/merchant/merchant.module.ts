@@ -10,7 +10,7 @@ import { MerchantPage } from "./merchant.page";
 import { LocalValueDirectiveModule } from "src/app/directives/local-value.module";
 import { IonImageModule } from "src/app/components/ion-image/ion-image.module";
 import { PricePipeModule } from "src/app/pipes/price/price.module";
-
+import { ProductListModule } from "src/app/components/product-list/product-list.module";
 @NgModule({
   imports: [
     CommonModule,
@@ -19,7 +19,8 @@ import { PricePipeModule } from "src/app/pipes/price/price.module";
     MerchantPageRoutingModule,
     LocalValueDirectiveModule,
     IonImageModule,
-    PricePipeModule
+    PricePipeModule,
+    ProductListModule
   ],
   declarations: [MerchantPage]
 })

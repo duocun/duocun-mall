@@ -24,6 +24,11 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     loadChildren: () =>
       import("../order/order.module").then((m) => m.OrderPageModule)
+  },
+  {
+    path: "categories",
+    loadChildren: () =>
+      import("../category/category.module").then((m) => m.CategoryPageModule)
   }
 ];
 
