@@ -18,7 +18,10 @@ describe("LocationGuard", () => {
     });
   });
 
-  it("should create a location guard", inject([LocationGuard], (guard: LocationGuard) => {
-    expect(guard).toBeTruthy();
-  }));
+  it("should create a location guard", inject(
+    [LocationGuard],
+    (guard: LocationGuard) => {
+      expect(guard).toBeTruthy();
+    }
+  ));
 });
