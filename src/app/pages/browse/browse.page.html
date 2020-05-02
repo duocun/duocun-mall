@@ -5,6 +5,11 @@
 </ion-header>
 
 <ion-content>
+  <ion-searchbar 
+    placeholder="{{'Search'|translate}}"
+    debounce="1000"
+    (ionChange)="handleSearch($event)"
+  ></ion-searchbar>
   <ion-row class="ion-padding">
     <ion-segment [(ngModel)]="viewMode">
       <ion-segment-button value="merchant">

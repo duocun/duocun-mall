@@ -62,7 +62,12 @@ export class ProductPage implements OnInit {
           if (data) {
             this.product = data;
             this.api
-              .geth("Restaurants/qFind", { _id: data.merchantId })
+              .geth(
+                "Restaurants/qFind",
+                { _id: data.merchantId },
+                true,
+                "filter"
+              )
               .then((merchants: Array<MerchantInterface>) => {
                 this.merchant = merchants[0];
                 const orderEndList = this.merchant.rules.map((r) => r.orderEnd);
@@ -89,7 +94,7 @@ export class ProductPage implements OnInit {
                           (r) => +r.deliver.dow
                         );
                         const bs = this.getBaseDateList(orderEndList, dows);
-                        this.schedules = this.getDeliverySchedule(
+                        this.getDeliverySchedule(
                           this.merchant,
                           bs,
                           baseTimeList
@@ -151,12 +156,22 @@ export class ProductPage implements OnInit {
   }
 
   getDeliverySchedule(merchant, baseList, deliverTimeList) {
-    if (merchant.delivers) {
-      const myDateTime = moment.utc().format("YYYY-MM-DD HH:mm:ss");
-      return this.deliverySvc.getSpecialSchedule(myDateTime, merchant.delivers);
-    } else {
-      return this.deliverySvc.getDeliverySchedule(baseList, deliverTimeList);
-    }
+    this.api
+      .get("Merchants/G/deliverSchedules", {
+        merchantId: this.merchant._id,
+        lat: this.location.lat,
+        lng: this.location.lng,
+        dt: moment().format("YYYY-MM-DDTHH:mm:ss")
+      })
+      .then((observable) =>
+        observable.subscribe(
+          (resp: { code: string; data: Array<DeliveryDateTimeInterface> }) => {
+            if (resp.code === "success") {
+              this.schedules = resp.data;
+            }
+          }
+        )
+      );
   }
 
   showAlert(header, message, button) {

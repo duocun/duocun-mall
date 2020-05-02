@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/browse" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center" translate="Search"></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-searchbar 
+    placeholder="{{'Search'|translate}}"
+    debounce="1000"
+    (ionChange)="handleSearch($event)"
+    [value]="search"
+  ></ion-searchbar>
+  <product-list
+    [loading]="loading"
+    [products]="products"
+    (onProductClick)="onProductClick($event)"
+  ></product-list>
+</ion-content>

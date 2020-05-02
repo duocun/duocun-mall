@@ -47,7 +47,11 @@ export class BrowsePage implements OnInit {
     });
   }
 
-  toggleViewMode(event) {
-    console.log(event);
+  handleSearch(event) {
+    if (event.detail.value) {
+      this.router.navigate(["/tabs/browse/search"], {
+        queryParams: { q: event.detail.value }
+      });
+    }
   }
 }
