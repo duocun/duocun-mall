@@ -9,13 +9,16 @@ import { IonImageModule } from "src/app/components/ion-image/ion-image.module";
 import { LocalValueDirectiveModule } from "src/app/directives/local-value.module";
 import { IonicStorageModule } from "@ionic/storage";
 import { RouterTestingModule } from "@angular/router/testing";
+import { FormsModule } from '@angular/forms';
+import { CategoryListComponent } from './category-list/category-list.component';
+import { MerchantListComponent } from './merchant-list/merchant-list.component';
 describe("BrowsePage", () => {
   let component: BrowsePage;
   let fixture: ComponentFixture<BrowsePage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [BrowsePage],
+      declarations: [BrowsePage, CategoryListComponent, MerchantListComponent],
       imports: [
         IonicModule.forRoot(),
         TranslateModule.forRoot(),
@@ -31,7 +34,8 @@ describe("BrowsePage", () => {
         LocationSearchModule,
         IonImageModule,
         LocalValueDirectiveModule,
-        IonicStorageModule.forRoot()
+        IonicStorageModule.forRoot(),
+        FormsModule
       ]
     }).compileComponents();
 

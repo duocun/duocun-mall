@@ -12,6 +12,8 @@ import { HttpClientModule } from "@angular/common/http";
 import { LocationSearchModule } from "src/app/components/location-search/location-search.module";
 import { LocalValueDirectiveModule } from "src/app/directives/local-value.module";
 import { IonImageModule } from "src/app/components/ion-image/ion-image.module";
+import { MerchantListComponent } from "./merchant-list/merchant-list.component";
+import { CategoryListComponent } from "./category-list/category-list.component";
 
 @NgModule({
   imports: [
@@ -25,6 +27,6 @@ import { IonImageModule } from "src/app/components/ion-image/ion-image.module";
     LocalValueDirectiveModule,
     IonImageModule
   ],
-  declarations: [BrowsePage]
+  declarations: [BrowsePage, MerchantListComponent, CategoryListComponent]
 })
 export class BrowsePageModule {}

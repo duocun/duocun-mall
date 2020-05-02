@@ -67,5 +67,7 @@
   "Save": "Save",
   "Input delivery address": "Input delivery address",
   "Please select delivery address": "Please select delivery address",
-  "Saved successfully": "Saved successfully"
+  "Saved successfully": "Saved successfully",
+  "Merchant": "Merchant",
+  "Category": "Category"
 }

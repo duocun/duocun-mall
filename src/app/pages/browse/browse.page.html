@@ -6,24 +6,15 @@
 
 <ion-content>
   <ion-row class="ion-padding">
-    <ion-col size="6" *ngFor="let merchant of merchants">
-      <ion-card 
-        class="card-merchant ion-no-margin"
-        [routerLink]="['/tabs/browse/merchants', merchant._id]"
-      >
-        <ion-card-content class="card-content-merchant ion-margin-bottom">
-          <div class="wrapper-merchant-img">
-            <app-ion-image
-            [src]="getPictureUrl(merchant)"
-            [alt]="merchant.name"
-            style="height: 180px; object-fit: cover;"
-          ></app-ion-image>
-          </div>
-          <ion-label class="label-merchant-name">
-            <h3 localValue [data]="merchant" key="name"></h3>
-          </ion-label>
-        </ion-card-content>
-      </ion-card>
-    </ion-col>
+    <ion-segment [(ngModel)]="viewMode">
+      <ion-segment-button value="merchant">
+        <ion-label translate="Merchant"></ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="category">
+        <ion-label translate="Category"></ion-label>
+      </ion-segment-button>
+    </ion-segment>
   </ion-row>
+  <merchant-list *ngIf="viewMode === 'merchant'"></merchant-list>
+  <category-list *ngIf="viewMode === 'category'"></category-list>
 </ion-content>
