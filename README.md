@@ -29,7 +29,7 @@ npm run start
 You can set a different port:
 
 ```console
-ionic serve --port 5002
+ionic serve --port 5008
 ```
 
 ## Test
@@ -61,5 +61,5 @@ prettier --write src/**/*.ts
 # Deployment
 
 ```console
-ionic build --prod
+ionic build --prod --base-href=/mall
 ```
