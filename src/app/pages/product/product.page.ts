@@ -2,14 +2,17 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ApiService } from "src/app/services/api/api.service";
 import { ProductInterface, getPictureUrl } from "src/app/models/product.model";
-import { CartItemInterface } from "src/app/models/cart.model";
+import { CartItemInterface, CartInterface } from "src/app/models/cart.model";
 import { MerchantInterface } from "src/app/models/merchant.model";
 import { CartService } from "src/app/services/cart/cart.service";
 import { LocationService } from "src/app/services/location/location.service";
 import { LocationInterface } from "src/app/models/location.model";
 import * as moment from "moment";
 import { DeliveryService } from "src/app/services/delivery/delivery.service";
-import { DeliveryDateTimeInterface } from "src/app/models/delivery.model";
+import {
+  DeliveryDateTimeInterface,
+  areEqualDeliveryDateTime
+} from "src/app/models/delivery.model";
 import { AlertController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 const baseTimeList = ["11:00"];
@@ -28,7 +31,8 @@ export class ProductPage implements OnInit {
   loading: boolean;
   merchant: MerchantInterface;
   product: ProductInterface;
-  item: CartItemInterface;
+  item: CartItemInterface; // base item
+  items: Array<CartItemInterface>;
   location: LocationInterface;
   isInRange: boolean;
   schedules: Array<DeliveryDateTimeInterface>;
@@ -45,6 +49,7 @@ export class ProductPage implements OnInit {
     this.loading = true;
     this.isInRange = false;
     this.deliveryIdx = -1;
+    this.items = [];
   }
 
   ngOnInit() {
@@ -115,10 +120,19 @@ export class ProductPage implements OnInit {
   }
 
   handleQuantityChange(event, schedule: DeliveryDateTimeInterface) {
-    const item = { ...this.item };
-    item.quantity = event.value;
-    item.delivery = schedule;
-    this.cartSvc.setItem(item);
+    const quantity = event.value;
+    const item = this.items.find((item) =>
+      areEqualDeliveryDateTime(item.delivery, schedule)
+    );
+    if (item) {
+      item.quantity = quantity;
+    }
+  }
+
+  addItemsToCart() {
+    this.items.forEach((item) => {
+      this.cartSvc.setItem(item);
+    });
   }
 
   buildItem(delivery): CartItemInterface {
@@ -168,10 +182,20 @@ export class ProductPage implements OnInit {
           (resp: { code: string; data: Array<DeliveryDateTimeInterface> }) => {
             if (resp.code === "success") {
               this.schedules = resp.data;
+              this.initItems();
             }
           }
         )
       );
+  }
+
+  initItems() {
+    this.schedules.forEach((delivery) => {
+      const tempItem = { ...this.item };
+      tempItem.delivery = delivery;
+      tempItem.quantity = this.getItemQuantity(delivery);
+      this.items.push(tempItem);
+    });
   }
 
   showAlert(header, message, button) {

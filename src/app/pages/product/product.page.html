@@ -13,7 +13,7 @@
     <div class="image-slide-container">
       <ion-slides *ngIf="product.pictures && product.pictures.length; Else slidePlaceholder">
         <ion-slide *ngFor="let image of product.pictures; index as idx">
-          <app-ion-image style="width: 100%; object-fit: cover;" [src]="getPictureUrl(product, idx)" [alt]="product.name"></app-ion-image>
+          <app-ion-image style="width: 100%; height: 240px; object-fit: cover;" [src]="getPictureUrl(product, idx)" [alt]="product.name"></app-ion-image>
         </ion-slide>
       </ion-slides>
     </div>
@@ -55,6 +55,14 @@
           </ion-row>
         </ion-item>
       </ng-container>
+      <ion-col size="12">
+        <ion-row class="ion-padding">
+          <ion-button color="primary" expand="full" class="w-100" (click)="addItemsToCart()">
+            <ion-icon class="ion-margin-end" name="cart-outline"></ion-icon>
+            {{"Add to Cart"|translate}}
+          </ion-button>
+        </ion-row>
+      </ion-col>
       <ion-col size="12" *ngIf="!location">
         <ion-row class="ion-padding">
           <ion-col align="center">
