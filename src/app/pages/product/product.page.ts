@@ -32,7 +32,7 @@ export class ProductPage implements OnInit {
   merchant: MerchantInterface;
   product: ProductInterface;
   item: CartItemInterface; // base item
-  items: Array<CartItemInterface>;
+  // items: Array<CartItemInterface>;
   location: LocationInterface;
   isInRange: boolean;
   schedules: Array<DeliveryDateTimeInterface>;
@@ -49,7 +49,7 @@ export class ProductPage implements OnInit {
     this.loading = true;
     this.isInRange = false;
     this.deliveryIdx = -1;
-    this.items = [];
+    // this.items = [];
   }
 
   ngOnInit() {
@@ -120,21 +120,18 @@ export class ProductPage implements OnInit {
   }
 
   handleQuantityChange(event, schedule: DeliveryDateTimeInterface) {
-    const quantity = event.value;
-    const item = this.items.find((item) =>
-      areEqualDeliveryDateTime(item.delivery, schedule)
-    );
-    if (item) {
-      item.quantity = quantity;
-    }
+    const item = { ...this.item };
+    item.delivery = schedule;
+    item.quantity = event.value;
+    this.cartSvc.setItem(item);
   }
 
-  addItemsToCart() {
-    console.log(this.items);
-    this.items.forEach((item) => {
-      this.cartSvc.setItem(item);
-    });
-  }
+  // addItemsToCart() {
+  //   console.log(this.items);
+  //   this.items.forEach((item) => {
+  //     this.cartSvc.setItem(item);
+  //   });
+  // }
 
   buildItem(delivery): CartItemInterface {
     const item = {
@@ -183,22 +180,22 @@ export class ProductPage implements OnInit {
           (resp: { code: string; data: Array<DeliveryDateTimeInterface> }) => {
             if (resp.code === "success") {
               this.schedules = resp.data;
-              this.initItems();
+              // this.initItems();
             }
           }
         )
       );
   }
 
-  initItems() {
-    this.items = [];
-    this.schedules.forEach((delivery) => {
-      const tempItem = { ...this.item };
-      tempItem.delivery = delivery;
-      tempItem.quantity = this.getItemQuantity(delivery);
-      this.items.push(tempItem);
-    });
-  }
+  // initItems() {
+  //   this.items = [];
+  //   this.schedules.forEach((delivery) => {
+  //     const tempItem = { ...this.item };
+  //     tempItem.delivery = delivery;
+  //     tempItem.quantity = this.getItemQuantity(delivery);
+  //     this.items.push(tempItem);
+  //   });
+  // }
 
   showAlert(header, message, button) {
     this.translator.get([header, message, button]).subscribe((dict) => {
