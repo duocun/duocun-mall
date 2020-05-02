@@ -30,15 +30,13 @@ export class LocationGuard implements CanActivate {
     | boolean
     | UrlTree {
     return new Observable((observer) => {
-      this.locSvc.getLocation().subscribe((location) => {
-        if (location) {
-          observer.next(true);
-        } else {
-          this.showAlert();
-          this.router.navigate(["/tabs/my-account/account-setting"]);
-          observer.next(false);
-        }
-      });
+      if (this.locSvc.location || this.locSvc.location === undefined) {
+        observer.next(true);
+      } else {
+        this.showAlert();
+        this.router.navigate(["/tabs/my-account/setting"]);
+        observer.next(false);
+      }
     });
   }
   showAlert() {

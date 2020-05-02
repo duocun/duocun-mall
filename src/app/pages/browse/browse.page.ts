@@ -5,6 +5,8 @@ import { LocationInterface } from "src/app/models/location.model";
 import { MerchantInterface } from "src/app/models/merchant.model";
 import { getPictureUrl } from "src/app/models/merchant.model";
 import { LocationService } from "src/app/services/location/location.service";
+import { AlertController } from "@ionic/angular";
+import { Router } from "@angular/router";
 @Component({
   selector: "app-browse",
   templateUrl: "./browse.page.html",
@@ -16,7 +18,10 @@ export class BrowsePage implements OnInit {
   constructor(
     private api: ApiService,
     private lang: TranslateService,
-    private loc: LocationService
+    private loc: LocationService,
+    private alert: AlertController,
+    private translator: TranslateService,
+    private router: Router
   ) {
     this.merchants = [];
   }
@@ -33,6 +38,9 @@ export class BrowsePage implements OnInit {
               }
             });
           });
+      } else if (location === null) {
+        this.showAlert();
+        this.router.navigate(["/tabs/my-account/setting"]);
       }
     });
   }
@@ -64,5 +72,22 @@ export class BrowsePage implements OnInit {
 
   getPictureUrl(merchant: MerchantInterface) {
     return getPictureUrl(merchant);
+  }
+
+  showAlert() {
+    const header = "Notice";
+    const message = "Please select delivery address";
+    const button = "OK";
+    this.translator.get([header, message, button]).subscribe((dict) => {
+      this.alert
+        .create({
+          header: dict[header],
+          message: dict[message],
+          buttons: [dict[button]]
+        })
+        .then((alert) => {
+          alert.present();
+        });
+    });
   }
 }

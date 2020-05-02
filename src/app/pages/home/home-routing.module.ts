@@ -3,6 +3,7 @@ import { Routes, RouterModule } from "@angular/router";
 
 import { HomePage } from "./home.page";
 import { AuthGuard } from "src/app/guards/auth/auth.guard";
+import { LocationGuard } from "src/app/guards/location/location.guard";
 
 const routes: Routes = [
   {
@@ -11,11 +12,13 @@ const routes: Routes = [
     children: [
       {
         path: "browse",
+        canActivate: [LocationGuard],
         loadChildren: () =>
           import("../browse/browse.module").then((m) => m.BrowsePageModule)
       },
       {
         path: "cart",
+        canActivate: [LocationGuard],
         loadChildren: () =>
           import("../cart/cart.module").then((m) => m.CartPageModule)
       },
@@ -29,14 +32,15 @@ const routes: Routes = [
       },
       {
         path: "",
-        redirectTo: "/tabs/browse",
+        redirectTo: "tabs/browse",
         pathMatch: "full"
       }
     ]
   },
   {
     path: "",
-    redirectTo: "/tabs/browse"
+    redirectTo: "tabs/browse",
+    pathMatch: "full"
   }
 ];
 

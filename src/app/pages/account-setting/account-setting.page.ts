@@ -7,6 +7,7 @@ import { AlertController } from "@ionic/angular";
 import { LocationService } from "src/app/services/location/location.service";
 import { LocationInterface } from "src/app/models/location.model";
 import { Router } from "@angular/router";
+import { CartService } from "src/app/services/cart/cart.service";
 @Component({
   selector: "app-account-setting",
   templateUrl: "./account-setting.page.html",
@@ -15,19 +16,24 @@ import { Router } from "@angular/router";
 export class AccountSettingPage implements OnInit {
   account: AccountInterface;
   model: AccountInterface;
+  location: LocationInterface;
   constructor(
     private authSvc: AuthService,
     private api: ApiService,
     private alert: AlertController,
     private translator: TranslateService,
     private loc: LocationService,
-    private router: Router
+    private router: Router,
+    private cart: CartService
   ) {}
 
   ngOnInit() {
     this.authSvc.getAccount().subscribe((account) => {
       this.account = account;
       this.model = { ...account };
+    });
+    this.loc.getLocation().subscribe((location) => {
+      this.location = location;
     });
   }
 
@@ -83,5 +89,6 @@ export class AccountSettingPage implements OnInit {
     location: LocationInterface;
   }) {
     this.loc.setLocation(event.location, event.address);
+    this.cart.clearCart();
   }
 }

@@ -8,7 +8,7 @@ import { LocationSearchModule } from "src/app/components/location-search/locatio
 import { IonImageModule } from "src/app/components/ion-image/ion-image.module";
 import { LocalValueDirectiveModule } from "src/app/directives/local-value.module";
 import { IonicStorageModule } from "@ionic/storage";
-
+import { RouterTestingModule } from "@angular/router/testing";
 describe("BrowsePage", () => {
   let component: BrowsePage;
   let fixture: ComponentFixture<BrowsePage>;
@@ -19,7 +19,15 @@ describe("BrowsePage", () => {
       imports: [
         IonicModule.forRoot(),
         TranslateModule.forRoot(),
-        RouterModule.forRoot([]),
+        RouterTestingModule.withRoutes([
+          {
+            path: "tabs/my-account/setting",
+            loadChildren: () =>
+              import("../account-setting/account-setting.module").then(
+                (m) => m.AccountSettingPageModule
+              )
+          }
+        ]),
         LocationSearchModule,
         IonImageModule,
         LocalValueDirectiveModule,

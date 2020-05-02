@@ -9,10 +9,10 @@ import { environment } from "src/environments/environment";
   providedIn: "root"
 })
 export class LocationService {
-  private location: LocationInterface;
-  private location$: BehaviorSubject<LocationInterface>;
+  public location: LocationInterface;
+  public location$: BehaviorSubject<LocationInterface>;
   constructor(private storage: Storage, private platform: Platform) {
-    this.location = null;
+    this.location = undefined;
     this.location$ = new BehaviorSubject<LocationInterface>(this.location);
     this.initLocation();
   }
