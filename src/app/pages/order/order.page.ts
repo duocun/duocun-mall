@@ -210,20 +210,22 @@ export class OrderPage implements OnInit {
           observable.subscribe(
             (resp: { code: string; data: MerchantInterface }) => {
               const merchant = resp.data;
-              resolve(
-                Order.createOrder(
-                  this.account,
-                  merchant,
-                  cartItemGroup.items,
-                  this.location,
-                  cartItemGroup.date,
-                  cartItemGroup.time,
-                  Order.getChargeFromCartItemGroup(cartItemGroup, 0),
-                  this.notes,
-                  this.paymentMethod,
-                  this.translator.currentLang
-                )
-              );
+              if (merchant && this.account) {
+                resolve(
+                  Order.createOrder(
+                    this.account,
+                    merchant,
+                    cartItemGroup.items,
+                    this.location,
+                    cartItemGroup.date,
+                    cartItemGroup.time,
+                    Order.getChargeFromCartItemGroup(cartItemGroup, 0),
+                    this.notes,
+                    this.paymentMethod,
+                    this.translator.currentLang
+                  )
+                );
+              }
             }
           );
         })
@@ -253,13 +255,16 @@ export class OrderPage implements OnInit {
     orders: Array<Order.OrderInterface>,
     amount: number
   ) {
+    const returnUrl =
+      window.location.host + `/mall?p=h&cId=${this.account._id}`;
     this.api
       .post("ClientPayments/payBySnappay", {
         appCode,
         paymentActionCode: "P",
         accountId,
         orders,
-        amount
+        amount,
+        returnUrl
       })
       .then((observable) => {
         observable.subscribe((resp: any) => {
