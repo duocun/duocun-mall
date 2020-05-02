@@ -9,6 +9,10 @@
 
 <ion-content>
   <ng-container *ngIf="account">
+    <ion-row class="ion-padding">
+      <ion-label translate="Please select delivery address"></ion-label>
+    </ion-row>
+    <location-search (onSelect)="handleLocationSelect($event)"></location-search>
     <ion-list class="ion-margin-top">
       <ion-item>
         <ion-label translate="Old Phone Number"></ion-label>
@@ -19,6 +23,8 @@
         <ion-input [(ngModel)]="model.phone"></ion-input>
       </ion-item>
     </ion-list>
+    <ion-row class="ion-padding">
+    </ion-row>
     <ion-row class="ion-padding">
       <ion-col size="12" align="center">
         <ion-button color="primary" translate="Save" expand="full" (click)="handleSave()"></ion-button>

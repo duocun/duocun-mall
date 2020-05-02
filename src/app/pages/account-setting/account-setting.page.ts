@@ -4,7 +4,9 @@ import { AccountInterface } from "src/app/models/account.model";
 import { ApiService } from "src/app/services/api/api.service";
 import { TranslateService } from "@ngx-translate/core";
 import { AlertController } from "@ionic/angular";
-
+import { LocationService } from "src/app/services/location/location.service";
+import { LocationInterface } from "src/app/models/location.model";
+import { Router } from "@angular/router";
 @Component({
   selector: "app-account-setting",
   templateUrl: "./account-setting.page.html",
@@ -17,7 +19,9 @@ export class AccountSettingPage implements OnInit {
     private authSvc: AuthService,
     private api: ApiService,
     private alert: AlertController,
-    private translator: TranslateService
+    private translator: TranslateService,
+    private loc: LocationService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -48,6 +52,7 @@ export class AccountSettingPage implements OnInit {
           if (resp.ok === 1) {
             this.showAlert("Notice", "Saved successfully", "OK");
             this.authSvc.updateData();
+            this.router.navigate(["/tabs/my-account"]);
           } else {
             this.showAlert("Notice", "Save failed", "OK");
           }
@@ -71,5 +76,12 @@ export class AccountSettingPage implements OnInit {
         })
         .then((alert) => alert.present());
     });
+  }
+
+  handleLocationSelect(event: {
+    address: string;
+    location: LocationInterface;
+  }) {
+    this.loc.setLocation(event.location, event.address);
   }
 }

@@ -37,13 +37,6 @@ export class BrowsePage implements OnInit {
     });
   }
 
-  handleLocationSelect(event: {
-    address: string;
-    location: LocationInterface;
-  }) {
-    this.loc.setLocation(event.location, event.address);
-  }
-
   loadMerchants(areaId: string) {
     this.api.get("Merchants/G", { status: "A" }).then((observable) => {
       observable.subscribe((resp: any) => {

@@ -7,6 +7,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { IonicStorageModule } from "@ionic/storage";
 import { FormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
+import { LocationSearchModule } from "src/app/components/location-search/location-search.module";
 
 describe("AccountSettingPage", () => {
   let component: AccountSettingPage;
@@ -21,7 +22,8 @@ describe("AccountSettingPage", () => {
         HttpClientModule,
         IonicStorageModule.forRoot(),
         FormsModule,
-        RouterModule.forRoot([])
+        RouterModule.forRoot([]),
+        LocationSearchModule
       ]
     }).compileComponents();
 
