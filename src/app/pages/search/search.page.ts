@@ -74,18 +74,17 @@ export class SearchPage implements OnInit {
   }
   getProducts() {
     this.api
-      .geth(
-        "Products",
-        {
+      .get("Products", {
+        query: JSON.stringify({
           name: { $regex: this.search },
           merchantId: { $in: this.availableMerchantIds }
-        },
-        true,
-        "filter"
-      )
-      .then((resp: Array<ProductInterface>) => {
-        this.products = resp;
-        this.loading = false;
+        })
+      })
+      .then((observable) => {
+        observable.subscribe((resp: Array<ProductInterface>) => {
+          this.products = resp;
+          this.loading = false;
+        });
       });
   }
   onProductClick(product: ProductInterface) {
