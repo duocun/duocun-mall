@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  api: "http://52.68.71.21:8000/api",
+  api: "https://duocun.com.cn/api",
   storageKey: {
     auth: "DUOCUN-AUTH-TOKEN",
     cart: "DUOCUN-CART",
