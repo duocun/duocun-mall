@@ -1,4 +1,4 @@
-<ion-row class="ion-padding">
+<ion-row class="ion-padding" *ngIf="!loading; Else skeleton">
   <ion-col size="6" *ngFor="let merchant of merchants">
     <ion-card 
       class="card-merchant ion-no-margin"
@@ -19,3 +19,37 @@
     </ion-card>
   </ion-col>
 </ion-row>
+<ng-template #skeleton>
+  <ion-row class="ion-padding" *ngFor="let idx of [1,2,3]">
+    <ion-col size="6">
+      <ion-card class="ion-no-margin">
+        <ion-card-content>
+          <div class="card-content-merchant ion-margin-bottom">
+            <app-ion-image
+              src="assets/img/no-image.png"
+              alt="awesome product"
+            ></app-ion-image>
+          </div>
+          <ion-skeleton-text animated></ion-skeleton-text>
+          <ion-skeleton-text animated style="width:80%"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width:60%"></ion-skeleton-text>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+    <ion-col size="6">
+      <ion-card class="ion-no-margin">
+        <ion-card-content>
+          <div class="card-content-merchant ion-margin-bottom">
+            <app-ion-image
+              src="assets/img/no-image.png"
+              alt="awesome product"
+            ></app-ion-image>
+          </div>
+          <ion-skeleton-text animated></ion-skeleton-text>
+          <ion-skeleton-text animated style="width:80%"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width:60%"></ion-skeleton-text>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+</ng-template>

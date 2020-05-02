@@ -11,9 +11,12 @@ import { LocationService } from "src/app/services/location/location.service";
   styleUrls: ["./merchant-list.component.scss"]
 })
 export class MerchantListComponent implements OnInit {
+  loading: boolean;
   merchants: Array<MerchantInterface>;
   location: LocationInterface;
-  constructor(private locSvc: LocationService, private api: ApiService) {}
+  constructor(private locSvc: LocationService, private api: ApiService) {
+    this.loading = true;
+  }
 
   ngOnInit() {
     this.locSvc.getLocation().subscribe((location: LocationInterface) => {
@@ -52,6 +55,7 @@ export class MerchantListComponent implements OnInit {
         } else {
           this.merchants = merchants;
         }
+        this.loading = false;
       });
     });
   }
