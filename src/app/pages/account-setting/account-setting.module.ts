@@ -8,6 +8,7 @@ import { AccountSettingPageRoutingModule } from "./account-setting-routing.modul
 
 import { AccountSettingPage } from "./account-setting.page";
 import { TranslateModule } from "@ngx-translate/core";
+import { LocationSearchModule } from "src/app/components/location-search/location-search.module";
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { TranslateModule } from "@ngx-translate/core";
     FormsModule,
     IonicModule,
     AccountSettingPageRoutingModule,
-    TranslateModule.forChild()
+    TranslateModule.forChild(),
+    LocationSearchModule
   ],
   declarations: [AccountSettingPage]
 })
