@@ -38,12 +38,12 @@ export class BrowsePage implements OnInit {
   }
 
   ngOnInit() {
-    this.loc.getLocation().subscribe((location: LocationInterface) => {
-      if (location === null) {
-        this.showAlert();
-        this.router.navigate(["/tabs/my-account/setting"]);
-      }
-    });
+    // this.loc.getLocation().subscribe((location: LocationInterface) => {
+    //   if (location === null) {
+    //     this.showAlert();
+    //     this.router.navigate(["/tabs/my-account/setting"]);
+    //   }
+    // });
     this.getAvailableMerchantIds().then(() => {
       this.api.get("Categories/G").then((observable) => {
         observable.subscribe((resp: { code: string; data: Array<any> }) => {
@@ -96,20 +96,15 @@ export class BrowsePage implements OnInit {
   }
 
   getProducts() {
+    const query: { categoryId?: any; merchantId?: any } = {};
+    if (this.selectedCategoryId) {
+      query.categoryId = this.selectedCategoryId;
+    }
+    if (this.availableMerchantIds && this.availableMerchantIds.length) {
+      query.merchantId = { $in: this.availableMerchantIds };
+    }
     this.api
-      .geth(
-        "Products",
-        this.selectedCategoryId
-          ? {
-              categoryId: this.selectedCategoryId,
-              merchantId: { $in: this.availableMerchantIds }
-            }
-          : {
-              merchantId: { $in: this.availableMerchantIds }
-            },
-        true,
-        "filter"
-      )
+      .geth("Products", query, true, "filter")
       .then((resp: Array<ProductInterface>) => {
         this.products = resp;
         this.loading = false;
@@ -120,7 +115,10 @@ export class BrowsePage implements OnInit {
     return new Promise((resolve, reject) => {
       this.loc.getLocation().subscribe((location) => {
         this.location = location;
-        if (!this.location) return;
+        if (!this.location) {
+          resolve([]);
+          return;
+        }
         this.api
           .get("/Areas/G/my", {
             lat: this.location.lat,

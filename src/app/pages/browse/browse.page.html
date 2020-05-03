@@ -25,7 +25,6 @@
       <ion-col *ngFor="let category of categories.slice(0,10)" size="3" class="ion-no-margin ion-no-padding">
         <ion-button
           [color]="selectedCategoryId === category._id ? 'success' : 'light'"
-          [disabled]="!availableMerchantIds || !availableMerchantIds.length"
           size="small"
           expand="full"
           localValue

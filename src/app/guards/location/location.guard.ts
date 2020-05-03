@@ -34,7 +34,9 @@ export class LocationGuard implements CanActivate {
         observer.next(true);
       } else {
         this.showAlert();
-        this.router.navigate(["/tabs/my-account/setting"]);
+        this.router.navigate(["/tabs/my-account/setting"], {
+          queryParams: { redirectUrl: state.url }
+        });
         observer.next(false);
       }
     });

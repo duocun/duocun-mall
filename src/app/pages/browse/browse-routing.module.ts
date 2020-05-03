@@ -3,6 +3,7 @@ import { Routes, RouterModule } from "@angular/router";
 
 import { BrowsePage } from "./browse.page";
 import { AuthGuard } from "src/app/guards/auth/auth.guard";
+import { LocationGuard } from "src/app/guards/location/location.guard";
 
 const routes: Routes = [
   {
@@ -16,12 +17,13 @@ const routes: Routes = [
   },
   {
     path: "products",
+    canActivate: [LocationGuard],
     loadChildren: () =>
       import("../product/product.module").then((m) => m.ProductPageModule)
   },
   {
     path: "order",
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, LocationGuard],
     loadChildren: () =>
       import("../order/order.module").then((m) => m.OrderPageModule)
   },

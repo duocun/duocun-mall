@@ -12,7 +12,6 @@ const routes: Routes = [
     children: [
       {
         path: "browse",
-        canActivate: [LocationGuard],
         loadChildren: () =>
           import("../browse/browse.module").then((m) => m.BrowsePageModule)
       },

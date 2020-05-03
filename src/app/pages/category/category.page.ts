@@ -46,7 +46,10 @@ export class CategoryPage implements OnInit {
     return new Promise((resolve, reject) => {
       this.locSvc.getLocation().subscribe((location) => {
         this.location = location;
-        if (!this.location) return;
+        if (!this.location) {
+          resolve([]);
+          return;
+        }
         this.api
           .get("/Areas/G/my", {
             lat: this.location.lat,
@@ -75,16 +78,13 @@ export class CategoryPage implements OnInit {
     });
   }
   getProducts() {
+    const query: { categoryId?: any; merchantId?: any } = {};
+    query.categoryId = this.category._id;
+    if (this.availableMerchantIds && this.availableMerchantIds.length) {
+      query.merchantId = { $in: this.availableMerchantIds };
+    }
     this.api
-      .geth(
-        "Products",
-        {
-          categoryId: this.category._id,
-          merchantId: { $in: this.availableMerchantIds }
-        },
-        true,
-        "filter"
-      )
+      .geth("Products", query, true, "filter")
       .then((resp: Array<ProductInterface>) => {
         this.products = resp;
         this.loading = false;
