@@ -62,6 +62,7 @@ export interface TransactionRepInterface extends TransactionInterface {
   description: string;
   consumed: number;
   paid: number;
+  balance: number;
 }
 
 export function getTransactionDescription(
