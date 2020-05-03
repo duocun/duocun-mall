@@ -8,6 +8,8 @@ import { LocationService } from "src/app/services/location/location.service";
 import { LocationInterface } from "src/app/models/location.model";
 import { Router, ActivatedRoute } from "@angular/router";
 import { CartService } from "src/app/services/cart/cart.service";
+import { environment } from "src/environments/environment";
+import { Storage } from "@ionic/storage";
 @Component({
   selector: "app-account-setting",
   templateUrl: "./account-setting.page.html",
@@ -27,10 +29,11 @@ export class AccountSettingPage implements OnInit {
     private loc: LocationService,
     private router: Router,
     private cart: CartService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private storage: Storage
   ) {
     this.redirectUrl = "";
-    this.saveLocation = true;
+    this.saveLocation = false;
   }
 
   ngOnInit() {
@@ -38,7 +41,16 @@ export class AccountSettingPage implements OnInit {
       this.account = account;
       this.model = { ...account };
     });
-    this.loc.getLocation().subscribe((location) => {
+    this.storage
+      .get(environment.storageKey.location)
+      .then((location: LocationInterface) => {
+        if (location) {
+          this.saveLocation = true;
+        } else {
+          this.saveLocation = false;
+        }
+      });
+    this.loc.getLocation().subscribe((location: LocationInterface) => {
       this.location = location;
     });
     this.route.queryParams.subscribe((params) => {
