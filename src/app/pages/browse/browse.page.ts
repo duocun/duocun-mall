@@ -23,6 +23,9 @@ export class BrowsePage implements OnInit {
   products: Array<ProductInterface>;
   loading: boolean;
   search: string;
+  page: number;
+  size = 20;
+  scrollDisabled: boolean;
   constructor(
     private loc: LocationService,
     private alert: AlertController,
@@ -30,12 +33,15 @@ export class BrowsePage implements OnInit {
     private router: Router,
     private api: ApiService
   ) {
+    this.page = 1;
     this.viewSegment = "merchant";
     this.viewMode = "category-only";
     this.categories = [];
     this.selectedCategoryId = "";
-    this.availableMerchantIds = [];
+    this.availableMerchantIds = null;
     this.loading = true;
+    this.scrollDisabled = false;
+    this.products = [];
   }
   ngOnInit() {
     this.loc.getLocation().subscribe((location: LocationInterface) => {
@@ -45,8 +51,10 @@ export class BrowsePage implements OnInit {
           observable.subscribe((resp: { code: string; data: Array<any> }) => {
             if (resp.code === "success") {
               this.categories = resp.data;
-              if (this.categories.length) {
-                this.getProducts();
+              if (this.availableMerchantIds) {
+                this.getProducts(null);
+              } else {
+                this.loading = false;
               }
             }
           });
@@ -84,18 +92,24 @@ export class BrowsePage implements OnInit {
   }
 
   showAll() {
+    this.page = 1;
+    this.products = [];
+    this.scrollDisabled = false;
     this.loading = true;
     this.selectedCategoryId = "";
     this.getProducts();
   }
 
   handleSelectCategory(category: CategoryInterface) {
+    this.page = 1;
+    this.scrollDisabled = false;
+    this.products = [];
     this.loading = true;
     this.selectedCategoryId = category._id;
     this.getProducts();
   }
 
-  getProducts() {
+  getProducts(event = null) {
     const query: { categoryId?: any; merchantId?: any } = {};
     if (this.selectedCategoryId) {
       query.categoryId = this.selectedCategoryId;
@@ -104,16 +118,35 @@ export class BrowsePage implements OnInit {
       query.merchantId = { $in: this.availableMerchantIds };
     }
     this.api
-      .geth("Products", query, true, "filter")
-      .then((resp: Array<ProductInterface>) => {
-        this.products = resp;
-        this.loading = false;
-      });
+      .geth(
+        `Products/paginate/${this.page}/${this.size}`,
+        query,
+        true,
+        "filter"
+      )
+      .then(
+        (resp: { code: string; data: Array<ProductInterface>; meta: any }) => {
+          this.products = [...this.products, ...resp.data];
+          this.loading = false;
+          if (event) {
+            event.target.complete();
+            if (!resp.data || !resp.data.length) {
+              this.scrollDisabled = true;
+            }
+          }
+        }
+      );
+  }
+
+  loadData(event) {
+    this.page++;
+    this.getProducts(event);
   }
 
   async getAvailableMerchantIds() {
     return new Promise((resolve, reject) => {
       if (!this.location) {
+        this.availableMerchantIds = [];
         resolve([]);
         return;
       }
