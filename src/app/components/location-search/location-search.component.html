@@ -1,6 +1,7 @@
 <ion-row class="row-search">
   <ion-col size="12" class="col-searchbar">
     <ion-searchbar 
+      class="searchbar-location"
       debounce="500" 
       animated 
       placeholder="{{'Input delivery address'|translate}}" 
@@ -24,7 +25,7 @@
 
 <ng-template #history>
   <ion-list class="list-suggestion" *ngIf="locationHistory.length">
-    <ion-item *ngFor="let location of locationHistory" (click)="handleLocationClick(location)">
+    <ion-item *ngFor="let location of locationHistory.slice(0,5)" (click)="handleLocationClick(location)">
       <ion-label>{{formatLocation(location)}}</ion-label>
       <ion-icon name="create-outline" slot="end"></ion-icon>
     </ion-item>
