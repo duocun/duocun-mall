@@ -38,6 +38,8 @@ export class LocationService {
     this.location.address = address;
     if (save) {
       this.storage.set(environment.storageKey.location, this.location);
+    } else {
+      this.storage.remove(environment.storageKey.location);
     }
     this.location$.next(this.location);
   }
