@@ -16,11 +16,6 @@ const routes: Routes = [
           import("../browse/browse.module").then((m) => m.BrowsePageModule)
       },
       {
-        path: "browse-other",
-        loadChildren: () =>
-          import("../browse/browse.module").then((m) => m.BrowsePageModule)
-      },
-      {
         path: "cart",
         canActivate: [LocationGuard],
         loadChildren: () =>
