@@ -55,3 +55,8 @@ body {
 .ion-text-danger {
   color: var(--ion-color-danger)
 }
+ion-searchbar.searchbar-location {
+  .searchbar-input {
+    font-size: 0.75rem !important;
+  }
+}
