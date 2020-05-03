@@ -257,6 +257,9 @@ export class OrderPage implements OnInit {
   }
 
   saveOrders(orders: Array<Order.OrderInterface>) {
+    orders.forEach((order) => {
+      order.note = this.notes;
+    });
     return this.api.post("Orders/bulk", orders);
   }
 
