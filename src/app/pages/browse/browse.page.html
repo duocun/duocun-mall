@@ -9,6 +9,7 @@
     placeholder="{{'Search'|translate}}"
     debounce="1000"
     (ionChange)="handleSearch($event)"
+    [value]="search"
   ></ion-searchbar>
   <ng-container *ngIf="viewMode === 'category-only'; Else segmentMode">
     <ion-row class="ion-padding-start ion-padding-end ion-margin-bottom">

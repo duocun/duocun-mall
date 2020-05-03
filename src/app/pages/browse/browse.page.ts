@@ -22,6 +22,7 @@ export class BrowsePage implements OnInit {
   availableMerchantIds: Array<string>;
   products: Array<ProductInterface>;
   loading: boolean;
+  search: string;
   constructor(
     private loc: LocationService,
     private alert: AlertController,
@@ -36,23 +37,19 @@ export class BrowsePage implements OnInit {
     this.availableMerchantIds = [];
     this.loading = true;
   }
-
   ngOnInit() {
-    // this.loc.getLocation().subscribe((location: LocationInterface) => {
-    //   if (location === null) {
-    //     this.showAlert();
-    //     this.router.navigate(["/tabs/my-account/setting"]);
-    //   }
-    // });
-    this.getAvailableMerchantIds().then(() => {
-      this.api.get("Categories/G").then((observable) => {
-        observable.subscribe((resp: { code: string; data: Array<any> }) => {
-          if (resp.code === "success") {
-            this.categories = resp.data;
-            if (this.categories.length) {
-              this.getProducts();
+    this.loc.getLocation().subscribe((location: LocationInterface) => {
+      this.location = location;
+      this.getAvailableMerchantIds().then(() => {
+        this.api.get("Categories/G").then((observable) => {
+          observable.subscribe((resp: { code: string; data: Array<any> }) => {
+            if (resp.code === "success") {
+              this.categories = resp.data;
+              if (this.categories.length) {
+                this.getProducts();
+              }
             }
-          }
+          });
         });
       });
     });
@@ -76,9 +73,12 @@ export class BrowsePage implements OnInit {
   }
 
   handleSearch(event) {
+    const search = event.detail.value;
+    this.search = "";
+    event.target.value = "";
     if (event.detail.value) {
       this.router.navigate(["/tabs/browse/search"], {
-        queryParams: { q: event.detail.value }
+        queryParams: { q: search }
       });
     }
   }
@@ -113,37 +113,34 @@ export class BrowsePage implements OnInit {
 
   async getAvailableMerchantIds() {
     return new Promise((resolve, reject) => {
-      this.loc.getLocation().subscribe((location) => {
-        this.location = location;
-        if (!this.location) {
-          resolve([]);
-          return;
-        }
-        this.api
-          .get("/Areas/G/my", {
-            lat: this.location.lat,
-            lng: this.location.lng
-          })
-          .then((observable) => {
-            observable.subscribe((resp: { code: string; data: any }) => {
-              if (resp.code === "success") {
-                this.api
-                  .geth("MerchantSchedules/availableMerchants", {
-                    areaId: resp.data._id
-                  })
-                  .then((merchantIds: Array<string>) => {
-                    this.availableMerchantIds = merchantIds;
-                    resolve(merchantIds);
-                  });
-              } else {
-                reject(resp);
-              }
-            });
-          })
-          .catch((e) => {
-            reject(e);
+      if (!this.location) {
+        resolve([]);
+        return;
+      }
+      this.api
+        .get("/Areas/G/my", {
+          lat: this.location.lat,
+          lng: this.location.lng
+        })
+        .then((observable) => {
+          observable.subscribe((resp: { code: string; data: any }) => {
+            if (resp.code === "success") {
+              this.api
+                .geth("MerchantSchedules/availableMerchants", {
+                  areaId: resp.data._id
+                })
+                .then((merchantIds: Array<string>) => {
+                  this.availableMerchantIds = merchantIds;
+                  resolve(merchantIds);
+                });
+            } else {
+              reject(resp);
+            }
           });
-      });
+        })
+        .catch((e) => {
+          reject(e);
+        });
     });
   }
   onProductClick(product: ProductInterface) {
