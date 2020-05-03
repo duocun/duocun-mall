@@ -80,8 +80,7 @@ export class TransactionHistoryPage implements OnInit {
               tr.consumed = tr.toId === this.accountId ? tr.amount : 0;
               tr.paid = tr.fromId === this.accountId ? tr.amount : 0;
               tr.balance =
-                -1 *
-                (tr.fromId === this.accountId ? tr.fromBalance : tr.toBalance);
+                tr.fromId === this.accountId ? tr.fromBalance : tr.toBalance;
               return tr;
             })
           ];
