@@ -265,13 +265,15 @@ export class OrderPage implements OnInit {
 
   savePayment(orders: Array<Order.OrderInterface>, paymentMethodId: string) {
     return this.api.post("ClientPayments/payByCreditCard", {
-      appType: AppType.GROCERY,
+      paymentActionCode: "P",
+      appCode: this.appCode,
       paymentMethodId,
       accountId: this.account._id,
       accountName: this.account.username,
-      orders,
-      payable: this.charge.payable,
-      paymentNote: ""
+      amount: this.charge.payable,
+      note: "",
+      paymentId: orders ? orders[0].paymentId : null,
+      merchantNames: orders.map((order) => order.merchantName)
     });
   }
 
@@ -286,12 +288,12 @@ export class OrderPage implements OnInit {
     const paymentId = orders ? orders[0].paymentId : null;
     this.api
       .post("ClientPayments/payBySnappay", {
-        appCode,
         paymentActionCode: "P",
+        appCode,
         accountId,
-        orders,
         amount,
         returnUrl,
+        note: "",
         paymentId,
         merchantNames: orders.map((order) => order.merchantName)
       })
