@@ -55,7 +55,7 @@
           </ion-row>
         </ion-item>
       </ng-container>
-      <ng-container *ngIf="!schedules || !shcedules.length">
+      <ng-container *ngIf="!schedules || !schedules.length">
         <ion-row class="ion-padding">
           <ion-col align="center">
             <ion-label color="danger" translate="Sorry, but this product is out of delivery range."></ion-label>
@@ -64,7 +64,7 @@
       </ng-container>
       <ion-col size="12">
         <ion-row class="ion-padding">
-          <ion-button color="primary" expand="full" class="w-100" routerLink="/tabs/browse/order" [disabled]="!shcedules || !shcedules.length">
+          <ion-button color="primary" expand="full" class="w-100" routerLink="/tabs/browse/order" [disabled]="!schedules || !schedules.length">
             <ion-icon class="ion-margin-end" name="cash-outline"></ion-icon>
             {{"Buy Now"|translate}}
           </ion-button>
@@ -75,7 +75,7 @@
           <ion-col align="center">
             <ion-label 
               translate="Please select delivery address"
-              routerLink="['/tabs/browse']"
+              routerLink="['/tabs/my-account/setting']"
               class="ion-text-danger"
             >
             </ion-label>

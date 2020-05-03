@@ -33,10 +33,12 @@ export class LocationService {
   getLocation() {
     return this.location$;
   }
-  setLocation(location: LocationInterface, address: string) {
+  setLocation(location: LocationInterface, address: string, save = true) {
     this.location = location;
     this.location.address = address;
-    this.storage.set(environment.storageKey.location, this.location);
+    if (save) {
+      this.storage.set(environment.storageKey.location, this.location);
+    }
     this.location$.next(this.location);
   }
 }

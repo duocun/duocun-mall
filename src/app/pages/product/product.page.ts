@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ApiService } from "src/app/services/api/api.service";
 import { ProductInterface, getPictureUrl } from "src/app/models/product.model";
 import { CartItemInterface, CartInterface } from "src/app/models/cart.model";
@@ -44,7 +44,8 @@ export class ProductPage implements OnInit {
     private locationSvc: LocationService,
     private deliverySvc: DeliveryService,
     private alert: AlertController,
-    private translator: TranslateService
+    private translator: TranslateService,
+    private router: Router
   ) {
     this.loading = true;
     this.isInRange = false;
@@ -55,6 +56,12 @@ export class ProductPage implements OnInit {
   ngOnInit() {
     this.locationSvc.getLocation().subscribe((location: LocationInterface) => {
       this.location = location;
+      if (this.location === null) {
+        this.showAlert("Notice", "Please select delivery address", "OK");
+        this.router.navigate(["/tabs/my-account/setting"], {
+          queryParams: { redirectUrl: this.router.url }
+        });
+      }
     });
     this.updateData();
   }

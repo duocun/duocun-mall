@@ -18,6 +18,7 @@ export class AccountSettingPage implements OnInit {
   model: AccountInterface;
   location: LocationInterface;
   redirectUrl: string;
+  saveLocation: any;
   constructor(
     private authSvc: AuthService,
     private api: ApiService,
@@ -29,6 +30,7 @@ export class AccountSettingPage implements OnInit {
     private route: ActivatedRoute
   ) {
     this.redirectUrl = "";
+    this.saveLocation = true;
   }
 
   ngOnInit() {
@@ -49,6 +51,11 @@ export class AccountSettingPage implements OnInit {
       this.showAlert("Notice", "Please input phone number", "OK");
       return;
     }
+    this.loc.setLocation(
+      this.location,
+      this.location.address,
+      this.saveLocation
+    );
     this.model.phone = this.sanitizePhoneNumber(this.model.phone);
     this.api
       .patch(`Accounts`, {
@@ -99,7 +106,8 @@ export class AccountSettingPage implements OnInit {
     address: string;
     location: LocationInterface;
   }) {
-    this.loc.setLocation(event.location, event.address);
+    this.location = event.location;
+    this.location.address = event.address;
     this.cart.clearCart();
   }
 }

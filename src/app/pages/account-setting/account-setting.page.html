@@ -13,6 +13,10 @@
       <ion-label translate="Please select delivery address"></ion-label>
     </ion-row>
     <location-search (onSelect)="handleLocationSelect($event)"></location-search>
+    <ion-item lines="none">
+      <ion-checkbox color="tertiary" [(ngModel)]="saveLocation"></ion-checkbox>
+      <ion-label translate="Set as default"></ion-label>
+    </ion-item>
     <ion-list class="ion-margin-top">
       <ion-item>
         <ion-label translate="Old Phone Number"></ion-label>
