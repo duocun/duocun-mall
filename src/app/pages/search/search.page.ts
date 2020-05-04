@@ -47,7 +47,8 @@ export class SearchPage implements OnInit {
         if (!this.location) {
           this.availableMerchantIds = [];
           resolve([]);
-        };
+          return;
+        }
         this.api
           .get("/Areas/G/my", {
             lat: this.location.lat,
