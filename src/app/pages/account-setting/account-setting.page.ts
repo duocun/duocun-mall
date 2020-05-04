@@ -96,6 +96,25 @@ export class AccountSettingPage implements OnInit {
       });
   }
 
+  checkDeliveryRange() {
+    this.api
+      .get("/Areas/G/my", {
+        lat: this.location.lat,
+        lng: this.location.lng
+      })
+      .then((observable) => {
+        observable.subscribe((resp: { code: string; data: any }) => {
+          if (resp.code !== "success") {
+            this.showAlert(
+              "Notice",
+              "Your address is out of delivery range",
+              "OK"
+            );
+          }
+        });
+      });
+  }
+
   sanitizePhoneNumber(phone: string) {
     phone = phone.substring(0, 2) === "+1" ? phone.substring(2) : phone;
     phone = phone.match(/\d+/g).join("");
@@ -121,5 +140,6 @@ export class AccountSettingPage implements OnInit {
     this.location = event.location;
     this.location.address = event.address;
     this.cart.clearCart();
+    this.checkDeliveryRange();
   }
 }

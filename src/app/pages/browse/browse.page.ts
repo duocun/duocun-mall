@@ -167,7 +167,8 @@ export class BrowsePage implements OnInit {
                   resolve(merchantIds);
                 });
             } else {
-              reject(resp);
+              this.availableMerchantIds = [];
+              resolve([]);
             }
           });
         })
