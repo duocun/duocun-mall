@@ -21,6 +21,10 @@
       </ion-col>
     </ion-row>
     <location-search (onSelect)="handleLocationSelect($event)"></location-search>
+    <ion-item *ngIf="location">
+      <ion-label translate="Address Detail"></ion-label>
+      <ion-input [(ngModel)]="location.unit"></ion-input>
+    </ion-item>
     <ion-item lines="none">
       <ion-checkbox class="ion-margin-end" color="tertiary" [(ngModel)]="saveLocation"></ion-checkbox>
       <ion-label translate="Set as default"></ion-label>
@@ -35,7 +39,7 @@
         <ion-input [(ngModel)]="model.phone"></ion-input>
       </ion-item>
       <ion-item *ngIf="(model.phone && account.phone != model.phone) || !account.phone">
-        <ion-row class="ion-align-items-end">
+        <ion-row class="ion-align-items-end ion-padding-start ion-padding-end">
           <ion-col size="7">
             <ion-label position="floating" translate="Verification Code"></ion-label>
             <ion-input [(ngModel)]="model.verificationCode"></ion-input>
@@ -51,6 +55,10 @@
             ></ion-button>
           </ion-col>
         </ion-row>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating" translate="Another phone number"></ion-label>
+        <ion-input [(ngModel)]="model.secondPhone"></ion-input>
       </ion-item>
     </ion-list>
     <ion-row class="ion-padding">

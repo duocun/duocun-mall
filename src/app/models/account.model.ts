@@ -1,3 +1,5 @@
+import { LocationInterface } from "./location.model";
+
 export interface AccountInterface {
   _id: string;
   username?: string;
@@ -11,6 +13,8 @@ export interface AccountInterface {
   created?: string;
   modified?: string;
   phone: string;
+  secondPhone?: string;
+  location?: LocationInterface;
   verified?: boolean;
   pickup?: any;
   verificationCode?: string;

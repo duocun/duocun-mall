@@ -70,19 +70,7 @@ export class AccountSettingPage implements OnInit {
 
     this.model.phone = this.sanitizePhoneNumber(this.model.phone);
     if (this.model.phone == this.account.phone) {
-      if (this.location) {
-        this.loc.setLocation(
-          this.location,
-          this.location.address,
-          this.saveLocation
-        );
-      }
-      this.processing = false;
-      if (this.redirectUrl) {
-        this.router.navigateByUrl(this.redirectUrl);
-      } else {
-        this.router.navigate(["/tabs/my-account"]);
-      }
+      this.saveProfile();
     } else {
       this.api
         .post("Accounts/verifyCode", {
@@ -92,20 +80,7 @@ export class AccountSettingPage implements OnInit {
         .then((observable) => {
           observable.subscribe((resp: { code: string }) => {
             if (resp.code === "success") {
-              if (this.location) {
-                this.loc.setLocation(
-                  this.location,
-                  this.location.address,
-                  this.saveLocation
-                );
-              }
-              this.showAlert("Notice", "Saved successfully", "OK");
-              this.authSvc.updateData();
-              if (this.redirectUrl) {
-                this.router.navigateByUrl(this.redirectUrl);
-              } else {
-                this.router.navigate(["/tabs/my-account"]);
-              }
+              this.saveProfile();
             } else {
               this.showAlert("Notice", "Please verify your phone number", "OK");
             }
@@ -153,6 +128,23 @@ export class AccountSettingPage implements OnInit {
       });
   }
 
+  saveProfile() {
+    this.api
+      .post("Accounts/saveProfile", {
+        location: this.saveLocation ? this.location : null,
+        secondPhone: this.model.secondPhone
+      })
+      .then((observable) => {
+        observable.subscribe((resp: { code: string }) => {
+          if (resp.code === "success") {
+            this.handleSaveProfileSuccess();
+          } else {
+            this.showAlert("Notice", "Save failed", "OK");
+          }
+        });
+      });
+  }
+
   sanitizePhoneNumber(phone: string) {
     phone = phone.substring(0, 2) === "+1" ? phone.substring(2) : phone;
     phone = phone.match(/\d+/g).join("");
@@ -179,5 +171,22 @@ export class AccountSettingPage implements OnInit {
     this.location.address = event.address;
     this.cart.clearCart();
     this.checkDeliveryRange();
+  }
+
+  handleSaveProfileSuccess() {
+    if (this.location) {
+      this.loc.setLocation(
+        this.location,
+        this.location.address,
+        this.saveLocation
+      );
+    }
+    this.showAlert("Notice", "Saved successfully", "OK");
+    this.authSvc.updateData();
+    if (this.redirectUrl) {
+      this.router.navigateByUrl(this.redirectUrl);
+    } else {
+      this.router.navigate(["/tabs/my-account"]);
+    }
   }
 }

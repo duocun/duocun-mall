@@ -42,6 +42,7 @@ export interface LocationInterface {
   streetNumber?: string;
   subLocality?: string;
   address?: string;
+  unit?: string;
 }
 
 export interface PlaceInterface {
