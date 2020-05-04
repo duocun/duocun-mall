@@ -9,8 +9,16 @@
 
 <ion-content>
   <ng-container *ngIf="account">
-    <ion-row class="ion-padding">
-      <ion-label translate="Please select delivery address"></ion-label>
+    <ion-row class="ion-padding-start ion-padding-end ion-padding-top">
+      <ion-col class="ion-no-padding" size="12">
+        <ion-label class="ion-margin-end" translate="Please select delivery address"></ion-label>
+        <ion-label 
+          color="primary"
+          routerLink="delivery-range"
+          class="ion-text-small"
+          translate="See delivery range"
+        ></ion-label>
+      </ion-col>
     </ion-row>
     <location-search (onSelect)="handleLocationSelect($event)"></location-search>
     <ion-item lines="none">

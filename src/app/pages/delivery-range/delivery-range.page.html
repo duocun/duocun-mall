@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/my-account" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title translate="See delivery range"></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <agm-map
+    *ngIf="!loading; Else skeleton"
+    class="gmap-container"
+    [latitude]="mapLat"
+    [longitude]="mapLng"
+  >
+    <agm-marker
+      *ngIf="location"
+      [latitude]="location.lat"
+      [longitude]="location.lng">
+    </agm-marker>
+    <ng-container *ngFor="let area of areas">
+      <agm-polygon 
+        *ngIf="area.coords && area.coords.length"
+        [paths]="area.coords"
+        strokeColor="#ed576b"
+        strokeWeight="1"
+      >
+      </agm-polygon>
+    </ng-container>
+  </agm-map>
+</ion-content>
+
+<ng-template #skeleton>
+  <ion-row class="ion-padding">
+    <ion-col size="12">
+      <ion-skeleton-text animated class="gmap-container"></ion-skeleton-text>
+    </ion-col>
+  </ion-row>
+</ng-template>

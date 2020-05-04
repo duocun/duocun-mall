@@ -9,6 +9,7 @@ import { AccountSettingPageRoutingModule } from "./account-setting-routing.modul
 import { AccountSettingPage } from "./account-setting.page";
 import { TranslateModule } from "@ngx-translate/core";
 import { LocationSearchModule } from "src/app/components/location-search/location-search.module";
+import { DeliveryRangePageModule } from "../delivery-range/delivery-range.module";
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { LocationSearchModule } from "src/app/components/location-search/locatio
     IonicModule,
     AccountSettingPageRoutingModule,
     TranslateModule.forChild(),
-    LocationSearchModule
+    LocationSearchModule,
+    DeliveryRangePageModule
   ],
   declarations: [AccountSettingPage]
 })

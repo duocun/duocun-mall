@@ -1,0 +1,7 @@
+.gmap-container {
+  height: calc(100vh - 96px);
+  min-height: 420px;
+}
+ion-skeleton-text.gmap-container {
+  height: calc(100vh - 144px);
+}

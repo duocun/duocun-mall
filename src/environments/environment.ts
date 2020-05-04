@@ -13,7 +13,8 @@ export const environment = {
   },
   media: "https://duocun.com.cn/media/",
   stripe: "pk_test_FsGoacByMF8lGNcVKveNZFSy00ATWTilJp",
-  defaultLang: "zh"
+  defaultLang: "zh",
+  gmap: "AIzaSyCEd6D6vc9K-YzMH-QtQWRSs5HZkLKSWyk"
 };
 
 /*
