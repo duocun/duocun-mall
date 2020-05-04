@@ -194,4 +194,14 @@ export class AccountSettingPage implements OnInit {
       this.router.navigate(["/tabs/my-account"]);
     }
   }
+
+  isValidPhoneNumber(phone: any) {
+    if (!phone) {
+      return false;
+    }
+    if (phone.length < 5 || phone.length > 10) {
+      return false;
+    }
+    return true;
+  }
 }
