@@ -128,7 +128,9 @@ export class BrowsePage implements OnInit {
       )
       .then(
         (resp: { code: string; data: Array<ProductInterface>; meta: any }) => {
-          this.products = [...this.products, ...resp.data];
+          if (this.products.length < this.page * this.size) {
+            this.products = [...this.products, ...resp.data];
+          }
           this.loading = false;
           if (event) {
             event.target.complete();
