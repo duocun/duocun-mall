@@ -23,7 +23,13 @@ describe("ProductPage", () => {
         IonicModule.forRoot(),
         LocalValueDirectiveModule,
         IonImageModule,
-        RouterModule.forRoot([]),
+        RouterModule.forRoot([
+          {
+            path: "tabs/my-account/setting",
+            loadChildren: () => 
+              import("../account-setting/account-setting.module").then((m) => m.AccountSettingPageModule)
+          }
+        ]),
         HttpClientModule,
         IonicStorageModule.forRoot(),
         TouchspinModule,
