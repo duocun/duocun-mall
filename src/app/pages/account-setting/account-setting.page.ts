@@ -20,7 +20,8 @@ export class AccountSettingPage implements OnInit {
   model: AccountInterface;
   location: LocationInterface;
   redirectUrl: string;
-  saveLocation: any;
+  saveLocation: boolean;
+  processing: boolean;
   constructor(
     private authSvc: AuthService,
     private api: ApiService,
@@ -34,12 +35,14 @@ export class AccountSettingPage implements OnInit {
   ) {
     this.redirectUrl = "";
     this.saveLocation = false;
+    this.processing = false;
   }
 
   ngOnInit() {
     this.authSvc.getAccount().subscribe((account) => {
       this.account = account;
       this.model = { ...account };
+      this.model.verificationCode = "";
     });
     this.storage
       .get(environment.storageKey.location)
@@ -63,34 +66,69 @@ export class AccountSettingPage implements OnInit {
       this.showAlert("Notice", "Please input phone number", "OK");
       return;
     }
-    this.loc.setLocation(
-      this.location,
-      this.location.address,
-      this.saveLocation
-    );
+    this.processing = true;
+
     this.model.phone = this.sanitizePhoneNumber(this.model.phone);
+    if (this.model.phone == this.account.phone) {
+      if (this.location) {
+        this.loc.setLocation(
+          this.location,
+          this.location.address,
+          this.saveLocation
+        );
+      }
+      this.processing = false;
+      if (this.redirectUrl) {
+        this.router.navigateByUrl(this.redirectUrl);
+      } else {
+        this.router.navigate(["/tabs/my-account"]);
+      }
+    } else {
+      this.api
+        .post("Accounts/verifyCode", {
+          newPhone: this.model.phone,
+          code: this.model.verificationCode
+        })
+        .then((observable) => {
+          observable.subscribe((resp: { code: string }) => {
+            if (resp.code === "success") {
+              if (this.location) {
+                this.loc.setLocation(
+                  this.location,
+                  this.location.address,
+                  this.saveLocation
+                );
+              }
+              this.showAlert("Notice", "Saved successfully", "OK");
+              this.authSvc.updateData();
+              if (this.redirectUrl) {
+                this.router.navigateByUrl(this.redirectUrl);
+              } else {
+                this.router.navigate(["/tabs/my-account"]);
+              }
+            } else {
+              this.showAlert("Notice", "Please verify your phone number", "OK");
+            }
+            this.processing = false;
+          });
+        })
+        .finally(() => {
+          this.processing = false;
+        });
+    }
+  }
+
+  handleSendVerificationCode() {
     this.api
-      .patch(`Accounts`, {
-        filter: {
-          _id: this.account._id
-        },
-        data: {
-          phone: this.model.phone,
-          verified: true
-        }
+      .post("Accounts/sendVerificationCode", {
+        phone: this.model.phone
       })
       .then((observable) => {
-        observable.subscribe((resp: any) => {
-          if (resp.ok === 1) {
-            this.showAlert("Notice", "Saved successfully", "OK");
-            this.authSvc.updateData();
-            if (this.redirectUrl) {
-              this.router.navigateByUrl(this.redirectUrl);
-            } else {
-              this.router.navigate(["/tabs/my-account"]);
-            }
+        observable.subscribe((resp: { code: string; message?: string }) => {
+          if (resp.code === "success") {
+            this.showAlert("Notice", "Verification code sent", "OK");
           } else {
-            this.showAlert("Notice", "Save failed", "OK");
+            this.showAlert("Notice", "Verification code was not sent", "OK");
           }
         });
       });

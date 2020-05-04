@@ -26,20 +26,44 @@
       <ion-label translate="Set as default"></ion-label>
     </ion-item>
     <ion-list class="ion-margin-top">
-      <ion-item>
+      <ion-item *ngIf="account.phone">
         <ion-label translate="Old Phone Number"></ion-label>
         <ion-label>{{account.phone}}</ion-label>
       </ion-item>
       <ion-item>
-        <ion-label position="stacked" translate="New Phone Number"></ion-label>
+        <ion-label position="floating" translate="New Phone Number"></ion-label>
         <ion-input [(ngModel)]="model.phone"></ion-input>
+      </ion-item>
+      <ion-item *ngIf="(model.phone && account.phone != model.phone) || !account.phone">
+        <ion-row class="ion-align-items-end">
+          <ion-col size="7">
+            <ion-label position="floating" translate="Verification Code"></ion-label>
+            <ion-input [(ngModel)]="model.verificationCode"></ion-input>
+          </ion-col>
+          <ion-col size="5">
+            <ion-button
+              color="success"
+              translate="Send Verification Code"
+              size="small"
+              expand="full"
+              [disabled]="processing"
+              (click)="handleSendVerificationCode()"
+            ></ion-button>
+          </ion-col>
+        </ion-row>
       </ion-item>
     </ion-list>
     <ion-row class="ion-padding">
     </ion-row>
     <ion-row class="ion-padding">
       <ion-col size="12" align="center">
-        <ion-button [disabled]="!model.phone" color="primary" translate="Save" expand="full" (click)="handleSave()"></ion-button>
+        <ion-button 
+          [disabled]="!model.phone || processing"
+          color="primary"
+          translate="Save"
+          expand="full"
+          (click)="handleSave()"
+        ></ion-button>
       </ion-col>
     </ion-row>
   </ng-container>

@@ -13,4 +13,5 @@ export interface AccountInterface {
   phone: string;
   verified?: boolean;
   pickup?: any;
+  verificationCode?: string;
 }
