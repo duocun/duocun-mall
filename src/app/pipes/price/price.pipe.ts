@@ -19,7 +19,7 @@ export class PricePipe implements PipeTransform {
       return this.transform(value.price);
     }
     value = parseFloat(<string>value);
-    if (value < 0 || isNaN(value)) {
+    if (isNaN(value)) {
       value = 0;
     }
     return this.formatter.format(value);
