@@ -136,12 +136,17 @@ export class AccountSettingPage implements OnInit {
       })
       .then((observable) => {
         observable.subscribe((resp: { code: string }) => {
+          this.processing = false;
           if (resp.code === "success") {
             this.handleSaveProfileSuccess();
           } else {
             this.showAlert("Notice", "Save failed", "OK");
           }
         });
+      })
+      .catch((e) => {
+        console.error(e);
+        this.processing = false;
       });
   }
 
