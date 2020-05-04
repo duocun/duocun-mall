@@ -76,7 +76,7 @@ export function getTransactionDescription(
     return (lang === "en" ? "Cancel" : "取消") + toName;
   } else if (t.actionCode === TransactionAction.PAY_BY_CARD.code) {
     // 'pay by card') {
-    return lang === "en" ? "by bank card" : "银行卡付款";
+    return lang === "en" ? "by bank card" : "信用卡付款";
   } else if (t.actionCode === TransactionAction.DECLINE_CREDIT_CARD.code) {
     // 'bank card pay fail') {
     return lang === "en" ? "bank card pay fail" : "银行卡付款失败";
