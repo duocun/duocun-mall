@@ -44,7 +44,10 @@ export class SearchPage implements OnInit {
     return new Promise((resolve, reject) => {
       this.locSvc.getLocation().subscribe((location) => {
         this.location = location;
-        if (!this.location) return;
+        if (!this.location) {
+          this.availableMerchantIds = [];
+          resolve([]);
+        };
         this.api
           .get("/Areas/G/my", {
             lat: this.location.lat,
@@ -73,12 +76,13 @@ export class SearchPage implements OnInit {
     });
   }
   getProducts() {
+    const query: any = { name: { $regex: this.search } };
+    if (this.availableMerchantIds && this.availableMerchantIds.length) {
+      query.merchantId = { $in: this.availableMerchantIds };
+    }
     this.api
       .get("Products", {
-        query: JSON.stringify({
-          name: { $regex: this.search },
-          merchantId: { $in: this.availableMerchantIds }
-        })
+        query: JSON.stringify(query)
       })
       .then((observable) => {
         observable.subscribe((resp: Array<ProductInterface>) => {
