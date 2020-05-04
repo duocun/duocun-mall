@@ -5,6 +5,7 @@ import { BehaviorSubject } from "rxjs";
 import { environment } from "src/environments/environment";
 import { AccountInterface } from "src/app/models/account.model";
 import { HttpClient } from "@angular/common/http";
+import { LocationService } from "src/app/services/location/location.service";
 
 @Injectable({
   providedIn: "root"
@@ -14,6 +15,7 @@ export class AuthService {
   account: AccountInterface | null;
   account$: BehaviorSubject<AccountInterface>;
   constructor(
+    private locSvc: LocationService,
     private storage: Storage,
     private platform: Platform,
     private http: HttpClient
@@ -45,6 +47,14 @@ export class AuthService {
             this.account$.next(this.account);
             this.authState.next(true);
           });
+          if (this.account.location) {
+            this.locSvc.setLocation(
+              this.account.location,
+              this.account.location.address
+            );
+          } else {
+            this.storage.remove(environment.storageKey.location);
+          }
         } else {
           this.logout();
         }

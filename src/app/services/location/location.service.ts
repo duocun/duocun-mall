@@ -35,7 +35,9 @@ export class LocationService {
   }
   setLocation(location: LocationInterface, address: string, save = true) {
     this.location = location;
-    this.location.address = address;
+    if (this.location) {
+      this.location.address = address;
+    }
     if (save) {
       this.storage.set(environment.storageKey.location, this.location);
     } else {
