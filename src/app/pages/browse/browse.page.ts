@@ -26,6 +26,7 @@ export class BrowsePage implements OnInit {
   page: number;
   size = 20;
   scrollDisabled: boolean;
+  outofRange: boolean;
   constructor(
     private loc: LocationService,
     private alert: AlertController,
@@ -42,6 +43,7 @@ export class BrowsePage implements OnInit {
     this.loading = true;
     this.scrollDisabled = false;
     this.products = [];
+    this.outofRange = false;
   }
   ngOnInit() {
     this.loc.getLocation().subscribe((location: LocationInterface) => {
@@ -167,12 +169,14 @@ export class BrowsePage implements OnInit {
                   resolve(merchantIds);
                 });
             } else {
+              this.outofRange = true;
               this.availableMerchantIds = [];
               resolve([]);
             }
           });
         })
         .catch((e) => {
+          this.outofRange = true;
           reject(e);
         });
     });
