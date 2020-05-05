@@ -36,7 +36,7 @@
       </ion-item>
       <ion-item>
         <ion-label position="floating" translate="New Phone Number"></ion-label>
-        <ion-input [(ngModel)]="model.phone"></ion-input>
+        <ion-input [(ngModel)]="model.phone" maxlength="10"></ion-input>
       </ion-item>
       <ion-item *ngIf="(model.phone && account.phone != model.phone) || !account.phone">
         <ion-row class="ion-align-items-end ion-padding-start ion-padding-end">
@@ -58,7 +58,7 @@
       </ion-item>
       <ion-item>
         <ion-label position="floating" translate="Another phone number"></ion-label>
-        <ion-input [(ngModel)]="model.secondPhone"></ion-input>
+        <ion-input [(ngModel)]="model.secondPhone" maxlength="10"></ion-input>
       </ion-item>
     </ion-list>
     <ion-row class="ion-padding">
