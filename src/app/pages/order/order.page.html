@@ -132,7 +132,7 @@
           expand="full"
           translate="Stripe"
           [disabled]="!stripe || loading || processing"
-          (click)="stripeCard.createToken()"
+          (click)="createStripeToken(stripeCard)"
         >
         </ion-button>
       </ion-col>

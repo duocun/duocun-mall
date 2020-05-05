@@ -111,6 +111,13 @@ export class OrderPage implements OnInit {
     });
   }
 
+  createStripeToken(stripeCard) {
+    this.processing = true;
+    stripeCard.createToken().catch(() => {
+      this.processing = false;
+    });
+  }
+
   setCharge() {
     if (this.account && this.summary) {
       const amount = this.summary.total;
@@ -161,6 +168,7 @@ export class OrderPage implements OnInit {
                         ]);
                       } else {
                         this.showAlert("Notice", "Payment failed", "OK");
+                        this.processing = false;
                       }
                     });
                   })
@@ -170,6 +178,7 @@ export class OrderPage implements OnInit {
                       type: "payment",
                       message: "Cannot save payment"
                     };
+                    this.processing = false;
                   });
               }
             );
