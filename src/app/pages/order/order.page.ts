@@ -90,6 +90,9 @@ export class OrderPage implements OnInit {
       this.chargeItems = Order.getChargeItems(cart);
       this.cartItemGroups = Order.getCartItemGroups(cart);
       this.orders = [];
+      if (!this.cartItemGroups.length) {
+        this.router.navigate(["/tabs/browse"]);
+      }
       for (const cartItemGroup of this.cartItemGroups) {
         this.getOrderFromCartItemGroup(cartItemGroup)
           .then((order: Order.OrderInterface) => {
@@ -163,9 +166,12 @@ export class OrderPage implements OnInit {
                       if (resp.err === PaymentError.NONE) {
                         this.showAlert("Notice", "Payment success", "OK");
                         this.cartSvc.clearCart();
-                        this.router.navigate([
-                          "/tabs/my-account/order-history"
-                        ]);
+                        this.router.navigate(
+                          ["/tabs/my-account/order-history"],
+                          {
+                            replaceUrl: true
+                          }
+                        );
                       } else {
                         this.showAlert("Notice", "Payment failed", "OK");
                         this.processing = false;
