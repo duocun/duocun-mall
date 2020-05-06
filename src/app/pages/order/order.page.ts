@@ -325,7 +325,8 @@ export class OrderPage implements OnInit {
     amount: number
   ) {
     const returnUrl =
-      window.location.origin + `/mall?p=h&cId=${this.account._id}`;
+      window.location.origin +
+      `/mall/tabs/my-account/transaction-history?state=${this.appCode}`;
     const paymentId = orders ? orders[0].paymentId : null;
     this.api
       .post("ClientPayments/payBySnappay", {
