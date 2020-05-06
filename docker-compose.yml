@@ -1,0 +1,13 @@
+version: '3.7'
+
+services: 
+  ionic-web:
+    container_name: duocun-mall
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - '.:/app'
+      - '/app/node_modules'
+    ports:
+      - '5008:80'
