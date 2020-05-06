@@ -110,17 +110,8 @@
       <ng-container *ngIf="paymentMethod !== PaymentMethod.PREPAY">
         <!-- BEGIN STRIPE FORM -->
       <ion-col size="12" align="center" class="ion-margin-top">
-        <ion-label 
-          position="stacked" 
-          color="danger" 
-          class="ion-margin-bottom ion-text-center"
-          *ngIf="stripeError" 
-          [translate]="stripeError.message"
-        >
-        </ion-label>
         <stripe-card
           #stripeCard
-          [(invalid)]="stripeError"
           (tokenChange)="stripePay($event)"
           [options]="{hidePostalCode: true}"
         ></stripe-card>
@@ -131,7 +122,7 @@
           size="medium" 
           expand="full"
           translate="Stripe"
-          [disabled]="!stripe || loading || processing"
+          [disabled]="!canPayStripe()"
           (click)="createStripeToken(stripeCard)"
         >
         </ion-button>

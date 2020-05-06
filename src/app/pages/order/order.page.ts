@@ -116,9 +116,30 @@ export class OrderPage implements OnInit {
 
   createStripeToken(stripeCard) {
     this.processing = true;
-    stripeCard.createToken().catch(() => {
-      this.processing = false;
-    });
+    stripeCard
+      .createToken()
+      .then((token) => {
+        if (!token) {
+          this.processing = false;
+        }
+      })
+      .catch((e) => {
+        console.error(e);
+        this.processing = false;
+      });
+  }
+
+  canPayStripe() {
+    if (!this.stripe) {
+      return false;
+    }
+    if (this.processing) {
+      return false;
+    }
+    if (this.loading) {
+      return false;
+    }
+    return true;
   }
 
   setCharge() {
@@ -172,6 +193,7 @@ export class OrderPage implements OnInit {
                             replaceUrl: true
                           }
                         );
+                        this.processing = false;
                       } else {
                         this.showAlert("Notice", "Payment failed", "OK");
                         this.processing = false;
@@ -197,6 +219,10 @@ export class OrderPage implements OnInit {
             };
             this.processing = false;
           });
+      })
+      .catch((e) => {
+        console.error(e);
+        this.processing = false;
       });
   }
 
