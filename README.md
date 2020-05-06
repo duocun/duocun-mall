@@ -34,6 +34,8 @@ ionic serve --port 5008
 
 ## Test
 
+**IMPORTANT** Backend api should be running at 8000 port. Otherwise, test should fail.
+
 ```console
 ng test
 ```
@@ -63,3 +65,14 @@ prettier --write src/**/*.ts
 ```console
 ionic build --prod
 ```
+# Docker compose
+
+## Build and run
+
+Start docker container.
+
+```console
+docker-compose up -d
+```
+
+Once docker container is up and running go to http://localhost:5008
