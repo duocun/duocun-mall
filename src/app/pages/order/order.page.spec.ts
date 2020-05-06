@@ -29,7 +29,13 @@ describe("OrderPage", () => {
         PricePipeModule,
         MomentPipeModule,
         IonicStorageModule.forRoot(),
-        RouterModule.forRoot([]),
+        RouterModule.forRoot([
+          {
+            path: "tabs/browse",
+            loadChildren: () =>
+              import("../browse/browse.module").then((m) => m.BrowsePageModule)
+          }
+        ]),
         StripeModule.forRoot(environment.stripe)
       ]
     }).compileComponents();
