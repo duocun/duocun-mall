@@ -26,8 +26,10 @@ describe("ProductPage", () => {
         RouterModule.forRoot([
           {
             path: "tabs/my-account/setting",
-            loadChildren: () => 
-              import("../account-setting/account-setting.module").then((m) => m.AccountSettingPageModule)
+            loadChildren: () =>
+              import("../account-setting/account-setting.module").then(
+                (m) => m.AccountSettingPageModule
+              )
           }
         ]),
         HttpClientModule,

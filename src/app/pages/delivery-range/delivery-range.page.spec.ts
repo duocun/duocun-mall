@@ -2,11 +2,11 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { IonicModule } from "@ionic/angular";
 
 import { DeliveryRangePage } from "./delivery-range.page";
-import { HttpClientModule } from '@angular/common/http';
-import { TranslateModule } from '@ngx-translate/core';
-import { AgmCoreModule } from '@agm/core';
-import { IonicStorageModule } from '@ionic/storage';
-import { RouterModule } from '@angular/router';
+import { HttpClientModule } from "@angular/common/http";
+import { TranslateModule } from "@ngx-translate/core";
+import { AgmCoreModule } from "@agm/core";
+import { IonicStorageModule } from "@ionic/storage";
+import { RouterModule } from "@angular/router";
 
 describe("DeliveryRangePage", () => {
   let component: DeliveryRangePage;
