@@ -4,6 +4,7 @@ import { AccountInterface } from "src/app/models/account.model";
 import { TranslateService } from "@ngx-translate/core";
 import { environment } from "src/environments/environment";
 import { Storage } from "@ionic/storage";
+import { ContextService } from "src/app/services/context/context.service";
 @Component({
   selector: "app-my-account",
   templateUrl: "./my-account.page.html",
@@ -12,10 +13,12 @@ import { Storage } from "@ionic/storage";
 export class MyAccountPage implements OnInit {
   account: AccountInterface;
   lang: string;
+  appCode: string;
   constructor(
     private authSvc: AuthService,
     private translator: TranslateService,
-    private storage: Storage
+    private storage: Storage,
+    private context: ContextService
   ) {}
 
   ngOnInit() {
@@ -24,11 +27,15 @@ export class MyAccountPage implements OnInit {
     this.translator.onLangChange.subscribe((locale: { lang: string }) => {
       this.lang = locale.lang;
     });
+    this.context.getContext().subscribe((context) => {
+      this.appCode = context.get("appCode");
+    })
   }
   handleLangChange(event) {
     const lang = event.detail.value;
     this.storage.set(environment.storageKey.lang, lang);
     this.translator.use(lang);
-    window.location.reload();
+    window.location.href =
+      window.location.origin + `/mall/tabs/my-account?state=${this.appCode}`;
   }
 }
