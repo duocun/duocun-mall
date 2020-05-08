@@ -22,3 +22,12 @@
     min-width: 65%;
   }
 }
+@media(max-width: 280px) {
+  .row-schedule {
+    justify-content: center;
+    ion-col {
+      width: 100%!important;
+      max-width: 100%!important;
+    }
+  }
+}
