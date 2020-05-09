@@ -180,6 +180,9 @@ export class OrderPage implements OnInit {
           .then((observable) => {
             observable.subscribe(
               (resp: { code: string; data: Array<Order.OrderInterface> }) => {
+                if (resp.code !== "success") {
+                  return this.handleInvalidOrders(resp.data);
+                }
                 const newOrders = resp.data;
                 this.savePayment(newOrders, paymentMethodId)
                   .then((observable) => {
@@ -232,6 +235,9 @@ export class OrderPage implements OnInit {
     this.saveOrders(this.orders).then((observable) => {
       observable.subscribe(
         (resp: { code: string; data: Array<Order.OrderInterface> }) => {
+          if (resp.code !== "success") {
+            return this.handleInvalidOrders(resp.data);
+          }
           this.payBySnappay(
             this.appCode,
             this.account._id,
@@ -245,12 +251,64 @@ export class OrderPage implements OnInit {
 
   payByDeposit() {
     this.saveOrders(this.orders).then((observable) => {
-      observable.subscribe(() => {
-        this.showAlert("Notice", "Payment success", "OK");
-        this.cartSvc.clearCart();
-        this.router.navigate(["/tabs/my-account/order-history"]);
-      });
+      observable.subscribe(
+        (resp: { code: string; data: Array<Order.OrderInterface> }) => {
+          if (resp.code !== "success") {
+            return this.handleInvalidOrders(resp.data);
+          }
+          this.showAlert("Notice", "Payment success", "OK");
+          this.cartSvc.clearCart();
+          this.router.navigate(["/tabs/my-account/order-history"]);
+        }
+      );
     });
+  }
+
+  handleInvalidOrders(resp) {
+    this.processing = false;
+    if (resp.message === "out of stock") {
+      if (resp.product.quantity && resp.product.quantity > 0) {
+        const msg1 = "Please adjust the quantity of the product";
+        const msg2 = "Max quantity";
+        this.translator
+          .get(msg1, {
+            value: this.getProductName(resp.product)
+          })
+          .subscribe((message1: string) => {
+            this.translator
+              .get(msg2, {
+                value: resp.product.quantity
+              })
+              .subscribe((message2: string) => {
+                this.showAlert("Notice", `${message1}\n${message2}`, "OK");
+                this.router.navigate(["/tabs/cart"]);
+              });
+          });
+      } else {
+        const message = "Product is out of stock";
+        this.translator
+          .get(message, {
+            value: this.getProductName(resp.product)
+          })
+          .subscribe((message1: string) => {
+            this.showAlert("Notice", message1, "OK");
+            this.router.navigate(["/tabs/cart"]);
+          });
+      }
+    }
+  }
+
+  getProductName(product) {
+    const lang = this.translator.currentLang;
+    if (lang === "zh") {
+      return product.name;
+    } else {
+      if (product.nameEN) {
+        return product.nameEN;
+      } else {
+        return product.name;
+      }
+    }
   }
 
   showAlert(header, message, button) {

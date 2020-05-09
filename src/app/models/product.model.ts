@@ -30,6 +30,13 @@ export interface ProductInterface {
   merchant?: MerchantInterface; // join account table from find()
   merchantAccount?: any; // join account table from find()
   taxRate: number;
+  stock?: {
+    enabled: boolean;
+    allowNegative: boolean;
+    quantity: number;
+    outofstockMessage: string;
+    outofstockMessageEN: string;
+  }
 }
 
 export function getPictureUrl(product: any, idx = 0) {

@@ -85,5 +85,8 @@
   "Send": "发送",
   "Verification code sent": "已发送验证码",
   "Verification code was not sent": "未发送验证码",
-  "Save failed": "保存失败"
+  "Save failed": "保存失败",
+  "Please adjust the quantity of the product": "请调整产品数量: {{value}}。",
+  "Max quantity": "最大数量: {{value}}",
+  "Product is out of stock": "{{value}}已售罄"
 }

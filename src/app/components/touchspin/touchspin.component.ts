@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, Output } from "@angular/core";
+import { Component, OnInit, Input, Output, ViewChild } from "@angular/core";
 import { EventEmitter } from "@angular/core";
+
 
 @Component({
   selector: "ion-touchspin",
@@ -7,62 +8,57 @@ import { EventEmitter } from "@angular/core";
   styleUrls: ["./touchspin.component.scss"]
 })
 export class TouchspinComponent implements OnInit {
+  
   @Input() size: "sm" | "md" | "lg";
   @Input() initialValue: number;
+  @Input() value: number;
   @Input() minimumValue: number;
   @Input() maximumValue: number | null;
+  @Input() isValid: (value: number) => boolean;
   @Output() valueChange: EventEmitter<any> = new EventEmitter();
-
-  value: number;
   minValue: number;
   maxValue: number;
 
   constructor() {}
 
+  @ViewChild("valueInput", { static: true }) valueInput;
   ngOnInit() {
     this.size = this.size || "md";
     this.initialValue = this.initialValue || 0;
-    this.value = this.initialValue;
+    this.value = this.value || this.initialValue;
     this.minValue = this.minimumValue === undefined ? 1 : this.minimumValue;
     this.maxValue = this.maximumValue;
   }
 
+  setValue(newValue: number, action: "up" | "down" | "set") {
+    this.valueChange.emit({
+      value: newValue,
+      newValue,
+      oldValue: this.value,
+      action,
+      ref: this
+    });
+    this.value = newValue;
+  }
+
   handleUp() {
     const newValue = this.value + 1;
-    if (this.isInRange(newValue)) {
-      this.valueChange.emit({
-        value: newValue,
-        newValue,
-        oldValue: this.value,
-        action: "up"
-      });
-      this.value = newValue;
+    if (this.isInRange(newValue) && this.checkValidity(newValue)) {
+      this.setValue(newValue, "up");
     }
   }
 
   handleDown() {
     const newValue = this.value - 1;
-    if (this.isInRange(newValue)) {
-      this.valueChange.emit({
-        value: newValue,
-        newValue,
-        oldValue: this.value,
-        action: "down"
-      });
-      this.value = newValue;
+    if (this.isInRange(newValue) && this.checkValidity(newValue)) {
+      this.setValue(newValue, "down");
     }
   }
 
   handleChange(val) {
     const newValue = parseInt(val);
-    if (this.isInRange(val)) {
-      this.valueChange.emit({
-        value: newValue,
-        newValue,
-        oldValue: this.value,
-        action: "set"
-      });
-      this.value = newValue;
+    if (this.isInRange(val) && this.checkValidity(newValue)) {
+      this.setValue(newValue, "set");
     }
   }
 
@@ -78,5 +74,12 @@ export class TouchspinComponent implements OnInit {
       }
     }
     return true;
+  }
+
+  checkValidity(value: number) {
+    if (!this.isValid) {
+      return true;
+    }
+    return this.isValid(value);
   }
 }

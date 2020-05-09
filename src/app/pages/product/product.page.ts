@@ -2,7 +2,11 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ApiService } from "src/app/services/api/api.service";
 import { ProductInterface, getPictureUrl } from "src/app/models/product.model";
-import { CartItemInterface, CartInterface } from "src/app/models/cart.model";
+import {
+  CartItemInterface,
+  CartInterface,
+  areEqualCartItems
+} from "src/app/models/cart.model";
 import { MerchantInterface } from "src/app/models/merchant.model";
 import { CartService } from "src/app/services/cart/cart.service";
 import { LocationService } from "src/app/services/location/location.service";
@@ -32,8 +36,9 @@ export class ProductPage implements OnInit {
   merchant: MerchantInterface;
   product: ProductInterface;
   item: CartItemInterface; // base item
-  // items: Array<CartItemInterface>;
+  cart: CartInterface;
   location: LocationInterface;
+  isInStock: boolean;
   isInRange: boolean;
   schedules: Array<DeliveryDateTimeInterface>;
   deliveryIdx: number; // schedule index
@@ -49,6 +54,7 @@ export class ProductPage implements OnInit {
   ) {
     this.loading = true;
     this.isInRange = false;
+    this.isInStock = false;
     this.deliveryIdx = -1;
     // this.items = [];
   }
@@ -63,6 +69,9 @@ export class ProductPage implements OnInit {
         });
       }
     });
+    this.cartSvc.getCart().subscribe((cart: CartInterface) => {
+      this.cart = cart;
+    });
     this.updateData();
   }
 
@@ -73,6 +82,7 @@ export class ProductPage implements OnInit {
         observable.subscribe((data: ProductInterface) => {
           if (data) {
             this.product = data;
+            this.setIsInStock();
             this.api
               .geth(
                 "Restaurants/qFind",
@@ -126,11 +136,55 @@ export class ProductPage implements OnInit {
     });
   }
 
+  setIsInStock() {
+    if (!this.shouldCheckProductQuantity()) {
+      this.isInStock = true;
+    } else {
+      this.isInStock = this.product.stock && this.product.stock.quantity > 0;
+    }
+  }
+
   handleQuantityChange(event, schedule: DeliveryDateTimeInterface) {
     const item = { ...this.item };
     item.delivery = schedule;
     item.quantity = event.value;
-    this.cartSvc.setItem(item);
+    if (!this.shouldCheckProductQuantity()) {
+      this.cartSvc.setItem(item);
+    } else {
+      const canAddToCart = this.checkProductQuantity(item);
+      if (!canAddToCart) {
+        this.showAlert("Notice", "You cannot buy that much.", "OK", () => {
+          event.ref.setValue(event.oldValue);
+          event.ref.valueInput.value = event.oldValue;
+        });
+      } else {
+        this.cartSvc.setItem(item);
+      }
+    }
+  }
+
+  shouldCheckProductQuantity() {
+    return (
+      this.product &&
+      this.product.stock &&
+      this.product.stock.enabled &&
+      !this.product.stock.allowNegative
+    );
+  }
+
+  checkProductQuantity(itemToAdd: CartItemInterface) {
+    const items = this.cart.items;
+    let quantity = 0;
+    items
+      .filter((item) => !areEqualCartItems(item, itemToAdd))
+      .filter((item) => item.productId === this.product._id)
+      .forEach((item) => {
+        quantity += item.quantity;
+      });
+    return (
+      this.product.stock.quantity > 0 &&
+      quantity + itemToAdd.quantity <= this.product.stock.quantity
+    );
   }
 
   // addItemsToCart() {
@@ -204,13 +258,20 @@ export class ProductPage implements OnInit {
   //   });
   // }
 
-  showAlert(header, message, button) {
+  showAlert(header, message, button, callback?: any) {
     this.translator.get([header, message, button]).subscribe((dict) => {
       this.alert
         .create({
           header: dict[header],
           message: dict[message],
-          buttons: [dict[button]]
+          buttons: callback
+            ? [
+                {
+                  text: dict[button],
+                  handler: callback
+                }
+              ]
+            : [dict[button]]
         })
         .then((alert) => alert.present());
     });

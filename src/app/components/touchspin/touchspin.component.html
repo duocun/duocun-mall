@@ -1,5 +1,5 @@
 <div [class]="'touchspin ' + size">
   <ion-icon class="btn-touchspin btn-touchspin-down" name="remove-circle-outline" (click)="handleDown()"></ion-icon>
-  <ion-input class="input-touchspin" [value]="value" (change)="handleChange($event.target.value)"></ion-input>
+  <ion-input #valueInput class="input-touchspin" [value]="value" (change)="handleChange($event.target.value)"></ion-input>
   <ion-icon class="btn-touchspin btn-touchspin-up" name="add-circle-outline" (click)="handleUp()"></ion-icon>
 </div>

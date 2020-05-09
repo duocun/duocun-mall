@@ -37,37 +37,55 @@
         </ion-row>
       </ion-col>
       <!--  END PRICE LABEL  -->
-      <ng-container *ngIf="isInRange && schedules">
-        <ion-item *ngFor="let schedule of schedules" class="w-100" lines="none">
-          <ion-row class="ion-no-margin ion-no-padding w-100">
-            <ion-col size="6">
-              <ion-label>{{schedule.date | moment:"YYYY-MM-DD ddd"}}</ion-label>
-            </ion-col>
-            <ion-col size="6" class="ion-justify-contents-end">
-              <ion-touchspin 
-                style="width: 96px;" 
-                size="md" 
-                [initialValue]="getItemQuantity(schedule)" 
-                minimumValue="0" 
-                (valueChange)="handleQuantityChange($event, schedule)"
-              ></ion-touchspin>
-            </ion-col>
-          </ion-row>
-        </ion-item>
+      <ng-container *ngIf="isInStock">
+        <ng-container *ngIf="isInRange && schedules">
+          <ion-item *ngFor="let schedule of schedules" class="w-100" lines="none">
+            <ion-row class="ion-no-margin ion-no-padding w-100 row-schedule">
+              <ion-col size="6">
+                <ion-label>{{schedule.date | moment:"YYYY-MM-DD ddd"}}</ion-label>
+              </ion-col>
+              <ion-col size="6" class="ion-justify-contents-end">
+                <ion-touchspin 
+                  style="width: 96px;" 
+                  size="md" 
+                  [initialValue]="getItemQuantity(schedule)" 
+                  minimumValue="0"
+                  (valueChange)="handleQuantityChange($event, schedule)"
+
+                ></ion-touchspin>
+              </ion-col>
+            </ion-row>
+          </ion-item>
+        </ng-container>
       </ng-container>
-      <ng-container *ngIf="!schedules || !schedules.length">
-        <ion-row class="ion-padding">
-          <ion-col size="12" align="center">
+      <ng-container *ngIf="!schedules || !schedules.length || !isInStock">
+        <ion-row class="ion-padding w-100">
+          <ion-col size="12" align="center" *ngIf="!schedules || !schedules.length">
             <ion-label color="danger" translate="Sorry, but this product is out of delivery range."></ion-label>
           </ion-col>
+          <ion-col size="12" align="center" *ngIf="!isInStock">
+            <ion-label 
+              color="danger"
+              localValue
+              [data]="product.stock"
+              key='outofstockMessage'
+              fallback="This product is out of stock"
+            ></ion-label>
+          </ion-col>
           <ion-col size="12" align="center">
-            <ion-button expand="full" [routerLink]="['/tabs/browse']" translate="Misc"></ion-button>
+            <ion-button color="success" expand="full" [routerLink]="['/tabs/browse']" translate="Misc"></ion-button>
           </ion-col>
         </ion-row>
       </ng-container>
-      <ion-col size="12" *ngIf="schedules && schedules.length">
+      <ion-col size="12" *ngIf="cart && cart.items && cart.items.length">
         <ion-row class="ion-padding">
-          <ion-button color="primary" expand="full" class="w-100" routerLink="/tabs/browse/order" [disabled]="!schedules || !schedules.length">
+          <ion-button
+            color="primary"
+            expand="full"
+            class="w-100"
+            routerLink="/tabs/browse/order"
+            [disabled]="!schedules || !schedules.length"
+          >
             <ion-icon class="ion-margin-end" name="cash-outline"></ion-icon>
             {{"Buy Now"|translate}}
           </ion-button>
