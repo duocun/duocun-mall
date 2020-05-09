@@ -105,26 +105,28 @@ export class ProductPage implements OnInit {
                     product: this.product
                   };
                   this.api
-                    .geth("MerchantSchedules/availables", {
+                    .get("MerchantSchedules/availables-v2", {
                       merchantId: data.merchantId,
-                      location: this.location
+                      location: JSON.stringify(this.location)
                     })
-                    .then((schedules: any[]) => {
-                      if (schedules && schedules.length > 0) {
-                        this.isInRange = true;
-                        const dows = schedules[0].rules.map(
-                          (r) => +r.deliver.dow
-                        );
-                        const bs = this.getBaseDateList(orderEndList, dows);
-                        this.getDeliverySchedule(
-                          this.merchant,
-                          bs,
-                          baseTimeList
-                        );
-                      } else {
-                        this.isInRange = false;
-                      }
-                      this.loading = false;
+                    .then((observable) => {
+                      observable.subscribe((schedules: any[]) => {
+                        if (schedules && schedules.length > 0) {
+                          this.isInRange = true;
+                          const dows = schedules[0].rules.map(
+                            (r) => +r.deliver.dow
+                          );
+                          const bs = this.getBaseDateList(orderEndList, dows);
+                          this.getDeliverySchedule(
+                            this.merchant,
+                            bs,
+                            baseTimeList
+                          );
+                        } else {
+                          this.isInRange = false;
+                        }
+                        this.loading = false;
+                      });
                     });
                 }
               });
