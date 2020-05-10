@@ -88,5 +88,6 @@
   "Save failed": "保存失败",
   "Please adjust the quantity of the product": "请调整产品数量: {{value}}。",
   "Max quantity": "最大数量: {{value}}",
-  "Product is out of stock": "{{value}}已售罄"
+  "Product is out of stock": "{{value}}已售罄",
+  "Cart item delivery has expired": "交货日期已过期"
 }

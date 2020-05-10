@@ -9,7 +9,7 @@ import {
 } from "src/app/models/cart.model";
 import { environment } from "src/environments/environment";
 import { BehaviorSubject } from "rxjs";
-
+import * as moment from "moment-timezone";
 @Injectable({
   providedIn: "root"
 })
@@ -113,6 +113,21 @@ export class CartService {
       }
       this.saveCart();
     }
+  }
+
+  sanitize() {
+    const now = moment.tz(environment.timezone).format("YYYY-MM-DD HH:mm");
+    this.cart.items = this.cart.items.filter((item) => {
+      // console.log(
+      //   "item delivery",
+      //   item.delivery.date + " " + item.delivery.time
+      // );
+      return (
+        item.delivery && item.delivery.date + " " + item.delivery.time > now
+      );
+    });
+    this.cart.quantity = getCartQuantity(this.cart);
+    this.saveCart();
   }
 
   clearCart() {

@@ -52,6 +52,7 @@ export class OrderPage implements OnInit {
   error: OrderErrorInterface | null;
   PaymentMethod = PaymentMethod;
   appCode: string | undefined;
+  cartSanitized: boolean;
   constructor(
     private cartSvc: CartService,
     private authSvc: AuthService,
@@ -65,6 +66,7 @@ export class OrderPage implements OnInit {
     this.loading = true;
     this.error = null;
     this.processing = false;
+    this.cartSanitized = false;
     loadStripe(environment.stripe).then((stripe) => {
       this.stripe = stripe;
     });
@@ -87,6 +89,16 @@ export class OrderPage implements OnInit {
     });
     this.cartSvc.getCart().subscribe((cart) => {
       this.cart = cart;
+      if (
+        this.cart &&
+        this.cart.items &&
+        this.cart.items.length &&
+        !this.cartSanitized
+      ) {
+        this.cartSanitized = true;
+        this.cartSvc.sanitize();
+        return;
+      }
       this.chargeItems = Order.getChargeItems(cart);
       this.cartItemGroups = Order.getCartItemGroups(cart);
       this.orders = [];
@@ -299,6 +311,9 @@ export class OrderPage implements OnInit {
             this.router.navigate(["/tabs/cart"]);
           });
       }
+    } else if (resp.message === "delivery expired") {
+      this.showAlert("Notice", "Cart item delivery has expired", "OK");
+      this.router.navigate(["/tabs/cart"]);
     }
   }
 

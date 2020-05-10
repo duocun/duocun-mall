@@ -10,11 +10,18 @@ import { getCartItemSubtotal } from "src/app/models/cart.model";
 })
 export class CartPage implements OnInit {
   cart: CartInterface;
-  constructor(private cartSvc: CartService) {}
+  cartSanizited: boolean;
+  constructor(private cartSvc: CartService) {
+    this.cartSanizited = false;
+  }
 
   ngOnInit() {
     this.cartSvc.getCart().subscribe((cart: CartInterface) => {
       this.cart = cart;
+      if (this.cart && this.cart.items && !this.cartSanizited) {
+        this.cartSanizited = true;
+        this.cartSvc.sanitize();
+      }
     });
   }
 

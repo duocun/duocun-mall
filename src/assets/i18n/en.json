@@ -88,5 +88,6 @@
   "Save failed": "Save failed",
   "Please adjust the quantity of the product": "Please adjust the quantity of the product: {{value}}.",
   "Max quantity": "Max quantity: {{value}}",
-  "Product is out of stock": "Product {{value}} is out of stock"
+  "Product is out of stock": "Product {{value}} is out of stock",
+  "Cart item delivery has expired": "Cart item delivery has expired"
 }
