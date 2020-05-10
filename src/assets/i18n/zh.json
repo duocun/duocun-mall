@@ -89,5 +89,6 @@
   "Please adjust the quantity of the product": "请调整产品数量: {{value}}。",
   "Max quantity": "最大数量: {{value}}",
   "Product is out of stock": "{{value}}已售罄",
-  "Cart item delivery has expired": "交货日期已过期"
+  "Cart item delivery has expired": "交货日期已过期",
+  "This product is out of stock": "此产品缺货"
 }
