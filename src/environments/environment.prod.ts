@@ -10,5 +10,6 @@ export const environment = {
   media: "https://duocun.com.cn/media/",
   stripe: "pk_live_vV7H1l4X9k2r8uf6JDf9lGsb",
   defaultLang: "zh",
-  gmap: "AIzaSyCEd6D6vc9K-YzMH-QtQWRSs5HZkLKSWyk"
+  gmap: "AIzaSyCEd6D6vc9K-YzMH-QtQWRSs5HZkLKSWyk",
+  timezone: "America/Toronto"
 };
