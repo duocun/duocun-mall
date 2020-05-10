@@ -149,6 +149,8 @@ export class OrderPage implements OnInit {
       const payable = balance >= amount ? 0 : amount - balance;
       if (amount !== 0 && balance >= amount) {
         this.paymentMethod = PaymentMethod.PREPAY;
+      } else {
+        this.paymentMethod = "";
       }
       this.charge = { ...this.summary, payable, balance };
     }
@@ -258,7 +260,9 @@ export class OrderPage implements OnInit {
           }
           this.showAlert("Notice", "Payment success", "OK");
           this.cartSvc.clearCart();
+          this.authSvc.updateData();
           this.router.navigate(["/tabs/my-account/order-history"]);
+          this.paymentMethod = "";
         }
       );
     });
@@ -358,6 +362,7 @@ export class OrderPage implements OnInit {
   saveOrders(orders: Array<Order.OrderInterface>) {
     orders.forEach((order) => {
       order.note = this.notes;
+      order.paymentMethod = this.paymentMethod;
     });
     return this.api.post("Orders/bulk", orders);
   }
