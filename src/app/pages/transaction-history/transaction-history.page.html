@@ -18,7 +18,7 @@
   <ion-row class="row-body" *ngIf="!loading; Else skeleton">
     <ng-container *ngIf="transactions && transactions.length > 0; Else empty">
       <ng-container *ngFor="let transaction of transactions">
-        <ion-col size="3">{{transaction.date | moment: 'YYYY-MM-DD ddd'}}</ion-col>
+        <ion-col size="3">{{transaction.created | moment: 'YYYY-MM-DD ddd'}}</ion-col>
         <ion-col size="3">{{transaction.description}}</ion-col>
         <ion-col size="2">{{transaction.consumed | price}}</ion-col>
         <ion-col size="2">{{transaction.paid | price}}</ion-col>
