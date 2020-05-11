@@ -378,6 +378,18 @@ export class OrderPage implements OnInit {
     orders.forEach((order) => {
       order.note = this.notes;
       order.paymentMethod = this.paymentMethod;
+      switch (order.paymentMethod) {
+        case PaymentMethod.CREDIT_CARD:
+        case PaymentMethod.WECHAT:
+          order.status = Order.OrderStatus.TEMP;
+          break;
+        case PaymentMethod.PREPAY:
+          order.status = Order.OrderStatus.NEW;
+          break;
+        default:
+          order.status = Order.OrderStatus.NEW;
+          break;
+      }
     });
     return this.api.post("Orders/bulk", orders);
   }
