@@ -39,6 +39,12 @@
       <!--  END PRICE LABEL  -->
       <ng-container *ngIf="isInStock">
         <ng-container *ngIf="isInRange && schedules">
+          <ion-row class="ion-padding w-100">
+            <ion-col align="center">
+              <ion-label class="ion-text-center" translate="Please select delivery date and quantity">
+              </ion-label>
+            </ion-col>
+          </ion-row>
           <ion-item *ngFor="let schedule of schedules" class="w-100" lines="none">
             <ion-row class="ion-no-margin ion-no-padding w-100 row-schedule">
               <ion-col size="6">

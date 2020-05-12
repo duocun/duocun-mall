@@ -90,5 +90,7 @@
   "Max quantity": "Max quantity: {{value}}",
   "Product is out of stock": "Product {{value}} is out of stock",
   "Cart item delivery has expired": "Cart item delivery has expired",
-  "This product is out of stock": "This product is out of stock"
+  "This product is out of stock": "This product is out of stock",
+  "Please select delivery date and quantity": "Please select delivery date and quantity",
+  "You have no items in your shopping cart": "You have no items in your shopping cart"
 }
