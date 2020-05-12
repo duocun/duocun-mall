@@ -9,7 +9,7 @@ import { environment } from "src/environments/environment";
 export class MomentPipe implements PipeTransform {
   constructor(private lang: TranslateService) {}
   transform(value: any, ...args: Array<any>): any {
-    const date = moment(value).tz(environment.timezone);
+    const date = moment(value);
     date.locale(this.lang.currentLang === "zh" ? "zh-cn" : "en");
     const [format] = args;
     return date.format(format);

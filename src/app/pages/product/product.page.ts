@@ -11,14 +11,12 @@ import { MerchantInterface } from "src/app/models/merchant.model";
 import { CartService } from "src/app/services/cart/cart.service";
 import { LocationService } from "src/app/services/location/location.service";
 import { LocationInterface } from "src/app/models/location.model";
-import * as moment from "moment";
 import { DeliveryService } from "src/app/services/delivery/delivery.service";
-import {
-  DeliveryDateTimeInterface,
-  areEqualDeliveryDateTime
-} from "src/app/models/delivery.model";
+import { DeliveryDateTimeInterface } from "src/app/models/delivery.model";
 import { AlertController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
+import * as moment from "moment-timezone";
+
 const baseTimeList = ["11:00"];
 export const AppType = {
   FOOD_DELIVERY: "F",

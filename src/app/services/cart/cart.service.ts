@@ -116,12 +116,8 @@ export class CartService {
   }
 
   sanitize() {
-    const now = moment.tz(environment.timezone).format("YYYY-MM-DD HH:mm");
+    const now = moment().format("YYYY-MM-DD HH:mm");
     this.cart.items = this.cart.items.filter((item) => {
-      // console.log(
-      //   "item delivery",
-      //   item.delivery.date + " " + item.delivery.time
-      // );
       return (
         item.delivery && item.delivery.date + " " + item.delivery.time > now
       );
