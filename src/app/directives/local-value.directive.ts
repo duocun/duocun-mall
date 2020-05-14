@@ -50,9 +50,11 @@ export class LocalValueDirective {
       }
     }
     if (!value) {
-      this.translator.get(this.fallback).subscribe((v) => {
-        value = v;
-      });
+      if (this.fallback) {
+        this.translator.get(this.fallback).subscribe((v) => {
+          value = v;
+        });
+      }
     }
     return value;
   }
