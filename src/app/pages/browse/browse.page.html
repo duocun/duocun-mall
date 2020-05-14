@@ -25,6 +25,7 @@
       </ion-col>
       <ion-col *ngFor="let category of categories.slice(0,10)" size="3" class="ion-no-margin ion-no-padding">
         <ion-button
+          [disabled]="loading"
           [color]="selectedCategoryId === category._id ? 'success' : 'light'"
           size="small"
           expand="full"
