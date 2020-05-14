@@ -22,6 +22,7 @@ import { formatLocation } from "src/app/models/location.model";
 import { LocationService } from "src/app/services/location/location.service";
 import { ContextService } from "src/app/services/context/context.service";
 import { Router } from "@angular/router";
+import { Subscription } from "rxjs";
 
 interface OrderErrorInterface {
   type: "order" | "payment";
@@ -45,6 +46,7 @@ export class OrderPage implements OnInit {
   stripeError: StripeError;
   charge: Order.ChargeInterface;
   cart: CartInterface;
+  cartSubscription: Subscription;
   paymentMethod: string;
   stripe: Stripe;
   loading: boolean;
@@ -87,7 +89,7 @@ export class OrderPage implements OnInit {
         this.address = formatLocation(location);
       }
     });
-    this.cartSvc.getCart().subscribe((cart) => {
+    this.cartSubscription = this.cartSvc.getCart().subscribe((cart) => {
       this.cart = cart;
       if (
         this.cart &&
@@ -203,6 +205,7 @@ export class OrderPage implements OnInit {
                     observable.subscribe((resp: any) => {
                       if (resp.err === PaymentError.NONE) {
                         this.showAlert("Notice", "Payment success", "OK");
+                        this.cartSubscription.unsubscribe();
                         this.cartSvc.clearCart();
                         this.router.navigate(
                           ["/tabs/my-account/order-history"],
@@ -271,6 +274,7 @@ export class OrderPage implements OnInit {
             return this.handleInvalidOrders(resp.data);
           }
           this.showAlert("Notice", "Payment success", "OK");
+          this.cartSubscription.unsubscribe();
           this.cartSvc.clearCart();
           this.authSvc.updateData();
           this.router.navigate(["/tabs/my-account/order-history"]);
@@ -432,6 +436,7 @@ export class OrderPage implements OnInit {
       .then((observable) => {
         observable.subscribe((resp: any) => {
           if (resp.err === PaymentError.NONE) {
+            this.cartSubscription.unsubscribe();
             this.cartSvc.clearCart();
             window.location.href = resp.url;
           } else {
