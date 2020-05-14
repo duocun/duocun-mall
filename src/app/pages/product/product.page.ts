@@ -122,8 +122,8 @@ export class ProductPage implements OnInit {
                           );
                         } else {
                           this.isInRange = false;
+                          this.loading = false;
                         }
-                        this.loading = false;
                       });
                     });
                 }
@@ -243,6 +243,7 @@ export class ProductPage implements OnInit {
               this.schedules = resp.data;
               // this.initItems();
             }
+            this.loading = false;
           }
         )
       );
