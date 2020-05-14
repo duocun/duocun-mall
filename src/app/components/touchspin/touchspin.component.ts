@@ -1,14 +1,12 @@
 import { Component, OnInit, Input, Output, ViewChild } from "@angular/core";
 import { EventEmitter } from "@angular/core";
 
-
 @Component({
   selector: "ion-touchspin",
   templateUrl: "./touchspin.component.html",
   styleUrls: ["./touchspin.component.scss"]
 })
 export class TouchspinComponent implements OnInit {
-  
   @Input() size: "sm" | "md" | "lg";
   @Input() initialValue: number;
   @Input() value: number;

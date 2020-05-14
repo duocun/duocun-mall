@@ -36,7 +36,7 @@ export interface ProductInterface {
     quantity: number;
     outofstockMessage: string;
     outofstockMessageEN: string;
-  }
+  };
 }
 
 export function getPictureUrl(product: any, idx = 0) {

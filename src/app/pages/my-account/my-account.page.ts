@@ -29,7 +29,7 @@ export class MyAccountPage implements OnInit {
     });
     this.context.getContext().subscribe((context) => {
       this.appCode = context.get("appCode");
-    })
+    });
   }
   handleLangChange(event) {
     const lang = event.detail.value;
