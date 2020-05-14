@@ -53,11 +53,9 @@ export class BrowsePage implements OnInit {
           observable.subscribe((resp: { code: string; data: Array<any> }) => {
             if (resp.code === "success") {
               this.categories = resp.data;
-              if (this.availableMerchantIds) {
-                this.getProducts(null);
-              } else {
-                this.loading = false;
-              }
+              this.loadData(null);
+            } else {
+              this.loading = false;
             }
           });
         });
@@ -128,6 +126,9 @@ export class BrowsePage implements OnInit {
       )
       .then(
         (resp: { code: string; data: Array<ProductInterface>; meta: any }) => {
+          if (this.page === 1) {
+            this.products = [];
+          }
           if (this.products.length < this.page * this.size) {
             this.products = [...this.products, ...resp.data];
           }
