@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/duocun/duocun-mall/compare/v1.0.0...v1.1.0) (2020-05-14)
+
+
+### Features
+
+* **page:** implement product quantity in product page ([470d97d](https://github.com/duocun/duocun-mall/commit/470d97da55561c81bc1bc48560e49edc3ede40e4))
+
+
+### Bug Fixes
+
+* **cart:** remove expired cart items in cart and order page ([361cbad](https://github.com/duocun/duocun-mall/commit/361cbadca83a813df0f6dd0ba78d6b1cfc554c27)), closes [#2](https://github.com/duocun/duocun-mall/issues/2)
+* **lang:** change some lang in cart and product pages ([c2fb7e8](https://github.com/duocun/duocun-mall/commit/c2fb7e8e4b4a1c6446353452f83c4f1a5f0c4b8e))
+* **lang:** translate out of stock fallback message ([f1d750a](https://github.com/duocun/duocun-mall/commit/f1d750aa7adbdd62060f99be1d7e3050e0ce4127))
+* **locale:** remove timezone from moment pipe and cart sanitize ([8ec85f9](https://github.com/duocun/duocun-mall/commit/8ec85f914cf62352391075977e28ee4cba630f55)), closes [#7](https://github.com/duocun/duocun-mall/issues/7)
+* **locale:** set timezone in moment pipe ([fb6a7c1](https://github.com/duocun/duocun-mall/commit/fb6a7c15b4f1dbf99b224c2b3d919a63d2a63837)), closes [#3](https://github.com/duocun/duocun-mall/issues/3)
+* **order:** fix error going to browse page before wechat payment ([fa91073](https://github.com/duocun/duocun-mall/commit/fa910737e8e351190935b3281af8e48cd98587e3))
+* **order:** set order status "T" before online payments ([a1ea1b0](https://github.com/duocun/duocun-mall/commit/a1ea1b017c59107d411f8a218b8e08fde2424b76)), closes [#5](https://github.com/duocun/duocun-mall/issues/5)
+* **page:** fix error when location is set as non english characters ([4e11a00](https://github.com/duocun/duocun-mall/commit/4e11a003d210366a629aa24838bd001646eef2da))
+* **page:** redirect with app code when change language ([1964757](https://github.com/duocun/duocun-mall/commit/1964757fb7841ff41843d77154b1d9d3258578e6))
+* **page:** show delivery touchspin in two rows in extra small screens ([841a5a2](https://github.com/duocun/duocun-mall/commit/841a5a280c53957cba7bd526c0dce85f5144c4dc))
+* **payment:** correct date in transaction history page ([6604f45](https://github.com/duocun/duocun-mall/commit/6604f45f5adebf16afc5cd74b4e7c21b650969ff)), closes [#6](https://github.com/duocun/duocun-mall/issues/6)
+* **payment:** reset payment method after payment is completed ([57e4167](https://github.com/duocun/duocun-mall/commit/57e4167daaacbd34cf09983c407afd7e8ef7a153)), closes [#4](https://github.com/duocun/duocun-mall/issues/4)
+* **product:** remove out of range error msg before loading in product page ([5503c7f](https://github.com/duocun/duocun-mall/commit/5503c7f8eb4eb25849a749b1598f6b60975fcdad))
+
 ## 1.0.0 (2020-05-06)
 
 
