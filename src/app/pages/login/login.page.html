@@ -44,7 +44,7 @@
     </ion-list>
     <div class="ion-padding-vertical">
       <ion-button 
-        [disabled]="!isValidPhoneNumber() || !otp"
+        [disabled]="!isValidPhoneNumber() || !otp || processing"
         expand="block" 
         type="submit" 
         translate="Sign In"

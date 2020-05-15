@@ -45,6 +45,7 @@ export class LoginPage implements OnInit {
           } else {
             this.showAlert("Notice", "Verification code was not sent", "OK");
           }
+          this.processing = false;
         });
       });
   }
@@ -58,12 +59,17 @@ export class LoginPage implements OnInit {
       .then((observable) => {
         observable.subscribe((resp: { code: string, token: string }) => {
           if (resp.code === "success") {
-            this.authSvc.login(resp.token);
-            if (this.returnUrl) {
-              this.router.navigate([this.returnUrl]);
-            } else {
-              this.router.navigate(["/tabs/browse"]);
-            }
+            this.authSvc.login(resp.token).then((account) => {
+              if (account) {
+                if (this.returnUrl) {
+                  this.router.navigate([this.returnUrl]);
+                } else {
+                  this.router.navigate(["/tabs/browse"]);
+                }
+              } else {
+                this.showAlert("Notice", "Login failed", "OK");
+              }
+            });
           } else {
             this.showAlert("Notice", "Login failed", "OK");
           }

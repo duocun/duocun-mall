@@ -38,27 +38,32 @@ export class AuthService {
   }
 
   login(token: unknown) {
-    this.http
-      .get(`${environment.api}/Accounts/G/token/${token}`)
-      .subscribe((resp: { code: string; data: AccountInterface }) => {
-        if (resp.code === "success") {
-          this.account = resp.data;
-          this.storage.set(environment.storageKey.auth, token).then(() => {
-            this.account$.next(this.account);
-            this.authState.next(true);
-          });
-          if (this.account.location) {
-            this.locSvc.setLocation(
-              this.account.location,
-              this.account.location.address
-            );
+    return new Promise<AccountInterface>((resolve) => {
+      this.http
+        .get(`${environment.api}/Accounts/G/token/${token}`)
+        .subscribe((resp: { code: string; data: AccountInterface }) => {
+          if (resp.code === "success") {
+            this.account = resp.data;
+            this.storage.set(environment.storageKey.auth, token).then(() => {
+              this.account$.next(this.account);
+              this.authState.next(true);
+              resolve(resp.data);
+            });
+            if (this.account.location) {
+              this.locSvc.setLocation(
+                this.account.location,
+                this.account.location.address
+              );
+            } else {
+              this.storage.remove(environment.storageKey.location);
+            }
           } else {
-            this.storage.remove(environment.storageKey.location);
+            this.logout().then(() => {
+              resolve(null);
+            });
           }
-        } else {
-          this.logout();
-        }
-      });
+        });
+    });
   }
 
   logout() {
@@ -88,6 +93,6 @@ export class AuthService {
 
   async updateData() {
     const token = await this.getToken();
-    this.login(token);
+    await this.login(token);
   }
 }

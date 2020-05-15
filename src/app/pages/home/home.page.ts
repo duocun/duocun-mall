@@ -94,22 +94,22 @@ export class HomePage implements OnInit {
     // });
   }
 
-  handleCreditByWeChat(params: ParamMap) {
+  async handleCreditByWeChat(params: ParamMap) {
     if (this.clientId) {
       // trusting clientId from query param is dangerous
       // a mailcious attacker can impersonate other user with acquired clientId
     } else {
-      this.authSvc.updateData();
+      await this.authSvc.updateData();
       this.router.navigate(["/tabs/my-account/transaction-history"]);
     }
   }
 
-  handleWeChatPay(params: ParamMap) {
+  async handleWeChatPay(params: ParamMap) {
     if (this.clientId) {
       // trusting clientId from query param is dangerous
       // a mailcious attacker can impersonate other user with acquired clientId
     } else {
-      this.authSvc.updateData();
+      await this.authSvc.updateData();
       this.router.navigate(["/tabs/my-account/order-history"]);
     }
   }
