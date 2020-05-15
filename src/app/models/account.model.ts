@@ -19,3 +19,9 @@ export interface AccountInterface {
   pickup?: any;
   verificationCode?: string;
 }
+
+export interface RegisterAccountInterface {
+  phone: string;
+  username: string;
+  verificationCode?: string;
+}

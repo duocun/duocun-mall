@@ -96,5 +96,11 @@
   "Sign In": "Sign In",
   "OTP Code": "OTP Code",
   "Send OTP Code": "Send OTP Code",
-  "Resend OTP Code": "Resend OTP Code"
+  "Resend OTP Code": "Resend OTP Code",
+  "Sign Up": "Sign Up",
+  "Username": "Username",
+  "Phone number already exists": "Phone number already exists",
+  "Registration failed": "Registration failed",
+  "Registered successfully": "Registered successfully",
+  "Agree with terms of service and privacy policy": "Agree with terms of service and privacy policy"
 }

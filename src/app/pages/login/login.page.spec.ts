@@ -2,11 +2,11 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { IonicModule } from "@ionic/angular";
 
 import { LoginPage } from "./login.page";
-import { HttpClientModule } from '@angular/common/http';
-import { IonicStorageModule } from '@ionic/storage';
-import { TranslateModule } from '@ngx-translate/core';
-import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { HttpClientModule } from "@angular/common/http";
+import { IonicStorageModule } from "@ionic/storage";
+import { TranslateModule } from "@ngx-translate/core";
+import { FormsModule } from "@angular/forms";
+import { RouterModule } from "@angular/router";
 
 describe("LoginPage", () => {
   let component: LoginPage;

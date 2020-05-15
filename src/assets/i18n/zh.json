@@ -96,5 +96,11 @@
   "Sign In": "登录",
   "OTP Code": "验证码",
   "Send OTP Code": "发送验证码",
-  "Resend OTP Code": "重新发送验证码"
+  "Resend OTP Code": "重新发送验证码",
+  "Sign Up": "注册",
+  "Username": "用户名",
+  "Phone number already exists": "手机号码已存在",
+  "Registration failed": "注册失败",
+  "Registered successfully": "注册成功",
+  "Agree with terms of service and privacy policy": "同意服务条款和隐私政策"
 }
