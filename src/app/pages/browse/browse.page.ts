@@ -53,7 +53,7 @@ export class BrowsePage implements OnInit {
           observable.subscribe((resp: { code: string; data: Array<any> }) => {
             if (resp.code === "success") {
               this.categories = resp.data;
-              this.loadData(null);
+              this.getProducts(null);
             } else {
               this.loading = false;
             }
