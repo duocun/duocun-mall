@@ -92,5 +92,9 @@
   "Cart item delivery has expired": "交货日期已过期",
   "This product is out of stock": "此产品缺货",
   "Please select delivery date and quantity": "请选择送货时间和商品数量",
-  "You have no items in your shopping cart": "您的购物车里现在没有商品"
+  "You have no items in your shopping cart": "您的购物车里现在没有商品",
+  "Sign In": "登录",
+  "OTP Code": "验证码",
+  "Send OTP Code": "发送验证码",
+  "Resend OTP Code": "重新发送验证码"
 }

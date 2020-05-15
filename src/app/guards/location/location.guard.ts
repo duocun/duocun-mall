@@ -4,12 +4,11 @@ import {
   Router,
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
-  UrlTree
 } from "@angular/router";
 import { LocationService } from "src/app/services/location/location.service";
 import { AlertController } from "@ionic/angular";
-import { Observable } from "rxjs";
 import { TranslateService } from "@ngx-translate/core";
+import { AuthGuard } from "../auth/auth.guard";
 
 @Injectable({
   providedIn: "root"
@@ -19,25 +18,25 @@ export class LocationGuard implements CanActivate {
     private locSvc: LocationService,
     private alert: AlertController,
     private router: Router,
-    private translator: TranslateService
+    private translator: TranslateService,
+    private authGuard: AuthGuard
   ) {}
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ):
-    | Observable<boolean | UrlTree>
-    | Promise<boolean | UrlTree>
-    | boolean
-    | UrlTree {
-    return new Observable((observer) => {
+  ): Promise<boolean> {
+    return this.authGuard.canActivate(next, state).then((canActivate) => {
+      if (!canActivate) {
+        return false;
+      }
       if (this.locSvc.location || this.locSvc.location === undefined) {
-        observer.next(true);
+        return true;
       } else {
         this.showAlert();
         this.router.navigate(["/tabs/my-account/setting"], {
           queryParams: { redirectUrl: state.url }
         });
-        observer.next(false);
+        return false;
       }
     });
   }

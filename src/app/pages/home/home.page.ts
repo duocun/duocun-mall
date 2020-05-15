@@ -71,7 +71,7 @@ export class HomePage implements OnInit {
 
   initAccount(params: ParamMap) {
     const tokenId: string = params.get("token");
-    const appCode = params.get("state");
+    const appCode = params.get("state") || "123"; // code for grocery
     if (appCode) {
       this.context.set("appCode", appCode);
     }

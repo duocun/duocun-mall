@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/browse" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title translate="Sign In"></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form class="ion-padding-horizontal">
+    <ion-list lines="full">
+      <ion-item>
+        <ion-grid class="ion-no-padding ion-no-margin w-100">
+          <ion-row>
+            <ion-col size="12">
+              <ion-label position="stacked" translate="Phone Number"></ion-label>
+              <ion-input required type="text" name="phone" autocomplete="on" autofocus=true inputmode="tel" minlength="6" maxlength="20" [(ngModel)]="phone"></ion-input>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+      <ion-item class="ion-margin-top ">
+        <ion-grid class="ion-no-padding ion-no-margin w-100">
+          <ion-row>
+            <ion-col>
+              <ion-label position="stacked" translate="OTP Code"></ion-label>
+              <ion-input required type="text" name="otp" [(ngModel)]="otp"></ion-input>
+            </ion-col>
+            <ion-col>
+              <ion-button 
+                class="ion-margin-top"
+                expand="block"
+                type="button"
+                color="tertiary"
+                (click)="handleSendVerificationCode()" 
+                [disabled]="!isValidPhoneNumber() || processing || failedCount > 3">
+                {{ isOtpSent ? "Resend OTP Code" : "Send OTP Code" | translate }}
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-list>
+    <div class="ion-padding-vertical">
+      <ion-button 
+        [disabled]="!isValidPhoneNumber() || !otp"
+        expand="block" 
+        type="submit" 
+        translate="Sign In"
+        (click)="handleSignIn()"
+      >
+      </ion-button>
+    </div>
+  </form>
+</ion-content>

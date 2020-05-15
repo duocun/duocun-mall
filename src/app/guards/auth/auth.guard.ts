@@ -3,9 +3,7 @@ import {
   CanActivate,
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
-  UrlTree
 } from "@angular/router";
-import { Observable } from "rxjs";
 import { AuthService } from "src/app/services/auth/auth.service";
 import { Router } from "@angular/router";
 import { AlertController } from "@ionic/angular";
@@ -15,31 +13,33 @@ import { TranslateService } from "@ngx-translate/core";
   providedIn: "root"
 })
 export class AuthGuard implements CanActivate {
+  alerted: boolean;
   constructor(
     public auth: AuthService,
     private router: Router,
     private alert: AlertController,
     private translator: TranslateService
-  ) {}
+  ) {
+    this.alerted = false;
+  }
 
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ):
-    | Observable<boolean | UrlTree>
-    | Promise<boolean | UrlTree>
-    | boolean
-    | UrlTree {
-    return new Observable((observer) => {
+  ): Promise<boolean> {
+    return new Promise((resolve) => {
       this.auth.authState.subscribe((isLoggedIn) => {
         if (isLoggedIn) {
-          observer.next(true);
+          resolve(true);
         } else {
-          this.showAlert();
-          this.router.navigate(["/"], {
+          if (!this.alerted) {
+            this.showAlert();
+            this.alerted = true;
+          }
+          this.router.navigate(["/tabs/login"], {
             queryParams: { returnUrl: state.url }
           });
-          observer.next(false);
+          resolve(false);
         }
       });
     });
