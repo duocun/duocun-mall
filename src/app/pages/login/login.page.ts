@@ -3,7 +3,7 @@ import { ApiService } from "src/app/services/api/api.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 import { AlertController } from "@ionic/angular";
-import { AuthService } from 'src/app/services/auth/auth.service';
+import { AuthService } from "src/app/services/auth/auth.service";
 
 @Component({
   selector: "app-login",
@@ -57,7 +57,7 @@ export class LoginPage implements OnInit {
         verificationCode: this.otp
       })
       .then((observable) => {
-        observable.subscribe((resp: { code: string, token: string }) => {
+        observable.subscribe((resp: { code: string; token: string }) => {
           if (resp.code === "success") {
             this.authSvc.login(resp.token).then((account) => {
               if (account) {

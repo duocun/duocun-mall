@@ -3,7 +3,7 @@ import {
   CanActivate,
   Router,
   ActivatedRouteSnapshot,
-  RouterStateSnapshot,
+  RouterStateSnapshot
 } from "@angular/router";
 import { LocationService } from "src/app/services/location/location.service";
 import { AlertController } from "@ionic/angular";
