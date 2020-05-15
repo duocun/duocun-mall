@@ -451,4 +451,8 @@ export class OrderPage implements OnInit {
         this.processing = false;
       });
   }
+
+  isWechatBrowser() {
+    return /micromessenger/i.test(navigator.userAgent);
+  }
 }

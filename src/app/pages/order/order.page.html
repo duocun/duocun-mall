@@ -128,7 +128,7 @@
         </ion-col>
         <!--  END STRIPE FORM  -->
         <!-- BEGIN WECHAT PAY BUTTON -->
-        <ion-col size="12" align="center">
+        <ion-col size="12" align="center" *ngIf="isWechatBrowser()">
           <ion-button 
             color="success" 
             size="medium" 
