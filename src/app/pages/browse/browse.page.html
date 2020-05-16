@@ -1,10 +1,33 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
     <ion-title class="ion-text-center" translate="Home"></ion-title>
+    <ion-buttons slot="end">
+      <language-button></language-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-menu side="start" menuId="custom" contentId="main" class="my-custom-menu">
+  <ion-header>
+    <ion-toolbar color="tertiary">
+      <ion-title>Custom Menu</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <ion-item>Menu Item</ion-item>
+      <ion-item>Menu Item</ion-item>
+      <ion-item>Menu Item</ion-item>
+      <ion-item>Menu Item</ion-item>
+      <ion-item>Menu Item</ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<ion-content id="main">
   <ion-searchbar 
     placeholder="{{'Search'|translate}}"
     debounce="1000"
@@ -63,10 +86,10 @@
                     style="object-fit:cover;"
                   ></app-ion-image>
                 </div>
-                <ion-label class="label-product-name">
+                <div class="label-product-name">
                   <h3 localValue [data]="product" [key]="'name'"></h3>
                   <p>{{product|price}}</p>
-                </ion-label>
+                </div>
               </ion-card-content>
             </ion-card>
           </ion-col>

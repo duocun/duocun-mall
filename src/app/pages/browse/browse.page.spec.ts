@@ -14,6 +14,7 @@ import { CategoryListComponent } from "./category-list/category-list.component";
 import { MerchantListComponent } from "./merchant-list/merchant-list.component";
 import { ProductListModule } from "src/app/components/product-list/product-list.module";
 import { PricePipeModule } from "src/app/pipes/price/price.module";
+import { LanguageButtonModule } from 'src/app/components/language-button/language-button.module';
 describe("BrowsePage", () => {
   let component: BrowsePage;
   let fixture: ComponentFixture<BrowsePage>;
@@ -39,7 +40,8 @@ describe("BrowsePage", () => {
         IonicStorageModule.forRoot(),
         FormsModule,
         ProductListModule,
-        PricePipeModule
+        PricePipeModule,
+        LanguageButtonModule
       ]
     }).compileComponents();
 

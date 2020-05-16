@@ -16,6 +16,7 @@ import { MerchantListComponent } from "./merchant-list/merchant-list.component";
 import { ProductListModule } from "src/app/components/product-list/product-list.module";
 import { PricePipeModule } from "src/app/pipes/price/price.module";
 import { CategoryListModule } from "./category-list/category-list.module";
+import { LanguageButtonModule } from "src/app/components/language-button/language-button.module";
 
 @NgModule({
   imports: [
@@ -30,7 +31,8 @@ import { CategoryListModule } from "./category-list/category-list.module";
     IonImageModule,
     ProductListModule,
     PricePipeModule,
-    CategoryListModule
+    CategoryListModule,
+    LanguageButtonModule
   ],
   declarations: [BrowsePage, MerchantListComponent]
 })
