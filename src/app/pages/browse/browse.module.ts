@@ -29,7 +29,6 @@ import { CategoryListModule } from "./category-list/category-list.module";
     LocalValueDirectiveModule,
     IonImageModule,
     ProductListModule,
-    PricePipeModule,
     CategoryListModule
   ],
   declarations: [BrowsePage, MerchantListComponent]

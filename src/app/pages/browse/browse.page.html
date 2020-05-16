@@ -65,7 +65,7 @@
                 </div>
                 <div class="label-product-name">
                   <h3 localValue [data]="product" [key]="'name'"></h3>
-                  <p>{{product|price}}</p>
+                  <p>{{product.price | currency:'USD':'symbol' }}</p>
                 </div>
               </ion-card-content>
             </ion-card>
