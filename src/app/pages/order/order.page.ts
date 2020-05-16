@@ -455,4 +455,11 @@ export class OrderPage implements OnInit {
   isWechatBrowser() {
     return /micromessenger/i.test(navigator.userAgent);
   }
+
+  prefersDark() {
+    return (
+      window.matchMedia("(prefers-color-scheme: dark)").matches ||
+      document.body.classList.contains("dark")
+    );
+  }
 }

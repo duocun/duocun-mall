@@ -56,6 +56,7 @@ export interface TransactionInterface {
   modified: string;
   orderType?: string;
   note?: string;
+  orders: Array<any>;
 }
 
 export interface TransactionRepInterface extends TransactionInterface {
@@ -63,6 +64,7 @@ export interface TransactionRepInterface extends TransactionInterface {
   consumed: number;
   paid: number;
   balance: number;
+  orders: Array<any>;
 }
 
 export function getTransactionDescription(
@@ -70,6 +72,7 @@ export function getTransactionDescription(
   clientId: string,
   lang = "en"
 ): string {
+  
   if (t.actionCode === TransactionAction.CANCEL_ORDER_FROM_DUOCUN.code) {
     // 'client cancel order from duocun') {
     const toName = t.toName ? t.toName : "";
@@ -93,16 +96,32 @@ export function getTransactionDescription(
     // 'client add credit by WECHATPAY') {
     return lang === "en" ? "add credit" : "微信充值";
   } else {
-    const fromId = t.fromId ? t.fromId : "";
-    const toName = t.toName ? t.toName : "";
-    const fromName = t.fromName ? t.fromName : "";
-    const name = fromId === clientId ? toName : fromName;
-    if (t.orderType === OrderType.MOBILE_PLAN_MONTHLY) {
-      return name + (lang === "en" ? " Phone monthly fee" : " 电话月费");
-    } else if (t.orderType === OrderType.MOBILE_PLAN_SETUP) {
-      return name + (lang === "en" ? " Phone setup fee" : " 电话安装费");
-    } else {
-      return name + " " + (t.note ? t.note : ""); // fix me
+    // const fromId = t.fromId ? t.fromId : "";
+    // const toName = t.toName ? t.toName : "";
+    // const fromName = t.fromName ? t.fromName : "";
+    // const name = fromId === clientId ? toName : fromName;
+    // if (t.orderType === OrderType.MOBILE_PLAN_MONTHLY) {
+    //   return name + (lang === "en" ? " Phone monthly fee" : " 电话月费");
+    // } else if (t.orderType === OrderType.MOBILE_PLAN_SETUP) {
+    //   return name + (lang === "en" ? " Phone setup fee" : " 电话安装费");
+    // } else {
+    //   return name + " " + (t.note ? t.note : ""); // fix me
+    // }
+    if (!t.orders) {
+      return t.note ? t.note : "";
     }
+    const productNames = [];
+    t.orders.forEach((order) => {
+      if (order.items) {
+        order.items.forEach((item) => {
+          const productName =
+            lang === "en" ? (item.nameEN ? item.nameEN : item.name) : item.name;
+          if (!productNames.includes(productName)) {
+            productNames.push(productName);
+          }
+        });
+      }
+    });
+    return productNames.join(", ");
   }
 }

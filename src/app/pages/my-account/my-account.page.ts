@@ -48,7 +48,12 @@ export class MyAccountPage implements OnInit, AfterViewInit {
     const lang = event.detail.value;
     this.storage.set(environment.storageKey.lang, lang);
     this.translator.use(lang);
-    window.location.href =
-      window.location.origin + `/mall/tabs/my-account?state=${this.appCode}`;
+    window.location.href = this.getUrlWithoutQueryString();
+  }
+  handleLangCancel() {
+    window.location.href = this.getUrlWithoutQueryString();
+  }
+  getUrlWithoutQueryString() {
+    return [location.protocol, "//", location.host, location.pathname].join("");
   }
 }

@@ -30,7 +30,6 @@ import { LanguageButtonModule } from "src/app/components/language-button/languag
     LocalValueDirectiveModule,
     IonImageModule,
     ProductListModule,
-    PricePipeModule,
     CategoryListModule,
     LanguageButtonModule
   ],

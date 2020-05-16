@@ -7,6 +7,7 @@ import { TranslateModule } from "@ngx-translate/core";
 import { PricePipeModule } from "src/app/pipes/price/price.module";
 import { IonImageModule } from "src/app/components/ion-image/ion-image.module";
 import { IonicStorageModule } from "@ionic/storage";
+import { RouterModule } from '@angular/router';
 
 describe("MyAccountPage", () => {
   let component: MyAccountPage;
@@ -21,7 +22,8 @@ describe("MyAccountPage", () => {
         TranslateModule.forRoot(),
         PricePipeModule,
         IonImageModule,
-        IonicStorageModule.forRoot()
+        IonicStorageModule.forRoot(),
+        RouterModule.forRoot([])
       ]
     }).compileComponents();
 
