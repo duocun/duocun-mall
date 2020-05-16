@@ -56,6 +56,7 @@ export interface TransactionInterface {
   modified: string;
   orderType?: string;
   note?: string;
+  orders: Array<any>;
 }
 
 export interface TransactionRepInterface extends TransactionInterface {
@@ -63,6 +64,7 @@ export interface TransactionRepInterface extends TransactionInterface {
   consumed: number;
   paid: number;
   balance: number;
+  orders: Array<any>;
 }
 
 export function getTransactionDescription(
@@ -70,6 +72,7 @@ export function getTransactionDescription(
   clientId: string,
   lang = "en"
 ): string {
+  
   if (t.actionCode === TransactionAction.CANCEL_ORDER_FROM_DUOCUN.code) {
     // 'client cancel order from duocun') {
     const toName = t.toName ? t.toName : "";
@@ -104,6 +107,21 @@ export function getTransactionDescription(
     // } else {
     //   return name + " " + (t.note ? t.note : ""); // fix me
     // }
-    return lang === "en" ? "Purchase product" : "商品购入";
+    if (!t.orders) {
+      return t.note ? t.note : "";
+    }
+    const productNames = [];
+    t.orders.forEach((order) => {
+      if (order.items) {
+        order.items.forEach((item) => {
+          const productName =
+            lang === "en" ? (item.nameEN ? item.nameEN : item.name) : item.name;
+          if (!productNames.includes(productName)) {
+            productNames.push(productName);
+          }
+        });
+      }
+    });
+    return productNames.join(", ");
   }
 }
