@@ -93,16 +93,17 @@ export function getTransactionDescription(
     // 'client add credit by WECHATPAY') {
     return lang === "en" ? "add credit" : "微信充值";
   } else {
-    const fromId = t.fromId ? t.fromId : "";
-    const toName = t.toName ? t.toName : "";
-    const fromName = t.fromName ? t.fromName : "";
-    const name = fromId === clientId ? toName : fromName;
-    if (t.orderType === OrderType.MOBILE_PLAN_MONTHLY) {
-      return name + (lang === "en" ? " Phone monthly fee" : " 电话月费");
-    } else if (t.orderType === OrderType.MOBILE_PLAN_SETUP) {
-      return name + (lang === "en" ? " Phone setup fee" : " 电话安装费");
-    } else {
-      return name + " " + (t.note ? t.note : ""); // fix me
-    }
+    // const fromId = t.fromId ? t.fromId : "";
+    // const toName = t.toName ? t.toName : "";
+    // const fromName = t.fromName ? t.fromName : "";
+    // const name = fromId === clientId ? toName : fromName;
+    // if (t.orderType === OrderType.MOBILE_PLAN_MONTHLY) {
+    //   return name + (lang === "en" ? " Phone monthly fee" : " 电话月费");
+    // } else if (t.orderType === OrderType.MOBILE_PLAN_SETUP) {
+    //   return name + (lang === "en" ? " Phone setup fee" : " 电话安装费");
+    // } else {
+    //   return name + " " + (t.note ? t.note : ""); // fix me
+    // }
+    return lang === "en" ? "Purchase product" : "商品购入";
   }
 }
