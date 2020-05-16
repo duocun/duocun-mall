@@ -15,10 +15,13 @@ export class PricePipe implements PipeTransform {
   }
 
   transform(value: any): string {
+    if (!value) {
+      value = 0;
+    }
     if (typeof value === "object") {
       return this.transform(value.price);
     }
-    value = parseFloat(<string>value);
+    value = parseFloat(`${value}`);
     if (isNaN(value)) {
       value = 0;
     }
