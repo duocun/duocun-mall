@@ -26,7 +26,7 @@
     <ion-item>
       <ion-icon slot="start" name="language-outline"></ion-icon>
       <ion-label translate="Language"></ion-label>
-      <ion-select [value]="lang" (ionChange)="handleLangChange($event)">
+      <ion-select [value]="lang" (ionChange)="handleLangChange($event)" #selectLang>
         <ion-select-option value="en">English</ion-select-option>
         <ion-select-option value="zh">中文</ion-select-option>
       </ion-select>
