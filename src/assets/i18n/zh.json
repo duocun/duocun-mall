@@ -102,5 +102,9 @@
   "Phone number already exists": "手机号码已存在",
   "Registration failed": "注册失败",
   "Registered successfully": "注册成功",
-  "Agree with terms of service and privacy policy": "同意服务条款和隐私政策"
+  "Agree with terms of service and privacy policy": "同意服务条款和隐私政策",
+  "Menu": "菜单",
+  "About Us": "公司简介",
+  "Terms of Service": "服务条款",
+  "Privacy Policy": "隐私条款"
 }

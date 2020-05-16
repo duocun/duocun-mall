@@ -102,5 +102,9 @@
   "Phone number already exists": "Phone number already exists",
   "Registration failed": "Registration failed",
   "Registered successfully": "Registered successfully",
-  "Agree with terms of service and privacy policy": "Agree with terms of service and privacy policy"
+  "Agree with terms of service and privacy policy": "Agree with terms of service and privacy policy",
+  "Menu": "Menu",
+  "About Us": "About Us",
+  "Terms of Service": "Terms of Service",
+  "Privacy Policy": "Privacy Policy"
 }
