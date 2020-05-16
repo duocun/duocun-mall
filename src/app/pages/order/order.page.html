@@ -112,7 +112,7 @@
           <stripe-card
             #stripeCard
             (tokenChange)="stripePay($event)"
-            [options]="{hidePostalCode: true}"
+            [options]="prefersDark() ? {hidePostalCode: true, style: {base: {color: '#eee'}}} : {hidePostalCode: true}"
           ></stripe-card>
         </ion-col>
         <ion-col size="12" align="center">
