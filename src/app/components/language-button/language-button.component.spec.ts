@@ -2,10 +2,10 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { IonicModule } from "@ionic/angular";
 
 import { LanguageButtonComponent } from "./language-button.component";
-import { RouterModule } from '@angular/router';
-import { IonicStorageModule } from '@ionic/storage';
-import { HttpClientModule } from '@angular/common/http';
-import { LanguageButtonModule } from './language-button.module';
+import { RouterModule } from "@angular/router";
+import { IonicStorageModule } from "@ionic/storage";
+import { HttpClientModule } from "@angular/common/http";
+import { LanguageButtonModule } from "./language-button.module";
 
 describe("LanguageButtonComponent", () => {
   let component: LanguageButtonComponent;

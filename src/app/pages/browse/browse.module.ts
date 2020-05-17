@@ -14,9 +14,9 @@ import { LocalValueDirectiveModule } from "src/app/directives/local-value.module
 import { IonImageModule } from "src/app/components/ion-image/ion-image.module";
 import { MerchantListComponent } from "./merchant-list/merchant-list.component";
 import { ProductListModule } from "src/app/components/product-list/product-list.module";
-import { PricePipeModule } from "src/app/pipes/price/price.module";
 import { CategoryListModule } from "./category-list/category-list.module";
 import { LanguageButtonModule } from "src/app/components/language-button/language-button.module";
+import { SideMenuModule } from "src/app/components/side-menu/side-menu.module";
 
 @NgModule({
   imports: [
@@ -31,7 +31,8 @@ import { LanguageButtonModule } from "src/app/components/language-button/languag
     IonImageModule,
     ProductListModule,
     CategoryListModule,
-    LanguageButtonModule
+    LanguageButtonModule,
+    SideMenuModule
   ],
   declarations: [BrowsePage, MerchantListComponent]
 })

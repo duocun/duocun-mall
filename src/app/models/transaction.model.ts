@@ -72,7 +72,6 @@ export function getTransactionDescription(
   clientId: string,
   lang = "en"
 ): string {
-  
   if (t.actionCode === TransactionAction.CANCEL_ORDER_FROM_DUOCUN.code) {
     // 'client cancel order from duocun') {
     const toName = t.toName ? t.toName : "";
