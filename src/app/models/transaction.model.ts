@@ -75,25 +75,25 @@ export function getTransactionDescription(
   if (t.actionCode === TransactionAction.CANCEL_ORDER_FROM_DUOCUN.code) {
     // 'client cancel order from duocun') {
     const toName = t.toName ? t.toName : "";
-    return (lang === "en" ? "Cancel" : "取消") + toName;
+    return lang === "en" ? "Order cancellation" : "取消订单";
   } else if (t.actionCode === TransactionAction.PAY_BY_CARD.code) {
     // 'pay by card') {
-    return lang === "en" ? "by bank card" : "信用卡付款";
+    return lang === "en" ? "Bank card" : "信用卡付款";
   } else if (t.actionCode === TransactionAction.DECLINE_CREDIT_CARD.code) {
     // 'bank card pay fail') {
-    return lang === "en" ? "bank card pay fail" : "银行卡付款失败";
+    return lang === "en" ? "Bank card pay fail" : "银行卡付款失败";
   } else if (t.actionCode === TransactionAction.PAY_BY_WECHAT.code) {
     // 'pay by wechat') {
-    return lang === "en" ? "wechat pay" : "微信付款";
+    return lang === "en" ? "Wechat pay" : "微信付款";
   } else if (t.actionCode === TransactionAction.ADD_CREDIT_BY_CASH.code) {
     // 'client add credit by cash') {
-    return lang === "en" ? "add credit" : "现金充值";
+    return lang === "en" ? "Add credit" : "现金充值";
   } else if (t.actionCode === TransactionAction.ADD_CREDIT_BY_CARD.code) {
     // 'client add credit by card') {
-    return lang === "en" ? "add credit" : "信用卡充值";
+    return lang === "en" ? "Add credit" : "信用卡充值";
   } else if (t.actionCode === TransactionAction.ADD_CREDIT_BY_WECHAT.code) {
     // 'client add credit by WECHATPAY') {
-    return lang === "en" ? "add credit" : "微信充值";
+    return lang === "en" ? "Add credit" : "微信充值";
   } else {
     // const fromId = t.fromId ? t.fromId : "";
     // const toName = t.toName ? t.toName : "";
@@ -109,18 +109,14 @@ export function getTransactionDescription(
     if (!t.orders) {
       return t.note ? t.note : "";
     }
-    const productNames = [];
-    t.orders.forEach((order) => {
-      if (order.items) {
-        order.items.forEach((item) => {
-          const productName =
-            lang === "en" ? (item.nameEN ? item.nameEN : item.name) : item.name;
-          if (!productNames.includes(productName)) {
-            productNames.push(productName);
-          }
-        });
-      }
-    });
-    return productNames.join(", ");
+    const order = t.orders[0];
+    if (order.items) {
+      const item = order.items[0];
+      const productName =
+        lang === "en" ? (item.nameEN ? item.nameEN : item.name) : item.name;
+      return productName + (lang === "en" ? " etc." : " 等");
+    } else {
+      return t.note ? t.note : "";
+    }
   }
 }

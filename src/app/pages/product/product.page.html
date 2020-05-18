@@ -32,7 +32,7 @@
         <ion-row class="row-price ion-padding">
           <ion-label>
             <span translate="Price"></span>
-            <span>{{product|price}}</span>
+            <span>{{product.price|currency:'USD':'symbol'}}</span>
           </ion-label>
         </ion-row>
       </ion-col>

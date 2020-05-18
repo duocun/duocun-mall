@@ -8,6 +8,7 @@ import { IonicStorageModule } from "@ionic/storage";
 import { MomentPipeModule } from "src/app/pipes/moment/moment.module";
 import { PricePipeModule } from "src/app/pipes/price/price.module";
 import { RouterModule } from "@angular/router";
+import { LocalValueDirectiveModule } from "src/app/directives/local-value.module";
 
 describe("TransactionHistoryPage", () => {
   let component: TransactionHistoryPage;
@@ -23,7 +24,8 @@ describe("TransactionHistoryPage", () => {
         IonicStorageModule.forRoot(),
         MomentPipeModule,
         PricePipeModule,
-        RouterModule.forRoot([])
+        RouterModule.forRoot([]),
+        LocalValueDirectiveModule
       ]
     }).compileComponents();
 

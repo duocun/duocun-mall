@@ -34,7 +34,7 @@ export class BrowsePage implements OnInit {
     private router: Router,
     private api: ApiService
   ) {
-    this.page = 1;
+    this.page = 0;
     this.viewSegment = "merchant";
     this.viewMode = "category-only";
     this.categories = [];
