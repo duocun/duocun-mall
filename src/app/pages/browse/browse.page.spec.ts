@@ -15,7 +15,7 @@ import { MerchantListComponent } from "./merchant-list/merchant-list.component";
 import { ProductListModule } from "src/app/components/product-list/product-list.module";
 import { PricePipeModule } from "src/app/pipes/price/price.module";
 import { LanguageButtonModule } from "src/app/components/language-button/language-button.module";
-import { SideMenuModule } from 'src/app/components/side-menu/side-menu.module';
+import { SideMenuModule } from "src/app/components/side-menu/side-menu.module";
 describe("BrowsePage", () => {
   let component: BrowsePage;
   let fixture: ComponentFixture<BrowsePage>;

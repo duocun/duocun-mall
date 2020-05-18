@@ -2,6 +2,8 @@ import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 
 import { HomePage } from "./home.page";
+import { StaticPageModule } from "src/app/pages/static-page/static-page.module";
+import { StaticPage } from "src/app/pages/static-page/static-page.page";
 import { AuthGuard } from "src/app/guards/auth/auth.guard";
 import { LocationGuard } from "src/app/guards/location/location.guard";
 
@@ -49,6 +51,14 @@ const routes: Routes = [
     ]
   },
   {
+    path: "page",
+    component: HomePage,
+    loadChildren: () =>
+      import("../static-page/static-page.module").then(
+        (m) => m.StaticPageModule
+      )
+  },
+  {
     path: "",
     redirectTo: "tabs/browse",
     pathMatch: "full"
@@ -56,7 +66,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [RouterModule.forChild(routes), StaticPageModule],
   exports: [RouterModule]
 })
 export class HomePageRoutingModule {}

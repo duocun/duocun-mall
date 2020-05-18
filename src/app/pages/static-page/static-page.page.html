@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/browse" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title *ngIf="!loading" localValue [data]="page" key="title"></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ng-container *ngIf="!loading; Else skeleton">
+    <div class="ion-padding" [innerHTML]="getContent()"></div>
+  </ng-container>
+</ion-content>
+
+<ng-template #skeleton>
+  <div class="ion-padding">
+    <ion-skeleton-text class="ion-margin-bottom" animated style="height: 1.5rem;"></ion-skeleton-text>
+    <ion-skeleton-text animated style="height: 1rem; width: 80%"></ion-skeleton-text>
+    <ion-skeleton-text animated style="height: 1rem; width: 60%"></ion-skeleton-text>
+    <ion-skeleton-text animated style="height: 1rem; width: 60%"></ion-skeleton-text>
+  </div>
+</ng-template>

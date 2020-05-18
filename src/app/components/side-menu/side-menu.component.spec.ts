@@ -2,11 +2,11 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { IonicModule } from "@ionic/angular";
 
 import { SideMenuComponent } from "./side-menu.component";
-import { TranslateModule } from '@ngx-translate/core';
-import { IonicStorageModule } from '@ionic/storage';
-import { HttpClientModule } from '@angular/common/http';
-import { LocalValueDirectiveModule } from 'src/app/directives/local-value.module';
-import { RouterModule } from '@angular/router';
+import { TranslateModule } from "@ngx-translate/core";
+import { IonicStorageModule } from "@ionic/storage";
+import { HttpClientModule } from "@angular/common/http";
+import { LocalValueDirectiveModule } from "src/app/directives/local-value.module";
+import { RouterModule } from "@angular/router";
 
 describe("SideMenuComponent", () => {
   let component: SideMenuComponent;
