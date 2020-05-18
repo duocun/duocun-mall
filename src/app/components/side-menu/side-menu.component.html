@@ -6,7 +6,7 @@
   </ion-header>
   <ion-content>
     <ion-list>
-      <ion-item *ngFor="let tab of tabs" routerLinkActive="router-link-active" [routerLink]="['/page/' + tab.slug]">
+      <ion-item *ngFor="let tab of tabs" routerLinkActive="router-link-active" (click)="closeMenu()" [routerLink]="['/page/' + tab.slug]">
         <ion-label localValue [data]="tab" key="title"></ion-label>
       </ion-item>
     </ion-list>

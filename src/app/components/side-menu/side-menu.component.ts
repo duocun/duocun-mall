@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ApiService } from "src/app/services/api/api.service";
 import { PageTabInterface } from "src/app/models/page.model";
+import { MenuController } from "@ionic/angular";
 
 @Component({
   selector: "app-side-menu",
@@ -10,7 +11,7 @@ import { PageTabInterface } from "src/app/models/page.model";
 export class SideMenuComponent implements OnInit {
   loading: boolean;
   tabs: Array<PageTabInterface>;
-  constructor(private api: ApiService) {
+  constructor(private api: ApiService, private menu: MenuController) {
     this.tabs = [];
     this.loading = true;
   }
@@ -37,5 +38,8 @@ export class SideMenuComponent implements OnInit {
         console.error(e);
         this.loading = false;
       });
+  }
+  closeMenu() {
+    this.menu.close();
   }
 }
