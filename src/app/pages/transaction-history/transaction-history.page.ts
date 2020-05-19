@@ -92,6 +92,10 @@ export class TransactionHistoryPage implements OnInit {
             }
           }
         }
-      );
+      )
+      .catch((e) => {
+        console.error(e);
+        this.loading = false;
+      });
   }
 }
