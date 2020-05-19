@@ -20,7 +20,7 @@
         <ion-label>
           <h3 localValue [data]="item.product" key="name"></h3>
           <p *ngIf="item.delivery">{{item.delivery.date|moment:"YYYY-MM-DD ddd"}}</p>
-          <p>{{cartItemSubtotal(item)|price}}</p>
+          <p>{{cartItemSubtotal(item)|currency:'USD':'symbol'}}</p>
         </ion-label>
         <ion-touchspin
           slot="end"

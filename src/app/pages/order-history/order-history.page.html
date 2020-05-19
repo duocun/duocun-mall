@@ -54,7 +54,7 @@
                 <ion-row *ngFor="let item of order.items">
                   <ion-col size="7" localValue [data]="item.product" key="name"></ion-col>
                   <ion-col size="2">&times; {{item.quantity}}</ion-col>
-                  <ion-col size="3">{{item|price}}</ion-col>
+                  <ion-col size="3">{{item.price|currency:'USD':'symbol'}}</ion-col>
                 </ion-row>
               </ng-container>
               <ion-row class="ion-margin-top border-top">
@@ -65,39 +65,39 @@
                 <ion-col size="5">
                   <ion-row>
                     <ion-col translate="Price"></ion-col>
-                    <ion-col>{{order|price}}</ion-col>
+                    <ion-col>{{order.price|currency:'USD':'symbol'}}</ion-col>
                   </ion-row>
                   <ion-row *ngIf="order.type === OrderTypes.FOOD_DELIVERY">
                     <ion-col translate="Delivery Fee"></ion-col>
-                    <ion-col>{{order.deliveryCost|price}}</ion-col>
+                    <ion-col>{{order.deliveryCost|currency:'USD':'symbol'}}</ion-col>
                   </ion-row>
                   <ion-row *ngIf="order.type === OrderTypes.FOOD_DELIVERY">
                     <ion-col translate="Subtotal"></ion-col>
-                    <ion-col>{{(order.price + order.deliveryCost)|price}}</ion-col>
+                    <ion-col>{{(order.price + order.deliveryCost)|currency:'USD':'symbol'}}</ion-col>
                   </ion-row>
                   <ion-row>
                     <ion-col translate="Tax"></ion-col>
-                    <ion-col>{{order.tax|price}}</ion-col>
+                    <ion-col>{{order.tax|currency:'USD':'symbol'}}</ion-col>
                   </ion-row>
                   <ion-row *ngIf="order.type === OrderTypes.FOOD_DELIVERY">
                     <ion-col translate="Tips"></ion-col>
-                    <ion-col>{{order.tips|price}}</ion-col>
+                    <ion-col>{{order.tips|currency:'USD':'symbol'}}</ion-col>
                   </ion-row>
                   <ion-row *ngIf="order.type === OrderTypes.FOOD_DELIVERY">
                     <ion-col translate="Discount"></ion-col>
-                    <ion-col>{{-order.discount|price}}</ion-col>
+                    <ion-col>{{-order.discount|currency:'USD':'symbol'}}</ion-col>
                   </ion-row>
                   <ion-row *ngIf="order.type === OrderTypes.FOOD_DELIVERY && order.groupDiscount > 0">
                     <ion-col translate="Group Discount"></ion-col>
-                    <ion-col>{{-order.groupDiscount|price}}</ion-col>
+                    <ion-col>{{-order.groupDiscount|currency:'USD':'symbol'}}</ion-col>
                   </ion-row>
                   <ion-row *ngIf="order.type === OrderTypes.FOOD_DELIVERY && order.overRangeCharge > 0">
                     <ion-col translate="Out-of-Range Charge"></ion-col>
-                    <ion-col>{{order.overRangeCharge|price}}</ion-col>
+                    <ion-col>{{order.overRangeCharge|currency:'USD':'symbol'}}</ion-col>
                   </ion-row>
                   <ion-row>
                     <ion-col translate="Total"></ion-col>
-                    <ion-col>{{order.total|price}}</ion-col>
+                    <ion-col>{{order.total|currency:'USD':'symbol'}}</ion-col>
                   </ion-row>
                 </ion-col>
               </ion-row>

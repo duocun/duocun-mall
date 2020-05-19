@@ -21,7 +21,7 @@
     <ion-item>
       <ion-icon slot="start" name="cash-outline"></ion-icon>
       <ion-label translate="Balance"></ion-label>
-      <ion-label class="ion-text-right">{{account.balance|price}}</ion-label>
+      <ion-label class="ion-text-right">{{account.balance|currency:'USD':'symbol'}}</ion-label>
     </ion-item>
     <ion-item>
       <ion-icon slot="start" name="language-outline"></ion-icon>
