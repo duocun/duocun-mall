@@ -8,6 +8,7 @@ import { ApiService } from "src/app/services/api/api.service";
 import { CategoryInterface } from "src/app/models/category.model";
 import { ProductInterface } from "src/app/models/product.model";
 import { getPictureUrl } from "src/app/models/product.model";
+import { SeoService } from "src/app/services/seo/seo.service";
 @Component({
   selector: "app-browse",
   templateUrl: "./browse.page.html",
@@ -32,7 +33,8 @@ export class BrowsePage implements OnInit {
     private alert: AlertController,
     private translator: TranslateService,
     private router: Router,
-    private api: ApiService
+    private api: ApiService,
+    private seo: SeoService
   ) {
     this.page = 0;
     this.viewSegment = "merchant";
@@ -46,6 +48,7 @@ export class BrowsePage implements OnInit {
     this.outofRange = false;
   }
   ngOnInit() {
+    this.seo.setDefaultSeo();
     this.loc.getLocation().subscribe((location: LocationInterface) => {
       this.location = location;
       this.getAvailableMerchantIds().then(() => {
