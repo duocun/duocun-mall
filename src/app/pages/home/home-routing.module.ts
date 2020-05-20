@@ -3,7 +3,6 @@ import { Routes, RouterModule } from "@angular/router";
 
 import { HomePage } from "./home.page";
 import { StaticPageModule } from "src/app/pages/static-page/static-page.module";
-import { StaticPage } from "src/app/pages/static-page/static-page.page";
 import { AuthGuard } from "src/app/guards/auth/auth.guard";
 import { LocationGuard } from "src/app/guards/location/location.guard";
 

@@ -1,0 +1,17 @@
+ion-footer {
+  margin-top: 2rem;
+  background-color: var(--ion-color-light);
+  color: var(--ion-color-dark);
+}
+ion-list {
+  --ion-background-color: var(--ion-color-light);
+}
+ion-label a {
+  text-decoration: none;
+  color: var(--ion-color-dark);
+}
+@media(max-width: 767px) {
+  .logo {
+    display: none;
+  }
+}

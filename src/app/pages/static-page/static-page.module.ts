@@ -8,6 +8,7 @@ import { StaticPageRoutingModule } from "./static-page-routing.module";
 
 import { StaticPage } from "./static-page.page";
 import { LocalValueDirectiveModule } from "src/app/directives/local-value.module";
+import { FooterModule } from 'src/app/components/footer/footer.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { LocalValueDirectiveModule } from "src/app/directives/local-value.module
     FormsModule,
     IonicModule,
     StaticPageRoutingModule,
-    LocalValueDirectiveModule
+    LocalValueDirectiveModule,
+    FooterModule
   ],
   declarations: [StaticPage]
 })

@@ -5,6 +5,18 @@ import { StaticPage } from "./static-page.page";
 
 const routes: Routes = [
   {
+    path: "browse",
+    redirectTo: "/tabs/browse"
+  },
+  {
+    path: "cart",
+    redirectTo: "/tabs/cart"
+  },
+  {
+    path: "my-account",
+    redirectTo: "/tabs/my-account"
+  },
+  {
     path: ":slug",
     component: StaticPage
   },

@@ -1,0 +1,45 @@
+<ion-footer>
+  <div class="container">
+    <ion-row class="ion-padding">
+      <ion-col size="6" class="logo">
+        <ion-row>
+          <ion-col>
+            <img class="cursor-pointer" [routerLink]="['/tabs/browse']" src="assets/icon/favicon.jpg" alt="多村 - Duocun" />
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            Copyright &copy; {{ date|date: 'yyyy' }} duocun.com
+          </ion-col>
+        </ion-row>
+      </ion-col>
+      <ion-col size-xs="12" size-md="6">
+        <ion-list>
+          <ion-item>
+            <ion-label class="cursor-pointer" [routerLink]="['/page/faq']" translate="FAQ"></ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label class="cursor-pointer" [routerLink]="['/page/terms-of-service']" translate="Terms of Service"></ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label class="cursor-pointer" [routerLink]="['/page/privacy-policy']" translate="Privacy Policy"></ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label class="cursor-pointer" [routerLink]="['/page/about-us']" translate="About Us"></ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>
+              <a href="tel:1234567890"><ion-icon name="call-outline" size="medium" class="ion-margin-end"></ion-icon>+123 (456) 7890</a>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-label>
+              <a href="mailto:support@duocun.ca"><ion-icon name="mail-outline" size="medium" class="ion-margin-end"></ion-icon>support@duocun.ca</a>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+      
+    </ion-row>
+  </div>
+</ion-footer>

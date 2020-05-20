@@ -2,7 +2,7 @@
   <div class="container">
     <ion-toolbar>
       <ion-buttons slot="start">
-        <ion-menu-button></ion-menu-button>
+        <ion-back-button defaultHref="/tabs/browse" text=""></ion-back-button>
       </ion-buttons>
       <ion-title class="ion-text-center" *ngIf="!loading" localValue [data]="page" key="title"></ion-title>
     </ion-toolbar>
@@ -15,6 +15,7 @@
       <div class="ion-padding" [innerHTML]="getContent()"></div>
     </ng-container>
   </div>
+  <app-footer></app-footer>
 </ion-content>
 
 <ng-template #skeleton>

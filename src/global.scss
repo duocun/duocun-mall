@@ -29,6 +29,12 @@ body {
   ion-app {
       margin-left: auto;
       margin-right: auto;
+      ion-header{
+        background-color: var(--ion-color-light);
+        ion-toolbar {
+          --background: var(--ion-color-light);
+        }
+      }
       ion-row {
           ion-col {
               ion-card {
@@ -43,6 +49,9 @@ body {
   margin-left: auto;
   margin-right: auto;
   max-width: 1170px;
+}
+ion-content > .container {
+  min-height: calc(100vh - 480px);
 }
 .container-lg {
   max-width: 1170px;
