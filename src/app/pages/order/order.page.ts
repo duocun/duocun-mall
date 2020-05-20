@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { CartService } from "src/app/services/cart/cart.service";
 import * as Order from "src/app/models/order.model";
 import {
@@ -33,7 +33,7 @@ interface OrderErrorInterface {
   templateUrl: "./order.page.html",
   styleUrls: ["./order.page.scss"]
 })
-export class OrderPage implements OnInit {
+export class OrderPage implements OnInit, OnDestroy {
   chargeItems;
   order: Order.OrderInterface;
   orders: Array<Order.OrderInterface>;
@@ -126,6 +126,12 @@ export class OrderPage implements OnInit {
       this.summary = Order.getOrderSummary(this.cartItemGroups, 0);
       this.setCharge();
     });
+  }
+
+  ngOnDestroy() {
+    this.cartSubscription.unsubscribe();
+    this.orders = [];
+    this.cartItemGroups = [];
   }
 
   createStripeToken(stripeCard) {
@@ -269,15 +275,17 @@ export class OrderPage implements OnInit {
   payByDeposit() {
     this.saveOrders(this.orders).then((observable) => {
       observable.subscribe(
-        (resp: { code: string; data: Array<Order.OrderInterface> }) => {
+        async (resp: { code: string; data: Array<Order.OrderInterface> }) => {
           if (resp.code !== "success") {
             return this.handleInvalidOrders(resp.data);
           }
           this.showAlert("Notice", "Payment success", "OK");
           this.cartSubscription.unsubscribe();
           this.cartSvc.clearCart();
-          this.authSvc.updateData();
-          this.router.navigate(["/tabs/my-account/order-history"]);
+          await this.authSvc.updateData();
+          this.router.navigate(["/tabs/my-account/order-history"], {
+            replaceUrl: true
+          });
           this.paymentMethod = "";
         }
       );
