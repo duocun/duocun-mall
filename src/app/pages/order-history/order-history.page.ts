@@ -57,7 +57,6 @@ export class OrderHistoryPage implements OnInit, OnDestroy {
         true,
         "filter"
       )
-      .pipe(takeUntil(this.unsubscribe$))
       .then((data: { orders: Array<OrderInterface>; total: number }) => {
         console.log("order history page history subscription");
         this.orders = [...this.orders, ...data.orders];
