@@ -42,3 +42,10 @@ ion-searchbar {
     }
   }
 }
+@media(min-width: 992px) {
+  [size-lg="2.4"] {
+    flex: 0 0 calc(calc(2.4 / var(--ion-grid-columns, 12)) * 100%)!important;
+    width: calc(calc(2.4 / var(--ion-grid-columns, 12)) * 100%)!important;
+    max-width: calc(calc(2.4 / var(--ion-grid-columns, 12)) * 100%)!important;
+  }
+}
