@@ -1,15 +1,16 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { OrderInterface, OrderType } from "src/app/models/order.model";
 import { ApiService } from "src/app/services/api/api.service";
 import { AuthService } from "src/app/services/auth/auth.service";
 import { AccountInterface } from "src/app/models/account.model";
-
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 @Component({
   selector: "app-order-history",
   templateUrl: "./order-history.page.html",
   styleUrls: ["./order-history.page.scss"]
 })
-export class OrderHistoryPage implements OnInit {
+export class OrderHistoryPage implements OnInit, OnDestroy {
   loading: boolean;
   orders: Array<OrderInterface>;
   page: number;
@@ -17,6 +18,7 @@ export class OrderHistoryPage implements OnInit {
   accountId: string;
   scrollDisabled: boolean;
   OrderTypes = OrderType;
+  private unsubscribe$ = new Subject<void>();
   constructor(private api: ApiService, private authSvc: AuthService) {
     this.loading = true;
     this.orders = [];
@@ -35,6 +37,11 @@ export class OrderHistoryPage implements OnInit {
     });
   }
 
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   loadData(event) {
     this.page++;
     this.updatePage(event);
@@ -50,7 +57,9 @@ export class OrderHistoryPage implements OnInit {
         true,
         "filter"
       )
+      .pipe(takeUntil(this.unsubscribe$))
       .then((data: { orders: Array<OrderInterface>; total: number }) => {
+        console.log("order history page history subscription");
         this.orders = [...this.orders, ...data.orders];
         this.loading = false;
         if (event) {

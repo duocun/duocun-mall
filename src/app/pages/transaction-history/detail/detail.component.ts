@@ -3,6 +3,8 @@ import { ActivatedRoute } from "@angular/router";
 import { ApiService } from "src/app/services/api/api.service";
 import { OrderInterface, OrderType } from "src/app/models/order.model";
 import { AuthService } from "src/app/services/auth/auth.service";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
   selector: "app-detail",
@@ -16,6 +18,7 @@ export class DetailComponent implements OnInit {
   code: string;
   accountId: string;
   OrderTypes = OrderType;
+  private unsubscribe$ = new Subject<void>();
   constructor(
     private route: ActivatedRoute,
     private api: ApiService,
@@ -27,16 +30,20 @@ export class DetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authSvc.getAccount().subscribe((account) => {
-      if (account && account._id) {
-        this.accountId = account._id;
-        this.route.params.subscribe((param) => {
-          this.scope = param.scope || "order";
-          this.code = param.code || "";
-          this.loadData();
-        });
-      }
-    });
+    this.authSvc
+      .getAccount()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((account) => {
+        console.log("transaction history detail account subscription");
+        if (account && account._id) {
+          this.accountId = account._id;
+          this.route.params.subscribe((param) => {
+            this.scope = param.scope || "order";
+            this.code = param.code || "";
+            this.loadData();
+          });
+        }
+      });
   }
 
   loadData() {

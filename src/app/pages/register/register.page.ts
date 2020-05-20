@@ -1,22 +1,24 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { RegisterAccountInterface } from "src/app/models/account.model";
 import { ApiService } from "src/app/services/api/api.service";
 import { TranslateService } from "@ngx-translate/core";
 import { AlertController } from "@ionic/angular";
 import { AuthService } from "src/app/services/auth/auth.service";
 import { Router } from "@angular/router";
-
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 @Component({
   selector: "app-register",
   templateUrl: "./register.page.html",
   styleUrls: ["./register.page.scss"]
 })
-export class RegisterPage implements OnInit {
+export class RegisterPage implements OnInit, OnDestroy {
   processing: boolean;
   model: RegisterAccountInterface;
   tosAgreed: boolean;
   isOtpSent: boolean;
   otpSentCount: number;
+  private unsubscribe$ = new Subject<void>();
   constructor(
     private api: ApiService,
     private translator: TranslateService,
@@ -36,6 +38,11 @@ export class RegisterPage implements OnInit {
   }
 
   ngOnInit() {}
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 
   isValidPhone() {
     if (!this.model.phone) {
@@ -58,17 +65,23 @@ export class RegisterPage implements OnInit {
         phone: this.model.phone
       })
       .then((observable) => [
-        observable.subscribe((res: { code: string; message?: string }) => {
-          if (res.code === "success") {
-            this.showAlert("Notice", "Verification code sent", "OK");
-          } else {
-            if (res.message === "phone number already exists") {
-              this.showAlert("Notice", "Phone number already exists", "OK");
+        observable
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe((res: { code: string; message?: string }) => {
+            if (res.code === "success") {
+              this.showAlert("Notice", "Verification code sent", "OK");
             } else {
-              this.showAlert("Notice", "Verification code was not sent", "OK");
+              if (res.message === "phone number already exists") {
+                this.showAlert("Notice", "Phone number already exists", "OK");
+              } else {
+                this.showAlert(
+                  "Notice",
+                  "Verification code was not sent",
+                  "OK"
+                );
+              }
             }
-          }
-        })
+          })
       ])
       .catch((e) => {
         console.error(e);
@@ -86,22 +99,25 @@ export class RegisterPage implements OnInit {
     this.api
       .post("Accounts/register", this.model)
       .then((observable) => {
-        observable.subscribe(
-          (res: { code: string; message?: string; token?: string }) => {
-            if (res.code === "success") {
-              this.authSvc.login(res.token).then((account) => {
-                if (account) {
-                  this.showAlert("Notice", "Registered successfully", "OK");
-                  this.router.navigate(["/tabs/browse"]);
-                } else {
-                  this.showAlert("Notice", "Registration failed", "OK");
-                }
-              });
-            } else {
-              this.showAlert("Notice", "Registration failed", "OK");
+        observable
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe(
+            (res: { code: string; message?: string; token?: string }) => {
+              console.log("register page register subscription");
+              if (res.code === "success") {
+                this.authSvc.login(res.token).then((account) => {
+                  if (account) {
+                    this.showAlert("Notice", "Registered successfully", "OK");
+                    this.router.navigate(["/tabs/browse"]);
+                  } else {
+                    this.showAlert("Notice", "Registration failed", "OK");
+                  }
+                });
+              } else {
+                this.showAlert("Notice", "Registration failed", "OK");
+              }
             }
-          }
-        );
+          );
       })
       .catch((e) => {
         console.error(e);
@@ -113,14 +129,18 @@ export class RegisterPage implements OnInit {
   }
 
   showAlert(header, message, button) {
-    this.translator.get([header, message, button]).subscribe((dict) => {
-      this.alert
-        .create({
-          header: dict[header],
-          message: dict[message],
-          buttons: [dict[button]]
-        })
-        .then((alert) => alert.present());
-    });
+    this.translator
+      .get([header, message, button])
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((dict) => {
+        console.log("register page lang subscription");
+        this.alert
+          .create({
+            header: dict[header],
+            message: dict[message],
+            buttons: [dict[button]]
+          })
+          .then((alert) => alert.present());
+      });
   }
 }

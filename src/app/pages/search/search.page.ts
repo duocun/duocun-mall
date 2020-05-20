@@ -1,21 +1,24 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ProductInterface } from "src/app/models/product.model";
 import { ApiService } from "src/app/services/api/api.service";
 import { LocationService } from "src/app/services/location/location.service";
 import { LocationInterface } from "src/app/models/location.model";
+import { Subject } from "rxjs";
+import { takeUntil, take } from "rxjs/operators";
 
 @Component({
   selector: "app-search",
   templateUrl: "./search.page.html",
   styleUrls: ["./search.page.scss"]
 })
-export class SearchPage implements OnInit {
+export class SearchPage implements OnInit, OnDestroy {
   search: string;
   loading: boolean;
   products: Array<ProductInterface>;
   availableMerchantIds: Array<string>;
   location: LocationInterface;
+  private unsubscribe$ = new Subject<void>();
   constructor(
     private route: ActivatedRoute,
     private api: ApiService,
@@ -27,13 +30,22 @@ export class SearchPage implements OnInit {
   }
 
   ngOnInit() {
-    this.route.queryParams.subscribe((params) => {
-      this.search = params.q || "";
-      this.getAvailableMerchantIds().then(() => {
-        this.getProducts();
+    this.route.queryParams
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((params) => {
+        console.log("search page query param subscription");
+        this.search = params.q || "";
+        this.getAvailableMerchantIds().then(() => {
+          this.getProducts();
+        });
       });
-    });
   }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   handleSearch(event) {
     this.search = event.detail.value;
     if (this.search) {
@@ -42,38 +54,45 @@ export class SearchPage implements OnInit {
   }
   async getAvailableMerchantIds() {
     return new Promise((resolve, reject) => {
-      this.locSvc.getLocation().subscribe((location) => {
-        this.location = location;
-        if (!this.location) {
-          this.availableMerchantIds = [];
-          resolve([]);
-          return;
-        }
-        this.api
-          .get("/Areas/G/my", {
-            lat: this.location.lat,
-            lng: this.location.lng
-          })
-          .then((observable) => {
-            observable.subscribe((resp: { code: string; data: any }) => {
-              if (resp.code === "success") {
-                this.api
-                  .geth("MerchantSchedules/availableMerchants", {
-                    areaId: resp.data._id
-                  })
-                  .then((merchantIds: Array<string>) => {
-                    this.availableMerchantIds = merchantIds;
-                    resolve(merchantIds);
-                  });
-              } else {
-                reject(resp);
-              }
+      this.locSvc
+        .getLocation()
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((location) => {
+          console.log("search page location subscription");
+          this.location = location;
+          if (!this.location) {
+            this.availableMerchantIds = [];
+            resolve([]);
+            return;
+          }
+          this.api
+            .get("/Areas/G/my", {
+              lat: this.location.lat,
+              lng: this.location.lng
+            })
+            .then((observable) => {
+              observable
+                .pipe(takeUntil(this.unsubscribe$))
+                .subscribe((resp: { code: string; data: any }) => {
+                  console.log("search page area subscription");
+                  if (resp.code === "success") {
+                    this.api
+                      .geth("MerchantSchedules/availableMerchants", {
+                        areaId: resp.data._id
+                      })
+                      .then((merchantIds: Array<string>) => {
+                        this.availableMerchantIds = merchantIds;
+                        resolve(merchantIds);
+                      });
+                  } else {
+                    reject(resp);
+                  }
+                });
+            })
+            .catch((e) => {
+              reject(e);
             });
-          })
-          .catch((e) => {
-            reject(e);
-          });
-      });
+        });
     });
   }
   getProducts() {
@@ -86,10 +105,13 @@ export class SearchPage implements OnInit {
         query: JSON.stringify(query)
       })
       .then((observable) => {
-        observable.subscribe((resp: Array<ProductInterface>) => {
-          this.products = resp;
-          this.loading = false;
-        });
+        observable
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe((resp: Array<ProductInterface>) => {
+            console.log("search page product subscription");
+            this.products = resp;
+            this.loading = false;
+          });
       });
   }
   onProductClick(product: ProductInterface) {

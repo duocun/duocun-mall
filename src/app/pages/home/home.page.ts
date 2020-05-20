@@ -1,19 +1,20 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { CartService } from "src/app/services/cart/cart.service";
 import { CartInterface } from "src/app/models/cart.model";
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
 import { AuthService } from "src/app/services/auth/auth.service";
-import { ApiService } from "src/app/services/api/api.service";
 import { AccountInterface } from "src/app/models/account.model";
 import { AlertController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import { ContextService } from "src/app/services/context/context.service";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 @Component({
   selector: "app-home",
   templateUrl: "./home.page.html",
   styleUrls: ["./home.page.scss"]
 })
-export class HomePage implements OnInit {
+export class HomePage implements OnInit, OnDestroy {
   cart: CartInterface;
   clientId: string;
   page: string;
@@ -23,12 +24,12 @@ export class HomePage implements OnInit {
    * Ionic tab routing does not clear query params
    */
   redirecting: boolean;
+  private unsubscribe$ = new Subject<void>();
   constructor(
     private cartService: CartService,
     private route: ActivatedRoute,
     private router: Router,
     private authSvc: AuthService,
-    private api: ApiService,
     private alert: AlertController,
     private translator: TranslateService,
     private context: ContextService
@@ -40,33 +41,45 @@ export class HomePage implements OnInit {
     this.initCart();
   }
 
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   handleQueryParams() {
-    this.route.queryParamMap.subscribe((paramAsMap: ParamMap) => {
-      this.clientId = paramAsMap.get("cid");
-      this.page = paramAsMap.get("p");
-      if (this.redirecting) {
-        this.redirecting = !this.redirecting;
-        switch (this.page) {
-          case "b":
-            this.handleCreditByWeChat(paramAsMap);
-            break;
-          case "h":
-            this.handleWeChatPay(paramAsMap);
-            break;
-          default:
-            this.initAccount(paramAsMap);
-            break;
+    this.route.queryParamMap
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((paramAsMap: ParamMap) => {
+        console.log("home page query param subscription");
+        this.clientId = paramAsMap.get("cid");
+        this.page = paramAsMap.get("p");
+        if (this.redirecting) {
+          this.redirecting = !this.redirecting;
+          switch (this.page) {
+            case "b":
+              this.handleCreditByWeChat(paramAsMap);
+              break;
+            case "h":
+              this.handleWeChatPay(paramAsMap);
+              break;
+            default:
+              this.initAccount(paramAsMap);
+              break;
+          }
+        } else {
+          this.initAccount(paramAsMap);
         }
-      } else {
-        this.initAccount(paramAsMap);
-      }
-    });
+      });
   }
 
   initCart() {
-    this.cartService.getCart().subscribe((cart: CartInterface) => {
-      this.cart = cart;
-    });
+    this.cartService
+      .getCart()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((cart: CartInterface) => {
+        console.log("home page cart subscription");
+        this.cart = cart;
+      });
   }
 
   initAccount(params: ParamMap) {
@@ -84,9 +97,13 @@ export class HomePage implements OnInit {
     } else {
       this.authSvc.login(tokenId);
     }
-    this.authSvc.getAccount().subscribe((account) => {
-      this.account = account;
-    });
+    this.authSvc
+      .getAccount()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((account) => {
+        console.log("home page account subscription");
+        this.account = account;
+      });
     // this.authSvc.authState.subscribe((isLoggedIn: boolean) => {
     //   if (!isLoggedIn) {
     //     this.showAlert("Notice", "Login failed", "OK");
@@ -115,14 +132,18 @@ export class HomePage implements OnInit {
   }
 
   showAlert(header, message, button) {
-    this.translator.get([header, message, button]).subscribe((dict) => {
-      this.alert
-        .create({
-          header: dict[header],
-          message: dict[message],
-          buttons: [dict[button]]
-        })
-        .then((alert) => alert.present());
-    });
+    this.translator
+      .get([header, message, button])
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((dict) => {
+        console.log("home page lang subscription");
+        this.alert
+          .create({
+            header: dict[header],
+            message: dict[message],
+            buttons: [dict[button]]
+          })
+          .then((alert) => alert.present());
+      });
   }
 }

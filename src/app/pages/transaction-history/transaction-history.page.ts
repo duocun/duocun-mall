@@ -1,23 +1,25 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { TransactionRepInterface } from "src/app/models/transaction.model";
 import { getTransactionDescription } from "src/app/models/transaction.model";
 import { AuthService } from "src/app/services/auth/auth.service";
 import { AccountInterface } from "src/app/models/account.model";
 import { ApiService } from "src/app/services/api/api.service";
 import { TranslateService } from "@ngx-translate/core";
-
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 @Component({
   selector: "app-transaction-history",
   templateUrl: "./transaction-history.page.html",
   styleUrls: ["./transaction-history.page.scss"]
 })
-export class TransactionHistoryPage implements OnInit {
+export class TransactionHistoryPage implements OnInit, OnDestroy {
   loading: boolean;
   transactions: Array<TransactionRepInterface>;
   accountId: string;
   page: number;
   pageLength: number;
   scrollDisabled: boolean;
+  private unsubscribe$ = new Subject<void>();
   constructor(
     private authSvc: AuthService,
     private api: ApiService,
@@ -31,12 +33,21 @@ export class TransactionHistoryPage implements OnInit {
   }
 
   ngOnInit() {
-    this.authSvc.getAccount().subscribe((account: AccountInterface) => {
-      if (account && account._id) {
-        this.accountId = account._id;
-        this.loadData(null);
-      }
-    });
+    this.authSvc
+      .getAccount()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((account: AccountInterface) => {
+        console.log("transaction history page account subscription");
+        if (account && account._id) {
+          this.accountId = account._id;
+          this.loadData(null);
+        }
+      });
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   loadData(event) {

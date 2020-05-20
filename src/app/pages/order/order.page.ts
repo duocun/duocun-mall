@@ -23,7 +23,8 @@ import { LocationService } from "src/app/services/location/location.service";
 import { ContextService } from "src/app/services/context/context.service";
 import { Router } from "@angular/router";
 import { Subscription } from "rxjs";
-
+import { Subject } from "rxjs";
+import { takeUntil, filter } from "rxjs/operators";
 interface OrderErrorInterface {
   type: "order" | "payment";
   message: string;
@@ -55,6 +56,7 @@ export class OrderPage implements OnInit, OnDestroy {
   PaymentMethod = PaymentMethod;
   appCode: string | undefined;
   cartSanitized: boolean;
+  private unsubscribe$ = new Subject<void>();
   constructor(
     private cartSvc: CartService,
     private authSvc: AuthService,
@@ -72,24 +74,45 @@ export class OrderPage implements OnInit, OnDestroy {
     loadStripe(environment.stripe).then((stripe) => {
       this.stripe = stripe;
     });
-    this.contextSvc.getContext().subscribe((context) => {
-      this.appCode = context.get("appCode");
-    });
+    this.contextSvc
+      .getContext()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((context) => {
+        console.log("order page context subscription");
+        this.appCode = context.get("appCode");
+      });
   }
 
   async ngOnInit() {
     this.paymentMethod = PaymentMethod.CREDIT_CARD;
-    this.authSvc.getAccount().subscribe((account) => {
-      if (account) {
+    this.authSvc
+      .getAccount()
+      .pipe(
+        filter((account) => !!account),
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe((account) => {
+        console.log("order page account subscription");
         this.account = account;
         this.setCharge();
-        this.locSvc.getLocation().subscribe((location) => {
-          if (location) {
+        this.locSvc
+          .getLocation()
+          .pipe(
+            filter((location) => !!location),
+            takeUntil(this.unsubscribe$)
+          )
+          .subscribe((location) => {
+            console.log("order page location subscription");
             this.location = location;
             this.address = formatLocation(location);
             this.cartSubscription = this.cartSvc
               .getCart()
+              .pipe(
+                filter((cart) => !!cart && cart.items.length > 0),
+                takeUntil(this.unsubscribe$)
+              )
               .subscribe(async (cart) => {
+                console.log("order page cart subscription");
                 this.cart = cart;
                 if (
                   this.cart &&
@@ -126,16 +149,14 @@ export class OrderPage implements OnInit, OnDestroy {
                 this.setCharge();
                 this.loading = false;
               });
-          }
-        });
-      }
-    });
+          });
+      });
   }
 
   ngOnDestroy() {
     this.cartSubscription.unsubscribe();
-    this.orders = [];
-    this.cartItemGroups = [];
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   createStripeToken(stripeCard) {
@@ -204,42 +225,48 @@ export class OrderPage implements OnInit, OnDestroy {
         const paymentMethodId = res.paymentMethod.id;
         this.saveOrders(this.orders)
           .then((observable) => {
-            observable.subscribe(
-              (resp: { code: string; data: Array<Order.OrderInterface> }) => {
-                if (resp.code !== "success") {
-                  return this.handleInvalidOrders(resp.data);
-                }
-                const newOrders = resp.data;
-                this.savePayment(newOrders, paymentMethodId)
-                  .then((observable) => {
-                    observable.subscribe((resp: any) => {
-                      if (resp.err === PaymentError.NONE) {
-                        this.showAlert("Notice", "Payment success", "OK");
-                        this.cartSubscription.unsubscribe();
-                        this.cartSvc.clearCart();
-                        this.router.navigate(
-                          ["/tabs/my-account/order-history"],
-                          {
-                            replaceUrl: true
+            observable
+              .pipe(takeUntil(this.unsubscribe$))
+              .subscribe(
+                (resp: { code: string; data: Array<Order.OrderInterface> }) => {
+                  console.log("order page save order subscription");
+                  if (resp.code !== "success") {
+                    return this.handleInvalidOrders(resp.data);
+                  }
+                  const newOrders = resp.data;
+                  this.savePayment(newOrders, paymentMethodId)
+                    .then((observable) => {
+                      observable
+                        .pipe(takeUntil(this.unsubscribe$))
+                        .subscribe((resp: any) => {
+                          console.log("order page save payment subscription");
+                          if (resp.err === PaymentError.NONE) {
+                            this.showAlert("Notice", "Payment success", "OK");
+                            this.cartSubscription.unsubscribe();
+                            this.cartSvc.clearCart();
+                            this.router.navigate(
+                              ["/tabs/my-account/order-history"],
+                              {
+                                replaceUrl: true
+                              }
+                            );
+                            this.processing = false;
+                          } else {
+                            this.showAlert("Notice", "Payment failed", "OK");
+                            this.processing = false;
                           }
-                        );
-                        this.processing = false;
-                      } else {
-                        this.showAlert("Notice", "Payment failed", "OK");
-                        this.processing = false;
-                      }
+                        });
+                    })
+                    .catch((e) => {
+                      console.error(e);
+                      this.error = {
+                        type: "payment",
+                        message: "Cannot save payment"
+                      };
+                      this.processing = false;
                     });
-                  })
-                  .catch((e) => {
-                    console.error(e);
-                    this.error = {
-                      type: "payment",
-                      message: "Cannot save payment"
-                    };
-                    this.processing = false;
-                  });
-              }
-            );
+                }
+              );
           })
           .catch((e) => {
             console.error(e);
@@ -260,39 +287,45 @@ export class OrderPage implements OnInit, OnDestroy {
     this.paymentMethod = PaymentMethod.WECHAT;
     this.processing = true;
     this.saveOrders(this.orders).then((observable) => {
-      observable.subscribe(
-        (resp: { code: string; data: Array<Order.OrderInterface> }) => {
-          if (resp.code !== "success") {
-            return this.handleInvalidOrders(resp.data);
+      observable
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(
+          (resp: { code: string; data: Array<Order.OrderInterface> }) => {
+            console.log("order page save order subscription");
+            if (resp.code !== "success") {
+              return this.handleInvalidOrders(resp.data);
+            }
+            this.payBySnappay(
+              this.appCode,
+              this.account._id,
+              resp.data,
+              this.charge.payable
+            );
           }
-          this.payBySnappay(
-            this.appCode,
-            this.account._id,
-            resp.data,
-            this.charge.payable
-          );
-        }
-      );
+        );
     });
   }
 
   payByDeposit() {
     this.saveOrders(this.orders).then((observable) => {
-      observable.subscribe(
-        async (resp: { code: string; data: Array<Order.OrderInterface> }) => {
-          if (resp.code !== "success") {
-            return this.handleInvalidOrders(resp.data);
+      observable
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(
+          async (resp: { code: string; data: Array<Order.OrderInterface> }) => {
+            console.log("order page save order subscription");
+            if (resp.code !== "success") {
+              return this.handleInvalidOrders(resp.data);
+            }
+            this.showAlert("Notice", "Payment success", "OK");
+            this.cartSubscription.unsubscribe();
+            this.cartSvc.clearCart();
+            await this.authSvc.updateData();
+            this.router.navigate(["/tabs/my-account/order-history"], {
+              replaceUrl: true
+            });
+            this.paymentMethod = "";
           }
-          this.showAlert("Notice", "Payment success", "OK");
-          this.cartSubscription.unsubscribe();
-          this.cartSvc.clearCart();
-          await this.authSvc.updateData();
-          this.router.navigate(["/tabs/my-account/order-history"], {
-            replaceUrl: true
-          });
-          this.paymentMethod = "";
-        }
-      );
+        );
     });
   }
 
@@ -306,12 +339,16 @@ export class OrderPage implements OnInit, OnDestroy {
           .get(msg1, {
             value: this.getProductName(resp.product)
           })
+          .pipe(takeUntil(this.unsubscribe$))
           .subscribe((message1: string) => {
+            console.log("order page lang subscription");
             this.translator
               .get(msg2, {
                 value: resp.product.quantity
               })
+              .pipe(takeUntil(this.unsubscribe$))
               .subscribe((message2: string) => {
+                console.log("order page lang subscription");
                 this.showAlert("Notice", `${message1}\n${message2}`, "OK");
                 this.router.navigate(["/tabs/cart"]);
               });
@@ -322,7 +359,9 @@ export class OrderPage implements OnInit, OnDestroy {
           .get(message, {
             value: this.getProductName(resp.product)
           })
+          .pipe(takeUntil(this.unsubscribe$))
           .subscribe((message1: string) => {
+            console.log("order page lang subscription");
             this.showAlert("Notice", message1, "OK");
             this.router.navigate(["/tabs/cart"]);
           });
@@ -347,25 +386,32 @@ export class OrderPage implements OnInit, OnDestroy {
   }
 
   showAlert(header, message, button) {
-    this.translator.get([header, message, button]).subscribe((dict) => {
-      this.alert
-        .create({
-          header: dict[header],
-          message: dict[message],
-          buttons: [dict[button]]
-        })
-        .then((alert) => alert.present());
-    });
+    this.translator
+      .get([header, message, button])
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((dict) => {
+        console.log("order page lang subscription");
+        this.alert
+          .create({
+            header: dict[header],
+            message: dict[message],
+            buttons: [dict[button]]
+          })
+          .then((alert) => alert.present());
+      });
   }
 
   getOrderFromCartItemGroup(cartItemGroup: Order.CartItemGroupInterface) {
+    console.log("getOrderFromCartItemGroup");
     return new Promise((resolve, reject) => {
       const merchantId = cartItemGroup.merchantId;
       this.api
         .get(`Merchants/G/${merchantId}`)
         .then((observable) => {
-          observable.subscribe(
-            (resp: { code: string; data: MerchantInterface }) => {
+          observable
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((resp: { code: string; data: MerchantInterface }) => {
+              console.log("order page merchant subscription");
               const merchant = resp.data;
               if (merchant && this.account) {
                 resolve(
@@ -388,8 +434,7 @@ export class OrderPage implements OnInit, OnDestroy {
                   account: this.account
                 });
               }
-            }
-          );
+            });
         })
         .catch((e) => reject(e));
     });
@@ -451,7 +496,8 @@ export class OrderPage implements OnInit, OnDestroy {
         merchantNames: orders.map((order) => order.merchantName)
       })
       .then((observable) => {
-        observable.subscribe((resp: any) => {
+        observable.pipe(takeUntil(this.unsubscribe$)).subscribe((resp: any) => {
+          console.log("order page pay by snappay subscription");
           if (resp.err === PaymentError.NONE) {
             this.cartSubscription.unsubscribe();
             this.cartSvc.clearCart();

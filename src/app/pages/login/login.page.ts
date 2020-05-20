@@ -1,22 +1,24 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ApiService } from "src/app/services/api/api.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 import { AlertController } from "@ionic/angular";
 import { AuthService } from "src/app/services/auth/auth.service";
-
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 @Component({
   selector: "app-login",
   templateUrl: "./login.page.html",
   styleUrls: ["./login.page.scss"]
 })
-export class LoginPage implements OnInit {
+export class LoginPage implements OnInit, OnDestroy {
   isOtpSent: boolean;
   failedCount: number;
   processing: boolean;
   phone: string;
   otp: string;
   returnUrl: string;
+  private unsubscribe$ = new Subject<void>();
   constructor(
     private api: ApiService,
     private route: ActivatedRoute,
@@ -33,20 +35,28 @@ export class LoginPage implements OnInit {
     this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "/";
   }
 
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   handleSendVerificationCode() {
     this.api
       .post("Accounts/sendOTPCode", {
         phone: this.phone
       })
       .then((observable) => {
-        observable.subscribe((resp: { code: string; message?: string }) => {
-          if (resp.code === "success") {
-            this.showAlert("Notice", "Verification code sent", "OK");
-          } else {
-            this.showAlert("Notice", "Verification code was not sent", "OK");
-          }
-          this.processing = false;
-        });
+        observable
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe((resp: { code: string; message?: string }) => {
+            console.log("login page send otp code subscription");
+            if (resp.code === "success") {
+              this.showAlert("Notice", "Verification code sent", "OK");
+            } else {
+              this.showAlert("Notice", "Verification code was not sent", "OK");
+            }
+            this.processing = false;
+          });
       });
   }
 
@@ -57,36 +67,43 @@ export class LoginPage implements OnInit {
         verificationCode: this.otp
       })
       .then((observable) => {
-        observable.subscribe((resp: { code: string; token: string }) => {
-          if (resp.code === "success") {
-            this.authSvc.login(resp.token).then((account) => {
-              if (account) {
-                if (this.returnUrl) {
-                  this.router.navigate([this.returnUrl]);
+        observable
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe((resp: { code: string; token: string }) => {
+            console.log("login page loginbyphone subscription");
+            if (resp.code === "success") {
+              this.authSvc.login(resp.token).then((account) => {
+                if (account) {
+                  if (this.returnUrl) {
+                    this.router.navigate([this.returnUrl]);
+                  } else {
+                    this.router.navigate(["/tabs/browse"]);
+                  }
                 } else {
-                  this.router.navigate(["/tabs/browse"]);
+                  this.showAlert("Notice", "Login failed", "OK");
                 }
-              } else {
-                this.showAlert("Notice", "Login failed", "OK");
-              }
-            });
-          } else {
-            this.showAlert("Notice", "Login failed", "OK");
-          }
-        });
+              });
+            } else {
+              this.showAlert("Notice", "Login failed", "OK");
+            }
+          });
       });
   }
 
   showAlert(header, message, button) {
-    this.translator.get([header, message, button]).subscribe((dict) => {
-      this.alert
-        .create({
-          header: dict[header],
-          message: dict[message],
-          buttons: [dict[button]]
-        })
-        .then((alert) => alert.present());
-    });
+    this.translator
+      .get([header, message, button])
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((dict) => {
+        console.log("login page lang subscription");
+        this.alert
+          .create({
+            header: dict[header],
+            message: dict[message],
+            buttons: [dict[button]]
+          })
+          .then((alert) => alert.present());
+      });
   }
 
   isValidPhoneNumber() {

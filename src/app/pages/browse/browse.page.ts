@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 import { LocationInterface } from "src/app/models/location.model";
 import { LocationService } from "src/app/services/location/location.service";
@@ -9,12 +9,14 @@ import { CategoryInterface } from "src/app/models/category.model";
 import { ProductInterface } from "src/app/models/product.model";
 import { getPictureUrl } from "src/app/models/product.model";
 import { SeoService } from "src/app/services/seo/seo.service";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 @Component({
   selector: "app-browse",
   templateUrl: "./browse.page.html",
   styleUrls: ["./browse.page.scss"]
 })
-export class BrowsePage implements OnInit {
+export class BrowsePage implements OnInit, OnDestroy {
   location: LocationInterface;
   viewMode: "segment" | "category-only";
   viewSegment: string;
@@ -29,6 +31,7 @@ export class BrowsePage implements OnInit {
   categoryDisplayLimit = 10;
   scrollDisabled: boolean;
   outofRange: boolean;
+  private unsubscribe$ = new Subject<void>();
   constructor(
     private loc: LocationService,
     private alert: AlertController,
@@ -50,38 +53,54 @@ export class BrowsePage implements OnInit {
   }
   ngOnInit() {
     this.seo.setDefaultSeo();
-    this.loc.getLocation().subscribe((location: LocationInterface) => {
-      this.location = location;
-      this.getAvailableMerchantIds().then(() => {
-        this.api.get("Categories/G").then((observable) => {
-          observable.subscribe((resp: { code: string; data: Array<any> }) => {
-            if (resp.code === "success") {
-              this.categories = resp.data;
-              this.loadData(null);
-            } else {
-              this.loading = false;
-            }
+    this.loc
+      .getLocation()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((location: LocationInterface) => {
+        console.log("browse page location susbscription");
+        this.location = location;
+        this.getAvailableMerchantIds().then(() => {
+          this.api.get("Categories/G").then((observable) => {
+            observable
+              .pipe(takeUntil(this.unsubscribe$))
+              .subscribe((resp: { code: string; data: Array<any> }) => {
+                console.log("browse page category subscription");
+                if (resp.code === "success") {
+                  this.categories = resp.data;
+                  this.loadData(null);
+                } else {
+                  this.loading = false;
+                }
+              });
           });
         });
       });
-    });
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   showAlert() {
     const header = "Notice";
     const message = "Please select delivery address";
     const button = "OK";
-    this.translator.get([header, message, button]).subscribe((dict) => {
-      this.alert
-        .create({
-          header: dict[header],
-          message: dict[message],
-          buttons: [dict[button]]
-        })
-        .then((alert) => {
-          alert.present();
-        });
-    });
+    this.translator
+      .get([header, message, button])
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((dict) => {
+        console.log("browse page language subscription");
+        this.alert
+          .create({
+            header: dict[header],
+            message: dict[message],
+            buttons: [dict[button]]
+          })
+          .then((alert) => {
+            alert.present();
+          });
+      });
   }
 
   handleSearch(event) {
@@ -165,22 +184,25 @@ export class BrowsePage implements OnInit {
           lng: this.location.lng
         })
         .then((observable) => {
-          observable.subscribe((resp: { code: string; data: any }) => {
-            if (resp.code === "success") {
-              this.api
-                .geth("MerchantSchedules/availableMerchants", {
-                  areaId: resp.data._id
-                })
-                .then((merchantIds: Array<string>) => {
-                  this.availableMerchantIds = merchantIds;
-                  resolve(merchantIds);
-                });
-            } else {
-              this.outofRange = true;
-              this.availableMerchantIds = [];
-              resolve([]);
-            }
-          });
+          observable
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((resp: { code: string; data: any }) => {
+              console.log("browse page get areas subscription");
+              if (resp.code === "success") {
+                this.api
+                  .geth("MerchantSchedules/availableMerchants", {
+                    areaId: resp.data._id
+                  })
+                  .then((merchantIds: Array<string>) => {
+                    this.availableMerchantIds = merchantIds;
+                    resolve(merchantIds);
+                  });
+              } else {
+                this.outofRange = true;
+                this.availableMerchantIds = [];
+                resolve([]);
+              }
+            });
         })
         .catch((e) => {
           this.outofRange = true;

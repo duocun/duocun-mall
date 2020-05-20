@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { AuthService } from "src/app/services/auth/auth.service";
 import { AccountInterface } from "src/app/models/account.model";
 import { ApiService } from "src/app/services/api/api.service";
@@ -10,18 +10,21 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { CartService } from "src/app/services/cart/cart.service";
 import { environment } from "src/environments/environment";
 import { Storage } from "@ionic/storage";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 @Component({
   selector: "app-account-setting",
   templateUrl: "./account-setting.page.html",
   styleUrls: ["./account-setting.page.scss"]
 })
-export class AccountSettingPage implements OnInit {
+export class AccountSettingPage implements OnInit, OnDestroy {
   account: AccountInterface;
   model: AccountInterface;
   location: LocationInterface;
   redirectUrl: string;
   saveLocation: boolean;
   processing: boolean;
+  private unsubscribe$ = new Subject<void>();
   constructor(
     private authSvc: AuthService,
     private api: ApiService,
@@ -39,11 +42,15 @@ export class AccountSettingPage implements OnInit {
   }
 
   ngOnInit() {
-    this.authSvc.getAccount().subscribe((account) => {
-      this.account = account;
-      this.model = { ...account };
-      this.model.verificationCode = "";
-    });
+    this.authSvc
+      .getAccount()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((account) => {
+        console.log("account setting page account subscription");
+        this.account = account;
+        this.model = { ...account };
+        this.model.verificationCode = "";
+      });
     this.storage
       .get(environment.storageKey.location)
       .then((location: LocationInterface) => {
@@ -53,12 +60,24 @@ export class AccountSettingPage implements OnInit {
           this.saveLocation = false;
         }
       });
-    this.loc.getLocation().subscribe((location: LocationInterface) => {
-      this.location = location;
-    });
-    this.route.queryParams.subscribe((params) => {
-      this.redirectUrl = params.redirectUrl || "";
-    });
+    this.loc
+      .getLocation()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((location: LocationInterface) => {
+        console.log("account setting page location subscription");
+        this.location = location;
+      });
+    this.route.queryParams
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((params) => {
+        console.log("account setting page query param subscription");
+        this.redirectUrl = params.redirectUrl || "";
+      });
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   handleSave() {
@@ -78,14 +97,21 @@ export class AccountSettingPage implements OnInit {
           code: this.model.verificationCode
         })
         .then((observable) => {
-          observable.subscribe((resp: { code: string }) => {
-            if (resp.code === "success") {
-              this.saveProfile();
-            } else {
-              this.showAlert("Notice", "Please verify your phone number", "OK");
-            }
-            this.processing = false;
-          });
+          observable
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((resp: { code: string }) => {
+              console.log("account setting page verify code subscription");
+              if (resp.code === "success") {
+                this.saveProfile();
+              } else {
+                this.showAlert(
+                  "Notice",
+                  "Please verify your phone number",
+                  "OK"
+                );
+              }
+              this.processing = false;
+            });
         })
         .finally(() => {
           this.processing = false;
@@ -99,13 +125,18 @@ export class AccountSettingPage implements OnInit {
         phone: this.model.phone
       })
       .then((observable) => {
-        observable.subscribe((resp: { code: string; message?: string }) => {
-          if (resp.code === "success") {
-            this.showAlert("Notice", "Verification code sent", "OK");
-          } else {
-            this.showAlert("Notice", "Verification code was not sent", "OK");
-          }
-        });
+        observable
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe((resp: { code: string; message?: string }) => {
+            console.log(
+              "account setting page send verification code subscription"
+            );
+            if (resp.code === "success") {
+              this.showAlert("Notice", "Verification code sent", "OK");
+            } else {
+              this.showAlert("Notice", "Verification code was not sent", "OK");
+            }
+          });
       });
   }
 
@@ -116,15 +147,18 @@ export class AccountSettingPage implements OnInit {
         lng: this.location.lng
       })
       .then((observable) => {
-        observable.subscribe((resp: { code: string; data: any }) => {
-          if (resp.code !== "success") {
-            this.showAlert(
-              "Notice",
-              "Your address is out of delivery range",
-              "OK"
-            );
-          }
-        });
+        observable
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe((resp: { code: string; data: any }) => {
+            console.log("account setting page area subscription");
+            if (resp.code !== "success") {
+              this.showAlert(
+                "Notice",
+                "Your address is out of delivery range",
+                "OK"
+              );
+            }
+          });
       });
   }
 
@@ -135,14 +169,16 @@ export class AccountSettingPage implements OnInit {
         secondPhone: this.model.secondPhone
       })
       .then((observable) => {
-        observable.subscribe((resp: { code: string }) => {
-          this.processing = false;
-          if (resp.code === "success") {
-            this.handleSaveProfileSuccess();
-          } else {
-            this.showAlert("Notice", "Save failed", "OK");
-          }
-        });
+        observable
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe((resp: { code: string }) => {
+            this.processing = false;
+            if (resp.code === "success") {
+              this.handleSaveProfileSuccess();
+            } else {
+              this.showAlert("Notice", "Save failed", "OK");
+            }
+          });
       })
       .catch((e) => {
         console.error(e);
@@ -157,15 +193,18 @@ export class AccountSettingPage implements OnInit {
   }
 
   showAlert(header, message, button) {
-    this.translator.get([header, message, button]).subscribe((dict) => {
-      this.alert
-        .create({
-          header: dict[header],
-          message: dict[message],
-          buttons: [dict[button]]
-        })
-        .then((alert) => alert.present());
-    });
+    this.translator
+      .get([header, message, button])
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((dict) => {
+        this.alert
+          .create({
+            header: dict[header],
+            message: dict[message],
+            buttons: [dict[button]]
+          })
+          .then((alert) => alert.present());
+      });
   }
 
   handleLocationSelect(event: {

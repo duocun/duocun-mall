@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ApiService } from "src/app/services/api/api.service";
 import { ProductInterface, getPictureUrl } from "src/app/models/product.model";
@@ -16,6 +16,8 @@ import { DeliveryDateTimeInterface } from "src/app/models/delivery.model";
 import { AlertController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import * as moment from "moment-timezone";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 const baseTimeList = ["11:00"];
 export const AppType = {
@@ -29,7 +31,7 @@ export const AppType = {
   templateUrl: "./product.page.html",
   styleUrls: ["./product.page.scss"]
 })
-export class ProductPage implements OnInit {
+export class ProductPage implements OnInit, OnDestroy {
   loading: boolean;
   merchant: MerchantInterface;
   product: ProductInterface;
@@ -40,6 +42,7 @@ export class ProductPage implements OnInit {
   isInRange: boolean;
   schedules: Array<DeliveryDateTimeInterface>;
   deliveryIdx: number; // schedule index
+  private unsubscribe$ = new Subject<void>();
   constructor(
     private route: ActivatedRoute,
     private api: ApiService,
@@ -58,82 +61,105 @@ export class ProductPage implements OnInit {
   }
 
   ngOnInit() {
-    this.locationSvc.getLocation().subscribe((location: LocationInterface) => {
-      this.location = location;
-      if (this.location === null) {
-        this.showAlert("Notice", "Please select delivery address", "OK");
-        this.router.navigate(["/tabs/my-account/setting"], {
-          queryParams: { redirectUrl: this.router.url }
-        });
-      }
-    });
+    this.locationSvc
+      .getLocation()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((location: LocationInterface) => {
+        console.log("product page location subscription");
+        this.location = location;
+        if (this.location === null) {
+          this.showAlert("Notice", "Please select delivery address", "OK");
+          this.router.navigate(["/tabs/my-account/setting"], {
+            queryParams: { redirectUrl: this.router.url }
+          });
+        }
+      });
     this.cartSvc.getCart().subscribe((cart: CartInterface) => {
       this.cart = cart;
     });
     this.updateData();
   }
 
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   updateData() {
-    this.route.params.subscribe((params: { id: string }) => {
-      const productId = params.id;
-      this.api.get(`products/${productId}`).then((observable) => {
-        observable.subscribe((data: ProductInterface) => {
-          if (data) {
-            this.product = data;
-            this.setIsInStock();
-            this.api
-              .geth(
-                "Restaurants/qFind",
-                { _id: data.merchantId },
-                true,
-                "filter"
-              )
-              .then((merchants: Array<MerchantInterface>) => {
-                this.merchant = merchants[0];
-                const orderEndList = this.merchant.rules.map((r) => r.orderEnd);
-                if (this.merchant) {
-                  this.item = {
-                    productId: this.product._id,
-                    productName: this.product.name,
-                    merchantId: this.merchant._id,
-                    merchantName: this.merchant.name,
-                    price: this.product.price,
-                    cost: this.product.cost,
-                    quantity: 0,
-                    product: this.product
-                  };
-                  this.api
-                    .get("MerchantSchedules/availables-v2", {
-                      merchantId: data.merchantId,
-                      location: JSON.stringify(this.location)
-                    })
-                    .then((observable) => {
-                      observable.subscribe((schedules: any[]) => {
-                        if (schedules && schedules.length > 0) {
-                          this.isInRange = true;
-                          const dows = schedules[0].rules.map(
-                            (r) => +r.deliver.dow
-                          );
-                          const bs = this.getBaseDateList(orderEndList, dows);
-                          this.getDeliverySchedule(
-                            this.merchant,
-                            bs,
-                            baseTimeList
-                          );
-                        } else {
-                          this.isInRange = false;
-                          this.loading = false;
-                        }
-                      });
-                    });
-                }
-              });
-          } else {
-            this.loading = false;
-          }
+    this.route.params
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((params: { id: string }) => {
+        console.log("product page route param subscription");
+        const productId = params.id;
+        this.api.get(`products/${productId}`).then((observable) => {
+          observable
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((data: ProductInterface) => {
+              console.log("product page product subscription");
+              if (data) {
+                this.product = data;
+                this.setIsInStock();
+                this.api
+                  .geth(
+                    "Restaurants/qFind",
+                    { _id: data.merchantId },
+                    true,
+                    "filter"
+                  )
+                  .then((merchants: Array<MerchantInterface>) => {
+                    this.merchant = merchants[0];
+                    const orderEndList = this.merchant.rules.map(
+                      (r) => r.orderEnd
+                    );
+                    if (this.merchant) {
+                      this.item = {
+                        productId: this.product._id,
+                        productName: this.product.name,
+                        merchantId: this.merchant._id,
+                        merchantName: this.merchant.name,
+                        price: this.product.price,
+                        cost: this.product.cost,
+                        quantity: 0,
+                        product: this.product
+                      };
+                      this.api
+                        .get("MerchantSchedules/availables-v2", {
+                          merchantId: data.merchantId,
+                          location: JSON.stringify(this.location)
+                        })
+                        .then((observable) => {
+                          observable
+                            .pipe(takeUntil(this.unsubscribe$))
+                            .subscribe((schedules: any[]) => {
+                              console.log("product page schedule subscription");
+                              if (schedules && schedules.length > 0) {
+                                this.isInRange = true;
+                                const dows = schedules[0].rules.map(
+                                  (r) => +r.deliver.dow
+                                );
+                                const bs = this.getBaseDateList(
+                                  orderEndList,
+                                  dows
+                                );
+                                this.getDeliverySchedule(
+                                  this.merchant,
+                                  bs,
+                                  baseTimeList
+                                );
+                              } else {
+                                this.isInRange = false;
+                                this.loading = false;
+                              }
+                            });
+                        });
+                    }
+                  });
+              } else {
+                this.loading = false;
+              }
+            });
         });
       });
-    });
   }
 
   setIsInStock() {
@@ -229,6 +255,7 @@ export class ProductPage implements OnInit {
   }
 
   getDeliverySchedule(merchant, baseList, deliverTimeList) {
+    console.log("getDeliverySchedule");
     this.api
       .get("Merchants/G/deliverSchedules", {
         merchantId: this.merchant._id,
@@ -237,15 +264,21 @@ export class ProductPage implements OnInit {
         dt: moment().format("YYYY-MM-DDTHH:mm:ss")
       })
       .then((observable) =>
-        observable.subscribe(
-          (resp: { code: string; data: Array<DeliveryDateTimeInterface> }) => {
-            if (resp.code === "success") {
-              this.schedules = resp.data;
-              // this.initItems();
+        observable
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe(
+            (resp: {
+              code: string;
+              data: Array<DeliveryDateTimeInterface>;
+            }) => {
+              console.log("product page schedule subscription");
+              if (resp.code === "success") {
+                this.schedules = resp.data;
+                // this.initItems();
+              }
+              this.loading = false;
             }
-            this.loading = false;
-          }
-        )
+          )
       );
   }
 
@@ -260,21 +293,25 @@ export class ProductPage implements OnInit {
   // }
 
   showAlert(header, message, button, callback?: any) {
-    this.translator.get([header, message, button]).subscribe((dict) => {
-      this.alert
-        .create({
-          header: dict[header],
-          message: dict[message],
-          buttons: callback
-            ? [
-                {
-                  text: dict[button],
-                  handler: callback
-                }
-              ]
-            : [dict[button]]
-        })
-        .then((alert) => alert.present());
-    });
+    this.translator
+      .get([header, message, button])
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((dict) => {
+        console.log("product page lang subscription");
+        this.alert
+          .create({
+            header: dict[header],
+            message: dict[message],
+            buttons: callback
+              ? [
+                  {
+                    text: dict[button],
+                    handler: callback
+                  }
+                ]
+              : [dict[button]]
+          })
+          .then((alert) => alert.present());
+      });
   }
 }

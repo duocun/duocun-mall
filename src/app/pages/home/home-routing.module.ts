@@ -51,7 +51,6 @@ const routes: Routes = [
   },
   {
     path: "page",
-    component: HomePage,
     loadChildren: () =>
       import("../static-page/static-page.module").then(
         (m) => m.StaticPageModule
