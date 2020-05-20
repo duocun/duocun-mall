@@ -9,6 +9,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { ContextService } from "src/app/services/context/context.service";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+
 @Component({
   selector: "app-home",
   templateUrl: "./home.page.html",
@@ -33,11 +34,13 @@ export class HomePage implements OnInit, OnDestroy {
     private alert: AlertController,
     private translator: TranslateService,
     private context: ContextService
-  ) {}
+  ) {
+    
+  }
 
   ngOnInit() {
     this.redirecting = true;
-    this.handleQueryParams();
+    // this.handleQueryParams();
     this.initCart();
   }
 
@@ -48,7 +51,7 @@ export class HomePage implements OnInit, OnDestroy {
 
   handleQueryParams() {
     this.route.queryParamMap
-      .pipe(takeUntil(this.unsubscribe$))
+      // .pipe(takeUntil(this.unsubscribe$))
       .subscribe((paramAsMap: ParamMap) => {
         console.log("home page query param subscription");
         this.clientId = paramAsMap.get("cid");
@@ -82,26 +85,28 @@ export class HomePage implements OnInit, OnDestroy {
       });
   }
 
-  initAccount(params: ParamMap) {
+  async initAccount(params: ParamMap) {
     const tokenId: string = params.get("token");
+    console.log("token", tokenId);
     const appCode = params.get("state") || "123"; // code for grocery
     if (appCode) {
       this.context.set("appCode", appCode);
     }
     if (!tokenId) {
-      this.authSvc.getToken().then((tokenId) => {
+      this.authSvc.getToken().then(async (tokenId) => {
         if (tokenId) {
-          this.authSvc.login(tokenId);
+          console.log("login");
+          await this.authSvc.login(tokenId);
         }
       });
     } else {
-      this.authSvc.login(tokenId);
+      console.log("login");
+      await this.authSvc.login(tokenId);
     }
     this.authSvc
       .getAccount()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((account) => {
-        console.log("home page account subscription");
         this.account = account;
       });
     // this.authSvc.authState.subscribe((isLoggedIn: boolean) => {

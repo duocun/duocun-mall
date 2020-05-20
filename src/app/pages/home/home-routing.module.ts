@@ -41,11 +41,6 @@ const routes: Routes = [
           import("../register/register.module").then(
             (m) => m.RegisterPageModule
           )
-      },
-      {
-        path: "",
-        redirectTo: "tabs/browse",
-        pathMatch: "full"
       }
     ]
   },
@@ -55,11 +50,6 @@ const routes: Routes = [
       import("../static-page/static-page.module").then(
         (m) => m.StaticPageModule
       )
-  },
-  {
-    path: "",
-    redirectTo: "tabs/browse",
-    pathMatch: "full"
   }
 ];
 

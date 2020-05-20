@@ -6,18 +6,38 @@ import { StatusBar } from "@ionic-native/status-bar/ngx";
 import { TranslateService } from "@ngx-translate/core";
 import { Storage } from "@ionic/storage";
 import { environment } from "src/environments/environment";
+import { AccountInterface } from "src/app/models/account.model";
+import * as queryString from "query-string";
+import { ActivatedRoute, Router } from "@angular/router";
+import { AuthService } from "src/app/services/auth/auth.service";
+import { AlertController } from "@ionic/angular";
+import { ContextService } from "src/app/services/context/context.service";
+
 @Component({
   selector: "app-root",
   templateUrl: "app.component.html",
   styleUrls: ["app.component.scss"]
 })
 export class AppComponent {
+  clientId: string;
+  page: string;
+  /**
+   * prevents permanent redirecting
+   * Ionic tab routing does not clear query params
+   */
+  redirecting: boolean;
+  account: AccountInterface;
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private translator: TranslateService,
-    private stroage: Storage
+    private stroage: Storage,
+    private route: ActivatedRoute,
+    private router: Router,
+    private authSvc: AuthService,
+    private alert: AlertController,
+    private context: ContextService
   ) {
     this.initializeApp();
     this.stroage.get(environment.storageKey.lang).then((lang: any) => {
@@ -31,9 +51,83 @@ export class AppComponent {
   }
 
   initializeApp() {
+    this.redirecting = true;
+    this.handleQueryParams();
+    console.log(queryString.parse(location.search));
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
+  }
+
+  handleQueryParams() {
+    const paramAsMap = queryString.parse(location.search);
+    console.log("paramAsMap", paramAsMap);
+    console.log("home page query param subscription");
+    this.clientId = `${paramAsMap["cid"] || ""}`;
+    this.page = `${paramAsMap["p"] || ""}`;
+    if (this.redirecting) {
+      this.redirecting = !this.redirecting;
+      switch (this.page) {
+        case "b":
+          this.handleCreditByWeChat(paramAsMap);
+          break;
+        case "h":
+          this.handleWeChatPay(paramAsMap);
+          break;
+        default:
+          this.initAccount(paramAsMap);
+          break;
+      }
+    } else {
+      this.initAccount(paramAsMap);
+    }
+  }
+  async handleCreditByWeChat(params: object) {
+    if (this.clientId) {
+      // trusting clientId from query param is dangerous
+      // a mailcious attacker can impersonate other user with acquired clientId
+    } else {
+      await this.authSvc.updateData();
+      this.router.navigate(["/tabs/my-account/transaction-history"]);
+    }
+  }
+
+  async handleWeChatPay(params: object) {
+    if (this.clientId) {
+      // trusting clientId from query param is dangerous
+      // a mailcious attacker can impersonate other user with acquired clientId
+    } else {
+      await this.authSvc.updateData();
+      this.router.navigate(["/tabs/my-account/order-history"]);
+    }
+  }
+
+  async initAccount(params: object) {
+    const tokenId: string = params["token"] || "";
+    console.log("token", tokenId);
+    const appCode = params["state"] || "123"; // code for grocery
+    if (appCode) {
+      this.context.set("appCode", appCode);
+    }
+    if (!tokenId) {
+      this.authSvc.getToken().then(async (tokenId) => {
+        if (tokenId) {
+          console.log("login");
+          await this.authSvc.login(tokenId);
+        }
+      });
+    } else {
+      console.log("login");
+      await this.authSvc.login(tokenId);
+    }
+    this.authSvc.getAccount().subscribe((account) => {
+      this.account = account;
+    });
+    // this.authSvc.authState.subscribe((isLoggedIn: boolean) => {
+    //   if (!isLoggedIn) {
+    //     this.showAlert("Notice", "Login failed", "OK");
+    //   }
+    // });
   }
 }
