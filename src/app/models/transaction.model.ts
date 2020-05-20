@@ -114,7 +114,11 @@ export function getTransactionDescription(
       const item = order.items[0];
       const productName =
         lang === "en" ? (item.nameEN ? item.nameEN : item.name) : item.name;
-      return productName + (lang === "en" ? " etc." : " 等");
+      if (order.items.length && order.items.length > 1) {
+        return productName + (lang === "en" ? " etc." : " 等");
+      } else {
+        return productName;
+      }
     } else {
       return t.note ? t.note : "";
     }
