@@ -8,6 +8,7 @@ import { PricePipeModule } from "src/app/pipes/price/price.module";
 import { IonImageModule } from "src/app/components/ion-image/ion-image.module";
 import { IonicStorageModule } from "@ionic/storage";
 import { RouterModule } from "@angular/router";
+import { FooterModule } from "src/app/components/footer/footer.module";
 
 describe("MyAccountPage", () => {
   let component: MyAccountPage;
@@ -23,7 +24,8 @@ describe("MyAccountPage", () => {
         PricePipeModule,
         IonImageModule,
         IonicStorageModule.forRoot(),
-        RouterModule.forRoot([])
+        RouterModule.forRoot([]),
+        FooterModule
       ]
     }).compileComponents();
 

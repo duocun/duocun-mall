@@ -8,6 +8,7 @@ import { IonicStorageModule } from "@ionic/storage";
 import { FormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { LocationSearchModule } from "src/app/components/location-search/location-search.module";
+import { FooterModule } from "src/app/components/footer/footer.module";
 
 describe("AccountSettingPage", () => {
   let component: AccountSettingPage;
@@ -23,7 +24,8 @@ describe("AccountSettingPage", () => {
         IonicStorageModule.forRoot(),
         FormsModule,
         RouterModule.forRoot([]),
-        LocationSearchModule
+        LocationSearchModule,
+        FooterModule
       ]
     }).compileComponents();
 

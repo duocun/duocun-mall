@@ -12,7 +12,7 @@ import { FormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { environment } from "src/environments/environment";
 import { StripeModule } from "stripe-angular";
-import { FooterModule } from 'src/app/components/footer/footer.module';
+import { FooterModule } from "src/app/components/footer/footer.module";
 
 describe("OrderPage", () => {
   let component: OrderPage;

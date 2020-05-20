@@ -12,6 +12,7 @@ import { PricePipeModule } from "src/app/pipes/price/price.module";
 import { MomentPipeModule } from "src/app/pipes/moment/moment.module";
 import { DetailComponent } from "./detail/detail.component";
 import { LocalValueDirectiveModule } from "src/app/directives/local-value.module";
+import { FooterModule } from "src/app/components/footer/footer.module";
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import { LocalValueDirectiveModule } from "src/app/directives/local-value.module
     TranslateModule.forChild(),
     PricePipeModule,
     MomentPipeModule,
-    LocalValueDirectiveModule
+    LocalValueDirectiveModule,
+    FooterModule
   ],
   declarations: [TransactionHistoryPage, DetailComponent]
 })

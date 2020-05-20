@@ -16,7 +16,7 @@ import { MerchantListComponent } from "./merchant-list/merchant-list.component";
 import { ProductListModule } from "src/app/components/product-list/product-list.module";
 import { CategoryListModule } from "./category-list/category-list.module";
 import { LanguageButtonModule } from "src/app/components/language-button/language-button.module";
-import { FooterModule } from 'src/app/components/footer/footer.module';
+import { FooterModule } from "src/app/components/footer/footer.module";
 
 @NgModule({
   imports: [

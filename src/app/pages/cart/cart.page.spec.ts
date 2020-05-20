@@ -12,6 +12,7 @@ import { TouchspinModule } from "src/app/components/touchspin/touchspin.module";
 import { IonicStorageModule } from "@ionic/storage";
 import { HttpClientModule } from "@angular/common/http";
 import { SideMenuModule } from "src/app/components/side-menu/side-menu.module";
+import { FooterModule } from "src/app/components/footer/footer.module";
 
 describe("CartPage", () => {
   let component: CartPage;
@@ -31,7 +32,8 @@ describe("CartPage", () => {
         TouchspinModule,
         IonicStorageModule.forRoot(),
         HttpClientModule,
-        SideMenuModule
+        SideMenuModule,
+        FooterModule
       ]
     }).compileComponents();
 

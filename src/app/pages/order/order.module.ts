@@ -13,7 +13,7 @@ import { MomentPipeModule } from "src/app/pipes/moment/moment.module";
 import { PricePipeModule } from "src/app/pipes/price/price.module";
 import { StripeModule } from "stripe-angular";
 import { environment } from "src/environments/environment";
-import { FooterModule } from 'src/app/components/footer/footer.module';
+import { FooterModule } from "src/app/components/footer/footer.module";
 
 @NgModule({
   imports: [

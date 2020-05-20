@@ -11,7 +11,7 @@ import { TouchspinModule } from "src/app/components/touchspin/touchspin.module";
 import { PricePipeModule } from "src/app/pipes/price/price.module";
 import { TranslateModule } from "@ngx-translate/core";
 import { MomentPipeModule } from "src/app/pipes/moment/moment.module";
-import { FooterModule } from 'src/app/components/footer/footer.module';
+import { FooterModule } from "src/app/components/footer/footer.module";
 
 describe("ProductPage", () => {
   let component: ProductPage;

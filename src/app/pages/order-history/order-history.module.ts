@@ -11,6 +11,7 @@ import { TranslateModule } from "@ngx-translate/core";
 import { PricePipeModule } from "src/app/pipes/price/price.module";
 import { LocalValueDirectiveModule } from "src/app/directives/local-value.module";
 import { MomentPipeModule } from "src/app/pipes/moment/moment.module";
+import { FooterModule } from "src/app/components/footer/footer.module";
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { MomentPipeModule } from "src/app/pipes/moment/moment.module";
     TranslateModule.forChild(),
     PricePipeModule,
     LocalValueDirectiveModule,
-    MomentPipeModule
+    MomentPipeModule,
+    FooterModule
   ],
   declarations: [OrderHistoryPage]
 })

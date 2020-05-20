@@ -9,6 +9,7 @@ import { MomentPipeModule } from "src/app/pipes/moment/moment.module";
 import { PricePipeModule } from "src/app/pipes/price/price.module";
 import { RouterModule } from "@angular/router";
 import { LocalValueDirectiveModule } from "src/app/directives/local-value.module";
+import { FooterModule } from "src/app/components/footer/footer.module";
 
 describe("TransactionHistoryPage", () => {
   let component: TransactionHistoryPage;
@@ -25,7 +26,8 @@ describe("TransactionHistoryPage", () => {
         MomentPipeModule,
         PricePipeModule,
         RouterModule.forRoot([]),
-        LocalValueDirectiveModule
+        LocalValueDirectiveModule,
+        FooterModule
       ]
     }).compileComponents();
 

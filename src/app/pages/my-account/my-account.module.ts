@@ -10,6 +10,7 @@ import { MyAccountPage } from "./my-account.page";
 import { TranslateModule } from "@ngx-translate/core";
 import { IonImageModule } from "src/app/components/ion-image/ion-image.module";
 import { PricePipeModule } from "src/app/pipes/price/price.module";
+import { FooterModule } from "src/app/components/footer/footer.module";
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { PricePipeModule } from "src/app/pipes/price/price.module";
     MyAccountPageRoutingModule,
     TranslateModule.forChild(),
     IonImageModule,
-    PricePipeModule
+    PricePipeModule,
+    FooterModule
   ],
   declarations: [MyAccountPage]
 })

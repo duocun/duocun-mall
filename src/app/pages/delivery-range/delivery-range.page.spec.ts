@@ -7,6 +7,7 @@ import { TranslateModule } from "@ngx-translate/core";
 import { AgmCoreModule } from "@agm/core";
 import { IonicStorageModule } from "@ionic/storage";
 import { RouterModule } from "@angular/router";
+import { FooterModule } from "src/app/components/footer/footer.module";
 
 describe("DeliveryRangePage", () => {
   let component: DeliveryRangePage;
@@ -21,7 +22,8 @@ describe("DeliveryRangePage", () => {
         TranslateModule.forRoot(),
         AgmCoreModule.forRoot(),
         IonicStorageModule.forRoot(),
-        RouterModule.forRoot([])
+        RouterModule.forRoot([]),
+        FooterModule
       ]
     }).compileComponents();
 

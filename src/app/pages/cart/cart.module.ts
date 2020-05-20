@@ -13,6 +13,7 @@ import { LocalValueDirectiveModule } from "src/app/directives/local-value.module
 import { PricePipeModule } from "src/app/pipes/price/price.module";
 import { MomentPipeModule } from "src/app/pipes/moment/moment.module";
 import { TouchspinModule } from "src/app/components/touchspin/touchspin.module";
+import { FooterModule } from "src/app/components/footer/footer.module";
 
 @NgModule({
   imports: [
@@ -25,7 +26,8 @@ import { TouchspinModule } from "src/app/components/touchspin/touchspin.module";
     LocalValueDirectiveModule,
     PricePipeModule,
     MomentPipeModule,
-    TouchspinModule
+    TouchspinModule,
+    FooterModule
   ],
   declarations: [CartPage]
 })

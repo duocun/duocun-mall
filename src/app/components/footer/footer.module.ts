@@ -3,7 +3,7 @@ import { CommonModule } from "@angular/common";
 import { IonicModule } from "@ionic/angular";
 import { FooterComponent } from "./footer.component";
 import { RouterModule } from "@angular/router";
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule } from "@ngx-translate/core";
 @NgModule({
   imports: [
     IonicModule,

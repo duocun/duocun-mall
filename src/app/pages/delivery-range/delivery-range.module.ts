@@ -10,6 +10,7 @@ import { DeliveryRangePage } from "./delivery-range.page";
 import { TranslateModule } from "@ngx-translate/core";
 import { AgmCoreModule } from "@agm/core";
 import { environment } from "src/environments/environment";
+import { FooterModule } from "src/app/components/footer/footer.module";
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { environment } from "src/environments/environment";
     TranslateModule.forChild(),
     AgmCoreModule.forRoot({
       apiKey: environment.gmap
-    })
+    }),
+    FooterModule
   ],
   declarations: [DeliveryRangePage]
 })

@@ -9,6 +9,7 @@ import { MomentPipeModule } from "src/app/pipes/moment/moment.module";
 import { HttpClientModule } from "@angular/common/http";
 import { IonicStorageModule } from "@ionic/storage";
 import { RouterModule } from "@angular/router";
+import { FooterModule } from "src/app/components/footer/footer.module";
 
 describe("OrderHistoryPage", () => {
   let component: OrderHistoryPage;
@@ -25,7 +26,8 @@ describe("OrderHistoryPage", () => {
         HttpClientModule,
         IonicStorageModule.forRoot(),
         TranslateModule.forRoot(),
-        RouterModule.forRoot([])
+        RouterModule.forRoot([]),
+        FooterModule
       ]
     }).compileComponents();
 
