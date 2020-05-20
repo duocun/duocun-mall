@@ -1,17 +1,20 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title class="ion-text-center" translate="Home"></ion-title>
-    <ion-buttons slot="end">
-      <language-button></language-button>
-    </ion-buttons>
-  </ion-toolbar>
+  <div class="container">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+      <ion-title class="ion-text-center" translate="Home"></ion-title>
+      <ion-buttons slot="end">
+        <language-button></language-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </div>
 </ion-header>
 
 <ion-content>
-  <ion-searchbar 
+  <div class="container">
+    <ion-searchbar 
     placeholder="{{'Search'|translate}}"
     debounce="1000"
     (ionChange)="handleSearch($event)"
@@ -19,7 +22,7 @@
   ></ion-searchbar>
   <ng-container *ngIf="viewMode === 'category-only'; Else segmentMode">
     <ion-row class="ion-padding-start ion-padding-end ion-margin-bottom">
-      <ion-col size="3" class="ion-nomargin ion-no-padding">
+      <ion-col size-xs="3" size-lg="2" class="ion-nomargin ion-no-padding">
         <ion-button
           [disabled]="loading"
           color="danger"
@@ -30,7 +33,7 @@
         >
         </ion-button>
       </ion-col>
-      <ion-col *ngFor="let category of categories.slice(0,10)" size="3" class="ion-no-margin ion-no-padding">
+      <ion-col *ngFor="let category of categories.slice(0,10)" size-xs="3" size-lg="2" class="ion-no-margin ion-no-padding">
         <ion-button
           [disabled]="loading"
           [color]="selectedCategoryId === category._id ? 'success' : 'light'"
@@ -43,7 +46,7 @@
         >
         </ion-button>
       </ion-col>
-      <ion-col *ngIf="categories.length >= 11" size="3" class="ion-no-margin ion-no-padding">
+      <ion-col *ngIf="categories.length >= 11" size-xs="3" size-lg="2" class="ion-no-margin ion-no-padding">
         <ion-button
           color="tertiary"
           size="small"
@@ -59,7 +62,7 @@
     <ion-row class="ion-padding-start ion-padding-end">
       <ng-container *ngIf="!loading; Else skeleton">
         <ng-container *ngIf="products.length; Else empty">
-          <ion-col size="4" *ngFor="let product of products">
+          <ion-col size-xs="4" size-md="3" size-lg="2" *ngFor="let product of products">
             <ion-card class="ion-no-margin card-product" (click)="onProductClick(product)">
               <ion-card-content>
                 <div class="wrapper-product-img">
@@ -86,6 +89,7 @@
       </ion-infinite-scroll-content>
     </ion-infinite-scroll>
   </ng-container>
+  </div>
 </ion-content>
 
 

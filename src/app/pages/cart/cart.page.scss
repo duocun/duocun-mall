@@ -1,0 +1,13 @@
+.label-product-name {
+  max-width: none!important;
+}
+@media(min-width: 768px) {
+  ion-list {
+    padding-top: 3rem;
+  }
+  ion-button {
+    --padding-top: 1.25rem;
+    --padding-bottom: 1.25rem;
+    font-size: 1rem;
+  }
+}

@@ -1,112 +1,116 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/my-account/transaction-history" text=""></ion-back-button>
-    </ion-buttons>
-    <ion-title translate="Transaction History"></ion-title>
-  </ion-toolbar>
+  <div class="container">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/tabs/my-account/transaction-history" text=""></ion-back-button>
+      </ion-buttons>
+      <ion-title translate="Transaction History"></ion-title>
+    </ion-toolbar>
+  </div>
 </ion-header>
 
 <ion-content>
-  <ng-container *ngIf="!loading; Else skeleton">
-    <ng-container *ngIf="orders.length; Else emptyHistory">
-      <ion-list class="list-order-history">
-        <ion-item *ngFor="let order of orders" class="item-order-history">
-          <ion-row class="w-100 ion-padding">
-            <ion-col size="12">
-              <ion-label>
-                <span translate="Order Code"></span>
-                <span>{{order.code}}</span>
-              </ion-label>
-            </ion-col>
-            <ion-col size="12" *ngIf="order.type === OrderTypes.FOOD_DELIVERY || order.type === OrderTypes.GROCERY">
-              <ion-label>
-                <span translate="Phone Number"></span>
-                <span>{{order.clientPhoneNumber}}</span>
-              </ion-label>
-            </ion-col>
-            <!-- <ion-col size="12">
-              <ion-label>
-                <span translate="Merchant Name"></span>
-                <span localValue [data]="order" key="merchantName"></span>
-              </ion-label>
-            </ion-col> -->
-            <ion-col size="12">
-              <ion-label>
-                <span translate="Order Date"></span>
-                <span>{{order.created|moment:"YYYY-MM-DD ddd"}}</span>
-              </ion-label>
-            </ion-col>
-            <ion-col size="12" *ngIf="order.delivered">
-              <ion-label>
-                <span translate="Delivery Date"></span>
-                <span>{{order.delivered|moment:"YYYY-MM-DD ddd"}}</span>
-              </ion-label>
-            </ion-col>
-            <ion-col size="12" class="border-bottom" *ngIf="order.type === OrderTypes.FOOD_DELIVERY || order.type === OrderTypes.GROCERY">
-              <ion-label>
-                <span translate="Delivery Address"></span>
-                <span>{{order.address}}</span>
-              </ion-label>
-            </ion-col>
-            <ion-col size="12" class="ion-margin-top">
-              <ng-container *ngIf="order.type !== 'MM'">
-                <ion-row *ngFor="let item of order.items">
-                  <ion-col size="7" localValue [data]="item.product" key="name"></ion-col>
-                  <ion-col size="2">&times; {{item.quantity}}</ion-col>
-                  <ion-col size="3">{{item.price|currency:'USD':'symbol'}}</ion-col>
+  <div class="container container-sm">
+    <ng-container *ngIf="!loading; Else skeleton">
+      <ng-container *ngIf="orders.length; Else emptyHistory">
+        <ion-list class="list-order-history">
+          <ion-item *ngFor="let order of orders" class="item-order-history">
+            <ion-row class="w-100 ion-padding">
+              <ion-col size="12">
+                <ion-label>
+                  <span translate="Order Code"></span>
+                  <span>{{order.code}}</span>
+                </ion-label>
+              </ion-col>
+              <ion-col size="12" *ngIf="order.type === OrderTypes.FOOD_DELIVERY || order.type === OrderTypes.GROCERY">
+                <ion-label>
+                  <span translate="Phone Number"></span>
+                  <span>{{order.clientPhoneNumber}}</span>
+                </ion-label>
+              </ion-col>
+              <!-- <ion-col size="12">
+                <ion-label>
+                  <span translate="Merchant Name"></span>
+                  <span localValue [data]="order" key="merchantName"></span>
+                </ion-label>
+              </ion-col> -->
+              <ion-col size="12">
+                <ion-label>
+                  <span translate="Order Date"></span>
+                  <span>{{order.created|moment:"YYYY-MM-DD ddd"}}</span>
+                </ion-label>
+              </ion-col>
+              <ion-col size="12" *ngIf="order.delivered">
+                <ion-label>
+                  <span translate="Delivery Date"></span>
+                  <span>{{order.delivered|moment:"YYYY-MM-DD ddd"}}</span>
+                </ion-label>
+              </ion-col>
+              <ion-col size="12" class="border-bottom" *ngIf="order.type === OrderTypes.FOOD_DELIVERY || order.type === OrderTypes.GROCERY">
+                <ion-label>
+                  <span translate="Delivery Address"></span>
+                  <span>{{order.address}}</span>
+                </ion-label>
+              </ion-col>
+              <ion-col size="12" class="ion-margin-top">
+                <ng-container *ngIf="order.type !== 'MM'">
+                  <ion-row *ngFor="let item of order.items">
+                    <ion-col size="7" localValue [data]="item.product" key="name"></ion-col>
+                    <ion-col size="2">&times; {{item.quantity}}</ion-col>
+                    <ion-col size="3">{{item.price|currency:'USD':'symbol'}}</ion-col>
+                  </ion-row>
+                </ng-container>
+                <ion-row class="ion-margin-top border-top">
+                  <ion-col size="7" style="word-break: break-all;">
+                    <ion-row>{{order.description}}</ion-row>
+                    <ion-row>{{order.note}}</ion-row>
+                  </ion-col>
+                  <ion-col size="5">
+                    <ion-row>
+                      <ion-col translate="Price"></ion-col>
+                      <ion-col>{{order.price|currency:'USD':'symbol'}}</ion-col>
+                    </ion-row>
+                    <ion-row *ngIf="order.type === OrderTypes.FOOD_DELIVERY">
+                      <ion-col translate="Delivery Fee"></ion-col>
+                      <ion-col>{{order.deliveryCost|currency:'USD':'symbol'}}</ion-col>
+                    </ion-row>
+                    <ion-row *ngIf="order.type === OrderTypes.FOOD_DELIVERY">
+                      <ion-col translate="Subtotal"></ion-col>
+                      <ion-col>{{(order.price + order.deliveryCost)|currency:'USD':'symbol'}}</ion-col>
+                    </ion-row>
+                    <ion-row>
+                      <ion-col translate="Tax"></ion-col>
+                      <ion-col>{{order.tax|currency:'USD':'symbol'}}</ion-col>
+                    </ion-row>
+                    <ion-row *ngIf="order.type === OrderTypes.FOOD_DELIVERY">
+                      <ion-col translate="Tips"></ion-col>
+                      <ion-col>{{order.tips|currency:'USD':'symbol'}}</ion-col>
+                    </ion-row>
+                    <ion-row *ngIf="order.type === OrderTypes.FOOD_DELIVERY">
+                      <ion-col translate="Discount"></ion-col>
+                      <ion-col>{{-order.discount|currency:'USD':'symbol'}}</ion-col>
+                    </ion-row>
+                    <ion-row *ngIf="order.type === OrderTypes.FOOD_DELIVERY && order.groupDiscount > 0">
+                      <ion-col translate="Group Discount"></ion-col>
+                      <ion-col>{{-order.groupDiscount|currency:'USD':'symbol'}}</ion-col>
+                    </ion-row>
+                    <ion-row *ngIf="order.type === OrderTypes.FOOD_DELIVERY && order.overRangeCharge > 0">
+                      <ion-col translate="Out-of-Range Charge"></ion-col>
+                      <ion-col>{{order.overRangeCharge|currency:'USD':'symbol'}}</ion-col>
+                    </ion-row>
+                    <ion-row>
+                      <ion-col translate="Total"></ion-col>
+                      <ion-col>{{order.total|currency:'USD':'symbol'}}</ion-col>
+                    </ion-row>
+                  </ion-col>
                 </ion-row>
-              </ng-container>
-              <ion-row class="ion-margin-top border-top">
-                <ion-col size="7" style="word-break: break-all;">
-                  <ion-row>{{order.description}}</ion-row>
-                  <ion-row>{{order.note}}</ion-row>
-                </ion-col>
-                <ion-col size="5">
-                  <ion-row>
-                    <ion-col translate="Price"></ion-col>
-                    <ion-col>{{order.price|currency:'USD':'symbol'}}</ion-col>
-                  </ion-row>
-                  <ion-row *ngIf="order.type === OrderTypes.FOOD_DELIVERY">
-                    <ion-col translate="Delivery Fee"></ion-col>
-                    <ion-col>{{order.deliveryCost|currency:'USD':'symbol'}}</ion-col>
-                  </ion-row>
-                  <ion-row *ngIf="order.type === OrderTypes.FOOD_DELIVERY">
-                    <ion-col translate="Subtotal"></ion-col>
-                    <ion-col>{{(order.price + order.deliveryCost)|currency:'USD':'symbol'}}</ion-col>
-                  </ion-row>
-                  <ion-row>
-                    <ion-col translate="Tax"></ion-col>
-                    <ion-col>{{order.tax|currency:'USD':'symbol'}}</ion-col>
-                  </ion-row>
-                  <ion-row *ngIf="order.type === OrderTypes.FOOD_DELIVERY">
-                    <ion-col translate="Tips"></ion-col>
-                    <ion-col>{{order.tips|currency:'USD':'symbol'}}</ion-col>
-                  </ion-row>
-                  <ion-row *ngIf="order.type === OrderTypes.FOOD_DELIVERY">
-                    <ion-col translate="Discount"></ion-col>
-                    <ion-col>{{-order.discount|currency:'USD':'symbol'}}</ion-col>
-                  </ion-row>
-                  <ion-row *ngIf="order.type === OrderTypes.FOOD_DELIVERY && order.groupDiscount > 0">
-                    <ion-col translate="Group Discount"></ion-col>
-                    <ion-col>{{-order.groupDiscount|currency:'USD':'symbol'}}</ion-col>
-                  </ion-row>
-                  <ion-row *ngIf="order.type === OrderTypes.FOOD_DELIVERY && order.overRangeCharge > 0">
-                    <ion-col translate="Out-of-Range Charge"></ion-col>
-                    <ion-col>{{order.overRangeCharge|currency:'USD':'symbol'}}</ion-col>
-                  </ion-row>
-                  <ion-row>
-                    <ion-col translate="Total"></ion-col>
-                    <ion-col>{{order.total|currency:'USD':'symbol'}}</ion-col>
-                  </ion-row>
-                </ion-col>
-              </ion-row>
-            </ion-col>
-          </ion-row>
-        </ion-item>
-      </ion-list>
+              </ion-col>
+            </ion-row>
+          </ion-item>
+        </ion-list>
+      </ng-container>
     </ng-container>
-  </ng-container>
+  </div>
 </ion-content>
 
 <ng-template #emptyHistory>

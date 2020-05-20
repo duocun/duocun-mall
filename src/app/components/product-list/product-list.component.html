@@ -1,7 +1,7 @@
 <ng-container *ngIf="!loading; Else skeleton">
   <ng-container *ngIf="products.length < 7; Else thumbnailMode">
     <ion-row class="ion-padding" *ngIf="products.length > 0; Else empty">
-      <ion-col *ngFor="let product of products" size="6">
+      <ion-col *ngFor="let product of products" size-xs="6" size-sm="6" size-md="3" size-lg="2">
         <ion-card class="ion-no-margin" (click)="handleClick(product)">
           <ion-card-content>
             <div class="wrapper-product-img">
@@ -13,7 +13,7 @@
             </div>
             <ion-label class="label-product-name">
               <h3 localValue [data]="product" [key]="'name'"></h3>
-              <p>{{product|currency:'USD':'symbol'}}</p>
+              <p>{{product.price|currency:'USD':'symbol'}}</p>
             </ion-label>
           </ion-card-content>
         </ion-card>
@@ -42,7 +42,7 @@
       </ion-thumbnail>
       <ion-label>
         <h3 localValue [data]="product" [key]="'name'"></h3>
-        <p>{{product|currency:'USD':'symbol'}}</p>
+        <p>{{product.price|currency:'USD':'symbol'}}</p>
       </ion-label>
     </ion-item>
   </ion-list>

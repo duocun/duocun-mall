@@ -1,53 +1,57 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/my-account" text=""></ion-back-button>
-    </ion-buttons>
-    <ion-title translate="Transaction History"></ion-title>
-  </ion-toolbar>
+  <div class="container">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/tabs/my-account" text=""></ion-back-button>
+      </ion-buttons>
+      <ion-title class="ion-text-center" translate="Transaction History"></ion-title>
+    </ion-toolbar>
+  </div>
 </ion-header>
 
 <ion-content>
-  <ion-row class="row-heading">
-    <ion-col size="3" translate="Date"></ion-col>
-    <ion-col size="3" translate="Description"></ion-col>
-    <ion-col size="2" translate="Credit"></ion-col>
-    <ion-col size="2" translate="Debit"></ion-col>
-    <ion-col size="2" translate="Balance"></ion-col>
-  </ion-row>
-  <ion-row class="row-body" *ngIf="!loading; Else skeleton">
-    <ng-container *ngIf="transactions && transactions.length > 0; Else empty">
-      <ng-container *ngFor="let transaction of transactions">
-        <ion-col size="3">{{transaction.created | moment: 'MM-DD'}}</ion-col>
-        <ion-col size="3"
-          [routerLink]="['detail/order/' + transaction.orders[0].code]"
-          *ngIf="(transaction.orderId && transaction.orders && transaction.orders.length); Else paymentDetail"
-          class="ion-text-tertiary"
-        >{{transaction.description}}</ion-col>
-        <ng-template #paymentDetail>
+  <div class="container container-sm">
+    <ion-row class="row-heading">
+      <ion-col size="3" translate="Date"></ion-col>
+      <ion-col size="3" translate="Description"></ion-col>
+      <ion-col size="2" translate="Credit"></ion-col>
+      <ion-col size="2" translate="Debit"></ion-col>
+      <ion-col size="2" translate="Balance"></ion-col>
+    </ion-row>
+    <ion-row class="row-body" *ngIf="!loading; Else skeleton">
+      <ng-container *ngIf="transactions && transactions.length > 0; Else empty">
+        <ng-container *ngFor="let transaction of transactions">
+          <ion-col size="3">{{transaction.created | moment: 'MM-DD'}}</ion-col>
           <ion-col size="3"
-            [routerLink]="['detail/payment/' + transaction.paymentId]"
-            *ngIf="transaction.paymentId; Else noLink"
-            class="ion-text-tertiary"
+            [routerLink]="['detail/order/' + transaction.orders[0].code]"
+            *ngIf="(transaction.orderId && transaction.orders && transaction.orders.length); Else paymentDetail"
+            class="ion-text-tertiary cursor-pointer"
           >{{transaction.description}}</ion-col>
-        </ng-template>
-        <ng-template #noLink>
-          <ion-col size="3">
-            {{transaction.description}}
-          </ion-col>
-        </ng-template>
-        <ion-col size="2">{{transaction.consumed|currency:'USD':'symbol'}}</ion-col>
-        <ion-col size="2">{{transaction.paid|currency:'USD':'symbol'}}</ion-col>
-        <ion-col size="2">{{transaction.balance|currency:'USD':'symbol'}}</ion-col>
+          <ng-template #paymentDetail>
+            <ion-col size="3"
+              [routerLink]="['detail/payment/' + transaction.paymentId]"
+              *ngIf="transaction.paymentId; Else noLink"
+              class="ion-text-tertiary cursor-pointer"
+            >{{transaction.description}}</ion-col>
+          </ng-template>
+          <ng-template #noLink>
+            <ion-col size="3">
+              {{transaction.description}}
+            </ion-col>
+          </ng-template>
+          <ion-col size="2">{{transaction.consumed|currency:'USD':'symbol'}}</ion-col>
+          <ion-col size="2">{{transaction.paid|currency:'USD':'symbol'}}</ion-col>
+          <ion-col size="2">{{transaction.balance|currency:'USD':'symbol'}}</ion-col>
+        </ng-container>
       </ng-container>
-    </ng-container>
-  </ion-row>
-  <ion-infinite-scroll threshold="96px" (ionInfinite)="loadData($event)" [disabled]="scrollDisabled">
-    <ion-infinite-scroll-content
-      loadingSpinner="bubbles"
-      [loadingText]="'Loading...'|translate">
-    </ion-infinite-scroll-content>
-  </ion-infinite-scroll>
+    </ion-row>
+    <ion-infinite-scroll threshold="96px" (ionInfinite)="loadData($event)" [disabled]="scrollDisabled">
+      <ion-infinite-scroll-content
+        loadingSpinner="bubbles"
+        [loadingText]="'Loading...'|translate">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </div>
 </ion-content>
 
 <ng-template #empty>

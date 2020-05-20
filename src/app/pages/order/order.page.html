@@ -1,162 +1,166 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/cart" text=""></ion-back-button>
-    </ion-buttons>
-    <ion-title translate="Confirm Order"></ion-title>
-  </ion-toolbar>
+  <div class="container">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/tabs/cart" text=""></ion-back-button>
+      </ion-buttons>
+      <ion-title class="ion-text-center" translate="Confirm Order"></ion-title>
+    </ion-toolbar>
+  </div>
 </ion-header>
 
 <ion-content>
-  <ion-row class="ion-padding">
-    <ion-col align="center">
-      <h5 translate="order_page_title"></h5>
-    </ion-col>
-  </ion-row>
-  <ion-row class="ion-padding row-charge">
-    <!-- BEGIN CHARGE ITEMS -->
-    <ion-col size="7">
-      <ion-row *ngFor="let item of chargeItems" class="row-charge-item">
-        <ion-col size="7">
-          <div><label localValue [data]="item" key="name"></label></div>
-          <div><label>{{item.date|moment: "YYYY-MM-DD ddd"}}</label></div>
-        </ion-col>
-        <ion-col size="2">
-          <span>&times; {{item.quantity}}</span>
-        </ion-col>
-        <ion-col size="3">
-          {{(item.price * item.quantity)|currency:'USD':'symbol'}}
-        </ion-col>
-      </ion-row>
-    </ion-col>
-    <!--  END CHARGE ITEMS  -->
-    <!-- BEGIN CHARGE SUMMARY -->
-    <ion-col size="5" class="col-charge-summary" *ngIf="charge">
-      <ion-row>
-        <ion-col size="7" translate="Subtotal"></ion-col>
-        <ion-col size="5">{{charge.price|currency:'USD':'symbol'}}</ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size="7" translate="Delivery Fee"></ion-col>
-        <ion-col size="5">{{charge.deliveryCost|currency:'USD':'symbol'}}</ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size="7" translate="Tax"></ion-col>
-        <ion-col size="5">{{charge.tax|currency:'USD':'symbol'}}</ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size="7" translate="Tips"></ion-col>
-        <ion-col size="5">{{charge.tips|currency:'USD':'symbol'}}</ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size="7" translate="Delivery Fee Discount"></ion-col>
-        <ion-col size="5">{{-charge.deliveryDiscount|currency:'USD':'symbol'}}</ion-col>
-      </ion-row>
-      <ion-row *ngIf="charge.overRangeCharge">
-        <ion-col size="7" translate="Out-of-Range Charge"></ion-col>
-        <ion-col size="5">{{charge.overRangeCharge|currency:'USD':'symbol'}}</ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col size="7" translate="Total"></ion-col>
-        <ion-col size="5">{{charge.total|currency:'USD':'symbol'}}</ion-col>
-      </ion-row>
-      <ion-row  *ngIf="charge.balance">
-        <ion-col size="7" translate="Balance"></ion-col>
-        <ion-col size="5">{{charge.balance|currency:'USD':'symbol'}}</ion-col>
-      </ion-row>
-      <ion-row class="border">
-        <ion-col size="7" translate="Payable"></ion-col>
-        <ion-col size="5">{{charge.payable|currency:'USD':'symbol'}}</ion-col>
-      </ion-row>
-    </ion-col>
-    <!--  END CHARGE SUMMARY  -->
-  </ion-row>
-  <!-- BEGIN NOTCIE -->
-  <ion-row class="ion-padding">
-    <ul class="order-notice">
-      <li translate="order_page_notice_1"></li>
-      <li translate="order_page_notice_2"></li>
-    </ul>
-  </ion-row>
-  <!--  END NOTCIE  -->
-  <!-- BEGIN ORDER FORM -->
-  <ng-container *ngIf="account">
-    <ion-item>
-      <ion-label position="floating" translate="Deliver To"></ion-label>
-      <ion-input [(ngModel)]="account.username" readonly></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label position="floating" translate="Phone Number"></ion-label>
-      <ion-input [(ngModel)]="account.phone" readonly></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label position="floating" translate="Address"></ion-label>
-      <ion-input readonly [(ngModel)]="address"></ion-input>
-    </ion-item>
-    <ion-item class="ion-padding" class="item-address" style="display:none;">
-      <ion-label position="floating" translate="Address"></ion-label>
-      <ion-input [(ngModel)]="address"></ion-input>
-    </ion-item>
-    <ion-item class="ion-padding" class="item-notes">
-      <ion-label position="floating" translate="Notes"></ion-label>
-      <ion-textarea [(ngModel)]="notes"></ion-textarea>
-    </ion-item>
-  </ng-container>
-  <!--  END ORDER FORM  -->
-  <!-- BEGIN PAYMENT FORM -->
-  <ng-container *ngIf="!error; Else errorMsg">
-    <ion-row class="ion-padding" *ngIf="account && charge && !loading">
-      <ng-container *ngIf="paymentMethod !== PaymentMethod.PREPAY">
-        <!-- BEGIN STRIPE FORM -->
-        <ion-col size="12" align="center" class="ion-margin-top">
-          <stripe-card
-            #stripeCard
-            (tokenChange)="stripePay($event)"
-            [options]="prefersDark() ? {hidePostalCode: true, style: {base: {color: '#eee'}}} : {hidePostalCode: true}"
-          ></stripe-card>
-        </ion-col>
-        <ion-col size="12" align="center">
-          <ion-button 
-            color="primary" 
-            size="medium" 
+  <div class="container container-sm">
+    <ion-row class="ion-padding">
+      <ion-col align="center">
+        <h5 translate="order_page_title"></h5>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-padding row-charge">
+      <!-- BEGIN CHARGE ITEMS -->
+      <ion-col size="7">
+        <ion-row *ngFor="let item of chargeItems" class="row-charge-item">
+          <ion-col size="7">
+            <div><label localValue [data]="item" key="name"></label></div>
+            <div><label>{{item.date|moment: "YYYY-MM-DD ddd"}}</label></div>
+          </ion-col>
+          <ion-col size="2">
+            <span>&times; {{item.quantity}}</span>
+          </ion-col>
+          <ion-col size="3">
+            {{(item.price * item.quantity)|currency:'USD':'symbol'}}
+          </ion-col>
+        </ion-row>
+      </ion-col>
+      <!--  END CHARGE ITEMS  -->
+      <!-- BEGIN CHARGE SUMMARY -->
+      <ion-col size="5" class="col-charge-summary" *ngIf="charge">
+        <ion-row>
+          <ion-col size="7" translate="Subtotal"></ion-col>
+          <ion-col size="5">{{charge.price|currency:'USD':'symbol'}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="7" translate="Delivery Fee"></ion-col>
+          <ion-col size="5">{{charge.deliveryCost|currency:'USD':'symbol'}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="7" translate="Tax"></ion-col>
+          <ion-col size="5">{{charge.tax|currency:'USD':'symbol'}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="7" translate="Tips"></ion-col>
+          <ion-col size="5">{{charge.tips|currency:'USD':'symbol'}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="7" translate="Delivery Fee Discount"></ion-col>
+          <ion-col size="5">{{-charge.deliveryDiscount|currency:'USD':'symbol'}}</ion-col>
+        </ion-row>
+        <ion-row *ngIf="charge.overRangeCharge">
+          <ion-col size="7" translate="Out-of-Range Charge"></ion-col>
+          <ion-col size="5">{{charge.overRangeCharge|currency:'USD':'symbol'}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="7" translate="Total"></ion-col>
+          <ion-col size="5">{{charge.total|currency:'USD':'symbol'}}</ion-col>
+        </ion-row>
+        <ion-row  *ngIf="charge.balance">
+          <ion-col size="7" translate="Balance"></ion-col>
+          <ion-col size="5">{{charge.balance|currency:'USD':'symbol'}}</ion-col>
+        </ion-row>
+        <ion-row class="border">
+          <ion-col size="7" translate="Payable"></ion-col>
+          <ion-col size="5">{{charge.payable|currency:'USD':'symbol'}}</ion-col>
+        </ion-row>
+      </ion-col>
+      <!--  END CHARGE SUMMARY  -->
+    </ion-row>
+    <!-- BEGIN NOTCIE -->
+    <ion-row class="ion-padding">
+      <ul class="order-notice">
+        <li translate="order_page_notice_1"></li>
+        <li translate="order_page_notice_2"></li>
+      </ul>
+    </ion-row>
+    <!--  END NOTCIE  -->
+    <!-- BEGIN ORDER FORM -->
+    <ng-container *ngIf="account">
+      <ion-item>
+        <ion-label position="floating" translate="Deliver To"></ion-label>
+        <ion-input [(ngModel)]="account.username" readonly></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating" translate="Phone Number"></ion-label>
+        <ion-input [(ngModel)]="account.phone" readonly></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating" translate="Address"></ion-label>
+        <ion-input readonly [(ngModel)]="address"></ion-input>
+      </ion-item>
+      <ion-item class="ion-padding" class="item-address" style="display:none;">
+        <ion-label position="floating" translate="Address"></ion-label>
+        <ion-input [(ngModel)]="address"></ion-input>
+      </ion-item>
+      <ion-item class="ion-padding" class="item-notes">
+        <ion-label position="floating" translate="Notes"></ion-label>
+        <ion-textarea [(ngModel)]="notes"></ion-textarea>
+      </ion-item>
+    </ng-container>
+    <!--  END ORDER FORM  -->
+    <!-- BEGIN PAYMENT FORM -->
+    <ng-container *ngIf="!error; Else errorMsg">
+      <ion-row class="ion-padding" *ngIf="account && charge && !loading">
+        <ng-container *ngIf="paymentMethod !== PaymentMethod.PREPAY">
+          <!-- BEGIN STRIPE FORM -->
+          <ion-col size="12" align="center" class="ion-margin-top">
+            <stripe-card
+              #stripeCard
+              (tokenChange)="stripePay($event)"
+              [options]="prefersDark() ? {hidePostalCode: true, style: {base: {color: '#eee'}}} : {hidePostalCode: true}"
+            ></stripe-card>
+          </ion-col>
+          <ion-col size="12" align="center">
+            <ion-button 
+              color="primary" 
+              size="medium" 
+              expand="full"
+              translate="Stripe"
+              [disabled]="!canPayStripe()"
+              (click)="createStripeToken(stripeCard)"
+            >
+            </ion-button>
+          </ion-col>
+          <!--  END STRIPE FORM  -->
+          <!-- BEGIN WECHAT PAY BUTTON -->
+          <ion-col size="12" align="center" *ngIf="isWechatBrowser()">
+            <ion-button 
+              color="success" 
+              size="medium" 
+              expand="full" 
+              translate="Wechat Pay"
+              [disabled]="loading || processing"
+              (click)="wechatPay()"
+            ></ion-button>
+          </ion-col>
+          <!--  END WECHAT PAY BUTTON  -->
+        </ng-container>
+        <!-- BEGIN PAY BY DEPOSIT BUTTON -->
+        <ion-col size="12" align="center" *ngIf="paymentMethod === PaymentMethod.PREPAY">
+          <ion-button
+            color="tertiary"
+            size="medium"
             expand="full"
-            translate="Stripe"
-            [disabled]="!canPayStripe()"
-            (click)="createStripeToken(stripeCard)"
+            translate="Pay by Deposit"
+            [disabled]="processing"
+            (click)="payByDeposit()"
           >
           </ion-button>
         </ion-col>
-        <!--  END STRIPE FORM  -->
-        <!-- BEGIN WECHAT PAY BUTTON -->
-        <ion-col size="12" align="center" *ngIf="isWechatBrowser()">
-          <ion-button 
-            color="success" 
-            size="medium" 
-            expand="full" 
-            translate="Wechat Pay"
-            [disabled]="loading || processing"
-            (click)="wechatPay()"
-          ></ion-button>
-        </ion-col>
-        <!--  END WECHAT PAY BUTTON  -->
-      </ng-container>
-      <!-- BEGIN PAY BY DEPOSIT BUTTON -->
-      <ion-col size="12" align="center" *ngIf="paymentMethod === PaymentMethod.PREPAY">
-        <ion-button
-          color="tertiary"
-          size="medium"
-          expand="full"
-          translate="Pay by Deposit"
-          [disabled]="processing"
-          (click)="payByDeposit()"
-        >
-        </ion-button>
-      </ion-col>
-      <!--  END PAY BY DEPOSIT BUTTON  -->
-      
-    </ion-row>
-  </ng-container>
-  <!--  END PAYMENT FORM  -->
+        <!--  END PAY BY DEPOSIT BUTTON  -->
+        
+      </ion-row>
+    </ng-container>
+    <!--  END PAYMENT FORM  -->
+  </div>
 </ion-content>
 
 <ng-template #errorMsg>

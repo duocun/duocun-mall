@@ -31,3 +31,10 @@
     }
   }
 }
+@media(min-width: 768px)  {
+  ion-content {
+    .container {
+      padding-top: 2rem;
+    }
+  }
+}

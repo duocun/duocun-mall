@@ -1,89 +1,93 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/login" text=""></ion-back-button>
-    </ion-buttons>
-    <ion-title translate="Sign Up"></ion-title>
-  </ion-toolbar>
+  <div class="container">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/tabs/login" text=""></ion-back-button>
+      </ion-buttons>
+      <ion-title class="ion-text-center" translate="Sign Up"></ion-title>
+    </ion-toolbar>
+  </div>
 </ion-header>
 
 <ion-content>
-  <form class="ion-padding-horizontal ion-margin-top">
-    <ion-list lines="full">
-      <ion-item>
-        <ion-grid class="ion-no-padding ion-no-margin w-100">
-          <ion-row>
-            <ion-col size="12">
-              <ion-label position="stacked" translate="Username"></ion-label>
-              <ion-input 
-                required 
-                type="text" 
-                name="username" 
-                autocomplete="off" 
-                autofocus=true 
-                minlength="5" 
-                maxlength="20"
-                [(ngModel)]="model.username"
-              ></ion-input>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-item>
-      <ion-item>
-        <ion-grid class="ion-no-padding ion-no-margin w-100">
-          <ion-row>
-            <ion-col size="12">
-              <ion-label position="stacked" translate="Phone Number"></ion-label>
-              <ion-input 
-                required
-                type="text"
-                name="phone"
-                autocomplete="on"
-                inputmode="tel"
-                minlength="6"
-                maxlength="20"
-                [(ngModel)]="model.phone"
-              ></ion-input>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-item>
-      <ion-item class="ion-margin-top ">
-        <ion-grid class="ion-no-padding ion-no-margin w-100">
-          <ion-row>
-            <ion-col>
-              <ion-label position="stacked" translate="OTP Code"></ion-label>
-              <ion-input required type="text" name="otp" [(ngModel)]="model.verificationCode"></ion-input>
-            </ion-col>
-            <ion-col>
-              <ion-button
-                [disabled]="processing || !isValidPhone() || otpSentCount > 3"
-                class="ion-margin-top"
-                expand="block"
-                type="button"
-                color="tertiary"
-                (click)="handleSendOTP()"
-              >
-                {{ (isOtpSent ? "Resend OTP Code" : "Send OTP Code") | translate }}
-              </ion-button>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-item>
-      <ion-item class="ion-margin-top">
-        <ion-checkbox size="small" name="agreed" color="secondary" slot="start" [(ngModel)]="tosAgreed"></ion-checkbox>
-        <ion-label size="small" translate="Agree with terms of service and privacy policy"></ion-label>
-      </ion-item>
-    </ion-list>
-    <div class="ion-padding-vertical">
-      <ion-button
-        [disabled]="processing || !isValidForm()"
-        expand="full" 
-        type="submit" 
-        translate="Sign Up"
-        (click)="handleSignUp()"
-      >
-      </ion-button>
-    </div>
-  </form>
+  <div class="container container-sm">
+    <form class="ion-padding-horizontal ion-margin-top">
+      <ion-list lines="full">
+        <ion-item>
+          <ion-grid class="ion-no-padding ion-no-margin w-100">
+            <ion-row>
+              <ion-col size="12">
+                <ion-label position="stacked" translate="Username"></ion-label>
+                <ion-input 
+                  required 
+                  type="text" 
+                  name="username" 
+                  autocomplete="off" 
+                  autofocus=true 
+                  minlength="5" 
+                  maxlength="20"
+                  [(ngModel)]="model.username"
+                ></ion-input>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+        <ion-item>
+          <ion-grid class="ion-no-padding ion-no-margin w-100">
+            <ion-row>
+              <ion-col size="12">
+                <ion-label position="stacked" translate="Phone Number"></ion-label>
+                <ion-input 
+                  required
+                  type="text"
+                  name="phone"
+                  autocomplete="on"
+                  inputmode="tel"
+                  minlength="6"
+                  maxlength="20"
+                  [(ngModel)]="model.phone"
+                ></ion-input>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+        <ion-item class="ion-margin-top ">
+          <ion-grid class="ion-no-padding ion-no-margin w-100">
+            <ion-row>
+              <ion-col>
+                <ion-label position="stacked" translate="OTP Code"></ion-label>
+                <ion-input required type="text" name="otp" [(ngModel)]="model.verificationCode"></ion-input>
+              </ion-col>
+              <ion-col>
+                <ion-button
+                  [disabled]="processing || !isValidPhone() || otpSentCount > 3"
+                  class="ion-margin-top"
+                  expand="block"
+                  type="button"
+                  color="tertiary"
+                  (click)="handleSendOTP()"
+                >
+                  {{ (isOtpSent ? "Resend OTP Code" : "Send OTP Code") | translate }}
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+        <ion-item class="ion-margin-top">
+          <ion-checkbox size="small" name="agreed" color="secondary" slot="start" [(ngModel)]="tosAgreed"></ion-checkbox>
+          <ion-label size="small" translate="Agree with terms of service and privacy policy"></ion-label>
+        </ion-item>
+      </ion-list>
+      <div class="ion-padding-vertical">
+        <ion-button
+          [disabled]="processing || !isValidForm()"
+          expand="full" 
+          type="submit" 
+          translate="Sign Up"
+          (click)="handleSignUp()"
+        >
+        </ion-button>
+      </div>
+    </form>
+  </div>
 </ion-content>
