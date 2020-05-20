@@ -80,51 +80,55 @@ export class OrderPage implements OnInit, OnDestroy {
   async ngOnInit() {
     this.paymentMethod = PaymentMethod.CREDIT_CARD;
     this.authSvc.getAccount().subscribe((account) => {
-      this.account = account;
-      this.setCharge();
-    });
-    this.locSvc.getLocation().subscribe((location) => {
-      if (location) {
-        this.location = location;
-        this.address = formatLocation(location);
+      if (account) {
+        this.account = account;
+        this.setCharge();
+        this.locSvc.getLocation().subscribe((location) => {
+          if (location) {
+            this.location = location;
+            this.address = formatLocation(location);
+            this.cartSubscription = this.cartSvc
+              .getCart()
+              .subscribe(async (cart) => {
+                this.cart = cart;
+                if (
+                  this.cart &&
+                  this.cart.items &&
+                  this.cart.items.length &&
+                  !this.cartSanitized
+                ) {
+                  this.cartSanitized = true;
+                  this.cartSvc.sanitize();
+                  return;
+                }
+                this.chargeItems = Order.getChargeItems(cart);
+                this.cartItemGroups = Order.getCartItemGroups(cart);
+                this.orders = [];
+                if (!this.cartItemGroups.length) {
+                  return this.router.navigate(["/tabs/browse"], {
+                    replaceUrl: true
+                  });
+                }
+                try {
+                  for (const cartItemGroup of this.cartItemGroups) {
+                    const order = await this.getOrderFromCartItemGroup(
+                      cartItemGroup
+                    );
+                    this.orders.push(order);
+                  }
+                } catch (e) {
+                  this.error = {
+                    type: "order",
+                    message: "Cannot create order"
+                  };
+                }
+                this.summary = Order.getOrderSummary(this.cartItemGroups, 0);
+                this.setCharge();
+                this.loading = false;
+              });
+          }
+        });
       }
-    });
-    this.cartSubscription = this.cartSvc.getCart().subscribe((cart) => {
-      this.cart = cart;
-      if (
-        this.cart &&
-        this.cart.items &&
-        this.cart.items.length &&
-        !this.cartSanitized
-      ) {
-        this.cartSanitized = true;
-        this.cartSvc.sanitize();
-        return;
-      }
-      this.chargeItems = Order.getChargeItems(cart);
-      this.cartItemGroups = Order.getCartItemGroups(cart);
-      this.orders = [];
-      if (!this.cartItemGroups.length) {
-        this.router.navigate(["/tabs/browse"]);
-      }
-      for (const cartItemGroup of this.cartItemGroups) {
-        this.getOrderFromCartItemGroup(cartItemGroup)
-          .then((order: Order.OrderInterface) => {
-            this.orders.push(order);
-            if (this.orders.length === this.cartItemGroups.length) {
-              this.loading = false;
-            }
-          })
-          .catch((e) => {
-            console.error(e);
-            this.error = {
-              type: "order",
-              message: "Cannot create order"
-            };
-          });
-      }
-      this.summary = Order.getOrderSummary(this.cartItemGroups, 0);
-      this.setCharge();
     });
   }
 
@@ -378,6 +382,11 @@ export class OrderPage implements OnInit, OnDestroy {
                     this.translator.currentLang
                   )
                 );
+              } else {
+                reject({
+                  merchant,
+                  account: this.account
+                });
               }
             }
           );
