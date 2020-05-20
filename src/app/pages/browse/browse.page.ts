@@ -26,6 +26,7 @@ export class BrowsePage implements OnInit {
   search: string;
   page: number;
   size = 20;
+  categoryDisplayLimit = 10;
   scrollDisabled: boolean;
   outofRange: boolean;
   constructor(

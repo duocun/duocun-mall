@@ -1,12 +1,16 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/browse" text=""></ion-back-button>
-    </ion-buttons>
-    <ion-title translate="Category"></ion-title>
-  </ion-toolbar>
+  <div class="container">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/tabs/browse" text=""></ion-back-button>
+      </ion-buttons>
+      <ion-title class="ion-text-center" translate="Category"></ion-title>
+    </ion-toolbar>
+  </div>
 </ion-header>
 
 <ion-content>
-  <category-list></category-list>
+  <div class="container">
+    <category-list></category-list>
+  </div>
 </ion-content>

@@ -1,5 +1,5 @@
 <ng-container *ngIf="!loading; Else skeleton">
-  <ng-container *ngIf="products.length < 7; Else thumbnailMode">
+  <ng-container *ngIf="true; Else thumbnailMode">
     <ion-row class="ion-padding" *ngIf="products.length > 0; Else empty">
       <ion-col *ngFor="let product of products" size-xs="6" size-sm="6" size-md="3" size-lg="2">
         <ion-card class="ion-no-margin" (click)="handleClick(product)">
@@ -49,23 +49,8 @@
 </ng-template>
 
 <ng-template #skeleton>
-  <ion-row *ngFor="let idx of [1,2,3]">
-    <ion-col size="6">
-      <ion-card class="ion-no-margin">
-        <ion-card-content>
-          <div class="featured-product-image-container ion-margin-bottom">
-            <app-ion-image
-              src="assets/img/no-image.png"
-              alt="awesome product"
-            ></app-ion-image>
-          </div>
-          <ion-skeleton-text animated></ion-skeleton-text>
-          <ion-skeleton-text animated style="width:80%"></ion-skeleton-text>
-          <ion-skeleton-text animated style="width:60%"></ion-skeleton-text>
-        </ion-card-content>
-      </ion-card>
-    </ion-col>
-    <ion-col size="6">
+  <ion-row class="ion-padding">
+    <ion-col size-xs="6" size-sm="6" size-md="3" size-lg="2" *ngFor="let idx of [1,2,3,4,5,6]">
       <ion-card class="ion-no-margin">
         <ion-card-content>
           <div class="featured-product-image-container ion-margin-bottom">

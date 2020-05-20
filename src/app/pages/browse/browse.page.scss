@@ -8,6 +8,7 @@ ion-searchbar {
   padding-inline-end: 1rem;
 }
 .card-product {
+  cursor: pointer;
   border: 1px solid #ccc;
   ion-card-content {
     padding: 0.5rem;
@@ -25,6 +26,19 @@ ion-searchbar {
       p {
         font-size: 0.75rem;
       }
+    }
+  }
+}
+@media(min-width: 768px) {
+  ion-button {
+    --padding-top: 1rem;
+    --padding-bottom: 1rem;
+  }
+  .row-category {
+    ion-col {
+      margin-bottom: .5rem!important;
+      padding-left: .2rem!important;
+      padding-right: .2rem!important;
     }
   }
 }

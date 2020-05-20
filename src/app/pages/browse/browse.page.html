@@ -15,14 +15,14 @@
 <ion-content>
   <div class="container">
     <ion-searchbar 
-    placeholder="{{'Search'|translate}}"
-    debounce="1000"
-    (ionChange)="handleSearch($event)"
-    [value]="search"
-  ></ion-searchbar>
+      placeholder="{{'Search'|translate}}"
+      debounce="1000"
+      (ionChange)="handleSearch($event)"
+      [value]="search"
+    ></ion-searchbar>
   <ng-container *ngIf="viewMode === 'category-only'; Else segmentMode">
-    <ion-row class="ion-padding-start ion-padding-end ion-margin-bottom">
-      <ion-col size-xs="3" size-lg="2" class="ion-nomargin ion-no-padding">
+    <ion-row class="ion-padding-start ion-padding-end ion-margin-bottom row-category">
+      <ion-col size-xs="3" size-lg="2" class="ion-no-margin ion-no-padding">
         <ion-button
           [disabled]="loading"
           color="danger"
@@ -33,7 +33,7 @@
         >
         </ion-button>
       </ion-col>
-      <ion-col *ngFor="let category of categories.slice(0,10)" size-xs="3" size-lg="2" class="ion-no-margin ion-no-padding">
+      <ion-col *ngFor="let category of categories.slice(0,categoryDisplayLimit)" size-xs="3" size-lg="2" class="ion-no-margin ion-no-padding">
         <ion-button
           [disabled]="loading"
           [color]="selectedCategoryId === category._id ? 'success' : 'light'"
@@ -46,7 +46,7 @@
         >
         </ion-button>
       </ion-col>
-      <ion-col *ngIf="categories.length >= 11" size-xs="3" size-lg="2" class="ion-no-margin ion-no-padding">
+      <ion-col *ngIf="categories.length >= (categoryDisplayLimit + 1)" size-xs="3" size-lg="2" class="ion-no-margin ion-no-padding">
         <ion-button
           color="tertiary"
           size="small"
@@ -115,7 +115,7 @@
 </ng-template>
 
 <ng-template #skeleton>
-  <ion-col *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]" size="4">
+  <ion-col *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]" size-xs="4" size-md="3" size-lg="2">
     <ion-card class="ion-no-margin card-product">
       <ion-card-content>
         <div class="wrapper-product-img">
