@@ -12,8 +12,8 @@
 <ion-content>
   <div class="container container-sm">
     <ion-row class="row-heading">
-      <ion-col size="3" translate="Date"></ion-col>
-      <ion-col size="3" translate="Description"></ion-col>
+      <ion-col size="2" translate="Date"></ion-col>
+      <ion-col size="4" translate="Description"></ion-col>
       <ion-col size="2" translate="Credit"></ion-col>
       <ion-col size="2" translate="Debit"></ion-col>
       <ion-col size="2" translate="Balance"></ion-col>
@@ -21,21 +21,21 @@
     <ion-row class="row-body" *ngIf="!loading; Else skeleton">
       <ng-container *ngIf="transactions && transactions.length > 0; Else empty">
         <ng-container *ngFor="let transaction of transactions">
-          <ion-col size="3">{{transaction.created | moment: 'MM-DD'}}</ion-col>
-          <ion-col size="3"
+          <ion-col size="2">{{transaction.created | moment: 'MM-DD'}}</ion-col>
+          <ion-col size="4"
             [routerLink]="['detail/order/' + transaction.orders[0].code]"
             *ngIf="(transaction.orderId && transaction.orders && transaction.orders.length); Else paymentDetail"
             class="ion-text-tertiary cursor-pointer"
           >{{transaction.description}}</ion-col>
           <ng-template #paymentDetail>
-            <ion-col size="3"
+            <ion-col size="4"
               [routerLink]="['detail/payment/' + transaction.paymentId]"
               *ngIf="transaction.paymentId; Else noLink"
               class="ion-text-tertiary cursor-pointer"
             >{{transaction.description}}</ion-col>
           </ng-template>
           <ng-template #noLink>
-            <ion-col size="3">
+            <ion-col size="4">
               {{transaction.description}}
             </ion-col>
           </ng-template>

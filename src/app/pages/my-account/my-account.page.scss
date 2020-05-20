@@ -1,6 +1,11 @@
 
+.container-sm {
+  max-width: 480px;
+}
 .card-link {
   --background: #fcfcfc;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
   ion-card-header {
     ion-icon {
       height: 36px;
@@ -11,5 +16,14 @@
     h3 {
       font-size: 1.125rem;
     }
+  }
+}
+[align=center] {
+  text-align: center;
+}
+@media(min-width: 768px) {
+  .card-link {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
   }
 }

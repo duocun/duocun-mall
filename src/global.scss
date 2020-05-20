@@ -81,6 +81,9 @@ ion-searchbar.searchbar-location {
 }
 
 @media(min-width: 768px) {
+  ion-content > .container {
+    padding-top: 1.75rem;
+  }
   ion-tab-bar {
     display: none;
   }

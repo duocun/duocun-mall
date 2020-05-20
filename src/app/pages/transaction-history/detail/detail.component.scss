@@ -30,3 +30,8 @@
   padding-top: 5px!important;
   border-top: 1px solid #eeeeee;
 }
+@media(min-width: 768px){
+  .list-order-history .item-order-history {
+    font-size: 1rem;
+  }
+}
