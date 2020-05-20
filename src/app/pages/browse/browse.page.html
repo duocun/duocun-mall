@@ -79,15 +79,16 @@
                 </ion-card-content>
               </ion-card>
             </ion-col>
+            <ion-infinite-scroll threshold="96px" (ionInfinite)="loadData($event)" [disabled]="scrollDisabled">
+              <ion-infinite-scroll-content
+                loadingSpinner="bubbles"
+                [loadingText]="'Loading...'|translate">
+              </ion-infinite-scroll-content>
+            </ion-infinite-scroll>
           </ng-container>
         </ng-container>
       </ion-row>
-      <ion-infinite-scroll threshold="96px" (ionInfinite)="loadData($event)" [disabled]="scrollDisabled">
-        <ion-infinite-scroll-content
-          loadingSpinner="bubbles"
-          [loadingText]="'Loading...'|translate">
-        </ion-infinite-scroll-content>
-      </ion-infinite-scroll>
+     
     </ng-container>
   </div>
   <app-footer></app-footer>

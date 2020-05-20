@@ -10,7 +10,7 @@ import { ProductInterface } from "src/app/models/product.model";
 import { getPictureUrl } from "src/app/models/product.model";
 import { SeoService } from "src/app/services/seo/seo.service";
 import { Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { takeUntil, filter } from "rxjs/operators";
 @Component({
   selector: "app-browse",
   templateUrl: "./browse.page.html",
@@ -55,7 +55,10 @@ export class BrowsePage implements OnInit, OnDestroy {
     this.seo.setDefaultSeo();
     this.loc
       .getLocation()
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(
+        filter((location) => location !== undefined),
+        takeUntil(this.unsubscribe$)
+      )
       .subscribe((location: LocationInterface) => {
         console.log("browse page location susbscription");
         this.location = location;
@@ -67,6 +70,7 @@ export class BrowsePage implements OnInit, OnDestroy {
                 console.log("browse page category subscription");
                 if (resp.code === "success") {
                   this.categories = resp.data;
+                  this.page = 0;
                   this.loadData(null);
                 } else {
                   this.loading = false;
