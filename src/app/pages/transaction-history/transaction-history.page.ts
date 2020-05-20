@@ -25,7 +25,7 @@ export class TransactionHistoryPage implements OnInit {
   ) {
     this.loading = true;
     this.transactions = [];
-    this.page = 1;
+    this.page = 0;
     this.pageLength = 15;
     this.scrollDisabled = false;
   }
@@ -34,7 +34,7 @@ export class TransactionHistoryPage implements OnInit {
     this.authSvc.getAccount().subscribe((account: AccountInterface) => {
       if (account && account._id) {
         this.accountId = account._id;
-        this.updatePage(null);
+        this.loadData(null);
       }
     });
   }

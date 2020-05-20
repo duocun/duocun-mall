@@ -106,7 +106,7 @@ export function getTransactionDescription(
     // } else {
     //   return name + " " + (t.note ? t.note : ""); // fix me
     // }
-    if (!t.orders) {
+    if (!t.orders || !t.orders.length) {
       return t.note ? t.note : "";
     }
     const order = t.orders[0];
