@@ -11,6 +11,7 @@ import { MomentPipeModule } from "src/app/pipes/moment/moment.module";
 import { TouchspinModule } from "src/app/components/touchspin/touchspin.module";
 import { IonicStorageModule } from "@ionic/storage";
 import { HttpClientModule } from "@angular/common/http";
+import { SideMenuModule } from "src/app/components/side-menu/side-menu.module";
 
 describe("CartPage", () => {
   let component: CartPage;
@@ -29,7 +30,8 @@ describe("CartPage", () => {
         MomentPipeModule,
         TouchspinModule,
         IonicStorageModule.forRoot(),
-        HttpClientModule
+        HttpClientModule,
+        SideMenuModule
       ]
     }).compileComponents();
 

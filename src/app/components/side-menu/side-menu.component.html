@@ -1,4 +1,4 @@
-<ion-menu side="start" menuId="side-menu" contentId="main" class="side-menu">
+<ion-menu side="start" menuId="side-menu" contentId="menuContent" class="side-menu">
   <ion-header>
     <ion-toolbar color="tertiary">
       <ion-title translate="Menu"></ion-title>
@@ -6,6 +6,21 @@
   </ion-header>
   <ion-content>
     <ion-list>
+      <ion-item routerLinkActive="router-link-active" (click)="closeMenu()" [routerLink]="['/tabs/browse']">
+        <ion-icon name="home-outline"></ion-icon>
+        <ion-label translate="Home"></ion-label>
+      </ion-item>
+      <ion-item routerLinkActive="router-link-active" (click)="closeMenu()" [routerLink]="['/tabs/cart']">
+        <ion-icon name="cart-outline"></ion-icon>
+        <ion-label translate="Cart"></ion-label>
+        <ion-badge *ngIf="cart && cart.items && cart.items.length">
+          {{cart.quantity}}
+        </ion-badge>
+      </ion-item>
+      <ion-item routerLinkActive="router-link-active" (click)="closeMenu()" [routerLink]="['/tabs/my-account']">
+        <ion-icon name="person-circle"></ion-icon>
+        <ion-label translate="My Account"></ion-label>
+      </ion-item>
       <ion-item *ngFor="let tab of tabs" routerLinkActive="router-link-active" (click)="closeMenu()" [routerLink]="['/page/' + tab.slug]">
         <ion-label localValue [data]="tab" key="title"></ion-label>
       </ion-item>

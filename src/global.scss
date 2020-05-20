@@ -27,7 +27,6 @@
 
 body {
   ion-app {
-      max-width: 768px!important;
       margin-left: auto;
       margin-right: auto;
       ion-row {
@@ -58,5 +57,10 @@ body {
 ion-searchbar.searchbar-location {
   .searchbar-input {
     font-size: 0.75rem !important;
+  }
+}
+@media(min-width: 768px) {
+  ion-tab-bar {
+    display: none;
   }
 }
