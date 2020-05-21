@@ -74,6 +74,7 @@ export class LoginPage implements OnInit, OnDestroy {
             if (resp.code === "success") {
               this.authSvc.login(resp.token).then((account) => {
                 if (account) {
+                  this.showAlert("Notice", "Login successful", "OK");
                   if (this.returnUrl) {
                     this.router.navigate([this.returnUrl]);
                   } else {
