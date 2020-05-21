@@ -26,6 +26,8 @@ export class SeoService {
   setDefaultSeo() {
     this.setTitle("多村 - Duocun");
     this.setDescription("多村送菜 - 免运费免小费 Toronto online shopping");
-    this.setKeywords("村送菜，多村商城，多伦多网上购物");
+    this.setKeywords(
+      "村送菜，多村商城，多伦多网上购物, 免运费, 免小费, Free shipping, No Fee, Canada grocery, Toronto, Online shopping"
+    );
   }
 }
