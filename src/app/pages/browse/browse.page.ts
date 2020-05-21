@@ -27,7 +27,7 @@ export class BrowsePage implements OnInit, OnDestroy {
   loading: boolean;
   search: string;
   page: number;
-  size = 20;
+  pageSize = 12;
   categoryDisplayLimit = 10;
   scrollDisabled: boolean;
   outofRange: boolean;
@@ -50,6 +50,9 @@ export class BrowsePage implements OnInit, OnDestroy {
     this.scrollDisabled = false;
     this.products = [];
     this.outofRange = false;
+    if (window.innerWidth >= 992) {
+      this.pageSize = 15;
+    }
   }
   ngOnInit() {
     this.seo.setDefaultSeo();
@@ -146,7 +149,7 @@ export class BrowsePage implements OnInit, OnDestroy {
     }
     this.api
       .geth(
-        `Products/paginate/${this.page}/${this.size}`,
+        `Products/paginate/${this.page}/${this.pageSize}`,
         query,
         true,
         "filter"
@@ -156,7 +159,7 @@ export class BrowsePage implements OnInit, OnDestroy {
           if (this.page === 1) {
             this.products = [];
           }
-          if (this.products.length < this.page * this.size) {
+          if (this.products.length < this.page * this.pageSize) {
             this.products = [...this.products, ...resp.data];
           }
           this.loading = false;
