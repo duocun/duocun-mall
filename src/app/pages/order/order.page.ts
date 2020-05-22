@@ -1,11 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { CartService } from "src/app/services/cart/cart.service";
 import * as Order from "src/app/models/order.model";
-import {
-  PaymentMethod,
-  AppType,
-  PaymentError
-} from "src/app/models/payment.model";
+import { PaymentMethod, PaymentError } from "src/app/models/payment.model";
 import { getPictureUrl, ProductInterface } from "src/app/models/product.model";
 import { AccountInterface } from "src/app/models/account.model";
 import { AuthService } from "src/app/services/auth/auth.service";
@@ -213,6 +209,7 @@ export class OrderPage implements OnInit, OnDestroy {
   }
 
   stripePay(token: StripeToken) {
+    throw new Error("Stripe payment is disabled. Use Moneris instead");
     this.paymentMethod = PaymentMethod.CREDIT_CARD;
     this.processing = true;
     this.stripe
@@ -519,6 +516,63 @@ export class OrderPage implements OnInit, OnDestroy {
         console.error(e);
         this.showAlert("Notice", "Payment failed", "OK");
         this.processing = false;
+      });
+  }
+
+  monerisPay() {
+    this.paymentMethod = PaymentMethod.CREDIT_CARD;
+    this.processing = true;
+    this.saveOrders(this.orders).then((observable) => {
+      observable
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(
+          (resp: { code: string; data: Array<Order.OrderInterface> }) => {
+            console.log("order page save order subscription");
+            if (resp.code !== "success") {
+              return this.handleInvalidOrders(resp.data);
+            }
+            this.getMonerisTicket(
+              this.appCode,
+              this.account._id,
+              resp.data,
+              this.charge.payable
+            );
+          }
+        );
+    });
+  }
+
+  getMonerisTicket(
+    appCode: string,
+    accountId: string,
+    orders: Array<Order.OrderInterface>,
+    payable: number
+  ) {
+    const paymentId = orders[0].paymentId;
+    this.api
+      .post("ClientPayments/moneris/preload", {
+        paymentId
+      })
+      .then((observable) => {
+        observable
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe((resp: { code: string; data?: string }) => {
+            console.log("order page moneris preload subscription");
+            if (resp.code === "success") {
+              this.router.navigate(
+                [`/tabs/browse/order/pay/moneris/${paymentId}/${resp.data}`],
+                {
+                  replaceUrl: true
+                }
+              );
+            } else {
+              this.showAlert("Notice", "Payment failed", "OK");
+            }
+          });
+      })
+      .catch((e) => {
+        console.error(e);
+        this.showAlert("Notice", "Payment failed", "OK");
       });
   }
 

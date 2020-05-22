@@ -11,5 +11,6 @@ export const environment = {
   stripe: "pk_live_vV7H1l4X9k2r8uf6JDf9lGsb",
   defaultLang: "zh",
   gmap: "AIzaSyCEd6D6vc9K-YzMH-QtQWRSs5HZkLKSWyk",
-  timezone: "America/Toronto"
+  timezone: "America/Toronto",
+  monerisMode: "prod"
 };

@@ -110,26 +110,40 @@
     <ng-container *ngIf="!error; Else errorMsg">
       <ion-row class="ion-padding" *ngIf="account && charge && !loading">
         <ng-container *ngIf="paymentMethod !== PaymentMethod.PREPAY">
-          <!-- BEGIN STRIPE FORM -->
-          <ion-col size="12" align="center" class="ion-margin-top">
-            <stripe-card
-              #stripeCard
-              (tokenChange)="stripePay($event)"
-              [options]="prefersDark() ? {hidePostalCode: true, style: {base: {color: '#eee'}}} : {hidePostalCode: true}"
-            ></stripe-card>
-          </ion-col>
-          <ion-col size="12" align="center">
-            <ion-button 
-              color="primary" 
-              size="medium" 
+          <!-- BEGIN STRIPE FORM [DISABLED]-->
+          <ng-container *ngIf="false">
+            <ion-col size="12" align="center" class="ion-margin-top">
+              <stripe-card
+                #stripeCard
+                (tokenChange)="stripePay($event)"
+                [options]="prefersDark() ? {hidePostalCode: true, style: {base: {color: '#eee'}}} : {hidePostalCode: true}"
+              ></stripe-card>
+            </ion-col>
+            <ion-col size="12" align="center">
+              <ion-button 
+                color="primary" 
+                size="medium" 
+                expand="full"
+                translate="Stripe"
+                [disabled]="!canPayStripe()"
+                (click)="createStripeToken(stripeCard)"
+              >
+              </ion-button>
+            </ion-col>
+          </ng-container>
+          <!--  END STRIPE FORM [DISABLED] -->
+          <!-- BEGIN MONERIS PAY BUTTON -->
+          <ion-col size="12" class="ion-text-center ion-margin-top">
+            <ion-button
+              color="primary"
+              size="medium"
               expand="full"
-              translate="Stripe"
-              [disabled]="!canPayStripe()"
-              (click)="createStripeToken(stripeCard)"
+              translate="Pay by Credit Card"
+              [disabled]="loading || processing"
+              (click)="monerisPay()"
             >
             </ion-button>
           </ion-col>
-          <!--  END STRIPE FORM  -->
           <!-- BEGIN WECHAT PAY BUTTON -->
           <ion-col size="12" align="center" *ngIf="isWechatBrowser()">
             <ion-button 
