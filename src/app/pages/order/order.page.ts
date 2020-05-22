@@ -93,6 +93,13 @@ export class OrderPage implements OnInit, OnDestroy {
       )
       .subscribe((account) => {
         console.log("order page account subscription");
+        if (!account.phone) {
+          this.showAlert("Notice", "Please input phone number", "OK");
+          this.router.navigate(["/tabs/my-account/setting"], {
+            queryParams: { redirectUrl: "/tabs/browse/order" },
+            replaceUrl: true
+          });
+        }
         this.account = account;
         this.setCharge();
         this.locSvc
