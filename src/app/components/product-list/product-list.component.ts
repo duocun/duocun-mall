@@ -27,4 +27,15 @@ export class ProductListComponent implements OnInit {
   handleClick(product: ProductInterface) {
     this.onProductClick.emit(product);
   }
+  isDepleted(product: ProductInterface): boolean {
+    if (
+      !product ||
+      !product.stock ||
+      !product.stock.enabled ||
+      product.stock.allowNegative
+    ) {
+      return false;
+    }
+    return product.stock.quantity < 1;
+  }
 }

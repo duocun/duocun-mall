@@ -71,6 +71,13 @@
                       [alt]="product.name"
                       style="object-fit: cover; height: 100%;"
                     ></app-ion-image>
+                    <div class="overlay-product-img" *ngIf="isDepleted(product)">
+                      <ion-badge 
+                        class="badge-out-of-stock"
+                        color="danger"
+                        translate="badge_out_of_stock">
+                      </ion-badge>
+                    </div>
                   </div>
                   <div class="label-product-name">
                     <h3 localValue [data]="product" [key]="'name'"></h3>

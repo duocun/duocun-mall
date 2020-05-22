@@ -223,4 +223,15 @@ export class BrowsePage implements OnInit, OnDestroy {
   getPictureUrl(product: ProductInterface) {
     return getPictureUrl(product);
   }
+  isDepleted(product: ProductInterface): boolean {
+    if (
+      !product ||
+      !product.stock ||
+      !product.stock.enabled ||
+      product.stock.allowNegative
+    ) {
+      return false;
+    }
+    return product.stock.quantity < 1;
+  }
 }

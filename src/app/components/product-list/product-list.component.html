@@ -2,7 +2,7 @@
   <ng-container *ngIf="true; Else thumbnailMode">
     <ion-row class="ion-padding" *ngIf="products.length > 0; Else empty">
       <ion-col *ngFor="let product of products" size-xs="4" size-sm="4" size-md="3" size-lg="2.4">
-        <ion-card class="ion-no-margin" (click)="handleClick(product)">
+        <ion-card class="ion-no-margin card-product" (click)="handleClick(product)">
           <ion-card-content>
             <div class="wrapper-product-img">
               <app-ion-image
@@ -10,11 +10,18 @@
                 [alt]="product.name"
                 style="height:100%; object-fit:cover;"
               ></app-ion-image>
+              <div class="overlay-product-img" *ngIf="isDepleted(product)">
+                <ion-badge 
+                  class="badge-out-of-stock"
+                  color="danger"
+                  translate="badge_out_of_stock">
+                </ion-badge>
+              </div>
             </div>
-            <ion-label class="label-product-name">
+            <div class="label-product-name">
               <h3 localValue [data]="product" [key]="'name'"></h3>
               <p>{{product.price|currency:'USD':'symbol'}}</p>
-            </ion-label>
+            </div>
           </ion-card-content>
         </ion-card>
       </ion-col>
