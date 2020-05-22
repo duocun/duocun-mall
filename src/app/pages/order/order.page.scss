@@ -1,8 +1,13 @@
+h5 {
+  font-weight: 600;
+}
 .order-notice {
   list-style: none;
   font-size: 0.75rem;
-  padding-left: 0;
-  color: #eb445a;
+  color: var(--ion-color-danger-shade);
+  padding: 0.5rem;
+  background-color: var(--ion-color-warning-tint);
+  font-weight: 600;
   li:before {
     content: "*";
     margin-right: .5rem;
@@ -20,5 +25,13 @@
   .border {
     border-top: 1px solid #eee;
     border-bottom: 1px solid #eee;
+  }
+}
+.font-weight-bold {
+  font-weight: 600;
+}
+@media(min-width: 768px) {
+  .row-charge-item, .col-charge-summary, .order-notice {
+    font-size: 1rem;
   }
 }

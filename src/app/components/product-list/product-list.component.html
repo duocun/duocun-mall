@@ -1,14 +1,14 @@
 <ng-container *ngIf="!loading; Else skeleton">
   <ng-container *ngIf="true; Else thumbnailMode">
     <ion-row class="ion-padding" *ngIf="products.length > 0; Else empty">
-      <ion-col *ngFor="let product of products" size-xs="6" size-sm="6" size-md="3" size-lg="2">
+      <ion-col *ngFor="let product of products" size-xs="4" size-sm="4" size-md="3" size-lg="2.4">
         <ion-card class="ion-no-margin" (click)="handleClick(product)">
           <ion-card-content>
             <div class="wrapper-product-img">
               <app-ion-image
                 [src]="getPictureUrl(product)"
                 [alt]="product.name"
-                style="height:180px; object-fit:cover;"
+                style="height:100%; object-fit:cover;"
               ></app-ion-image>
             </div>
             <ion-label class="label-product-name">
@@ -50,7 +50,7 @@
 
 <ng-template #skeleton>
   <ion-row class="ion-padding">
-    <ion-col size-xs="6" size-sm="6" size-md="3" size-lg="2" *ngFor="let idx of [1,2,3,4,5,6]">
+    <ion-col size-xs="4" size-sm="4" size-md="3" size-lg="2.4" *ngFor="let idx of [1,2,3,4,5,6]">
       <ion-card class="ion-no-margin">
         <ion-card-content>
           <div class="featured-product-image-container ion-margin-bottom">

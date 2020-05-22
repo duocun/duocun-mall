@@ -31,3 +31,18 @@
     }
   }
 }
+@media(max-width: 479px) {
+  ion-slides {
+    height: 240px;
+  }
+}
+@media(min-width: 480px) and (max-width: 767px) {
+  ion-slides {
+    height: 420px;
+  }
+}
+@media(min-width: 768px) {
+  ion-slides {
+    max-height: 480px;
+  }
+}

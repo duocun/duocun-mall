@@ -16,7 +16,8 @@ ion-searchbar {
       margin-top: -10px;
       margin-left: -10px;
       margin-right: -10px;
-      margin-bottom: 5px;
+      margin-bottom: 1rem;
+      height: 120px;
     }
     .label-product-name {
       h3 {
@@ -27,6 +28,11 @@ ion-searchbar {
         font-size: 0.75rem;
       }
     }
+  }
+}
+@media(max-width: 767px) {
+  .wrapper-product-img {
+    height: 108px!important;
   }
 }
 @media(min-width: 768px) {
@@ -47,5 +53,21 @@ ion-searchbar {
     flex: 0 0 calc(calc(2.4 / var(--ion-grid-columns, 12)) * 100%)!important;
     width: calc(calc(2.4 / var(--ion-grid-columns, 12)) * 100%)!important;
     max-width: calc(calc(2.4 / var(--ion-grid-columns, 12)) * 100%)!important;
+  }
+}
+@media(min-width: 1170px) {
+  .wrapper-product-img {
+    height: 160px!important;
+  }
+  .label-product-name {
+    h3 {
+      font-size: 1rem!important;
+    }
+    p {
+      font-size: 1rem!important;
+    }
+  }
+  .row-category ion-button {
+    font-size: 1rem!important;
   }
 }
