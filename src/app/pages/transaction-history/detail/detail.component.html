@@ -82,11 +82,11 @@
                       <ion-col translate="Tax"></ion-col>
                       <ion-col>{{order.tax|currency:'USD':'symbol'}}</ion-col>
                     </ion-row>
-                    <ion-row *ngIf="order.type === OrderTypes.FOOD_DELIVERY">
+                    <ion-row *ngIf="order.type === OrderTypes.FOOD_DELIVERY && order.tips">
                       <ion-col translate="Tips"></ion-col>
                       <ion-col>{{order.tips|currency:'USD':'symbol'}}</ion-col>
                     </ion-row>
-                    <ion-row *ngIf="order.type === OrderTypes.FOOD_DELIVERY">
+                    <ion-row *ngIf="order.type === OrderTypes.FOOD_DELIVERY && order.discount">
                       <ion-col translate="Discount"></ion-col>
                       <ion-col>{{-order.discount|currency:'USD':'symbol'}}</ion-col>
                     </ion-row>
