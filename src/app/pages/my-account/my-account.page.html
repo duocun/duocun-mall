@@ -63,6 +63,14 @@
         <h3 class="ion-text-tertiary" translate="Transaction History"></h3>
       </ion-card-content>
     </ion-card>
+    <ion-card class="card-link cursor-pointer" (click)="handleLogout()">
+      <ion-card-header align="center">
+        <ion-icon color="danger" name="exit-outline"></ion-icon>
+      </ion-card-header>
+      <ion-card-content align="center">
+        <h3 class="ion-text-danger" translate="Log Out"></h3>
+      </ion-card-content>
+    </ion-card>
   </div>
   <app-footer></app-footer>
 </ion-content>
