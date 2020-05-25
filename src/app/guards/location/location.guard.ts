@@ -9,6 +9,7 @@ import { LocationService } from "src/app/services/location/location.service";
 import { AlertController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import { AuthGuard } from "../auth/auth.guard";
+import { AuthService } from "src/app/services/auth/auth.service";
 
 @Injectable({
   providedIn: "root"
@@ -19,6 +20,7 @@ export class LocationGuard implements CanActivate {
     private alert: AlertController,
     private router: Router,
     private translator: TranslateService,
+    private authSvc: AuthService,
     private authGuard: AuthGuard
   ) {}
   canActivate(
@@ -27,6 +29,13 @@ export class LocationGuard implements CanActivate {
   ): Promise<boolean> {
     return this.authGuard.canActivate(next, state).then((canActivate) => {
       if (!canActivate) {
+        return false;
+      }
+      if (!this.authSvc.account.phone) {
+        this.showAlert("Notice", "Please input phone number", "OK");
+        this.router.navigate(["/tabs/my-account/setting"], {
+          queryParams: { redirectUrl: state.url }
+        });
         return false;
       }
       if (this.locSvc.location || this.locSvc.location === undefined) {
@@ -40,10 +49,11 @@ export class LocationGuard implements CanActivate {
       }
     });
   }
-  showAlert() {
-    const header = "Notice";
-    const message = "Please select delivery address";
-    const button = "OK";
+  showAlert(
+    header = "Notice",
+    message = "Please select delivery address",
+    button = "OK"
+  ) {
     this.translator.get([header, message, button]).subscribe((dict) => {
       this.alert
         .create({

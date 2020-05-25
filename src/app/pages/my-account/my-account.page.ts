@@ -82,6 +82,9 @@ export class MyAccountPage implements OnInit, AfterViewInit, OnDestroy {
   handleLangCancel() {
     window.location.href = this.getUrlWithoutQueryString();
   }
+  handleLogout() {
+    this.authSvc.logout();
+  }
   getUrlWithoutQueryString() {
     return [location.protocol, "//", location.host, location.pathname].join("");
   }

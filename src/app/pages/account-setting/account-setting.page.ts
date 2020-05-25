@@ -88,35 +88,34 @@ export class AccountSettingPage implements OnInit, OnDestroy {
     this.processing = true;
 
     this.model.phone = this.sanitizePhoneNumber(this.model.phone);
-    if (this.model.phone == this.account.phone) {
-      this.saveProfile();
-    } else {
-      this.api
-        .post("Accounts/verifyCode", {
-          newPhone: this.model.phone,
-          code: this.model.verificationCode
-        })
-        .then((observable) => {
-          observable
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((resp: { code: string }) => {
-              console.log("account setting page verify code subscription");
-              if (resp.code === "success") {
-                this.saveProfile();
-              } else {
-                this.showAlert(
-                  "Notice",
-                  "Please verify your phone number",
-                  "OK"
-                );
-              }
-              this.processing = false;
-            });
-        })
-        .finally(() => {
-          this.processing = false;
-        });
-    }
+    this.api
+      .post("Accounts/saveProfile", {
+        username: this.model.username,
+        newPhone: this.model.phone,
+        code: this.model.verificationCode,
+        location: this.saveLocation ? this.location : null,
+        secondPhone: this.model.secondPhone
+      })
+      .then((observable) => {
+        observable
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe((resp: { code: string; data: string }) => {
+            if (resp.code === "success") {
+              this.authSvc.login(resp.data).then(() => {
+                this.handleSaveProfileSuccess();
+                this.processing = false;
+              });
+            } else {
+              this.showAlert("Notice", "Please verify your phone number", "OK");
+            }
+            this.processing = false;
+          });
+      })
+      .catch((e) => {
+        console.error(e);
+        this.showAlert("Notice", "Save failed", "OK");
+        this.processing = false;
+      });
   }
 
   handleSendVerificationCode() {
@@ -162,30 +161,6 @@ export class AccountSettingPage implements OnInit, OnDestroy {
       });
   }
 
-  saveProfile() {
-    this.api
-      .post("Accounts/saveProfile", {
-        location: this.saveLocation ? this.location : null,
-        secondPhone: this.model.secondPhone
-      })
-      .then((observable) => {
-        observable
-          .pipe(takeUntil(this.unsubscribe$))
-          .subscribe((resp: { code: string }) => {
-            this.processing = false;
-            if (resp.code === "success") {
-              this.handleSaveProfileSuccess();
-            } else {
-              this.showAlert("Notice", "Save failed", "OK");
-            }
-          });
-      })
-      .catch((e) => {
-        console.error(e);
-        this.processing = false;
-      });
-  }
-
   sanitizePhoneNumber(phone: string) {
     phone = phone.substring(0, 2) === "+1" ? phone.substring(2) : phone;
     phone = phone.match(/\d+/g).join("");
@@ -226,7 +201,6 @@ export class AccountSettingPage implements OnInit, OnDestroy {
       );
     }
     this.showAlert("Notice", "Saved successfully", "OK");
-    this.authSvc.updateData();
     if (this.redirectUrl) {
       this.router.navigateByUrl(this.redirectUrl);
     } else {
