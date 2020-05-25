@@ -25,6 +25,7 @@ import { Router } from "@angular/router";
 import { Subscription } from "rxjs";
 import { Subject } from "rxjs";
 import { takeUntil, filter } from "rxjs/operators";
+import * as moment from "moment";
 interface OrderErrorInterface {
   type: "order" | "payment";
   message: string;
@@ -448,7 +449,14 @@ export class OrderPage implements OnInit, OnDestroy {
   }
 
   saveOrders(orders: Array<Order.OrderInterface>) {
-    orders.forEach((order) => {
+    for (const order of orders) {
+      if (order.deliverDate < moment().format("YYYY-MM-DD")) {
+        this.showAlert("Notice", "Deliver date is expired", "OK");
+        this.router.navigate(["tabs/browse/cart"], {
+          replaceUrl: true
+        });
+        return;
+      }
       order.note = this.notes;
       order.paymentMethod = this.paymentMethod;
       switch (order.paymentMethod) {
@@ -463,7 +471,7 @@ export class OrderPage implements OnInit, OnDestroy {
           order.status = Order.OrderStatus.NEW;
           break;
       }
-    });
+    }
     return this.api.post("Orders/bulk", orders);
   }
 
@@ -489,7 +497,7 @@ export class OrderPage implements OnInit, OnDestroy {
   ) {
     const returnUrl =
       window.location.origin +
-      `/mall/tabs/my-account/transaction-history?state=${this.appCode}`;
+      `/tabs/my-account/transaction-history?state=${this.appCode}`;
     const paymentId = orders ? orders[0].paymentId : null;
     this.api
       .post("ClientPayments/payBySnappay", {
