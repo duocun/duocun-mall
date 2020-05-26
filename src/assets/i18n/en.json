@@ -103,7 +103,7 @@
   "Resend OTP Code": "Resend OTP Code",
   "Sign Up": "Sign Up",
   "Username": "Username",
-  "Phone number already exists": "Phone number already exists",
+  "Phone number already exists": "Phone number already exists. Please sign in directly.",
   "Registration failed": "Registration failed",
   "Registered successfully": "Registered successfully",
   "Agree with terms of service and privacy policy": "Agree with terms of service and privacy policy",
