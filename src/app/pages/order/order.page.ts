@@ -575,12 +575,14 @@ export class OrderPage implements OnInit, OnDestroy {
               );
             } else {
               this.showAlert("Notice", "Payment failed", "OK");
+              this.processing = false;
             }
           });
       })
       .catch((e) => {
         console.error(e);
         this.showAlert("Notice", "Payment failed", "OK");
+        this.processing = false;
       });
   }
 

@@ -11,6 +11,11 @@ import { CartService } from "src/app/services/cart/cart.service";
 
 declare const monerisCheckout: any;
 
+export const monerisCheckoutSrc = {
+  qa: "https://gatewayt.moneris.com/chkt/js/chkt_v1.00.js",
+  prod: "https://gateway.moneris.com/chkt/js/chkt_v1.00.js"
+};
+
 @Component({
   selector: "moneris-checkout",
   templateUrl: "./moneris-checkout.component.html",
@@ -73,16 +78,17 @@ export class MonerisCheckoutComponent implements OnInit, OnDestroy {
   onPageLoad(e) {
     console.log("onPageLoad", e);
     e = JSON.parse(e);
-    if (e.response_code !== "001") {
-      console.log("response_code: " + e.response_code);
-      this.router.navigate(["/tabs/browse/order"], {
-        replaceUrl: true
-      });
-    }
+    // if (e.response_code !== "001") {
+    //   console.log("response_code: " + e.response_code);
+    //   this.router.navigate(["/tabs/browse/order"], {
+    //     replaceUrl: true
+    //   });
+    // }
   }
   onCancelTransaction(e) {
     console.log("onCancelTransaction", e);
     console.log(e);
+    closeCheckout();
     this.router.navigate(["/tabs/browse/order"], {
       replaceUrl: true
     });
