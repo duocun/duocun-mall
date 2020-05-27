@@ -88,7 +88,7 @@ export class MonerisCheckoutComponent implements OnInit, OnDestroy {
   onCancelTransaction(e) {
     console.log("onCancelTransaction", e);
     console.log(e);
-    closeCheckout();
+    this.moneris.closeCheckout();
     this.router.navigate(["/tabs/browse/order"], {
       replaceUrl: true
     });
@@ -96,6 +96,7 @@ export class MonerisCheckoutComponent implements OnInit, OnDestroy {
   onErrorEvent(e) {
     console.log("onErrorEvent", e);
     this.showAlert("Notice", "Payment failed", "OK");
+    this.moneris.closeCheckout();
     this.router.navigate(["/tabs/browse"], {
       replaceUrl: true
     });
@@ -120,6 +121,7 @@ export class MonerisCheckoutComponent implements OnInit, OnDestroy {
             .subscribe((resp: { code: string; data: any }) => {
               console.log("moneris page receipt subscription");
               if (resp.code === "success") {
+                this.moneris.closeCheckout();
                 this.cartSvc.clearCart();
                 this.router.navigate(["/tabs/my-account/order-history"], {
                   replaceUrl: true
@@ -134,6 +136,7 @@ export class MonerisCheckoutComponent implements OnInit, OnDestroy {
     }
   }
   onPaymentComplete(e) {
+    // this.moneris.closeCheckout();
     console.log("onPaymentComplete", e);
   }
 
