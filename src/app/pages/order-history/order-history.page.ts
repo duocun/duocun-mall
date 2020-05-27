@@ -4,7 +4,7 @@ import { ApiService } from "src/app/services/api/api.service";
 import { AuthService } from "src/app/services/auth/auth.service";
 import { AccountInterface } from "src/app/models/account.model";
 import { Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+
 @Component({
   selector: "app-order-history",
   templateUrl: "./order-history.page.html",
@@ -12,7 +12,7 @@ import { takeUntil } from "rxjs/operators";
 })
 export class OrderHistoryPage implements OnInit, OnDestroy {
   loading: boolean;
-  orders: Array<OrderInterface>;
+  groupedOrders: Array<Array<OrderInterface>>;
   page: number;
   pageLength: number;
   accountId: string;
@@ -21,7 +21,7 @@ export class OrderHistoryPage implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
   constructor(private api: ApiService, private authSvc: AuthService) {
     this.loading = true;
-    this.orders = [];
+    this.groupedOrders = [];
     this.page = 1;
     this.pageLength = 10;
     this.accountId = "";
@@ -57,16 +57,27 @@ export class OrderHistoryPage implements OnInit, OnDestroy {
         true,
         "filter"
       )
-      .then((data: { orders: Array<OrderInterface>; total: number }) => {
+      .then((data: { data: Array<Array<OrderInterface>>; total: number }) => {
         console.log("order history page history subscription");
-        this.orders = [...this.orders, ...data.orders];
+        this.groupedOrders = [...this.groupedOrders, ...data.data];
         this.loading = false;
         if (event) {
           event.target.complete();
-          if (this.orders.length === data.total) {
+          if (this.groupedOrders.length === data.total) {
             this.scrollDisabled = true;
           }
         }
       });
+  }
+
+  getGroupOrderCode(group: Array<OrderInterface>) {
+    return group.map((order) => order.code).join("-");
+  }
+  getGroupValue(group: Array<OrderInterface>, key: string): number {
+    let total = 0;
+    group.forEach((order) => {
+      total += parseFloat(order[key] || 0);
+    });
+    return total;
   }
 }
