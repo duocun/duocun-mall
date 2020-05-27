@@ -83,6 +83,11 @@ ion-content > .container {
 .cursor-pointer {
   cursor: pointer;
 }
+@media(prefers-color-scheme: dark) {
+  ion-searchbar {
+    --background: var(--ion-color-light)!important;
+  }
+}
 ion-searchbar.searchbar-location {
   .searchbar-input {
     font-size: 0.75rem !important;
