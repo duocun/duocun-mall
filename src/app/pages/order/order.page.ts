@@ -10,7 +10,7 @@ import { getPictureUrl, ProductInterface } from "src/app/models/product.model";
 import { AccountInterface } from "src/app/models/account.model";
 import { AuthService } from "src/app/services/auth/auth.service";
 import { ApiService } from "src/app/services/api/api.service";
-import { AlertController } from "@ionic/angular";
+import { AlertController, LoadingController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import { StripeToken } from "stripe-angular";
 import { CartInterface } from "src/app/models/cart.model";
@@ -57,6 +57,7 @@ export class OrderPage implements OnInit, OnDestroy {
   PaymentMethod = PaymentMethod;
   appCode: string | undefined;
   cartSanitized: boolean;
+  loadingOverlay: any;
   private unsubscribe$ = new Subject<void>();
   constructor(
     private cartSvc: CartService,
@@ -66,7 +67,8 @@ export class OrderPage implements OnInit, OnDestroy {
     private translator: TranslateService,
     private locSvc: LocationService,
     private contextSvc: ContextService,
-    private router: Router
+    private router: Router,
+    private loader: LoadingController
   ) {
     this.loading = true;
     this.error = null;
@@ -169,17 +171,38 @@ export class OrderPage implements OnInit, OnDestroy {
 
   createStripeToken(stripeCard) {
     this.processing = true;
+    this.presentLoading();
     stripeCard
       .createToken()
       .then((token) => {
         if (!token) {
           this.processing = false;
+          this.dismissLoading();
         }
       })
       .catch((e) => {
         console.error(e);
         this.processing = false;
+        this.dismissLoading();
       });
+  }
+
+  async presentLoading() {
+    const message =
+      this.translator.currentLang === "zh" ? "处理中..." : "Processing...";
+    if (this.loadingOverlay) {
+      return;
+    }
+    this.loadingOverlay = await this.loader.create({
+      message
+    });
+    await this.loadingOverlay.present();
+  }
+
+  async dismissLoading() {
+    if (this.loadingOverlay) {
+      await this.loadingOverlay.dismiss();
+    }
   }
 
   canPayStripe() {
@@ -216,6 +239,7 @@ export class OrderPage implements OnInit, OnDestroy {
   stripePay(token: StripeToken) {
     this.paymentMethod = PaymentMethod.CREDIT_CARD;
     this.processing = true;
+    this.presentLoading();
     this.stripe
       .createPaymentMethod({
         type: "card",
@@ -253,16 +277,19 @@ export class OrderPage implements OnInit, OnDestroy {
                             this.cartSubscription.unsubscribe();
                             this.cartSvc.clearCart();
                             await this.authSvc.updateData();
+                            this.processing = false;
+                            await this.dismissLoading();
+                            console.log("navigate to order history");
                             this.router.navigate(
                               ["/tabs/my-account/order-history"],
                               {
                                 replaceUrl: true
                               }
                             );
-                            this.processing = false;
                           } else {
                             this.showAlert("Notice", "Payment failed", "OK");
                             this.processing = false;
+                            this.dismissLoading();
                           }
                         });
                     })
@@ -273,6 +300,7 @@ export class OrderPage implements OnInit, OnDestroy {
                         message: "Cannot save payment"
                       };
                       this.processing = false;
+                      this.dismissLoading();
                     });
                 }
               );
@@ -284,17 +312,20 @@ export class OrderPage implements OnInit, OnDestroy {
               message: "Cannot save orders"
             };
             this.processing = false;
+            this.dismissLoading();
           });
       })
       .catch((e) => {
         console.error(e);
         this.processing = false;
+        this.dismissLoading();
       });
   }
 
   wechatPay() {
     this.paymentMethod = PaymentMethod.WECHAT;
     this.processing = true;
+    this.presentLoading();
     this.saveOrders(this.orders).then((observable) => {
       observable
         .pipe(takeUntil(this.unsubscribe$))
@@ -340,6 +371,7 @@ export class OrderPage implements OnInit, OnDestroy {
 
   handleInvalidOrders(resp) {
     this.processing = false;
+    this.dismissLoading();
     if (resp.message === "out of stock") {
       if (resp.product.quantity && resp.product.quantity > 0) {
         const msg1 = "Please adjust the quantity of the product";
@@ -521,6 +553,7 @@ export class OrderPage implements OnInit, OnDestroy {
           } else {
             this.showAlert("Notice", "Payment failed", "OK");
             this.processing = false;
+            this.dismissLoading();
           }
         });
       })
@@ -528,6 +561,7 @@ export class OrderPage implements OnInit, OnDestroy {
         console.error(e);
         this.showAlert("Notice", "Payment failed", "OK");
         this.processing = false;
+        this.dismissLoading();
       });
   }
 
