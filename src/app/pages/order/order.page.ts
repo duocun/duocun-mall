@@ -246,12 +246,13 @@ export class OrderPage implements OnInit, OnDestroy {
                     .then((observable) => {
                       observable
                         .pipe(takeUntil(this.unsubscribe$))
-                        .subscribe((resp: any) => {
+                        .subscribe(async (resp: any) => {
                           console.log("order page save payment subscription");
                           if (resp.err === PaymentError.NONE) {
                             this.showAlert("Notice", "Payment success", "OK");
                             this.cartSubscription.unsubscribe();
                             this.cartSvc.clearCart();
+                            await this.authSvc.updateData();
                             this.router.navigate(
                               ["/tabs/my-account/order-history"],
                               {
