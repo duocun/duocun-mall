@@ -562,9 +562,10 @@ export class OrderPage implements OnInit, OnDestroy {
       });
   }
 
-  monerisPay() {
+  async monerisPay() {
     this.paymentMethod = PaymentMethod.CREDIT_CARD;
     this.processing = true;
+    await this.presentLoading();
     this.saveOrders(this.orders).then((observable) => {
       observable
         .pipe(takeUntil(this.unsubscribe$))
@@ -602,6 +603,8 @@ export class OrderPage implements OnInit, OnDestroy {
           .subscribe((resp: { code: string; data?: string }) => {
             console.log("order page moneris preload subscription");
             if (resp.code === "success") {
+              this.processing = false;
+              this.dismissLoading();
               this.router.navigate(
                 [`/tabs/browse/order/pay/moneris/${paymentId}/${resp.data}`],
                 {
@@ -611,6 +614,7 @@ export class OrderPage implements OnInit, OnDestroy {
             } else {
               this.showAlert("Notice", "Payment failed", "OK");
               this.processing = false;
+              this.dismissLoading();
             }
           });
       })

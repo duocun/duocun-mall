@@ -137,7 +137,46 @@ export class MonerisCheckoutComponent implements OnInit, OnDestroy {
   }
   onPaymentComplete(e) {
     // this.moneris.closeCheckout();
+    if (this.paymentReceiptHandled) {
+      console.log("payment receipt already handled", e);
+      return;
+    }
+    this.paymentReceiptHandled = true;
     console.log("onPaymentComplete", e);
+    e = JSON.parse(e);
+    if (e.response_code === "001") {
+      this.api
+        .post("ClientPayments/moneris/receipt", {
+          paymentId: this.paymentId,
+          ticket: this.ticket
+        })
+        .then((observable) => {
+          observable
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((resp: { code: string; data: any }) => {
+              console.log("moneris page receipt subscription");
+              if (resp.code === "success") {
+                this.moneris.closeCheckout();
+                this.cartSvc.clearCart();
+                this.router.navigate(["/tabs/my-account/order-history"], {
+                  replaceUrl: true
+                });
+              } else {
+                this.moneris.closeCheckout();
+                this.router.navigate(["/tabs/browse/order"], {
+                  replaceUrl: true
+                });
+                this.showAlert("Notice", "Payment failed", "OK");
+              }
+            });
+        });
+    } else {
+      this.moneris.closeCheckout();
+      this.router.navigate(["/tabs/browse/order"], {
+        replaceUrl: true
+      });
+      this.showAlert("Notice", "Payment failed", "OK");
+    }
   }
 
   showAlert(header, message, button) {
