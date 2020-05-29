@@ -1,7 +1,6 @@
 import { Pipe, PipeTransform } from "@angular/core";
 import * as moment from "moment-timezone";
 import { TranslateService } from "@ngx-translate/core";
-import { environment } from "src/environments/environment";
 @Pipe({
   name: "moment",
   pure: false

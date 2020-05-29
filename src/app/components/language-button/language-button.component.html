@@ -1,3 +1,6 @@
 <ion-button *ngIf="account" [routerLink]="['/tabs/my-account']" [queryParams]="{action: 'change-lang'}">
-  <ion-icon name="language-outline"></ion-icon>
+  <ion-label>
+    <ng-container *ngIf="lang === 'zh'">En</ng-container>
+    <ng-container *ngIf="lang === 'en'">中文</ng-container>
+  </ion-label>
 </ion-button>
