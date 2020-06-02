@@ -84,6 +84,7 @@ export class MyAccountPage implements OnInit, AfterViewInit, OnDestroy {
   }
   handleLogout() {
     this.authSvc.logout();
+    window.location.href = "/tabs/browse";
   }
   getUrlWithoutQueryString() {
     return [location.protocol, "//", location.host, location.pathname].join("");

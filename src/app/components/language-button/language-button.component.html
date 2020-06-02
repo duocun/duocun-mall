@@ -4,3 +4,9 @@
     <ng-container *ngIf="lang === 'en'">中文</ng-container>
   </ion-label>
 </ion-button>
+<ion-button *ngIf="!account" (click)="switchLanguage()">
+  <ion-label>
+    <ng-container *ngIf="lang === 'zh'">En</ng-container>
+    <ng-container *ngIf="lang === 'en'">中文</ng-container>
+  </ion-label>
+</ion-button>

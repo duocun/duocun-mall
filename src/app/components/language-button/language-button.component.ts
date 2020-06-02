@@ -4,6 +4,8 @@ import { AccountInterface } from "src/app/models/account.model";
 import { takeUntil } from "rxjs/operators";
 import { Subject } from "rxjs";
 import { TranslateService } from "@ngx-translate/core";
+import { Storage } from "@ionic/storage";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "language-button",
@@ -16,7 +18,8 @@ export class LanguageButtonComponent implements OnInit, OnDestroy {
   unsubscribe$: Subject<void>;
   constructor(
     private authSvc: AuthService,
-    private translator: TranslateService
+    private translator: TranslateService,
+    private storage: Storage
   ) {
     this.unsubscribe$ = new Subject<void>();
   }
@@ -39,5 +42,12 @@ export class LanguageButtonComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  switchLanguage() {
+    const lang = this.lang === "zh" ? "en" : "zh";
+    this.storage.set(environment.storageKey.lang, lang);
+    this.translator.use(lang);
+    window.location.reload();
   }
 }
