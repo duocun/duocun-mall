@@ -31,7 +31,7 @@ export class LocationGuard implements CanActivate {
       if (!canActivate) {
         return false;
       }
-      if (!this.authSvc.account || !this.authSvc.account.phone) {
+      if (this.authSvc.account && !this.authSvc.account.phone) {
         this.showAlert("Notice", "Please input phone number", "OK");
         this.router.navigate(["/tabs/my-account/setting"], {
           queryParams: { redirectUrl: state.url }

@@ -83,6 +83,7 @@ export class OrderPage implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+    await this.presentLoading();
     this.paymentMethod = PaymentMethod.CREDIT_CARD;
     this.authSvc
       .getAccount()
@@ -154,6 +155,7 @@ export class OrderPage implements OnInit, OnDestroy {
                 this.summary = Order.getOrderSummary(this.cartItemGroups, 0);
                 this.setCharge();
                 this.loading = false;
+                await this.dismissLoading();
               });
           });
       });
