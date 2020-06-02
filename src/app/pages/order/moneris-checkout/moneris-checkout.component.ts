@@ -1,6 +1,4 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { get } from "scriptjs";
-import { environment } from "src/environments/environment";
 import { ActivatedRoute, Router } from "@angular/router";
 import { takeUntil } from "rxjs/operators";
 import { Subject } from "rxjs";
@@ -8,13 +6,9 @@ import { AlertController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import { ApiService } from "src/app/services/api/api.service";
 import { CartService } from "src/app/services/cart/cart.service";
+import "../../../../assets/plugins/moneris-checkout";
 
 declare const monerisCheckout: any;
-
-export const monerisCheckoutSrc = {
-  qa: "https://gatewayt.moneris.com/chkt/js/chkt_v1.00.js",
-  prod: "https://gateway.moneris.com/chkt/js/chkt_v1.00.js"
-};
 
 @Component({
   selector: "moneris-checkout",
@@ -39,34 +33,32 @@ export class MonerisCheckoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    get("https://gatewayt.moneris.com/chkt/js/chkt_v1.00.js", () => {
-      this.moneris = new monerisCheckout();
-      this.moneris.setMode(environment.monerisMode);
-      this.moneris.setCheckoutDiv("monerisCheckout");
-      this.moneris.setCallback("page_loaded", (e) => {
-        this.onPageLoad(e);
-      });
-      this.moneris.setCallback("cancel_transaction", (e) => {
-        this.onCancelTransaction(e);
-      });
-      this.moneris.setCallback("error_event", (e) => {
-        this.onErrorEvent(e);
-      });
-      this.moneris.setCallback("payment_receipt", (e) => {
-        this.onPaymentReceipt(e);
-      });
-      this.moneris.setCallback("payment_complete", (e) => {
-        this.onPaymentComplete(e);
-      });
-      this.route.params
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((params) => {
-          this.paymentId = params.paymentId;
-          this.ticket = params.ticket;
-          if (this.ticket) {
-            this.moneris.startCheckout(this.ticket);
-          }
-        });
+    this.moneris = new monerisCheckout();
+    this.moneris.setMode("prod");
+    this.moneris.setCheckoutDiv("monerisCheckoutDiv");
+    this.moneris.setCallback("page_loaded", (e) => {
+      this.onPageLoad(e);
+      //@ts-ignore
+      monerisCheckoutDiv.classList.add("loaded");
+    });
+    this.moneris.setCallback("cancel_transaction", (e) => {
+      this.onCancelTransaction(e);
+    });
+    this.moneris.setCallback("error_event", (e) => {
+      this.onErrorEvent(e);
+    });
+    this.moneris.setCallback("payment_receipt", (e) => {
+      this.onPaymentReceipt(e);
+    });
+    this.moneris.setCallback("payment_complete", (e) => {
+      this.onPaymentComplete(e);
+    });
+    this.route.params.pipe(takeUntil(this.unsubscribe$)).subscribe((params) => {
+      this.paymentId = params.paymentId;
+      this.ticket = params.ticket;
+      if (this.ticket) {
+        this.moneris.startCheckout(this.ticket);
+      }
     });
   }
 
