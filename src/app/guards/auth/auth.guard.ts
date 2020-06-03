@@ -33,7 +33,7 @@ export class AuthGuard implements CanActivate {
           resolve(true);
         } else {
           if (!this.alerted) {
-            this.showAlert();
+            // this.showAlert();
             this.alerted = true;
           }
           this.router.navigate(["/tabs/login"], {
