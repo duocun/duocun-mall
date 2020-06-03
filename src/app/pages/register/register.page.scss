@@ -4,3 +4,38 @@ ion-checkbox[size=small] {
 ion-label[size=small] {
   font-size: 0.8rem;
 }
+.container-sm {
+  max-width: 540px;
+}
+@media(min-width: 576px) {
+  .container-sm > form {
+    padding: 0.5rem 1rem;
+    border: 1px solid #eeeeee;
+  }
+}
+ion-button.button-google {
+  --background: #DB4437;
+  text-transform: none;
+}
+ion-button.button-facebook {
+  --background: #3B5998;
+  text-transform: none;
+}
+b.stroke {
+  display: block;
+  position: absolute;
+  content: ' ';
+  width: calc((100% - 132px)/2);
+  border-bottom: 1px solid #999999;
+  top: 15px;
+  &.before {
+    left: 7px;
+  }
+  &.after {
+    right: 7px;
+  }
+}
+.list-input {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}

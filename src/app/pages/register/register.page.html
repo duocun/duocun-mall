@@ -12,7 +12,16 @@
 <ion-content>
   <div class="container container-sm">
     <form class="ion-padding-horizontal ion-margin-top">
-      <ion-list lines="full">
+      <div class="ion-padding-horizontal ion-margin-top">
+        <ion-row>
+          <ion-col class="ion-text-center">
+            <b class="stroke before"></b>
+            <ion-label translate="Join duocun"></ion-label>
+            <b class="stroke after"></b>
+          </ion-col>
+        </ion-row>
+      </div>
+      <ion-list lines="full" class="list-input">
         <ion-item>
           <ion-grid class="ion-no-padding ion-no-margin w-100">
             <ion-row>
@@ -78,15 +87,40 @@
           <ion-label size="small" translate="Agree with terms of service and privacy policy"></ion-label>
         </ion-item>
       </ion-list>
-      <div class="ion-padding-vertical">
-        <ion-button
-          [disabled]="processing || !isValidForm()"
-          expand="full" 
-          type="submit" 
-          translate="Sign Up"
-          (click)="handleSignUp()"
-        >
+      <div class="ion-padding">
+        <ion-row>
+          <ion-col>
+            <ion-button
+              [disabled]="processing || !isValidForm()"
+              expand="full" 
+              type="submit" 
+              translate="Sign Up"
+              (click)="handleSignUp()"
+            >
         </ion-button>
+          </ion-col>
+        </ion-row>
+      </div>
+      <div class="ion-padding">
+        <ion-row>
+          <ion-col size="12" class="ion-text-center">
+            <b class="stroke before"></b>
+            <ion-label translate="Or sign up with"></ion-label>
+            <b class="stroke after"></b>
+          </ion-col>
+          <ion-col size="12">
+            <ion-button class="button-google" expand="full">
+              <ion-icon name="logo-google" class="ion-margin-end"></ion-icon>
+              <ion-label translate="Sign up with Google"></ion-label>
+            </ion-button>
+          </ion-col>
+          <ion-col size="12">
+            <ion-button class="button-facebook" expand="full">
+              <ion-icon name="logo-facebook" class="ion-margin-end"></ion-icon>
+              <ion-label translate="Sign up with Facebook"></ion-label>
+            </ion-button>
+          </ion-col>
+        </ion-row>
       </div>
     </form>
   </div>
