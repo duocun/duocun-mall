@@ -70,7 +70,7 @@
   "Please verify your phone number": "请验证您的电话号码",
   "Save": "保存",
   "Input delivery address": "输入收货地址",
-  "Please select delivery address": "请选择收货地址",
+  "Please select delivery address": "请输入收货地址，并在提示的地址列表里选择您的地址",
   "Saved successfully": "保存成功",
   "Merchant": "商店",
   "Category": "类别",
