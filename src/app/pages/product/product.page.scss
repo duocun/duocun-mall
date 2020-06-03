@@ -22,6 +22,10 @@
     min-width: 65%;
   }
 }
+.product-detail {
+  padding-top: 1rem;
+}
+
 @media(max-width: 280px) {
   .row-schedule {
     justify-content: center;
@@ -30,6 +34,11 @@
       max-width: 100%!important;
     }
   }
+}
+ion-button[expand=full] {
+  max-width: 360px!important;
+  margin-left: auto;
+  margin-right: auto;
 }
 @media(max-width: 479px) {
   ion-slides {
@@ -44,5 +53,13 @@
 @media(min-width: 768px) {
   ion-slides {
     max-height: 480px;
+  }
+  .container {
+    padding-top: 0.5rem;
+  }
+}
+@media(min-width: 992px) {
+  .image-slide-container {
+    margin-top: 2rem;
   }
 }
