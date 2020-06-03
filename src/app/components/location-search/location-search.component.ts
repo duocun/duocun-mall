@@ -18,7 +18,7 @@ export class LocationSearchComponent implements OnInit {
   locationHistory: Array<LocationInterface>;
   search: string;
   @Output() onSelect = new EventEmitter<{ address: string; location: any }>();
-
+  @Output() onClear = new EventEmitter<void>();
   constructor(
     private api: ApiService,
     private lang: TranslateService,
@@ -86,6 +86,12 @@ export class LocationSearchComponent implements OnInit {
         this.listVisible = true;
       }
     }
+  }
+
+  handleClear() {
+    this.listVisible = false;
+    this.placeList = [];
+    this.onClear.emit();
   }
 
   formatAddress(place: PlaceInterface) {

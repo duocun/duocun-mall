@@ -85,6 +85,10 @@ export class AccountSettingPage implements OnInit, OnDestroy {
       this.showAlert("Notice", "Please input phone number", "OK");
       return;
     }
+    if (!this.location) {
+      this.showAlert("Notice", "Please select delivery address", "OK");
+      return;
+    }
     this.processing = true;
 
     this.model.phone = this.sanitizePhoneNumber(this.model.phone);
@@ -182,14 +186,18 @@ export class AccountSettingPage implements OnInit, OnDestroy {
       });
   }
 
-  handleLocationSelect(event: {
+  async handleLocationSelect(event: {
     address: string;
     location: LocationInterface;
   }) {
     this.location = event.location;
     this.location.address = event.address;
     this.cart.clearCart();
-    this.checkDeliveryRange();
+    await this.checkDeliveryRange();
+  }
+
+  handleLocationClear() {
+    this.location = null;
   }
 
   handleSaveProfileSuccess() {

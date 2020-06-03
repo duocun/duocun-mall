@@ -7,7 +7,7 @@
       placeholder="{{'Input delivery address'|translate}}" 
       (ionChange)="handleSearch($event)"
       (ionCancel)="listVisible = false"
-      (ionClear)="listVisible=false; placeList=[]"
+      (ionClear)="handleClear()"
       (click)="handleFocus()"
       [value]="search"
     >

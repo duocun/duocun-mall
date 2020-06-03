@@ -23,7 +23,7 @@
           ></ion-label>
         </ion-col>
       </ion-row>
-      <location-search (onSelect)="handleLocationSelect($event)"></location-search>
+      <location-search (onSelect)="handleLocationSelect($event)" (onClear)="handleLocationClear()"></location-search>
       <ion-item *ngIf="location">
         <ion-label position="stacked" translate="Address Detail"></ion-label>
         <ion-input [(ngModel)]="location.unit"></ion-input>
