@@ -273,7 +273,9 @@ export class ProductPage implements OnInit, OnDestroy {
             }) => {
               console.log("product page schedule subscription");
               if (resp.code === "success") {
-                this.schedules = resp.data;
+                this.schedules = resp.data.filter((schedule: any) => {
+                  return schedule.date > moment().format("YYYY-MM-DD");
+                });
                 // this.initItems();
               }
               this.loading = false;
