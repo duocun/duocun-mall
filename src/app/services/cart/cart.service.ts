@@ -116,11 +116,9 @@ export class CartService {
   }
 
   sanitize() {
-    const now = moment().format("YYYY-MM-DD HH:mm");
+    const now = moment().format("YYYY-MM-DD");
     this.cart.items = this.cart.items.filter((item) => {
-      return (
-        item.delivery && item.delivery.date + " " + item.delivery.time > now
-      );
+      return item.delivery && item.delivery.date > now;
     });
     this.cart.quantity = getCartQuantity(this.cart);
     this.saveCart();
