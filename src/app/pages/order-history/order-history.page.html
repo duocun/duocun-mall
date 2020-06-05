@@ -53,10 +53,10 @@
                       <ion-row>
                         <ion-col localValue [data]="item.product" key="name"></ion-col>
                       </ion-row>
-                      <ion-row>
+                      <ion-row *ngIf="order.deliverDate">
                         <ion-col>
                           <ion-badge color="light">
-                            {{order.deliverDate}}
+                            {{order.deliverDate}}{{'deliver_badge_text'|translate}}
                           </ion-badge>
                         </ion-col>
                       </ion-row>
