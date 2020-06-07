@@ -25,7 +25,7 @@
         <ion-col size-xs="3" size-lg="2.4" class="ion-no-margin ion-no-padding">
           <ion-button
             [disabled]="loading"
-            color="danger"
+            [color]="selectedCategoryId === '' ? 'success' : 'light' "
             size="small"
             expand="full"
             translate="All"
