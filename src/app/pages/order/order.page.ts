@@ -287,9 +287,13 @@ export class OrderPage implements OnInit, OnDestroy {
                               }
                             );
                           } else {
-                            this.showAlert("Notice", "Payment failed", "OK");
-                            this.processing = false;
-                            this.dismissLoading();
+                            if (resp.data) {
+                              this.handleInvalidOrders(resp.data);
+                            } else {
+                              this.showAlert("Notice", "Payment failed", "OK");
+                              this.processing = false;
+                              this.dismissLoading();
+                            }
                           }
                         });
                     })
@@ -551,9 +555,13 @@ export class OrderPage implements OnInit, OnDestroy {
             this.cartSvc.clearCart();
             window.location.href = resp.url;
           } else {
-            this.showAlert("Notice", "Payment failed", "OK");
-            this.processing = false;
-            this.dismissLoading();
+            if (resp.data) {
+              this.handleInvalidOrders(resp.data);
+            } else {
+              this.showAlert("Notice", "Payment failed", "OK");
+              this.processing = false;
+              this.dismissLoading();
+            }
           }
         });
       })
