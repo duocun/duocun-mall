@@ -33,10 +33,8 @@ export class AppComponent {
     private statusBar: StatusBar,
     private translator: TranslateService,
     private stroage: Storage,
-    private route: ActivatedRoute,
     private router: Router,
     private authSvc: AuthService,
-    private alert: AlertController,
     private context: ContextService
   ) {
     this.initializeApp();
