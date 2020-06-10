@@ -54,6 +54,9 @@ export class OrderPage implements OnInit, OnDestroy {
   appCode: string | undefined;
   cartSanitized: boolean;
   loadingOverlay: any;
+  cc: string;
+  exp: string;
+  cvd: string;
   private unsubscribe$ = new Subject<void>();
   constructor(
     private cartSvc: CartService,
@@ -586,9 +589,37 @@ export class OrderPage implements OnInit, OnDestroy {
               return this.handleInvalidOrders(resp.data);
             }
             const order: Order.OrderInterface = resp.data[0];
-            this.router.navigateByUrl(
-              `/tabs/browse/order/pay/moneris/${order.paymentId}`
-            );
+            this.api
+              .post("ClientPayments/moneris/htpay", {
+                paymentId: order.paymentId,
+                cc: this.cc,
+                exp: this.exp,
+                cvd: this.cvd
+              })
+              .then((observable) => {
+                observable.toPromise().then(async (resp: any) => {
+                  if (resp.err == PaymentError.NONE) {
+                    this.showAlert("Notice", "Payment success", "OK");
+                    this.cartSubscription.unsubscribe();
+                    this.cartSvc.clearCart();
+                    await this.authSvc.updateData();
+                    this.processing = false;
+                    await this.dismissLoading();
+                    console.log("navigate to order history");
+                    this.router.navigate(["/tabs/my-account/order-history"], {
+                      replaceUrl: true
+                    });
+                  } else {
+                    if (resp.data) {
+                      this.handleInvalidOrders(resp.data);
+                    } else {
+                      this.showAlert("Notice", "Payment failed", "OK");
+                      this.processing = false;
+                      this.dismissLoading();
+                    }
+                  }
+                });
+              });
           }
         );
     });
@@ -600,6 +631,7 @@ export class OrderPage implements OnInit, OnDestroy {
     orders: Array<Order.OrderInterface>,
     payable: number
   ) {
+    throw new Error("Use moneris ht payment instead");
     const paymentId = orders[0].paymentId;
     this.api
       .post("ClientPayments/moneris/preload", {
