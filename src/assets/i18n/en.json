@@ -124,5 +124,8 @@
   "Sign up with Google": "Google login",
   "Sign up with Facebook": "Facebook login",
   "Already have an account?": "Already have an account?",
-  "deliver_badge_text": ""
+  "deliver_badge_text": "",
+  "Credit Card Number": "Credit Card Number",
+  "Expiry Date": "Expiry Date (MMYY)",
+  "CVD": "CVD"
 }

@@ -12,5 +12,6 @@ export const environment = {
   defaultLang: "zh",
   gmap: "AIzaSyCEd6D6vc9K-YzMH-QtQWRSs5HZkLKSWyk",
   timezone: "America/Toronto",
-  monerisMode: "prod"
+  monerisMode: "prod",
+  monerisHTProfileId: "htV6VVM9NH24SXX"
 };

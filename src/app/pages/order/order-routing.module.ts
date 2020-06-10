@@ -7,7 +7,7 @@ import { MonerisCheckoutComponent } from "src/app/pages/order/moneris-checkout/m
 
 const routes: Routes = [
   {
-    path: "pay/moneris/:paymentId/:ticket",
+    path: "pay/moneris/:paymentId",
     component: MonerisCheckoutComponent,
     canActivate: [AuthGuard]
   },

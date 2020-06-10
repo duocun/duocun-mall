@@ -585,11 +585,9 @@ export class OrderPage implements OnInit, OnDestroy {
             if (resp.code !== "success") {
               return this.handleInvalidOrders(resp.data);
             }
-            this.getMonerisTicket(
-              this.appCode,
-              this.account._id,
-              resp.data,
-              this.charge.payable
+            const order: Order.OrderInterface = resp.data[0];
+            this.router.navigateByUrl(
+              `/tabs/browse/order/pay/moneris/${order.paymentId}`
             );
           }
         );
