@@ -118,7 +118,7 @@ export class OrderPage implements OnInit, OnDestroy {
             this.cartSubscription = this.cartSvc
               .getCart()
               .pipe(
-                filter((cart) => !!cart && cart.items.length > 0),
+                filter((cart) => !!cart),
                 takeUntil(this.unsubscribe$)
               )
               .subscribe(async (cart) => {
@@ -138,6 +138,7 @@ export class OrderPage implements OnInit, OnDestroy {
                 this.cartItemGroups = Order.getCartItemGroups(cart);
                 this.orders = [];
                 if (!this.cartItemGroups.length) {
+                  await this.dismissLoading();
                   return this.router.navigate(["/tabs/browse"], {
                     replaceUrl: true
                   });
