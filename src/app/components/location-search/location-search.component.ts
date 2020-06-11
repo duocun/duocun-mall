@@ -109,13 +109,14 @@ export class LocationSearchComponent implements OnInit {
           if (loc[0]) {
             this.onSelect.emit({
               address,
-              location: getLocationFromGeocode(loc[1] ? loc[1] : loc[0])
+              location: getLocationFromGeocode(loc[1] ? loc[1] : loc[0]),
+              place
             });
           }
         });
       });
     } else {
-      this.onSelect.emit({ address, location: place.location });
+      this.onSelect.emit({ address, location: place.location, place });
     }
     this.listVisible = false;
     this.search = address;

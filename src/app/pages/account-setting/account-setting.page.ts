@@ -189,9 +189,21 @@ export class AccountSettingPage implements OnInit, OnDestroy {
   async handleLocationSelect(event: {
     address: string;
     location: LocationInterface;
+    place: {
+      description: string;
+      structured_formatting: { main_text: string };
+    };
   }) {
     this.location = event.location;
     this.location.address = event.address;
+    if (!this.location.streetNumber) {
+      try {
+        this.location.streetNumber =
+          event.place.structured_formatting.main_text.split(" ")[0] || "";
+      } catch (e) {
+        this.location.streetNumber = "";
+      }
+    }
     this.cart.clearCart();
     await this.checkDeliveryRange();
   }
