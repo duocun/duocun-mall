@@ -5,7 +5,10 @@ import { ApiService } from "src/app/services/api/api.service";
 import { TranslateService } from "@ngx-translate/core";
 import { AlertController } from "@ionic/angular";
 import { LocationService } from "src/app/services/location/location.service";
-import { LocationInterface } from "src/app/models/location.model";
+import {
+  LocationInterface,
+  PlaceInterface
+} from "src/app/models/location.model";
 import { Router, ActivatedRoute } from "@angular/router";
 import { CartService } from "src/app/services/cart/cart.service";
 import { environment } from "src/environments/environment";
@@ -189,14 +192,11 @@ export class AccountSettingPage implements OnInit, OnDestroy {
   async handleLocationSelect(event: {
     address: string;
     location: LocationInterface;
-    place: {
-      description: string;
-      structured_formatting: { main_text: string };
-    };
+    place?: PlaceInterface;
   }) {
     this.location = event.location;
     this.location.address = event.address;
-    if (!this.location.streetNumber) {
+    if (!this.location.streetNumber && event.place) {
       try {
         this.location.streetNumber =
           event.place.structured_formatting.main_text.split(" ")[0] || "";

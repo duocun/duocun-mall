@@ -17,7 +17,11 @@ export class LocationSearchComponent implements OnInit {
   placeList: Array<PlaceInterface>;
   locationHistory: Array<LocationInterface>;
   search: string;
-  @Output() onSelect = new EventEmitter<{ address: string; location: any }>();
+  @Output() onSelect = new EventEmitter<{
+    address: string;
+    location: any;
+    place?: PlaceInterface;
+  }>();
   @Output() onClear = new EventEmitter<void>();
   constructor(
     private api: ApiService,
