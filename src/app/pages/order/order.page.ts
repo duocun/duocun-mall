@@ -666,6 +666,17 @@ export class OrderPage implements OnInit, OnDestroy {
       });
   }
 
+  isCardValid() {
+    return (
+      this.cc &&
+      this.cvd &&
+      this.exp &&
+      this.cc.length > 7 &&
+      this.cvd.length > 2 &&
+      this.exp.length > 3
+    );
+  }
+
   isWechatBrowser() {
     return /micromessenger/i.test(navigator.userAgent);
   }
