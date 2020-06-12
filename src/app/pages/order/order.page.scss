@@ -1,6 +1,12 @@
 h5 {
   font-weight: 600;
 }
+.row-order-notice {
+  padding: 1.5rem;
+}
+.row-order-info {
+  padding: 1.25rem;
+}
 .order-notice {
   list-style: none;
   font-size: 0.75rem;
@@ -27,6 +33,15 @@ h5 {
     border-bottom: 1px solid #eee;
   }
 }
+.col-payment-button {
+  padding: 0.25rem;
+}
+.col-payment-cc {
+  margin-top: 10px;
+}
+.col-payment-wechat {
+  padding: 0.6rem;
+}
 .font-weight-bold {
   font-weight: 600;
 }
@@ -36,10 +51,10 @@ h5 {
   }
 }
 #cardContainer {
-  padding: 7px;
   ion-icon {
     font-size: 1.125rem;
-    margin-right: 5px;
+    margin-right: 6px;
+    margin-left: 12px;
   }
   ion-input {
     font-size: 0.875rem;
