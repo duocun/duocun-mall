@@ -127,5 +127,21 @@
   "deliver_badge_text": "",
   "Credit Card Number": "Credit Card Number",
   "Expiry Date": "MMYY",
-  "CVD": "CVD"
+  "CVD": "CVD",
+  "Moneris_invalid_card_number": "Card number is invalid",
+  "Moneris_card_invalid_number": "Card number is invalid",
+  "Moneris_invalid_exp": "Expiration date is invalid",
+  "Moneris_invalid_cvd": "Cvd number is invalid",
+  "Moneris_card_expired": "Credit card is expired",
+  "Moneris_card_stolen": "Invalid credit card",
+  "Moneris_card_invalid_status": "Invalid credit card",
+  "Moneris_card_restricted": "Credit card is restricted",
+  "Moneris_card_low_funds": "Insufficient funds",
+  "Moneris_card_not_supported": "That credit card is not supported",
+  "Moneris_card_invalid_account": "Invalid credit card",
+  "Moneris_card_invalid_expiration_date": "Expiration date is invalid",
+  "Moneris_card_limited": "Credit card is limited",
+  "Moneris_card_declined": "Credit card is declined",
+  "Moneris_cvv_invalid": "Cvd number is invalid",
+  "Moneris_payment_failed": "Payment failed"
 }

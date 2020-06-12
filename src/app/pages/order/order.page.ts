@@ -614,7 +614,12 @@ export class OrderPage implements OnInit, OnDestroy {
                     if (resp.data) {
                       this.handleInvalidOrders(resp.data);
                     } else {
-                      this.showAlert("Notice", "Payment failed", "OK");
+                      if (resp.msg) {
+                        const message = "Moneris_" + resp.msg;
+                        this.showAlert("Notice", message, "OK");
+                      } else {
+                        this.showAlert("Notice", "Payment failed", "OK");
+                      }
                       this.processing = false;
                       this.dismissLoading();
                     }
