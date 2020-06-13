@@ -6,6 +6,9 @@ import { AlertController } from "@ionic/angular";
 import { AuthService } from "src/app/services/auth/auth.service";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { environment } from "src/environments/environment";
+declare const gapi: any;
+
 @Component({
   selector: "app-login",
   templateUrl: "./login.page.html",
@@ -33,11 +36,58 @@ export class LoginPage implements OnInit, OnDestroy {
     this.failedCount = 0;
     this.processing = false;
     this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "/";
+    this.initGoogleAuth();
   }
 
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  initGoogleAuth() {
+    gapi.load("auth2", () => {
+      const auth2 = gapi.auth2.init({
+        client_id: environment.googleAuthClientId,
+        cookiepolicy: "single_host_origin"
+      });
+      auth2.attachClickHandler(
+        document.getElementById("googleLoginButton"),
+        {},
+        (googleUser) => {
+          const profile = googleUser.getBasicProfile();
+          const userInfo = {
+            token: googleUser.getAuthResponse().id_token,
+            googleUserId: profile.getId()
+          };
+          this.api.post("Accounts/googleLogin", userInfo).then((observable) => {
+            observable
+              .toPromise()
+              .then((resp: { code: string; token: string }) => {
+                if (resp.code === "success") {
+                  this.authSvc.login(resp.token).then((account) => {
+                    if (account) {
+                      this.showAlert("Notice", "Login successful", "OK");
+                      if (this.returnUrl) {
+                        this.router.navigate([this.returnUrl]);
+                      } else {
+                        this.router.navigate(["/tabs/browse"]);
+                      }
+                    } else {
+                      this.showAlert("Notice", "Login failed", "OK");
+                    }
+                  });
+                } else {
+                  this.showAlert("Notice", "Login failed", "OK");
+                }
+              });
+          });
+        },
+        (error) => {
+          console.error(error);
+          this.showAlert("Notice", "Google login failed", "OK");
+        }
+      );
+    });
   }
 
   handleSendVerificationCode() {
