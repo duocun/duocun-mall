@@ -577,6 +577,11 @@ export class OrderPage implements OnInit, OnDestroy {
   }
 
   async monerisPay() {
+    const valid = this.isCardValid();
+    if (!valid.isValid) {
+      this.showAlert("Notice", valid.message, "OK");
+      return;
+    }
     this.paymentMethod = PaymentMethod.CREDIT_CARD;
     this.processing = true;
     await this.presentLoading();
@@ -672,14 +677,25 @@ export class OrderPage implements OnInit, OnDestroy {
   }
 
   isCardValid() {
-    return (
-      this.cc &&
-      this.cvd &&
-      this.exp &&
-      this.cc.length > 7 &&
-      this.cvd.length > 2 &&
-      this.exp.length > 3
-    );
+    if (!this.cc || this.cc.length < 10) {
+      return {
+        isValid: false,
+        message: "Moneris_invalid_card_number"
+      };
+    }
+    if (!this.cvd || this.cvd.length !== 3) {
+      return {
+        isValid: false,
+        message: "Moneris_invalid_cvd"
+      };
+    }
+    if (!this.exp || this.exp.length !== 4) {
+      return {
+        isValid: false,
+        message: "Moneris_invalid_exp"
+      };
+    }
+    return { isValid: true }
   }
 
   isWechatBrowser() {

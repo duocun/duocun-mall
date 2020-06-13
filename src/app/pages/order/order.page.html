@@ -169,7 +169,7 @@
                     size="medium"
                     expand="full"
                     translate="Pay by Credit Card"
-                    [disabled]="loading || processing || !isCardValid()"
+                    [disabled]="loading || processing"
                     (click)="monerisPay()"
                   >
                   </ion-button>
