@@ -40,7 +40,9 @@ export class RegisterPage implements OnInit, OnDestroy {
     this.otpSentCount = 0;
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.initGoogleAuth();
+  }
 
   ngOnDestroy() {
     this.unsubscribe$.next();
