@@ -13,5 +13,7 @@ export const environment = {
   gmap: "AIzaSyCEd6D6vc9K-YzMH-QtQWRSs5HZkLKSWyk",
   timezone: "America/Toronto",
   monerisMode: "prod",
-  monerisHTProfileId: "htV6VVM9NH24SXX"
+  monerisHTProfileId: "htV6VVM9NH24SXX",
+  googleAuthClientId:
+    "53858676843-kjkp8dt8e01tktpc8pimd3vtlvkcre81.apps.googleusercontent.com"
 };

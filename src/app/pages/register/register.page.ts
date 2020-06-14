@@ -7,6 +7,9 @@ import { AuthService } from "src/app/services/auth/auth.service";
 import { Router } from "@angular/router";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { environment } from "src/environments/environment";
+declare const gapi: any;
+
 @Component({
   selector: "app-register",
   templateUrl: "./register.page.html",
@@ -37,11 +40,66 @@ export class RegisterPage implements OnInit, OnDestroy {
     this.otpSentCount = 0;
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.initGoogleAuth();
+  }
 
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  initGoogleAuth() {
+    gapi.load("auth2", () => {
+      const auth2 = gapi.auth2.init({
+        client_id: environment.googleAuthClientId,
+        cookiepolicy: "single_host_origin"
+      });
+      auth2.attachClickHandler(
+        document.getElementById("googleLoginButton"),
+        {},
+        (googleUser) => {
+          const profile = googleUser.getBasicProfile();
+          const userInfo = {
+            token: googleUser.getAuthResponse().id_token,
+            googleUserId: profile.getId(),
+            username: profile.getName(),
+            imageurl: profile.getImageUrl()
+          };
+          this.api
+            .post("Accounts/googleSignUp", userInfo)
+            .then((observable) => {
+              observable
+                .toPromise()
+                .then(
+                  (res: { code: string; message?: string; token?: string }) => {
+                    console.log("register page register subscription");
+                    if (res.code === "success") {
+                      this.authSvc.login(res.token).then((account) => {
+                        if (account) {
+                          this.showAlert(
+                            "Notice",
+                            "Registered successfully",
+                            "OK"
+                          );
+                          this.router.navigate(["/tabs/browse"]);
+                        } else {
+                          this.showAlert("Notice", "Registration failed", "OK");
+                        }
+                      });
+                    } else {
+                      this.showAlert("Notice", "Registration failed", "OK");
+                    }
+                  }
+                );
+            });
+        },
+        (error) => {
+          console.error(error);
+          this.showAlert("Notice", "Registration failed", "OK");
+        }
+      );
+    });
   }
 
   isValidPhone() {
