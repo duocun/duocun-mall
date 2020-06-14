@@ -127,7 +127,7 @@
   "Already have an account?": "已有账户吗？",
   "deliver_badge_text": "送货",
   "Credit Card Number": "卡号",
-  "Expiry Date": "MMYY",
+  "Expiry Date": "YYMM",
   "CVD": "CVD",
   "Moneris_invalid_card_number": "信用卡号错误，请重新确认",
   "Moneris_card_invalid_number": "信用卡号错误，请重新确认",

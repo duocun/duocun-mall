@@ -55,7 +55,7 @@ export class MonerisHtComponent implements OnInit {
     ;
 
     const panLabel = "Card Number";
-    const expLabel = "Expiry Date (MMYY)";
+    const expLabel = "Expiry Date (YYMM)";
     const cvdLabel = "CVD";
 
     this.iframeSrc = this.sanitizer.bypassSecurityTrustResourceUrl(
