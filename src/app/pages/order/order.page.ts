@@ -179,12 +179,14 @@ export class OrderPage implements OnInit, OnDestroy {
         if (!token) {
           this.processing = false;
           this.dismissLoading();
+          this.showAlert("Notice", "Invalid payment input", "OK");
         }
       })
       .catch((e) => {
         console.error(e);
         this.processing = false;
         this.dismissLoading();
+        this.showAlert("Notice", "Invalid payment input", "OK");
       });
   }
 
