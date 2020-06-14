@@ -96,7 +96,7 @@ export class RegisterPage implements OnInit, OnDestroy {
         },
         (error) => {
           console.error(error);
-          this.showAlert("Notice", "Google login failed", "OK");
+          this.showAlert("Notice", "Registration failed", "OK");
         }
       );
     });

@@ -84,7 +84,7 @@ export class LoginPage implements OnInit, OnDestroy {
         },
         (error) => {
           console.error(error);
-          this.showAlert("Notice", "Google login failed", "OK");
+          this.showAlert("Notice", "Login failed", "OK");
         }
       );
     });
