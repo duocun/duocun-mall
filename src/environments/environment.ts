@@ -15,7 +15,11 @@ export const environment = {
   stripe: "pk_test_FsGoacByMF8lGNcVKveNZFSy00ATWTilJp",
   defaultLang: "zh",
   gmap: "AIzaSyCEd6D6vc9K-YzMH-QtQWRSs5HZkLKSWyk",
-  timezone: "Asia/Shanghai"
+  timezone: "Asia/Shanghai",
+  monerisMode: "prod",
+  monerisHTProfileId: "ht4E3Z1H87Y3327",
+  googleAuthClientId:
+    "53858676843-kjkp8dt8e01tktpc8pimd3vtlvkcre81.apps.googleusercontent.com"
 };
 
 /*

@@ -1,6 +1,12 @@
 h5 {
   font-weight: 600;
 }
+.row-order-notice {
+  padding: 1.5rem;
+}
+.row-order-info {
+  padding: 1.25rem;
+}
 .order-notice {
   list-style: none;
   font-size: 0.75rem;
@@ -27,11 +33,31 @@ h5 {
     border-bottom: 1px solid #eee;
   }
 }
+.col-payment-button {
+  padding: 0.25rem;
+}
+.col-payment-cc {
+  margin-top: 10px;
+}
+.col-payment-wechat {
+  padding: 0.6rem;
+}
 .font-weight-bold {
   font-weight: 600;
 }
 @media(min-width: 768px) {
   .row-charge-item, .col-charge-summary, .order-notice {
     font-size: 1rem;
+  }
+}
+#cardContainer {
+  ion-icon {
+    font-size: 1.125rem;
+    margin-right: 6px;
+    margin-left: 12px;
+  }
+  ion-input {
+    font-size: 0.875rem;
+    --padding-start: 10px!important;
   }
 }

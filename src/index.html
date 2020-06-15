@@ -5,10 +5,11 @@
   <meta charset="utf-8" />
   <title>多村 - Duocun</title>
 
-  <base href="/" />
+  <base href="/test/" />
 
   <meta name="color-scheme" content="light dark" />
   <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="google-signin-client_id" content="53858676843-kjkp8dt8e01tktpc8pimd3vtlvkcre81.apps.googleusercontent.com">
   <meta name="format-detection" content="telephone=no" />
   <meta name="msapplication-tap-highlight" content="no" />
 
@@ -19,10 +20,21 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <meta name="description" content="多村送菜 - 免运费免小费 Toronto online shopping">
   <meta name="keywords" content="多村送菜，多村商城，多伦多网上购物, 免运费, 免小费, Free shipping, No Fee, Canada grocery, Toronto, Online shopping">
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-169250243-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-169250243-1');
+  </script>
+  <script src="https://apis.google.com/js/api:client.js"></script>
 </head>
 
 <body>
   <app-root></app-root>
 </body>
-
+<script src="assets/plugins/moneris-checkout.js"></script>
 </html>

@@ -12,6 +12,7 @@ import { AppComponent } from "./app.component";
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { createTranslateLoader } from "./app.module";
 import { IonicStorageModule } from "@ionic/storage";
+import { RouterModule } from "@angular/router";
 
 describe("AppComponent", () => {
   let statusBarSpy, splashScreenSpy, platformReadySpy, platformSpy;
@@ -34,7 +35,23 @@ describe("AppComponent", () => {
             deps: [HttpClient]
           }
         }),
-        IonicStorageModule.forRoot()
+        IonicStorageModule.forRoot(),
+        RouterModule.forRoot([
+          {
+            path: "tabs/my-account/transaction-history",
+            loadChildren: () =>
+              import(
+                "./pages/transaction-history/transaction-history.module"
+              ).then((m) => m.TransactionHistoryPageModule)
+          },
+          {
+            path: "tabs/my-account/order-history",
+            loadChildren: () =>
+              import("./pages/my-account/my-account.module").then(
+                (m) => m.MyAccountPageModule
+              )
+          }
+        ])
       ],
       providers: [
         { provide: StatusBar, useValue: statusBarSpy },

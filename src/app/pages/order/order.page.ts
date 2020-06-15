@@ -1,11 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { CartService } from "src/app/services/cart/cart.service";
 import * as Order from "src/app/models/order.model";
-import {
-  PaymentMethod,
-  AppType,
-  PaymentError
-} from "src/app/models/payment.model";
+import { PaymentMethod, PaymentError } from "src/app/models/payment.model";
 import { getPictureUrl, ProductInterface } from "src/app/models/product.model";
 import { AccountInterface } from "src/app/models/account.model";
 import { AuthService } from "src/app/services/auth/auth.service";
@@ -58,6 +54,9 @@ export class OrderPage implements OnInit, OnDestroy {
   appCode: string | undefined;
   cartSanitized: boolean;
   loadingOverlay: any;
+  cc: string;
+  exp: string;
+  cvd: string;
   private unsubscribe$ = new Subject<void>();
   constructor(
     private cartSvc: CartService,
@@ -87,6 +86,7 @@ export class OrderPage implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+    await this.presentLoading();
     this.paymentMethod = PaymentMethod.CREDIT_CARD;
     this.authSvc
       .getAccount()
@@ -159,6 +159,7 @@ export class OrderPage implements OnInit, OnDestroy {
                 this.summary = Order.getOrderSummary(this.cartItemGroups, 0);
                 this.setCharge();
                 this.loading = false;
+                await this.dismissLoading();
               });
           });
       });
@@ -240,6 +241,7 @@ export class OrderPage implements OnInit, OnDestroy {
   }
 
   stripePay(token: StripeToken) {
+    throw new Error("Stripe payment is disabled. Use Moneris instead");
     this.paymentMethod = PaymentMethod.CREDIT_CARD;
     this.processing = true;
     this.presentLoading();
@@ -574,6 +576,128 @@ export class OrderPage implements OnInit, OnDestroy {
         this.processing = false;
         this.dismissLoading();
       });
+  }
+
+  async monerisPay() {
+    const valid = this.isCardValid();
+    if (!valid.isValid) {
+      this.showAlert("Notice", valid.message, "OK");
+      return;
+    }
+    this.paymentMethod = PaymentMethod.CREDIT_CARD;
+    this.processing = true;
+    await this.presentLoading();
+    this.saveOrders(this.orders).then((observable) => {
+      observable
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(
+          (resp: { code: string; data: Array<Order.OrderInterface> }) => {
+            console.log("order page save order subscription");
+            if (resp.code !== "success") {
+              return this.handleInvalidOrders(resp.data);
+            }
+            const order: Order.OrderInterface = resp.data[0];
+            this.api
+              .post("ClientPayments/moneris/htpay", {
+                paymentId: order.paymentId,
+                cc: this.cc,
+                exp: this.exp,
+                cvd: this.cvd
+              })
+              .then((observable) => {
+                observable.toPromise().then(async (resp: any) => {
+                  if (resp.err == PaymentError.NONE) {
+                    this.showAlert("Notice", "Payment success", "OK");
+                    this.cartSubscription.unsubscribe();
+                    this.cartSvc.clearCart();
+                    await this.authSvc.updateData();
+                    this.processing = false;
+                    await this.dismissLoading();
+                    console.log("navigate to order history");
+                    this.router.navigate(["/tabs/my-account/order-history"], {
+                      replaceUrl: true
+                    });
+                  } else {
+                    if (resp.data) {
+                      this.handleInvalidOrders(resp.data);
+                    } else {
+                      if (resp.msg) {
+                        const message = "Moneris_" + resp.msg;
+                        this.showAlert("Notice", message, "OK");
+                      } else {
+                        this.showAlert("Notice", "Payment failed", "OK");
+                      }
+                      this.processing = false;
+                      this.dismissLoading();
+                    }
+                  }
+                });
+              });
+          }
+        );
+    });
+  }
+
+  getMonerisTicket(
+    appCode: string,
+    accountId: string,
+    orders: Array<Order.OrderInterface>,
+    payable: number
+  ) {
+    throw new Error("Use moneris ht payment instead");
+    const paymentId = orders[0].paymentId;
+    this.api
+      .post("ClientPayments/moneris/preload", {
+        paymentId
+      })
+      .then((observable) => {
+        observable
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe((resp: { code: string; data?: string }) => {
+            console.log("order page moneris preload subscription");
+            if (resp.code === "success") {
+              this.processing = false;
+              this.dismissLoading();
+              this.router.navigate(
+                [`/tabs/browse/order/pay/moneris/${paymentId}/${resp.data}`],
+                {
+                  replaceUrl: true
+                }
+              );
+            } else {
+              this.showAlert("Notice", "Payment failed", "OK");
+              this.processing = false;
+              this.dismissLoading();
+            }
+          });
+      })
+      .catch((e) => {
+        console.error(e);
+        this.showAlert("Notice", "Payment failed", "OK");
+        this.processing = false;
+      });
+  }
+
+  isCardValid() {
+    if (!this.cc || this.cc.length < 10) {
+      return {
+        isValid: false,
+        message: "Moneris_invalid_card_number"
+      };
+    }
+    if (!this.cvd || this.cvd.length !== 3) {
+      return {
+        isValid: false,
+        message: "Moneris_invalid_cvd"
+      };
+    }
+    if (!this.exp || this.exp.length !== 4) {
+      return {
+        isValid: false,
+        message: "Moneris_invalid_exp"
+      };
+    }
+    return { isValid: true }
   }
 
   isWechatBrowser() {

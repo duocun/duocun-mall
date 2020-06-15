@@ -34,9 +34,7 @@ export class HomePage implements OnInit, OnDestroy {
     private alert: AlertController,
     private translator: TranslateService,
     private context: ContextService
-  ) {
-    
-  }
+  ) {}
 
   ngOnInit() {
     this.redirecting = true;
