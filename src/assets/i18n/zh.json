@@ -33,7 +33,7 @@
   "Stripe": "Stripe",
   "Pay by Credit Card": "信用卡支付",
   "Login failed": "登陆失败",
-  "Login failed. Please check your verification code and try again": "您的验证码错误，请重新输入",
+  "Login failed. Please check your verification code and try again": "请输入正确的验证码",
   "Registration failed. Please check your verification code and try again": "验证码错误，注册失败",
   "Login successful": "登陆成功",
   "Deliver To": "配送到",
