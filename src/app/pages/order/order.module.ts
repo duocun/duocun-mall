@@ -16,6 +16,8 @@ import { environment } from "src/environments/environment";
 import { FooterModule } from "src/app/components/footer/footer.module";
 import { MonerisCheckoutComponent } from "src/app/pages/order/moneris-checkout/moneris-checkout.component";
 import { MonerisHtComponent } from "src/app/pages/order/moneris-ht/moneris-ht.component";
+import { LanguageButtonModule } from "src/app/components/language-button/language-button.module";
+import { CartButtonModule } from "src/app/components/cart-button/cart-button.module";
 
 @NgModule({
   imports: [
@@ -28,7 +30,9 @@ import { MonerisHtComponent } from "src/app/pages/order/moneris-ht/moneris-ht.co
     MomentPipeModule,
     PricePipeModule,
     StripeModule.forRoot(environment.stripe),
-    FooterModule
+    FooterModule,
+    LanguageButtonModule,
+    CartButtonModule
   ],
   declarations: [OrderPage, MonerisCheckoutComponent, MonerisHtComponent]
 })

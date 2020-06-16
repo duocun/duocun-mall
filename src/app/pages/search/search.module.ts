@@ -9,6 +9,8 @@ import { SearchPageRoutingModule } from "./search-routing.module";
 import { SearchPage } from "./search.page";
 import { TranslateModule } from "@ngx-translate/core";
 import { ProductListModule } from "src/app/components/product-list/product-list.module";
+import { LanguageButtonModule } from "src/app/components/language-button/language-button.module";
+import { CartButtonModule } from "src/app/components/cart-button/cart-button.module";
 
 @NgModule({
   imports: [
@@ -17,7 +19,9 @@ import { ProductListModule } from "src/app/components/product-list/product-list.
     IonicModule,
     SearchPageRoutingModule,
     TranslateModule.forChild(),
-    ProductListModule
+    ProductListModule,
+    LanguageButtonModule,
+    CartButtonModule
   ],
   declarations: [SearchPage]
 })

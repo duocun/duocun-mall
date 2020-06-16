@@ -1,0 +1,6 @@
+<ion-button routerLink="/tabs/cart">
+  <ion-icon name="cart-outline"></ion-icon>
+  <ion-badge *ngIf="cart && cart.items && cart.items.length">
+    {{cart.quantity}}
+  </ion-badge>
+</ion-button>

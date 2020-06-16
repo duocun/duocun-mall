@@ -13,6 +13,8 @@ import { MomentPipeModule } from "src/app/pipes/moment/moment.module";
 import { DetailComponent } from "./detail/detail.component";
 import { LocalValueDirectiveModule } from "src/app/directives/local-value.module";
 import { FooterModule } from "src/app/components/footer/footer.module";
+import { LanguageButtonModule } from "src/app/components/language-button/language-button.module";
+import { CartButtonModule } from "src/app/components/cart-button/cart-button.module";
 
 @NgModule({
   imports: [
@@ -24,7 +26,9 @@ import { FooterModule } from "src/app/components/footer/footer.module";
     PricePipeModule,
     MomentPipeModule,
     LocalValueDirectiveModule,
-    FooterModule
+    FooterModule,
+    LanguageButtonModule,
+    CartButtonModule
   ],
   declarations: [TransactionHistoryPage, DetailComponent]
 })

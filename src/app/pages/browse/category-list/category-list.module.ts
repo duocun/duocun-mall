@@ -10,7 +10,7 @@ import { LocalValueDirectiveModule } from "src/app/directives/local-value.module
     IonicModule,
     CommonModule,
     RouterModule.forChild([]),
-    LocalValueDirectiveModule
+    LocalValueDirectiveModule,
   ],
   declarations: [CategoryListComponent],
   exports: [CategoryListComponent]
