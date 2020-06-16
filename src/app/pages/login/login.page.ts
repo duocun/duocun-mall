@@ -144,7 +144,11 @@ export class LoginPage implements OnInit, OnDestroy {
                 }
               });
             } else {
-              this.showAlert("Notice", "Login failed", "OK");
+              this.showAlert(
+                "Notice",
+                "Login failed. Please check your verification code and try again",
+                "OK"
+              );
             }
           });
       });

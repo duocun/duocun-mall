@@ -181,7 +181,11 @@ export class RegisterPage implements OnInit, OnDestroy {
                   }
                 });
               } else {
-                this.showAlert("Notice", "Registration failed", "OK");
+                this.showAlert(
+                  "Notice",
+                  "Registration failed. Please check your verification code and try again",
+                  "OK"
+                );
               }
             }
           );

@@ -33,6 +33,8 @@
   "Stripe": "Stripe",
   "Pay by Credit Card": "Pay by Credit Card",
   "Login failed": "Login failed",
+  "Login failed. Please check your verification code and try again": "Login failed. Please check your verification code and try again",
+  "Registration failed. Please check your verification code and try again": "Registration failed. Please check your verification code and try again",
   "Login successful": "Login successful",
   "Deliver To": "Deliver To",
   "Phone Number": "Phone Number",
