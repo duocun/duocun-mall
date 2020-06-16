@@ -66,11 +66,20 @@ export class LoginPage implements OnInit, OnDestroy {
                 if (resp.code === "success") {
                   this.authSvc.login(resp.token).then((account) => {
                     if (account) {
-                      this.showAlert("Notice", "Login successful", "OK");
-                      if (this.returnUrl) {
-                        this.router.navigate([this.returnUrl]);
+                      if (!account.phone || !account.verified) {
+                        // this.showAlert(
+                        //   "Notice",
+                        //   "Please verify your phone number",
+                        //   "OK"
+                        // );
+                        // this.router.navigate(["/tabs/my-account/setting"]);
                       } else {
-                        this.router.navigate(["/tabs/browse"]);
+                        this.showAlert("Notice", "Login successful", "OK");
+                        if (this.returnUrl) {
+                          this.router.navigate([this.returnUrl]);
+                        } else {
+                          this.router.navigate(["/tabs/browse"]);
+                        }
                       }
                     } else {
                       this.showAlert("Notice", "Login failed", "OK");

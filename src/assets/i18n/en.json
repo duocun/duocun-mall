@@ -126,7 +126,7 @@
   "Already have an account?": "Already have an account?",
   "deliver_badge_text": "",
   "Credit Card Number": "Credit Card Number",
-  "Expiry Date": "YYMM",
+  "Expiry Date": "MMYY",
   "CVD": "CVD",
   "Moneris_invalid_card_number": "Card number is invalid. Please confirm your card number again",
   "Moneris_card_invalid_number": "Card number is invalid. Please confirm your card number again",

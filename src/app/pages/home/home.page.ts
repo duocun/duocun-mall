@@ -94,19 +94,17 @@ export class HomePage implements OnInit, OnDestroy {
       this.authSvc.getToken().then(async (tokenId) => {
         if (tokenId) {
           console.log("login");
-          await this.authSvc.login(tokenId);
+          this.account = await this.authSvc.login(tokenId);
         }
       });
     } else {
       console.log("login");
-      await this.authSvc.login(tokenId);
+      this.account = await this.authSvc.login(tokenId);
     }
-    this.authSvc
-      .getAccount()
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((account) => {
-        this.account = account;
-      });
+    if (this.account && (!this.account.phone || !this.account.verified) ) {
+      this.showAlert("Notice", "Please set phone number", "OK");
+      this.router.navigate["/tabs/my-account/setting"];
+    }
     // this.authSvc.authState.subscribe((isLoggedIn: boolean) => {
     //   if (!isLoggedIn) {
     //     this.showAlert("Notice", "Login failed", "OK");

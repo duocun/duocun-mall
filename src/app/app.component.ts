@@ -8,7 +8,7 @@ import { Storage } from "@ionic/storage";
 import { environment } from "src/environments/environment";
 import { AccountInterface } from "src/app/models/account.model";
 import * as queryString from "query-string";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { AuthService } from "src/app/services/auth/auth.service";
 import { AlertController } from "@ionic/angular";
 import { ContextService } from "src/app/services/context/context.service";
@@ -35,7 +35,8 @@ export class AppComponent {
     private stroage: Storage,
     private router: Router,
     private authSvc: AuthService,
-    private context: ContextService
+    private context: ContextService,
+    private alert: AlertController
   ) {
     this.initializeApp();
     this.stroage.get(environment.storageKey.lang).then((lang: any) => {
@@ -121,11 +122,27 @@ export class AppComponent {
     }
     this.authSvc.getAccount().subscribe((account) => {
       this.account = account;
+      if (this.account && (!this.account.phone || !this.account.verified)) {
+        this.showAlert("Notice", "Please verify your phone number", "OK");
+        this.router.navigate(["/tabs/my-account/setting"]);
+      }
     });
     // this.authSvc.authState.subscribe((isLoggedIn: boolean) => {
     //   if (!isLoggedIn) {
     //     this.showAlert("Notice", "Login failed", "OK");
     //   }
     // });
+  }
+  showAlert(header, message, button) {
+    this.translator.get([header, message, button]).subscribe((dict) => {
+      console.log("home page lang subscription");
+      this.alert
+        .create({
+          header: dict[header],
+          message: dict[message],
+          buttons: [dict[button]]
+        })
+        .then((alert) => alert.present());
+    });
   }
 }

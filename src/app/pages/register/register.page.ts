@@ -77,12 +77,21 @@ export class RegisterPage implements OnInit, OnDestroy {
                     if (res.code === "success") {
                       this.authSvc.login(res.token).then((account) => {
                         if (account) {
-                          this.showAlert(
-                            "Notice",
-                            "Registered successfully",
-                            "OK"
-                          );
-                          this.router.navigate(["/tabs/browse"]);
+                          if (account.phone && account.verified) {
+                            this.showAlert(
+                              "Notice",
+                              "Registered successfully",
+                              "OK"
+                            );
+                            this.router.navigate(["/tabs/browse"]);
+                          } else {
+                            this.showAlert(
+                              "Notice",
+                              "Please verify your phone number",
+                              "OK"
+                            );
+                            this.router.navigate(["/tabs/my-account/setting"]);
+                          }
                         } else {
                           this.showAlert("Notice", "Registration failed", "OK");
                         }
