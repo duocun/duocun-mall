@@ -26,7 +26,10 @@ export const PaymentMethod = {
   CASH: "CA",
   WECHAT: "W",
   CREDIT_CARD: "CC",
-  PREPAY: "P"
+  PREPAY: "P",
+  ALPHA_WECHAT: "AW",
+  ALPHA_ALIPAY: "AA",
+  ALPHA_UNIONPAY: "AU"
 };
 
 export const PaymentStatus = {

@@ -145,5 +145,8 @@
   "Moneris_card_limited": "Card use is limited",
   "Moneris_card_declined": "Credit card is declined",
   "Moneris_cvv_invalid": "Cvd number is the three-digit security code on the back of your credit card. Please check again.",
-  "Moneris_payment_failed": "Payment failed"
+  "Moneris_payment_failed": "Payment failed",
+  "Alipay": "Alipay",
+  "UnionPay": "UnionPay",
+  "Checking payment, please wait...": "Checking payment, please wait..."
 }

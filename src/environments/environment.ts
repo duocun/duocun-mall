@@ -19,7 +19,11 @@ export const environment = {
   monerisMode: "prod",
   monerisHTProfileId: "ht4E3Z1H87Y3327",
   googleAuthClientId:
-    "53858676843-kjkp8dt8e01tktpc8pimd3vtlvkcre81.apps.googleusercontent.com"
+    "53858676843-kjkp8dt8e01tktpc8pimd3vtlvkcre81.apps.googleusercontent.com",
+  alphapay: {
+    partnerCode: "XB20WG",
+    credentialCode: "swqqHo6TrfaWp6dPNMBncPpmjifQhxiL"
+  }
 };
 
 /*

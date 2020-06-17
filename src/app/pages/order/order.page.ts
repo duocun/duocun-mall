@@ -22,6 +22,7 @@ import { Subscription } from "rxjs";
 import { Subject } from "rxjs";
 import { takeUntil, filter } from "rxjs/operators";
 import * as moment from "moment";
+import { DeviceDetectorService } from "ngx-device-detector";
 interface OrderErrorInterface {
   type: "order" | "payment";
   message: string;
@@ -57,6 +58,7 @@ export class OrderPage implements OnInit, OnDestroy {
   cc: string;
   exp: string;
   cvd: string;
+  isMobile: boolean;
   private unsubscribe$ = new Subject<void>();
   constructor(
     private cartSvc: CartService,
@@ -67,12 +69,14 @@ export class OrderPage implements OnInit, OnDestroy {
     private locSvc: LocationService,
     private contextSvc: ContextService,
     private router: Router,
-    private loader: LoadingController
+    private loader: LoadingController,
+    private deviceDetector: DeviceDetectorService
   ) {
     this.loading = true;
     this.error = null;
     this.processing = false;
     this.cartSanitized = false;
+    this.isMobile = this.deviceDetector.isMobile();
     loadStripe(environment.stripe).then((stripe) => {
       this.stripe = stripe;
     });
@@ -502,15 +506,11 @@ export class OrderPage implements OnInit, OnDestroy {
       order.note = this.notes;
       order.paymentMethod = this.paymentMethod;
       switch (order.paymentMethod) {
-        case PaymentMethod.CREDIT_CARD:
-        case PaymentMethod.WECHAT:
-          order.status = Order.OrderStatus.TEMP;
-          break;
         case PaymentMethod.PREPAY:
           order.status = Order.OrderStatus.NEW;
           break;
         default:
-          order.status = Order.OrderStatus.NEW;
+          order.status = Order.OrderStatus.TEMP;
           break;
       }
     }
@@ -697,7 +697,7 @@ export class OrderPage implements OnInit, OnDestroy {
         message: "Moneris_invalid_exp"
       };
     }
-    return { isValid: true }
+    return { isValid: true };
   }
 
   isWechatBrowser() {
@@ -709,5 +709,123 @@ export class OrderPage implements OnInit, OnDestroy {
       window.matchMedia("(prefers-color-scheme: dark)").matches ||
       document.body.classList.contains("dark")
     );
+  }
+
+  async alphaPayByQRCode(channel: "wechat" | "alipay" | "unionpay") {
+    if (this.isMobile && channel != "wechat") {
+      return this.alphaPayH5(channel);
+    }
+    if (channel == "wechat") this.paymentMethod = PaymentMethod.ALPHA_WECHAT;
+    if (channel == "alipay") this.paymentMethod = PaymentMethod.ALPHA_ALIPAY;
+    if (channel == "unionpay") {
+      this.paymentMethod = PaymentMethod.ALPHA_UNIONPAY;
+    }
+    this.processing = true;
+    await this.presentLoading();
+    this.saveOrders(this.orders).then((observable) => {
+      observable.toPromise().then(async (resp: any) => {
+        if (resp.code !== "success") {
+          return this.handleInvalidOrders(resp.data);
+        }
+        const order: Order.OrderInterface = resp.data[0];
+        this.api
+          .post("ClientPayments/alphapay/qrcode", {
+            paymentId: order.paymentId,
+            channel
+          })
+          .then((observable) => {
+            observable.toPromise().then((resp: any) => {
+              if (resp.code == "success") {
+                window.location.href = resp.redirect_url;
+              } else {
+                this.showAlert("Notice", "Payment failed", "OK");
+                this.processing = false;
+                this.dismissLoading();
+              }
+            });
+          })
+          .catch((e) => {
+            console.error(e);
+            this.showAlert("Notice", "Payment failed", "OK");
+            this.processing = false;
+            this.dismissLoading();
+          });
+      });
+    });
+  }
+
+  async alphaPayH5(channel: "alipay" | "unionpay") {
+    this.paymentMethod =
+      channel == "alipay"
+        ? PaymentMethod.ALPHA_ALIPAY
+        : PaymentMethod.ALPHA_UNIONPAY;
+    this.processing = true;
+    await this.presentLoading();
+    this.saveOrders(this.orders).then((observable) => {
+      observable.toPromise().then(async (resp: any) => {
+        if (resp.code !== "success") {
+          return this.handleInvalidOrders(resp.data);
+        }
+        const order: Order.OrderInterface = resp.data[0];
+        this.api
+          .post("ClientPayments/alphapay/h5", {
+            paymentId: order.paymentId,
+            channel
+          })
+          .then((observable) => {
+            observable.toPromise().then((resp: any) => {
+              if (resp.code == "success") {
+                window.location.href = resp.redirect_url;
+              } else {
+                this.showAlert("Notice", "Payment failed", "OK");
+                this.processing = false;
+                this.dismissLoading();
+              }
+            });
+          })
+          .catch((e) => {
+            console.error(e);
+            this.showAlert("Notice", "Payment failed", "OK");
+            this.processing = false;
+            this.dismissLoading();
+          });
+      });
+    });
+  }
+
+  async alphaPayJSApi(channel = "wechat") {
+    this.paymentMethod = PaymentMethod.ALPHA_WECHAT;
+    this.processing = true;
+    await this.presentLoading();
+    this.saveOrders(this.orders).then((observable) => {
+      observable.toPromise().then(async (resp: any) => {
+        if (resp.code !== "success") {
+          return this.handleInvalidOrders(resp.data);
+        }
+        const order: Order.OrderInterface = resp.data[0];
+        this.api
+          .post("ClientPayments/alphapay/jsapi", {
+            paymentId: order.paymentId,
+            channel
+          })
+          .then((observable) => {
+            observable.toPromise().then((resp: any) => {
+              if (resp.code == "success") {
+                window.location.href = resp.redirect_url;
+              } else {
+                this.showAlert("Notice", "Payment failed", "OK");
+                this.processing = false;
+                this.dismissLoading();
+              }
+            });
+          })
+          .catch((e) => {
+            console.error(e);
+            this.showAlert("Notice", "Payment failed", "OK");
+            this.processing = false;
+            this.dismissLoading();
+          });
+      });
+    });
   }
 }

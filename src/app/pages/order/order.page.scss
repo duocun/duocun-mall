@@ -39,8 +39,18 @@ h5 {
 .col-payment-cc {
   margin-top: 10px;
 }
-.col-payment-wechat {
+.col-payment-wechat,.col-payment-alipay, .col-payment-unionpay {
   padding: 0.6rem;
+}
+.col-payment-alipay {
+  ion-button {
+    --background: #0e9dec!important;
+  }
+}
+.col-payment-unionpay {
+  ion-button {
+    --background: #e31133!important;
+  }
 }
 .font-weight-bold {
   font-weight: 600;

@@ -38,6 +38,7 @@
     "core-js": "^2.5.4",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.28",
+    "ngx-device-detector": "^1.4.5",
     "query-string": "^6.12.1",
     "rxjs": "~6.5.1",
     "scriptjs": "^2.5.9",
