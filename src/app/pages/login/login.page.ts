@@ -112,7 +112,19 @@ export class LoginPage implements OnInit, OnDestroy {
             if (resp.code === "success") {
               this.showAlert("Notice", "Verification code sent", "OK");
             } else {
-              this.showAlert("Notice", "Verification code was not sent", "OK");
+              if (resp.message == "no such account") {
+                this.showAlert(
+                  "Notice",
+                  "The phone number is not registered. Please create an account first.",
+                  "OK"
+                );
+              } else {
+                this.showAlert(
+                  "Notice",
+                  "Verification code was not sent",
+                  "OK"
+                );
+              }
             }
             this.processing = false;
           });

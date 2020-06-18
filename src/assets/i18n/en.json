@@ -126,6 +126,7 @@
   "Sign up with Google": "Google login",
   "Sign up with Facebook": "Facebook login",
   "Already have an account?": "Already have an account?",
+  "The phone number is not registered. Please create an account first.": "The phone number is not registered. Please create an account first.",
   "deliver_badge_text": "",
   "Credit Card Number": "Credit Card Number",
   "Expiry Date": "MMYY",
