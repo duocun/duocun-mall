@@ -38,18 +38,32 @@ h5 {
 }
 .col-payment-cc {
   margin-top: 10px;
+  ion-button {
+    ion-icon {
+      font-size: 2.5rem!important;
+    }
+  }
 }
 .col-payment-wechat,.col-payment-alipay, .col-payment-unionpay {
   padding: 0.6rem;
+  ion-button {
+    img {
+      height: 20px;
+      margin-right: 5px;
+    }
+  }
 }
 .col-payment-alipay {
   ion-button {
     --background: #0e9dec!important;
+    ion-icon {
+      font-size: 2.5rem!important;
+    }
   }
 }
 .col-payment-unionpay {
   ion-button {
-    --background: #e31133!important;
+    --background: #eb445a!important;
   }
 }
 .font-weight-bold {

@@ -8,10 +8,7 @@ import { AuthService } from "src/app/services/auth/auth.service";
 import { ApiService } from "src/app/services/api/api.service";
 import { AlertController, LoadingController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
-import { StripeToken } from "stripe-angular";
 import { CartInterface } from "src/app/models/cart.model";
-import { environment } from "src/environments/environment";
-import { loadStripe, Stripe, StripeError } from "@stripe/stripe-js";
 import { MerchantInterface } from "src/app/models/merchant.model";
 import { LocationInterface } from "src/app/models/location.model";
 import { formatLocation } from "src/app/models/location.model";
@@ -42,12 +39,10 @@ export class OrderPage implements OnInit, OnDestroy {
   summary: Order.OrderSummaryInterface;
   notes: string;
   account: AccountInterface;
-  stripeError: StripeError;
   charge: Order.ChargeInterface;
   cart: CartInterface;
   cartSubscription: Subscription;
   paymentMethod: string;
-  stripe: Stripe;
   loading: boolean;
   processing: boolean;
   error: OrderErrorInterface | null;
@@ -77,9 +72,6 @@ export class OrderPage implements OnInit, OnDestroy {
     this.processing = false;
     this.cartSanitized = false;
     this.isMobile = this.deviceDetector.isMobile();
-    loadStripe(environment.stripe).then((stripe) => {
-      this.stripe = stripe;
-    });
     this.contextSvc
       .getContext()
       .pipe(takeUntil(this.unsubscribe$))
@@ -175,26 +167,6 @@ export class OrderPage implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
-  createStripeToken(stripeCard) {
-    this.processing = true;
-    this.presentLoading();
-    stripeCard
-      .createToken()
-      .then((token) => {
-        if (!token) {
-          this.processing = false;
-          this.dismissLoading();
-          this.showAlert("Notice", "Invalid payment input", "OK");
-        }
-      })
-      .catch((e) => {
-        console.error(e);
-        this.processing = false;
-        this.dismissLoading();
-        this.showAlert("Notice", "Invalid payment input", "OK");
-      });
-  }
-
   async presentLoading() {
     const message =
       this.translator.currentLang === "zh" ? "处理中..." : "Processing...";
@@ -211,19 +183,6 @@ export class OrderPage implements OnInit, OnDestroy {
     if (this.loadingOverlay) {
       await this.loadingOverlay.dismiss();
     }
-  }
-
-  canPayStripe() {
-    if (!this.stripe) {
-      return false;
-    }
-    if (this.processing) {
-      return false;
-    }
-    if (this.loading) {
-      return false;
-    }
-    return true;
   }
 
   setCharge() {
@@ -243,122 +202,6 @@ export class OrderPage implements OnInit, OnDestroy {
   getPictureUrl(item: ProductInterface) {
     return getPictureUrl(item);
   }
-
-  stripePay(token: StripeToken) {
-    throw new Error("Stripe payment is disabled. Use Moneris instead");
-    this.paymentMethod = PaymentMethod.CREDIT_CARD;
-    this.processing = true;
-    this.presentLoading();
-    this.stripe
-      .createPaymentMethod({
-        type: "card",
-        card: {
-          token: token.id
-        },
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        billing_details: { name: this.account.username }
-      })
-      .then((res) => {
-        if (res.error) {
-          this.showAlert("Notice", "Payment failed", "OK");
-          return;
-        }
-        const paymentMethodId = res.paymentMethod.id;
-        this.saveOrders(this.orders)
-          .then((observable) => {
-            observable
-              .pipe(takeUntil(this.unsubscribe$))
-              .subscribe(
-                (resp: { code: string; data: Array<Order.OrderInterface> }) => {
-                  console.log("order page save order subscription");
-                  if (resp.code !== "success") {
-                    return this.handleInvalidOrders(resp.data);
-                  }
-                  const newOrders = resp.data;
-                  this.savePayment(newOrders, paymentMethodId)
-                    .then((observable) => {
-                      observable
-                        .pipe(takeUntil(this.unsubscribe$))
-                        .subscribe(async (resp: any) => {
-                          console.log("order page save payment subscription");
-                          if (resp.err === PaymentError.NONE) {
-                            this.showAlert("Notice", "Payment success", "OK");
-                            this.cartSubscription.unsubscribe();
-                            this.cartSvc.clearCart();
-                            await this.authSvc.updateData();
-                            this.processing = false;
-                            await this.dismissLoading();
-                            console.log("navigate to order history");
-                            this.router.navigate(
-                              ["/tabs/my-account/order-history"],
-                              {
-                                replaceUrl: true
-                              }
-                            );
-                          } else {
-                            if (resp.data) {
-                              this.handleInvalidOrders(resp.data);
-                            } else {
-                              this.showAlert("Notice", "Payment failed", "OK");
-                              this.processing = false;
-                              this.dismissLoading();
-                            }
-                          }
-                        });
-                    })
-                    .catch((e) => {
-                      console.error(e);
-                      this.error = {
-                        type: "payment",
-                        message: "Cannot save payment"
-                      };
-                      this.processing = false;
-                      this.dismissLoading();
-                    });
-                }
-              );
-          })
-          .catch((e) => {
-            console.error(e);
-            this.error = {
-              type: "order",
-              message: "Cannot save orders"
-            };
-            this.processing = false;
-            this.dismissLoading();
-          });
-      })
-      .catch((e) => {
-        console.error(e);
-        this.processing = false;
-        this.dismissLoading();
-      });
-  }
-
-  wechatPay() {
-    this.paymentMethod = PaymentMethod.WECHAT;
-    this.processing = true;
-    this.presentLoading();
-    this.saveOrders(this.orders).then((observable) => {
-      observable
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe(
-          (resp: { code: string; data: Array<Order.OrderInterface> }) => {
-            console.log("order page save order subscription");
-            if (resp.code !== "success") {
-              return this.handleInvalidOrders(resp.data);
-            }
-            this.payBySnappay(
-              this.appCode,
-              this.account._id,
-              resp.data,
-              this.charge.payable
-            );
-          }
-        );
-    });
-  }
-
   payByDeposit() {
     this.saveOrders(this.orders).then((observable) => {
       observable
