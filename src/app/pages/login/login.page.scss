@@ -14,10 +14,16 @@
   margin-top: 10px;
 }
 .ion-padding{
-  padding: 10px 0px;
+  padding: 5px 0px;
 }
 ion-list{
-  margin-top: 20px;
+  padding-top: 15px;
+}
+ion-input{
+  margin-top:20px;
+  input{
+    font-size: 16px;
+  }
 }
 ion-button.button-google {
   --background: #DB4437;

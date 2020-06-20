@@ -4,7 +4,7 @@
       <ion-buttons slot="start">
         <ion-back-button defaultHref="/tabs/login" text=""></ion-back-button>
       </ion-buttons>
-      <ion-title class="ion-text-center" translate="Sign Up"></ion-title>
+      <ion-title class="ion-text-center" translate="Create Account"></ion-title>
     </ion-toolbar>
   </div>
 </ion-header>
@@ -16,7 +16,7 @@
         <ion-row>
           <ion-col class="ion-text-center">
             <b class="stroke before"></b>
-            <ion-label translate="Join duocun"></ion-label>
+            <ion-label translate="Create Account"></ion-label>
             <b class="stroke after"></b>
           </ion-col>
         </ion-row>
@@ -63,11 +63,11 @@
         <ion-item class="ion-margin-top ">
           <ion-grid class="ion-no-padding ion-no-margin w-100">
             <ion-row>
-              <ion-col>
+              <ion-col size="8">
                 <ion-label position="stacked" translate="OTP Code"></ion-label>
                 <ion-input required type="text" name="otp" [(ngModel)]="model.verificationCode"></ion-input>
               </ion-col>
-              <ion-col>
+              <ion-col size="4">
                 <ion-button
                   [disabled]="processing || !isValidPhone() || otpSentCount > 3"
                   class="ion-margin-top"
@@ -94,7 +94,7 @@
               [disabled]="processing || !isValidForm()"
               expand="full" 
               type="submit" 
-              translate="Create account"
+              translate="Create Account"
               (click)="handleSignUp()"
             >
         </ion-button>
@@ -103,17 +103,17 @@
       </div>
       <div class="ion-padding">
         <ion-row>
-          <ion-col size="12" class="ion-text-center">
+          <!-- <ion-col size="12" class="ion-text-center">
             <b class="stroke before"></b>
             <ion-label translate="Or sign up with"></ion-label>
             <b class="stroke after"></b>
-          </ion-col>
-          <ion-col size="12">
+          </ion-col> -->
+          <!-- <ion-col size="12">
             <ion-button class="button-google" expand="full" id="googleLoginButton">
               <ion-icon name="logo-google" class="ion-margin-end"></ion-icon>
               <ion-label translate="Sign up with Google"></ion-label>
             </ion-button>
-          </ion-col>
+          </ion-col> -->
           <!-- <ion-col size="12">
             <ion-button class="button-facebook" expand="full">
               <ion-icon name="logo-facebook" class="ion-margin-end"></ion-icon>
