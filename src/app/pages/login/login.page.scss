@@ -1,10 +1,28 @@
 .container-sm {
   max-width: 540px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
-@media(min-width: 576px) {
-  .container-sm > form {
-    padding: 0.5rem 1rem;
-    border: 1px solid #eeeeee;
+.container-sm > form {
+  padding: 0px;
+  border: 1px solid #eeeeee;
+}
+.divide-text{
+  font-size: 12px;
+}
+.divide-row{
+  margin-top: 10px;
+}
+.ion-padding{
+  padding: 5px 0px;
+}
+ion-list{
+  padding-top: 15px;
+}
+ion-input{
+  margin-top:20px;
+  input{
+    font-size: 16px;
   }
 }
 ion-button.button-google {
