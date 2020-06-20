@@ -24,14 +24,16 @@
         </ion-col>
       </ion-row>
       <location-search (onSelect)="handleLocationSelect($event)" (onClear)="handleLocationClear()"></location-search>
-      <ion-item *ngIf="location">
-        <ion-label position="stacked" translate="Address Detail"></ion-label>
-        <ion-input [(ngModel)]="location.unit"></ion-input>
-      </ion-item>
-      <ion-item lines="none">
-        <ion-checkbox class="ion-margin-end" color="tertiary" [(ngModel)]="saveLocation"></ion-checkbox>
-        <ion-label translate="Set as default"></ion-label>
-      </ion-item>
+      <ion-list>
+        <ion-item *ngIf="location">
+          <ion-label position="stacked" translate="Address Detail"></ion-label>
+          <ion-input [(ngModel)]="location.unit"></ion-input>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-checkbox class="ion-margin-end" color="tertiary" [(ngModel)]="saveLocation"></ion-checkbox>
+          <ion-label translate="Set as default"></ion-label>
+        </ion-item>
+      </ion-list>
       <ion-list class="ion-margin-top">
         <ion-item *ngIf="account.phone">
           <ion-label translate="Old Phone Number"></ion-label>
