@@ -52,8 +52,13 @@
             </ion-row>
           </ion-grid>
         </ion-item>
-        <ion-item lines="none">
-          <ion-label class="ion-text-wrap" size="small" translate="By signing in, you agree to the Terms of Service and Privacy statement"></ion-label>
+        <ion-item lines="none" class="item-agreement">
+          <label *ngIf="lang === 'en'">
+            By signing in, you agree to the <a routerLink="/page/terms-of-service">terms of service</a> and <a routerLink="/page/privacy-policy">privacy statement</a>
+          </label>
+          <label *ngIf="lang === 'zh'">
+            登录即表示您同意<a routerLink="/page/terms-of-service">服务条款</a>服务条款和<a routerLink="/page/privacy-policy">隐私声明</a>隐私声明
+          </label>
         </ion-item>
 
         <div class="ion-padding">

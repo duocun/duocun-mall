@@ -21,6 +21,7 @@ export class RegisterPage implements OnInit, OnDestroy {
   tosAgreed: boolean;
   isOtpSent: boolean;
   otpSentCount: number;
+  lang: string;
   private unsubscribe$ = new Subject<void>();
   constructor(
     private api: ApiService,
@@ -49,6 +50,9 @@ export class RegisterPage implements OnInit, OnDestroy {
           this.model.phone = phone;
         }
       } catch (e) {}
+    });
+    this.translator.onLangChange.subscribe((lang) => {
+      this.lang = lang.lang;
     });
   }
 

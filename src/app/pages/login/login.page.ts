@@ -21,6 +21,7 @@ export class LoginPage implements OnInit, OnDestroy {
   phone: string;
   otp: string;
   returnUrl: string;
+  lang: string;
   private unsubscribe$ = new Subject<void>();
   constructor(
     private api: ApiService,
@@ -37,6 +38,9 @@ export class LoginPage implements OnInit, OnDestroy {
     this.processing = false;
     this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "/";
     this.initGoogleAuth();
+    this.translator.onLangChange.subscribe((lang) => {
+      this.lang = lang.lang;
+    });
   }
 
   ngOnDestroy() {
