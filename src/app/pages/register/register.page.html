@@ -30,7 +30,8 @@
                 <ion-input 
                   required 
                   type="text" 
-                  name="username" 
+                  name="username"
+                  placeholder="{{'Please input username' | translate}}"
                   autocomplete="off" 
                   autofocus=true 
                   minlength="5" 
@@ -50,6 +51,7 @@
                   required
                   type="text"
                   name="phone"
+                  placeholder="{{'Please input phone number' | translate}}"
                   autocomplete="on"
                   inputmode="tel"
                   minlength="6"
@@ -65,7 +67,7 @@
             <ion-row>
               <ion-col size="8">
                 <ion-label position="stacked" translate="OTP Code"></ion-label>
-                <ion-input required type="text" name="otp" [(ngModel)]="model.verificationCode"></ion-input>
+                <ion-input required type="text" name="otp" placeholder="{{'Please input verification code' | translate}}" [(ngModel)]="model.verificationCode"></ion-input>
               </ion-col>
               <ion-col size="4">
                 <ion-button
