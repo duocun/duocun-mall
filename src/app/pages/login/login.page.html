@@ -4,14 +4,19 @@
       <ion-buttons slot="start">
         <ion-back-button defaultHref="/tabs/browse" text=""></ion-back-button>
       </ion-buttons>
-      <ion-title class="ion-text-center" translate="Sign In"></ion-title>
+      <!-- <ion-title class="ion-text-center" translate="Sign In"></ion-title> -->
     </ion-toolbar>
   </div>
 </ion-header>
 
 <ion-content>
   <div class="container container-sm">
-    <form class="ion-padding-horizontal ion-margin-top">
+    <form class="ion-padding-horizontal ion-margin-top login-form">
+      <ion-row class="row-title">
+        <ion-col size="12">
+          <ion-title translate="Sign In"></ion-title>
+        </ion-col>
+      </ion-row>
       <ion-list lines="full" class="list-input">
         <ion-item>
           <ion-grid class="ion-no-padding ion-no-margin w-100">
@@ -34,11 +39,15 @@
                 <ion-input required type="text" name="otp" [(ngModel)]="otp" placeholder="{{'Input verification code'|translate}}"></ion-input>
               </ion-col>
               <ion-col size="5" class="ion-padding-horizontal">
-                <ion-button class="ion-margin-top w-100" expand="full" type="button" color="tertiary"
+                <ion-button class="ion-margin-top w-100" 
+                  expand="block"
+                  type="button"
+                  color="tertiary"
                   (click)="handleSendVerificationCode()"
                   [disabled]="!isValidPhoneNumber() || processing || failedCount > 3">
                   {{ isOtpSent ? "Resend OTP Code" : "Send OTP Code" | translate }}
                 </ion-button>
+
               </ion-col>
             </ion-row>
           </ion-grid>
@@ -63,17 +72,17 @@
               <ion-label class="divide-text" translate="Or sign in with"></ion-label>
               <b class="stroke after"></b>
             </ion-col>
-            <ion-col size="12">
-              <ion-button class="button-google" expand="full" id="googleLoginButton">
-                <ion-icon name="logo-google" class="ion-margin-end"></ion-icon>
-                <ion-label translate="Sign in with Google"></ion-label>
-              </ion-button>
+            <ion-col size="3">
+              <!-- <ion-button class="button-google" expand="full" id="googleLoginButton"> -->
+                <ion-icon style="zoom:2.5;" id="googleLoginButton" name="logo-google" class="ion-margin-end"></ion-icon>
+                <!-- <ion-label translate="Sign in with Google"></ion-label>
+              </ion-button> -->
             </ion-col>
-            <ion-col size="12">
-              <ion-button class="button-facebook" expand="full">
-                <ion-icon name="logo-facebook" class="ion-margin-end"></ion-icon>
-                <ion-label translate="Sign in with Facebook"></ion-label>
-              </ion-button>
+            <ion-col size="3">
+              <!-- <ion-button class="button-facebook" expand="full"> -->
+                <ion-icon style="zoom:2.5;" name="logo-facebook" class="ion-margin-end"></ion-icon>
+                <!-- <ion-label translate="Sign in with Facebook"></ion-label>
+              </ion-button> -->
             </ion-col>
           </ion-row>
         </div>

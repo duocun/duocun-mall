@@ -4,7 +4,7 @@
       <ion-buttons slot="start">
         <ion-back-button defaultHref="/tabs/login" text=""></ion-back-button>
       </ion-buttons>
-      <ion-title class="ion-text-center" translate="Create Account"></ion-title>
+      <!-- <ion-title class="ion-text-center" translate="Create Account"></ion-title> -->
     </ion-toolbar>
   </div>
 </ion-header>
@@ -12,7 +12,7 @@
 <ion-content>
   <div class="container container-sm">
     <form class="ion-padding-horizontal ion-margin-top">
-      <div class="ion-padding-horizontal ion-margin-top">
+      <!-- <div class="ion-padding-horizontal ion-margin-top">
         <ion-row>
           <ion-col class="ion-text-center">
             <b class="stroke before"></b>
@@ -20,7 +20,12 @@
             <b class="stroke after"></b>
           </ion-col>
         </ion-row>
-      </div>
+      </div> -->
+      <ion-row class="row-title">
+        <ion-col size="12">
+          <ion-title translate="Create Account"></ion-title>
+        </ion-col>
+      </ion-row>
       <ion-list lines="full" class="list-input">
         <ion-item>
           <ion-grid class="ion-no-padding ion-no-margin w-100">
@@ -42,7 +47,7 @@
             </ion-row>
           </ion-grid>
         </ion-item>
-        <ion-item>
+        <ion-item class="row-phone">
           <ion-grid class="ion-no-padding ion-no-margin w-100">
             <ion-row>
               <ion-col size="12">
@@ -84,12 +89,12 @@
             </ion-row>
           </ion-grid>
         </ion-item>
-        <ion-item class="ion-margin-top">
+      </ion-list>
+      <ion-item class="ion-margin-top row-agreement">
           <ion-checkbox size="small" name="agreed" color="secondary" slot="start" [(ngModel)]="tosAgreed"></ion-checkbox>
           <ion-label size="small" translate="Agree with terms of service and privacy policy"></ion-label>
-        </ion-item>
-      </ion-list>
-      <div class="ion-padding">
+      </ion-item>
+      <!-- <div class="ion-padding"> -->
         <ion-row>
           <ion-col>
             <ion-button
@@ -102,36 +107,38 @@
         </ion-button>
           </ion-col>
         </ion-row>
-      </div>
-      <div class="ion-padding">
+      <!-- </div> -->
+      <!-- <div class="ion-padding">
         <ion-row>
-          <!-- <ion-col size="12" class="ion-text-center">
+          <ion-col size="12" class="ion-text-center">
             <b class="stroke before"></b>
             <ion-label translate="Or sign up with"></ion-label>
             <b class="stroke after"></b>
-          </ion-col> -->
-          <!-- <ion-col size="12">
+          </ion-col>
+          <ion-col size="12">
             <ion-button class="button-google" expand="full" id="googleLoginButton">
               <ion-icon name="logo-google" class="ion-margin-end"></ion-icon>
               <ion-label translate="Sign up with Google"></ion-label>
             </ion-button>
-          </ion-col> -->
-          <!-- <ion-col size="12">
+          </ion-col>
+          <ion-col size="12">
             <ion-button class="button-facebook" expand="full">
               <ion-icon name="logo-facebook" class="ion-margin-end"></ion-icon>
               <ion-label translate="Sign up with Facebook"></ion-label>
             </ion-button>
-          </ion-col> -->
-        </ion-row>
-      </div>
-      <div class="ion-padding">
-        <ion-row>
-          <ion-col size="12">
-            <ion-label translate="Already have an account?"></ion-label>
-            <ion-label color="primary" routerLink="/tabs/login" translate="Sign In"></ion-label>
           </ion-col>
         </ion-row>
-      </div>
+      </div> -->
     </form>
+
+    <div class="ion-padding">
+      <ion-row>
+        <ion-col size="12">
+          <ion-label translate="Already have an account?"></ion-label>
+          <ion-label color="primary" routerLink="/tabs/login" translate="Sign In"></ion-label>
+        </ion-col>
+      </ion-row>
+    </div>
+    
   </div>
 </ion-content>
