@@ -38,6 +38,7 @@ export class LoginPage implements OnInit, OnDestroy {
     this.processing = false;
     this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "/";
     this.initGoogleAuth();
+    this.lang = this.translator.currentLang;
     this.translator.onLangChange.subscribe((lang) => {
       this.lang = lang.lang;
     });

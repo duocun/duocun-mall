@@ -51,6 +51,7 @@ export class RegisterPage implements OnInit, OnDestroy {
         }
       } catch (e) {}
     });
+    this.lang = this.translator.currentLang;
     this.translator.onLangChange.subscribe((lang) => {
       this.lang = lang.lang;
     });
