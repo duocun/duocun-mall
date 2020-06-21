@@ -30,7 +30,10 @@
       </ion-item>
       <ion-item lines="none">
         <ion-checkbox class="ion-margin-end" color="tertiary" [(ngModel)]="saveLocation"></ion-checkbox>
-        <ion-label translate="Set as default"></ion-label>
+        <ion-label>
+          {{"Set as default"|translate}}
+        </ion-label>
+        <ion-icon class="icon-what-is-this" (click)="showWhatisThis()" name="help-outline"></ion-icon>
       </ion-item>
       <ion-list class="ion-margin-top">
         <ion-item *ngIf="account.phone">

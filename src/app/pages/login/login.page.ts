@@ -113,11 +113,38 @@ export class LoginPage implements OnInit, OnDestroy {
               this.showAlert("Notice", "Verification code sent", "OK");
             } else {
               if (resp.message == "no such account") {
-                this.showAlert(
-                  "Notice",
-                  "The phone number is not registered. Please create an account first.",
-                  "OK"
-                );
+                const header = "Notice";
+                const message =
+                  "The phone number is not registered. Please create an account first.";
+                const cancel = "Cancel";
+                const ok = "OK";
+                this.translator
+                  .get([header, message, cancel, ok])
+                  .subscribe(async (dict: any) => {
+                    const alert = await this.alert.create({
+                      header: dict[header],
+                      message: dict[message],
+                      buttons: [
+                        {
+                          text: dict[cancel],
+                          role: "cancel",
+                          cssClass: "secondary"
+                        },
+                        {
+                          text: dict[ok],
+                          handler: () => {
+                            this.router.navigate(["/tabs/register"], {
+                              state: {
+                                phone: this.phone
+                              },
+                              replaceUrl: true
+                            });
+                          }
+                        }
+                      ]
+                    });
+                    alert.present();
+                  });
               } else {
                 this.showAlert(
                   "Notice",

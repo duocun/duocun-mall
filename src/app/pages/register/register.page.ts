@@ -42,6 +42,14 @@ export class RegisterPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.initGoogleAuth();
+    this.router.events.subscribe((event) => {
+      try {
+        const phone = this.router.getCurrentNavigation().extras.state.phone;
+        if (phone) {
+          this.model.phone = phone;
+        }
+      } catch (e) {}
+    });
   }
 
   ngOnDestroy() {
@@ -105,7 +113,7 @@ export class RegisterPage implements OnInit, OnDestroy {
         },
         (error) => {
           console.error(error);
-          this.showAlert("Notice", "Registration failed", "OK");
+          // this.showAlert("Notice", "Registration failed", "OK");
         }
       );
     });
