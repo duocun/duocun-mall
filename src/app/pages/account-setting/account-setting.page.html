@@ -24,17 +24,18 @@
         </ion-col>
       </ion-row>
       <location-search (onSelect)="handleLocationSelect($event)" (onClear)="handleLocationClear()"></location-search>
+      <ion-item lines="none item-address-set-default">
+        <ion-checkbox class="ion-margin-end" color="tertiary" [(ngModel)]="saveLocation"></ion-checkbox>
+        <ion-label>
+          {{"Set as default delivery address"|translate}}
+        </ion-label>
+        <ion-icon class="icon-what-is-this" (click)="showWhatisThis()" name="help-outline"></ion-icon>
+      </ion-item>
       <ion-item *ngIf="location">
         <ion-label position="stacked" translate="Unit# (We don't deliver upstairs)"></ion-label>
         <ion-input [(ngModel)]="location.unit" placeholder="{{'Please input unit# (Optional)' | translate}}"></ion-input>
       </ion-item>
-      <ion-item lines="none item-address-set-default">
-        <ion-checkbox class="ion-margin-end" color="tertiary" [(ngModel)]="saveLocation"></ion-checkbox>
-        <ion-label>
-          {{"Set as default"|translate}}
-        </ion-label>
-        <ion-icon class="icon-what-is-this" (click)="showWhatisThis()" name="help-outline"></ion-icon>
-      </ion-item>
+      
       <ion-list class="ion-margin-top">
         <ion-item *ngIf="account.phone">
           <ion-label translate="Old Phone Number"></ion-label>
