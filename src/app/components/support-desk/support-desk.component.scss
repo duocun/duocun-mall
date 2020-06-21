@@ -1,0 +1,35 @@
+@media(min-width: 768px) {
+
+}
+
+.thread {
+  margin-top: 7px;
+  margin-bottom: 7px;
+  label {
+    white-space: normal!important;
+    padding: 10px;
+    border-radius: 10px;
+    flex: 0 1 auto;
+  }
+  &.in {
+    label {
+      background-color: #eeeeee;
+    }
+  }
+  &.out {
+    float: right;
+    label {
+      background-color: var(--ion-color-primary-tint);
+      color: #ffffff;
+    }
+  }
+}
+ion-footer {
+  ion-item {
+    padding-left: 7px!important;
+    padding-right: 7px!important;
+  }
+  ion-icon {
+    margin-right: 5px!important;
+  }
+}
