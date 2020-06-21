@@ -18,10 +18,11 @@
 }
 .row-title{
   height: 30px;
-  padding-left: 8px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   margin-top: 20px;
   ion-title{
+    padding: 0px 30px;
+    text-align: left;
     font-size: 26px;
   }
 }
@@ -59,10 +60,16 @@ b.stroke {
     right: 7px;
   }
 }
+
 .list-input {
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+  padding-left: 1.2rem;
+  padding-right: 1.2rem;
 }
+
 .container-sm > form {
   border: 1px solid #ccc;
+}
+
+.item-native{
+  padding-left: 0px;
 }
