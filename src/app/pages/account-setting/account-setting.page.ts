@@ -83,13 +83,25 @@ export class AccountSettingPage implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
+  showWhatisThis() {
+    this.showAlert("Notice", "WhatIsThis_set_as_default", "OK");
+  }
+
   handleSave() {
     if (!this.model.phone) {
-      this.showAlert("Notice", "Please input phone number", "OK");
+      this.showAlert(
+        "Notice",
+        "You need to enter the phone number and shipping address to save, and then place the order",
+        "OK"
+      );
       return;
     }
     if (!this.location) {
-      this.showAlert("Notice", "Please select delivery address", "OK");
+      this.showAlert(
+        "Notice",
+        "You need to enter the phone number and shipping address to save, and then place the order",
+        "OK"
+      );
       return;
     }
     this.processing = true;
