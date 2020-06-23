@@ -28,7 +28,7 @@ export class BrowsePage implements OnInit, OnDestroy {
   search: string;
   page: number;
   pageSize = 12;
-  categoryDisplayLimit = 10;
+  categoryDisplayLimit = 20;
   scrollDisabled: boolean;
   outofRange: boolean;
   private unsubscribe$ = new Subject<void>();
