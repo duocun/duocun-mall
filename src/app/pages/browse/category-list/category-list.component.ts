@@ -3,6 +3,7 @@ import { ApiService } from "src/app/services/api/api.service";
 import { CategoryInterface } from "src/app/models/category.model";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import slugify from "slugify";
 @Component({
   selector: "category-list",
   templateUrl: "./category-list.component.html",
@@ -34,5 +35,15 @@ export class CategoryListComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  getCategorySlug(category: CategoryInterface) {
+    if (category.nameEN) {
+      return slugify(category.nameEN, {
+        lower: true
+      });
+    } else {
+      return "";
+    }
   }
 }

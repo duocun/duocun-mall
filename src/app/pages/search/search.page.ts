@@ -7,7 +7,7 @@ import { LocationInterface } from "src/app/models/location.model";
 import { Subject } from "rxjs";
 import { takeUntil, take } from "rxjs/operators";
 import { SeoService } from "src/app/services/seo/seo.service";
-
+import slugify from "slugify";
 @Component({
   selector: "app-search",
   templateUrl: "./search.page.html",
@@ -119,6 +119,16 @@ export class SearchPage implements OnInit, OnDestroy {
       });
   }
   onProductClick(product: ProductInterface) {
-    this.router.navigate(["/tabs/browse/products", product._id]);
+    if (product.nameEN) {
+      this.router.navigate([
+        "/tabs/browse/products",
+        slugify(product.nameEN, {
+          lower: true
+        }),
+        product._id
+      ]);
+    } else {
+      this.router.navigate(["/tabs/browse/products", product._id]);
+    }
   }
 }

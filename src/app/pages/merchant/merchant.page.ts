@@ -9,6 +9,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { AlertController } from "@ionic/angular";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import slugify from "slugify";
 @Component({
   selector: "app-merchant",
   templateUrl: "./merchant.page.html",
@@ -99,7 +100,17 @@ export class MerchantPage implements OnInit, OnDestroy {
             });
         });
     } else {
-      this.router.navigate(["/tabs/browse/products", product._id]);
+      if (product.nameEN) {
+        this.router.navigate([
+          "/tabs/browse/products",
+          slugify(product.nameEN, {
+            lower: true
+          }),
+          product._id
+        ]);
+      } else {
+        this.router.navigate(["/tabs/browse/products", product._id]);
+      }
     }
   }
 
