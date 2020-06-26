@@ -18,7 +18,9 @@ import { TranslateService } from "@ngx-translate/core";
 import * as moment from "moment-timezone";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
-
+import { AccountInterface } from "src/app/models/account.model";
+import { AuthService } from "src/app/services/auth/auth.service";
+import { SeoService } from "src/app/services/seo/seo.service";
 const baseTimeList = ["11:00"];
 export const AppType = {
   FOOD_DELIVERY: "F",
@@ -42,6 +44,7 @@ export class ProductPage implements OnInit, OnDestroy {
   isInRange: boolean;
   schedules: Array<DeliveryDateTimeInterface>;
   deliveryIdx: number; // schedule index
+  account: AccountInterface;
   private unsubscribe$ = new Subject<void>();
   constructor(
     private route: ActivatedRoute,
@@ -51,7 +54,9 @@ export class ProductPage implements OnInit, OnDestroy {
     private deliverySvc: DeliveryService,
     private alert: AlertController,
     private translator: TranslateService,
-    private router: Router
+    private router: Router,
+    private authSvc: AuthService,
+    private seo: SeoService
   ) {
     this.loading = true;
     this.isInRange = false;
@@ -61,13 +66,19 @@ export class ProductPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.authSvc.account$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((account: AccountInterface) => {
+        console.log("product page account subscription");
+        this.account = account;
+      });
     this.locationSvc
       .getLocation()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((location: LocationInterface) => {
         console.log("product page location subscription");
         this.location = location;
-        if (this.location === null) {
+        if (this.account && this.location === null) {
           this.showAlert("Notice", "Please select delivery address", "OK");
           this.router.navigate(["/tabs/my-account/setting"], {
             queryParams: { redirectUrl: this.router.url }
@@ -81,6 +92,7 @@ export class ProductPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.seo.setDefaultSeo();
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
@@ -99,6 +111,13 @@ export class ProductPage implements OnInit, OnDestroy {
               if (data) {
                 this.product = data;
                 this.setIsInStock();
+                this.seo.setTitle(this.product.name);
+                this.seo.setDescription(this.product.description);
+                if (!this.account) {
+                  this.loading = false;
+                  return;
+                }
+
                 this.api
                   .geth(
                     "Restaurants/qFind",

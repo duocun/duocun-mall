@@ -7,6 +7,7 @@ import { AuthService } from "src/app/services/auth/auth.service";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { environment } from "src/environments/environment";
+import { SeoService } from 'src/app/services/seo/seo.service';
 declare const gapi: any;
 
 @Component({
@@ -29,7 +30,8 @@ export class LoginPage implements OnInit, OnDestroy {
     private router: Router,
     private translator: TranslateService,
     private alert: AlertController,
-    private authSvc: AuthService
+    private authSvc: AuthService,
+    private seo: SeoService
   ) {}
 
   ngOnInit() {
@@ -42,11 +44,13 @@ export class LoginPage implements OnInit, OnDestroy {
     this.translator.onLangChange.subscribe((lang) => {
       this.lang = lang.lang;
     });
+    this.seo.setTitle("登录");
   }
 
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+    this.seo.setDefaultSeo();
   }
 
   initGoogleAuth() {

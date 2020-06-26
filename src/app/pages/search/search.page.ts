@@ -6,6 +6,7 @@ import { LocationService } from "src/app/services/location/location.service";
 import { LocationInterface } from "src/app/models/location.model";
 import { Subject } from "rxjs";
 import { takeUntil, take } from "rxjs/operators";
+import { SeoService } from "src/app/services/seo/seo.service";
 
 @Component({
   selector: "app-search",
@@ -23,7 +24,8 @@ export class SearchPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private api: ApiService,
     private router: Router,
-    private locSvc: LocationService
+    private locSvc: LocationService,
+    private seo: SeoService
   ) {
     this.search = "";
     this.loading = true;
@@ -39,11 +41,13 @@ export class SearchPage implements OnInit, OnDestroy {
           this.getProducts();
         });
       });
+    this.seo.setTitle("搜索");
   }
 
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+    this.seo.setDefaultSeo();
   }
 
   handleSearch(event) {

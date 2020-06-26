@@ -5,10 +5,20 @@ import { Meta, Title } from "@angular/platform-browser";
   providedIn: "root"
 })
 export class SeoService {
+  public DEFAULT_TITLE = "多村 - Duocun";
+  public DEFAULT_DESCRIPTION =
+    "多村送菜 - 免运费免小费 Toronto online shopping";
+  public DEFAULT_KEYWORDS =
+    "村送菜，多村商城，多伦多网上购物, 免运费, 免小费, Free shipping, No Fee, Canada grocery, Toronto, Online shopping";
+
   constructor(private title: Title, private meta: Meta) {}
 
-  setTitle(title: string) {
-    this.title.setTitle(title);
+  setTitle(title: string, addDefault = true) {
+    if (addDefault) {
+      this.title.setTitle(title + " | " + this.DEFAULT_TITLE);
+    } else {
+      this.title.setTitle(title);
+    }
   }
 
   setDescription(desc: string) {
@@ -24,10 +34,8 @@ export class SeoService {
   }
 
   setDefaultSeo() {
-    this.setTitle("多村 - Duocun");
-    this.setDescription("多村送菜 - 免运费免小费 Toronto online shopping");
-    this.setKeywords(
-      "村送菜，多村商城，多伦多网上购物, 免运费, 免小费, Free shipping, No Fee, Canada grocery, Toronto, Online shopping"
-    );
+    this.setTitle(this.DEFAULT_TITLE);
+    this.setDescription(this.DEFAULT_DESCRIPTION);
+    this.setKeywords(this.DEFAULT_KEYWORDS);
   }
 }

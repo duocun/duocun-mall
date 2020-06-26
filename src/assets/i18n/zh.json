@@ -155,5 +155,6 @@
   "Moneris_card_limited": "付款金额超出单笔消费额上限，请联系发卡公司",
   "Moneris_card_declined": "此信用卡使用受限，请联系发卡公司",
   "Moneris_cvv_invalid": "信用卡背面三位数支付码错误，请重新确认",
-  "Moneris_payment_failed": "支付失败"
+  "Moneris_payment_failed": "支付失败",
+  "Sign in to continue purchasing": "请先登录"
 }

@@ -697,7 +697,7 @@ export class OrderPage implements OnInit, OnDestroy {
         message: "Moneris_invalid_exp"
       };
     }
-    return { isValid: true }
+    return { isValid: true };
   }
 
   isWechatBrowser() {

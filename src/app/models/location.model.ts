@@ -85,7 +85,7 @@ export function formatLocation(location: LocationInterface): string {
 export function getLocationFromGeocode(geocodeResult): LocationInterface {
   const addr = geocodeResult && geocodeResult.address_components;
   const oLocation = geocodeResult.geometry.location;
-  console.log('geocodeResult: ', geocodeResult)
+  console.log("geocodeResult: ", geocodeResult);
   if (addr && addr.length) {
     const loc: LocationInterface = {
       placeId: geocodeResult.place_id,
@@ -123,7 +123,7 @@ export function getLocationFromGeocode(geocodeResult): LocationInterface {
         loc.province = compo.short_name;
       }
     });
-    console.log('loc', loc)
+    console.log("loc", loc);
     return loc;
   } else {
     return null;

@@ -8,6 +8,7 @@ import { Router } from "@angular/router";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { environment } from "src/environments/environment";
+import { SeoService } from "src/app/services/seo/seo.service";
 declare const gapi: any;
 
 @Component({
@@ -28,7 +29,8 @@ export class RegisterPage implements OnInit, OnDestroy {
     private translator: TranslateService,
     private alert: AlertController,
     private authSvc: AuthService,
-    private router: Router
+    private router: Router,
+    private seo: SeoService
   ) {
     this.model = {
       phone: "",
@@ -55,11 +57,13 @@ export class RegisterPage implements OnInit, OnDestroy {
     this.translator.onLangChange.subscribe((lang) => {
       this.lang = lang.lang;
     });
+    this.seo.setTitle("注册");
   }
 
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+    this.seo.setDefaultSeo();
   }
 
   initGoogleAuth() {
