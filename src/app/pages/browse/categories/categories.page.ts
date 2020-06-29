@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Router } from "@angular/router";
-import { SeoService } from 'src/app/services/seo/seo.service';
+import { SeoService } from "src/app/services/seo/seo.service";
 
 @Component({
   selector: "app-categories",

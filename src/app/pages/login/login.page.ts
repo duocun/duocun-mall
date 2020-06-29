@@ -7,7 +7,7 @@ import { AuthService } from "src/app/services/auth/auth.service";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { environment } from "src/environments/environment";
-import { SeoService } from 'src/app/services/seo/seo.service';
+import { SeoService } from "src/app/services/seo/seo.service";
 declare const gapi: any;
 
 @Component({
