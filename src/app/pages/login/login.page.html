@@ -19,23 +19,18 @@
       </ion-row>
       <ion-list lines="full" class="list-input">
         <ion-item>
-          <ion-grid class="ion-no-padding ion-no-margin w-100">
-            <ion-row class="row-phone">
-              <ion-col size="12">
-                <ion-label position="stacked" translate="Phone Number"></ion-label>
-                <ion-input required type="text" name="phone" autocomplete="off" autofocus=true inputmode="tel"
-                  minlength="6" maxlength="20" placeholder="{{'Please input phone number'|translate}}"
-                  [(ngModel)]="phone">
-                </ion-input>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
+
+          <ion-label position="stacked" translate="Phone Number" *ngIf="phone"></ion-label>
+          <ion-input required type="text" name="phone" autocomplete="off" autofocus=true inputmode="tel"
+            minlength="6" maxlength="20" placeholder="{{'Please input phone number'|translate}}"
+            [(ngModel)]="phone">
+          </ion-input>
+
         </ion-item>
         <ion-item class="ion-margin-top ">
-          <ion-grid class="ion-no-padding ion-no-margin w-100">
             <ion-row class="row-otp">
               <ion-col size="7">
-                <ion-label position="stacked" translate="OTP Code"></ion-label>
+                <ion-label position="stacked" translate="OTP Code" *ngIf="otp"></ion-label>
                 <ion-input required type="text" name="otp" [(ngModel)]="otp" placeholder="{{'Input verification code'|translate}}"></ion-input>
               </ion-col>
               <ion-col size="5" class="ion-padding-horizontal">
@@ -47,10 +42,8 @@
                   [disabled]="!isValidPhoneNumber() || processing || failedCount > 3">
                   {{ isOtpSent ? "Resend OTP Code" : "Send OTP Code" | translate }}
                 </ion-button>
-
               </ion-col>
             </ion-row>
-          </ion-grid>
         </ion-item>
         <ion-item lines="none" class="item-agreement">
           <label *ngIf="lang === 'en'">
