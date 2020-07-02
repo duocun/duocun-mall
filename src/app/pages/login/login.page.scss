@@ -36,9 +36,9 @@ ion-input{
   input {
     font-size: 16px;
     padding-bottom: 0px;
+    --padding-bottom: 0px;
   }
 }
-
 ion-button.button-google {
   --background: #DB4437;
   text-transform: none;
@@ -83,9 +83,9 @@ b.stroke {
   margin-top: 10px;
   font-size: 90%;
 }
+
 .row-otp{
   ion-col{
-    padding-left: 0px;
-    padding-right: 0px;
+    padding: 0px;
   }
 }
