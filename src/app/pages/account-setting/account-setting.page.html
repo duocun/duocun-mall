@@ -52,7 +52,7 @@
                 expand="full"
                 [disabled]="processing"
                 (click)="handleSendVerificationCode()">
-                {{ (isOtpSent ? "Resend OTP Code" : "Send OTP Code") | translate }}
+                {{ "Send OTP Code" | translate }}
             </ion-button>
             </ion-col>
           </ion-row>
@@ -69,7 +69,7 @@
       <ion-row class="ion-padding">
         <ion-col size="12" align="center">
           <ion-button 
-            [disabled]="!isValidPhoneNumber(model.phone) || (model.secondPhone && !isValidPhoneNumber(model.secondPhone)) || processing"
+            [disabled]="processing"
             color="primary"
             translate="Save"
             expand="full"
