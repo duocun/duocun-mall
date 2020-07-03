@@ -28,6 +28,14 @@ ion-checkbox{
   margin-top: -6px;
   margin-left: 10px;
 }
-.label-address{
-  padding-bottom: 6px;
+
+@media(max-width: 767px) {
+  .label-address{
+    padding-bottom: 0px;
+  }
+}
+@media(min-width: 768px) {
+  .label-address{
+    padding-bottom: 3px;
+  }
 }

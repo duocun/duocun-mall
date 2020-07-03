@@ -10,7 +10,19 @@
     font-size: 0.75rem;
   }
 }
+
 ion-searchbar{
   padding-top: 0px;
   padding-bottom: 0px;
+}
+
+@media(max-width: 767px) {
+  ion-searchbar{
+    height: 42px;
+  }
+}
+@media(min-width: 768px) {
+  ion-searchbar{
+    height: 42px;
+  }
 }
