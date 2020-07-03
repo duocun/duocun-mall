@@ -71,10 +71,10 @@
             </ion-col>
             <div class="row-sns">
               <div class="col-sns">
-                <img id="googleLoginButton" name="logo-google" class="google-icon" src="assets/img/google.jpg"/>
+                <img id="googleLoginButton" style="cursor: pointer;" name="logo-google" class="google-icon" src="assets/img/google.jpg"/>
               </div>
               <div class="col-sns">
-                <img id="googleLoginButton" name="logo-facebook" class="facebook-icon" src="assets/img/fb.png"/>
+                <img id="facebookLoginButton" (click)="handleFacebookLogin()" style="cursor: pointer;" name="logo-facebook" class="facebook-icon" src="assets/img/fb.png"/>
               </div>
             </div>
         </div>

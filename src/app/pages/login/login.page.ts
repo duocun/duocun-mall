@@ -4,10 +4,11 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { TranslateService } from "@ngx-translate/core";
 import { AlertController } from "@ionic/angular";
 import { AuthService } from "src/app/services/auth/auth.service";
-import { Subject } from "rxjs";
+import { Subject, Observable } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 declare const gapi: any;
+declare const FB: any;
 
 @Component({
   selector: "app-login",
@@ -38,6 +39,7 @@ export class LoginPage implements OnInit, OnDestroy {
     this.processing = false;
     this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "/";
     this.initGoogleAuth();
+    this.initFacebookAuth();
     this.lang = this.translator.currentLang;
     this.translator.onLangChange.subscribe((lang) => {
       this.lang = lang.lang;
@@ -65,35 +67,7 @@ export class LoginPage implements OnInit, OnDestroy {
             googleUserId: profile.getId()
           };
           this.api.post("Accounts/googleLogin", userInfo).then((observable) => {
-            observable
-              .toPromise()
-              .then((resp: { code: string; token: string }) => {
-                if (resp.code === "success") {
-                  this.authSvc.login(resp.token).then((account) => {
-                    if (account) {
-                      if (!account.phone || !account.verified) {
-                        // this.showAlert(
-                        //   "Notice",
-                        //   "Please verify your phone number",
-                        //   "OK"
-                        // );
-                        // this.router.navigate(["/tabs/my-account/setting"]);
-                      } else {
-                        this.showAlert("Notice", "Login successful", "OK");
-                        if (this.returnUrl) {
-                          this.router.navigate([this.returnUrl]);
-                        } else {
-                          this.router.navigate(["/tabs/browse"]);
-                        }
-                      }
-                    } else {
-                      this.showAlert("Notice", "Login failed", "OK");
-                    }
-                  });
-                } else {
-                  this.showAlert("Notice", "Login failed", "OK");
-                }
-              });
+            return this.handleSocialLoginResponse(observable);
           });
         },
         (error) => {
@@ -102,6 +76,63 @@ export class LoginPage implements OnInit, OnDestroy {
         }
       );
     });
+  }
+
+  initFacebookAuth() {
+    FB.init({
+      appId: environment.facebookAppId,
+      autoLogAppEvents: true,
+      xfbml: true,
+      version: "v7.0"
+    });
+
+  }
+
+  handleFacebookLogin() {
+    if (!FB) {
+      return;
+    }
+    FB.getLoginStatus((response) => {
+      if (response.status === 'connected') {
+        this.api.post("Accounts/fbLogin", response.authResponse).then((observable) => {
+          this.handleSocialLoginResponse(observable);
+        });
+      } else {
+        this.showAlert("Notice", "Login failed", "OK");
+      }
+    });
+  }
+
+  handleSocialLoginResponse(observable: Observable<Object>) {
+    return observable
+      .toPromise()
+      .then((resp: { code: string; token: string }) => {
+        if (resp.code === "success") {
+          this.authSvc.login(resp.token).then((account) => {
+            if (account) {
+              if (!account.phone || !account.verified) {
+                // this.showAlert(
+                //   "Notice",
+                //   "Please verify your phone number",
+                //   "OK"
+                // );
+                // this.router.navigate(["/tabs/my-account/setting"]);
+              } else {
+                this.showAlert("Notice", "Login successful", "OK");
+                if (this.returnUrl) {
+                  this.router.navigate([this.returnUrl]);
+                } else {
+                  this.router.navigate(["/tabs/browse"]);
+                }
+              }
+            } else {
+              this.showAlert("Notice", "Login failed", "OK");
+            }
+          });
+        } else {
+          this.showAlert("Notice", "Login failed", "OK");
+        }
+      });
   }
 
   handleSendVerificationCode() {
