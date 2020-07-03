@@ -51,7 +51,7 @@
                 expand="full"
                 [disabled]="processing"
                 (click)="handleSendVerificationCode()">
-              "Resend OTP Code" : "Send OTP Code" | translate
+                {{ (isOtpSent ? "Resend OTP Code" : "Send OTP Code") | translate }}
             </ion-button>
             </ion-col>
           </ion-row>
