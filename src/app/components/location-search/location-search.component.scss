@@ -1,14 +1,16 @@
 .col-list-suggestion {
   padding-left: 1rem;
   padding-right: 1rem;
-  padding-top: 0;
+  padding-top: 0.5rem;
   margin-top: -1rem;
 }
 .list-suggestion {
   background: #eee;
-}
-.list-suggestion {
   ion-item {
     font-size: 0.75rem;
   }
+}
+ion-searchbar{
+  padding-top: 0px;
+  padding-bottom: 0px;
 }

@@ -12,25 +12,18 @@
 <ion-content>
   <div class="container container-sm">
     <ng-container *ngIf="account">
-      <ion-row class="ion-padding-start ion-padding-end ion-padding-top">
-        <ion-col class="ion-no-padding" size="12">
-          <ion-label class="ion-margin-end" translate="Delivery Address"></ion-label>
-          <ion-label 
-            color="primary"
-            routerLink="delivery-range"
-            class="ion-text-small"
-            translate="See delivery range"
-          ></ion-label>
-        </ion-col>
+      <ion-row class="ion-padding-start ion-padding-end ion-padding-top label-address">
+        <ion-label class="ion-margin-end ion-text-small" translate="Delivery Address"></ion-label>
+        <ion-label class="ion-text-small" color="primary" routerLink="delivery-range" translate="See delivery range"></ion-label>
       </ion-row>
       <location-search (onSelect)="handleLocationSelect($event)" (onClear)="handleLocationClear()"></location-search>
-      <ion-item lines="none item-address-set-default">
-        <ion-checkbox class="ion-margin-end" color="tertiary" [(ngModel)]="saveLocation"></ion-checkbox>
-        <ion-label>
-          {{"Set as default delivery address"|translate}}
-        </ion-label>
-        <ion-icon class="icon-what-is-this" (click)="showWhatisThis()" name="help-outline"></ion-icon>
-      </ion-item>
+      <!-- lines="none item-address-set-default"  -->
+      <ion-row class="ion-padding-start ion-padding-end default-address">
+        <ion-checkbox class="checkbox-square ion-margin-end" mode="md" color="tertiary" [(ngModel)]="saveLocation"></ion-checkbox>
+        <ion-label>{{"Set as default delivery address"|translate}}</ion-label>
+        <ion-icon class="icon-what-is-this" (click)="showWhatisThis()" name="help-circle"></ion-icon>
+      </ion-row>
+      
       <ion-item *ngIf="location">
         <ion-label position="stacked" translate="Unit# (We don't deliver upstairs)" *ngIf="location.unit"></ion-label>
         <ion-input [(ngModel)]="location.unit" placeholder="{{'Please input unit# (Optional)' | translate}}"></ion-input>
