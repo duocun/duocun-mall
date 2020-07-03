@@ -9,3 +9,33 @@
     flex: 0 1 auto;
   }
 }
+.col-code{
+  padding-left: 0px;
+}
+.container{
+  padding-right: 10px;
+}
+ion-checkbox{
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+.default-address{
+  height: 36px;
+  padding-top: 8px;
+}
+.icon-what-is-this{
+  font-size: 28px;
+  margin-top: -5px;
+  margin-left: 10px;
+}
+
+@media(max-width: 767px) {
+  .label-address{
+    padding-bottom: 0px;
+  }
+}
+@media(min-width: 768px) {
+  .label-address{
+    padding-bottom: 3px;
+  }
+}
