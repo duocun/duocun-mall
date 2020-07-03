@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild, Directive, AfterViewInit } from "@angular/core";
 import { AuthService } from "src/app/services/auth/auth.service";
 import { AccountInterface } from "src/app/models/account.model";
 import { ApiService } from "src/app/services/api/api.service";
@@ -15,12 +15,14 @@ import { environment } from "src/environments/environment";
 import { Storage } from "@ionic/storage";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { LocationSearchComponent } from 'src/app/components/location-search/location-search.component';
+
 @Component({
   selector: "app-account-setting",
   templateUrl: "./account-setting.page.html",
-  styleUrls: ["./account-setting.page.scss"]
+  styleUrls: ["./account-setting.page.scss"],
 })
-export class AccountSettingPage implements OnInit, OnDestroy {
+export class AccountSettingPage implements AfterViewInit, OnInit, OnDestroy {
   account: AccountInterface;
   model: AccountInterface;
   location: LocationInterface;
@@ -28,6 +30,7 @@ export class AccountSettingPage implements OnInit, OnDestroy {
   saveLocation: boolean;
   processing: boolean;
   isOtpSent: boolean;
+  @ViewChild('locationSearch', {static: false}) locationSearch: LocationSearchComponent;
   private unsubscribe$ = new Subject<void>();
   constructor(
     private authSvc: AuthService,
@@ -43,6 +46,10 @@ export class AccountSettingPage implements OnInit, OnDestroy {
     this.redirectUrl = "";
     this.saveLocation = false;
     this.processing = false;
+  }
+
+  ngAfterViewInit() {
+    console.log(this.locationSearch);
   }
 
   ngOnInit() {
@@ -104,6 +111,7 @@ export class AccountSettingPage implements OnInit, OnDestroy {
         "You need to enter the phone number and shipping address to save, and then place the order",
         "OK"
       );
+      this.locationSearch.handleClear();
       return;
     }
     this.processing = true;
@@ -209,6 +217,11 @@ export class AccountSettingPage implements OnInit, OnDestroy {
     location: LocationInterface;
     place?: PlaceInterface;
   }) {
+    if (!event.location || !event.location.streetName) {
+      this.showAlert("Notice", "Please input street name", "OK");
+      // this.locationSearch.handleClear();
+      return;
+    }
     this.location = event.location;
     this.location.address = event.address;
     if (!this.location.streetNumber && event.place) {

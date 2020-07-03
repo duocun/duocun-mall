@@ -17,7 +17,7 @@
         <ion-label class="ion-margin-end ion-text-small" translate="Delivery Address"></ion-label>
         <ion-label class="ion-text-small" color="primary" routerLink="delivery-range" translate="See delivery range"></ion-label>
       </ion-row>
-      <location-search (onSelect)="handleLocationSelect($event)" (onClear)="handleLocationClear()"></location-search>
+      <location-search #locationSearch (onSelect)="handleLocationSelect($event)" (onClear)="handleLocationClear()"></location-search>
       <!-- lines="none item-address-set-default"  -->
       <ion-row class="ion-padding-start ion-padding-end default-address">
         <ion-checkbox class="checkbox-square ion-margin-end" mode="md" color="tertiary" [(ngModel)]="saveLocation"></ion-checkbox>

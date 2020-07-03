@@ -78,6 +78,7 @@
   "Please input phone number": "请输入手机号码",
   "Please input verification code": "请输入手机验证码",
   "Please verify your phone number": "请验证您的电话号码",
+  "Please input street name": "请输入街道名",
   "Save": "保存",
   "Please select delivery address": "请输入收货地址(街道号, 街道名), 并在提示列表里选择",
   "Saved successfully": "保存成功",
