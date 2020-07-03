@@ -27,7 +27,6 @@ export class AccountSettingPage implements OnInit, OnDestroy {
   redirectUrl: string;
   saveLocation: boolean;
   processing: boolean;
-  isOtpSent: boolean;
   private unsubscribe$ = new Subject<void>();
   constructor(
     private authSvc: AuthService,
@@ -46,7 +45,6 @@ export class AccountSettingPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.isOtpSent = false;
     this.authSvc
       .getAccount()
       .pipe(takeUntil(this.unsubscribe$))
@@ -152,7 +150,6 @@ export class AccountSettingPage implements OnInit, OnDestroy {
               "account setting page send verification code subscription"
             );
             if (resp.code === "success") {
-              this.isOtpSent = true;
               this.showAlert("Notice", "Verification code sent", "OK");
             } else {
               this.showAlert("Notice", "Verification code was not sent", "OK");
