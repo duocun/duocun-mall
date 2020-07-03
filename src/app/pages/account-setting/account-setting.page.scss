@@ -28,7 +28,16 @@ ion-checkbox{
   margin-top: -5px;
   margin-left: 10px;
 }
-
+.container-sm {
+  max-width: 540px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.container-sm > .wrapper {
+  padding: 0px 15px;
+  border: 1px solid #ccc;
+  margin-top: 15px;
+}
 @media(max-width: 767px) {
   .label-address{
     padding-bottom: 0px;

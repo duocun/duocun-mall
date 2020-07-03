@@ -12,6 +12,7 @@
 <ion-content>
   <div class="container container-sm">
     <ng-container *ngIf="account">
+      <div class="wrapper">
       <ion-row class="ion-padding-start ion-padding-end ion-padding-top label-address">
         <ion-label class="ion-margin-end ion-text-small" translate="Delivery Address"></ion-label>
         <ion-label class="ion-text-small" color="primary" routerLink="delivery-range" translate="See delivery range"></ion-label>
@@ -76,6 +77,7 @@
           ></ion-button>
         </ion-col>
       </ion-row>
+    </div>
     </ng-container>
   </div>
   <app-footer></app-footer>

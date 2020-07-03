@@ -27,6 +27,7 @@
       </ion-col>
       
     </ion-row>
+
     <ion-list>
       <ion-item>
         <ion-icon slot="start" name="cash-outline"></ion-icon>
@@ -43,39 +44,34 @@
       </ion-item>
     </ion-list>
     
-    <ion-card class="card-link" routerLink="/tabs/order-history">
-      <ion-card-header align="center">
-        <ion-icon color="primary" name="reader-outline"></ion-icon>
-      </ion-card-header>
-      <ion-card-content align="center">
-        <h3 class="ion-text-primary" translate="Order History"></h3>
-      </ion-card-content>
-    </ion-card>
-    <ion-card class="card-link" routerLink="setting">
-      <ion-card-header align="center">
-        <ion-icon color="success" name="person-circle-outline"></ion-icon>
-      </ion-card-header>
-      <ion-card-content align="center">
-        <h3 class="ion-text-success" translate="Account Setting"></h3>
-      </ion-card-content>
-    </ion-card>
-    <ion-card class="card-link" routerLink="transaction-history">
-      <ion-card-header align="center">
-        <ion-icon color="tertiary" name="qr-code-outline"></ion-icon>
-      </ion-card-header>
-      <ion-card-content align="center">
-        <h3 class="ion-text-tertiary" translate="Transaction History"></h3>
-      </ion-card-content>
-    </ion-card>
-    <ion-card class="card-link cursor-pointer" (click)="handleLogout()">
-      <ion-card-header align="center">
-        <ion-icon color="danger" name="exit-outline"></ion-icon>
-      </ion-card-header>
-      <ion-card-content align="center">
-        <h3 class="ion-text-danger" translate="Log Out"></h3>
-      </ion-card-content>
-    </ion-card>
+    <ion-row class="ion-padding-top">
+      <ion-card class="card-link" routerLink="/tabs/order-history">
+        <ion-item align="center" lines="none">
+          <ion-icon color="primary" name="reader-outline"></ion-icon>
+          <h3 class="ion-text-primary" translate="Order History"></h3>
+        </ion-item>
+      </ion-card>
+      <ion-card class="card-link" routerLink="setting">
+        <ion-item align="center" lines="none">
+          <ion-icon color="success" name="person-circle-outline"></ion-icon>
+          <h3 class="ion-text-success" translate="Account Setting"></h3>
+        </ion-item>
+      </ion-card>
+      <ion-card class="card-link" routerLink="transaction-history">
+        <ion-item align="center" lines="none">
+          <ion-icon color="tertiary" name="qr-code-outline"></ion-icon>
+          <h3 class="ion-text-tertiary" translate="Transaction History"></h3>
+        </ion-item>
+      </ion-card>
+      <ion-card class="card-link cursor-pointer" (click)="handleLogout()">
+        <ion-item align="center" lines="none">
+          <ion-icon color="danger" name="exit-outline"></ion-icon>
+          <h3 class="ion-text-danger" translate="Log Out"></h3>
+        </ion-item>
+      </ion-card>
+    </ion-row>
   </div>
+
   <app-footer></app-footer>
 </ion-content>
 
