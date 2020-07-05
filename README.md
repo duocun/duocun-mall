@@ -2,6 +2,7 @@
 [![Node version](https://img.shields.io/badge/npm-v6.9.0-green)](http://nodejs.org/download/)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 [![HitCount](http://hits.dwyl.com/duocun/duocun-mall.svg)](http://hits.dwyl.com/duocun/duocun-mall)
+
 # duocun-mall
 
 **duocun-mall** is a shopping mall frontend using [duocun-api](https://github.com/duocun/duocun-api) as its backend
@@ -42,22 +43,16 @@ ng test
 
 ## Prettier Lint Check & Fix
 
-### Install prettier
-
-```console
-npm i g prettier@2.0.5
-```
-
 ### Lint Check
 
 ```console
-prettier --check src/**/*.ts
+npm run lint
 ```
 
 ### Lint Fix
 
 ```console
-prettier --write src/**/*.ts
+npm run prettify
 ```
 
 # Deployment
@@ -65,6 +60,7 @@ prettier --write src/**/*.ts
 ```console
 ionic build --prod
 ```
+
 # Docker compose
 
 ## Build and run

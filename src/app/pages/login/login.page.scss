@@ -1,10 +1,38 @@
 .container-sm {
   max-width: 540px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
-@media(min-width: 576px) {
-  .container-sm > form {
-    padding: 0.5rem 1rem;
-    border: 1px solid #eeeeee;
+.container-sm > form {
+  padding: 0px;
+  border: 1px solid #ccc;
+}
+.divide-text{
+  font-size: 12px;
+}
+.divide-row{
+  margin-top: 10px;
+}
+.ion-padding{
+  padding: 5px 0px;
+}
+.row-title{
+  height: 30px;
+  margin-bottom: 10px;
+  margin-top: 20px;
+  ion-title{
+    padding: 0px 30px;
+    text-align: left;
+    font-size: 26px;
+  }
+}
+ion-list{
+  padding-top: 15px;
+}
+ion-input{
+  margin-top: 12px;
+  input{
+    font-size: 16px;
   }
 }
 ion-button.button-google {
@@ -32,7 +60,42 @@ b.stroke {
     right: 7px;
   }
 }
+
 .list-input {
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+  padding-left: 1.2rem;
+  padding-right: 1.2rem;
+}
+
+.container-sm > form {
+  border: 1px solid #ccc;
+}
+
+.item-native{
+  padding-left: 0px;
+}
+
+.item-agreement {
+  margin-top: 10px;
+  font-size: 90%;
+}
+
+.row-otp{
+  ion-col{
+    padding: 0px;
+  }
+}
+
+.row-sns{
+  padding:15px 20px;
+  height: 80px;
+  .col-sns{
+    float: left;
+    width: 80px;
+    padding: 0px 15px;
+  }
+}
+
+.google-icon, .facebook-icon{
+  width: 50px;
+  height: 50px;
 }

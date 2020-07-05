@@ -16,14 +16,16 @@
 <ion-content>
   <chat-button></chat-button>
   <div class="container">
-    <ion-searchbar 
+    <ion-searchbar
       placeholder="{{'Search'|translate}}"
       debounce="1000"
       (ionChange)="handleSearch($event)"
       [value]="search"
     ></ion-searchbar>
     <ng-container *ngIf="viewMode === 'category-only'; Else segmentMode">
-      <ion-row class="ion-padding-start ion-padding-end ion-margin-bottom row-category">
+      <ion-row
+        class="ion-padding-start ion-padding-end ion-margin-bottom row-category"
+      >
         <ion-col size-xs="3" size-lg="2.4" class="ion-no-margin ion-no-padding">
           <ion-button
             [disabled]="loading"
@@ -35,7 +37,12 @@
           >
           </ion-button>
         </ion-col>
-        <ion-col *ngFor="let category of categories.slice(0,categoryDisplayLimit)" size-xs="3" size-lg="2.4" class="ion-no-margin ion-no-padding">
+        <ion-col
+          *ngFor="let category of categories.slice(0,categoryDisplayLimit)"
+          size-xs="3"
+          size-lg="2.4"
+          class="ion-no-margin ion-no-padding"
+        >
           <ion-button
             [disabled]="loading"
             [color]="selectedCategoryId === category._id ? 'success' : 'light'"
@@ -48,7 +55,12 @@
           >
           </ion-button>
         </ion-col>
-        <ion-col *ngIf="categories.length >= (categoryDisplayLimit + 1)" size-xs="3" size-lg="2.4" class="ion-no-margin ion-no-padding">
+        <ion-col
+          *ngIf="categories.length >= (categoryDisplayLimit + 1)"
+          size-xs="3"
+          size-lg="2.4"
+          class="ion-no-margin ion-no-padding"
+        >
           <ion-button
             color="tertiary"
             size="small"
@@ -64,8 +76,16 @@
       <ion-row class="ion-padding-start ion-padding-end">
         <ng-container *ngIf="!loading; Else skeleton">
           <ng-container *ngIf="products.length; Else empty">
-            <ion-col size-xs="4" size-md="3" size-lg="2.4" *ngFor="let product of products">
-              <ion-card class="ion-no-margin card-product" (click)="onProductClick(product)">
+            <ion-col
+              size-xs="4"
+              size-md="3"
+              size-lg="2.4"
+              *ngFor="let product of products"
+            >
+              <ion-card
+                class="ion-no-margin card-product"
+                [routerLink]="getProductSlug(product) ? ['/tabs/browse/products', getProductSlug(product), product._id] : ['/tabs/browse/products', product._id]"
+              >
                 <ion-card-content>
                   <div class="wrapper-product-img">
                     <app-ion-image
@@ -73,11 +93,15 @@
                       [alt]="product.name"
                       style="object-fit: cover; height: 100%;"
                     ></app-ion-image>
-                    <div class="overlay-product-img" *ngIf="isDepleted(product)">
-                      <ion-badge 
+                    <div
+                      class="overlay-product-img"
+                      *ngIf="isDepleted(product)"
+                    >
+                      <ion-badge
                         class="badge-out-of-stock"
                         color="danger"
-                        translate="badge_out_of_stock">
+                        translate="badge_out_of_stock"
+                      >
                       </ion-badge>
                     </div>
                   </div>
@@ -88,10 +112,15 @@
                 </ion-card-content>
               </ion-card>
             </ion-col>
-            <ion-infinite-scroll threshold="1px" (ionInfinite)="loadData($event)" [disabled]="scrollDisabled">
+            <ion-infinite-scroll
+              threshold="1px"
+              (ionInfinite)="loadData($event)"
+              [disabled]="scrollDisabled"
+            >
               <ion-infinite-scroll-content
                 loadingSpinner="bubbles"
-                [loadingText]="'Loading...'|translate">
+                [loadingText]="'Loading...'|translate"
+              >
               </ion-infinite-scroll-content>
             </ion-infinite-scroll>
           </ng-container>
@@ -124,13 +153,18 @@
 </ng-template>
 
 <ng-template #skeleton>
-  <ion-col *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]" size-xs="4" size-md="3" size-lg="2.4">
+  <ion-col
+    *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]"
+    size-xs="4"
+    size-md="3"
+    size-lg="2.4"
+  >
     <ion-card class="ion-no-margin card-product">
       <ion-card-content>
         <div class="wrapper-product-img">
           <app-ion-image
-              src="assets/img/no-image.png"
-              alt="awesome product"
+            src="assets/img/no-image.png"
+            alt="awesome product"
           ></app-ion-image>
         </div>
         <ion-skeleton-text animated style="height: 0.5rem;"></ion-skeleton-text>

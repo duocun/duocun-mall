@@ -5,6 +5,10 @@ import { ProductPage } from "./product.page";
 
 const routes: Routes = [
   {
+    path: ":slug/:id",
+    component: ProductPage
+  },
+  {
     path: ":id",
     component: ProductPage
   },

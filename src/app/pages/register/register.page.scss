@@ -6,13 +6,15 @@ ion-label[size=small] {
 }
 .container-sm {
   max-width: 540px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
-@media(min-width: 576px) {
-  .container-sm > form {
-    padding: 0.5rem 1rem;
-    border: 1px solid #eeeeee;
-  }
+
+.container-sm > form {
+  padding: 0.5rem 1rem;
+  border: 1px solid #cccc;
 }
+
 ion-button.button-google {
   --background: #DB4437;
   text-transform: none;
@@ -35,7 +37,37 @@ b.stroke {
     right: 7px;
   }
 }
-.list-input {
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+.row-title{
+  height: 30px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  ion-title{
+    padding: 0px 20px;
+    text-align: left;
+    font-size: 26px;
+  }
+}
+.row-phone{
+  padding-top: 10px;
+}
+.row-agreement{
+  --border-width: 0;
+  --inner-border-width: 0;
+}
+ion-list.list-input{
+  padding-left: 8px;
+  padding-right: 8px;
+}
+ion-input{
+  margin-top: 12px;
+  input{
+    font-size: 16px;
+  }
+}
+
+.row-agreement {
+  label {
+    z-index: 2;
+    font-size: 80%;
+  }
 }

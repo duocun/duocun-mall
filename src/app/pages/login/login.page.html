@@ -4,21 +4,29 @@
       <ion-buttons slot="start">
         <ion-back-button defaultHref="/tabs/browse" text=""></ion-back-button>
       </ion-buttons>
-      <ion-title class="ion-text-center" translate="Sign In"></ion-title>
+      <!-- <ion-title class="ion-text-center" translate="Sign In"></ion-title> -->
     </ion-toolbar>
   </div>
 </ion-header>
 
 <ion-content>
   <div class="container container-sm">
-    <form class="ion-padding-horizontal ion-margin-top">
+    <form class="ion-padding-horizontal ion-margin-top login-form">
+      <ion-row class="row-title">
+        <ion-col size="12">
+          <ion-title text-left translate="Sign In"></ion-title>
+        </ion-col>
+      </ion-row>
       <ion-list lines="full" class="list-input">
         <ion-item>
           <ion-grid class="ion-no-padding ion-no-margin w-100">
             <ion-row class="row-phone">
               <ion-col size="12">
                 <ion-label position="stacked" translate="Phone Number"></ion-label>
-                <ion-input required type="text" name="phone" autocomplete="off" autofocus=true inputmode="tel" minlength="6" maxlength="20" [(ngModel)]="phone"></ion-input>
+                <ion-input required type="text" name="phone" autocomplete="off" autofocus=true inputmode="tel"
+                  minlength="6" maxlength="20" placeholder="{{'Please input phone number'|translate}}"
+                  [(ngModel)]="phone">
+                </ion-input>
               </ion-col>
             </ion-row>
           </ion-grid>
@@ -26,83 +34,73 @@
         <ion-item class="ion-margin-top ">
           <ion-grid class="ion-no-padding ion-no-margin w-100">
             <ion-row class="row-otp">
-              <ion-col>
+              <ion-col size="7">
                 <ion-label position="stacked" translate="OTP Code"></ion-label>
-                <ion-input required type="text" name="otp" [(ngModel)]="otp"></ion-input>
+                <ion-input required type="text" name="otp" [(ngModel)]="otp" placeholder="{{'Input verification code'|translate}}"></ion-input>
               </ion-col>
-              <ion-col class="ion-padding-horizontal">
-                <ion-button 
-                  class="ion-margin-top w-100"
-                  expand="full"
+              <ion-col size="5" class="ion-padding-horizontal">
+                <ion-button class="ion-margin-top w-100" 
+                  expand="block"
                   type="button"
                   color="tertiary"
-                  (click)="handleSendVerificationCode()" 
+                  (click)="handleSendVerificationCode()"
                   [disabled]="!isValidPhoneNumber() || processing || failedCount > 3">
                   {{ isOtpSent ? "Resend OTP Code" : "Send OTP Code" | translate }}
                 </ion-button>
+
               </ion-col>
             </ion-row>
           </ion-grid>
         </ion-item>
-        <ion-item lines="none">
-          <ion-label size="small" translate="By logging in, you agree to the terms of service and privacy statement"></ion-label>
+        <ion-item lines="none" class="item-agreement">
+          <label *ngIf="lang === 'en'">
+            By signing in, you agree to the <a routerLink="/page/terms-of-service">terms of service</a> and <a routerLink="/page/privacy-policy">privacy statement</a>
+          </label>
+          <label *ngIf="lang === 'zh'">
+            登录即表示您同意<a routerLink="/page/terms-of-service">服务条款</a>和<a routerLink="/page/privacy-policy">隐私声明</a>
+          </label>
         </ion-item>
-      </ion-list>
-      <div class="ion-padding">
-        <ion-row>
-          <ion-col>
-            <ion-button 
-              class=""
-              [disabled]="!isValidPhoneNumber() || !otp || processing"
-              expand="full" 
-              type="submit" 
-              translate="Sign In"
-              (click)="handleSignIn()"
-            >
-            </ion-button>
-          </ion-col>
-        </ion-row>
-      </div>
-      <div class="ion-padding">
-        <ion-row>
-          <ion-col size="12" class="ion-text-center">
-            <b class="stroke before"></b>
-            <ion-label translate="Or sign in with"></ion-label>
-            <b class="stroke after"></b>
-          </ion-col>
-          <ion-col size="12">
-            <ion-button class="button-google" expand="full" id="googleLoginButton">
-              <ion-icon name="logo-google" class="ion-margin-end"></ion-icon>
-              <ion-label translate="Sign in with Google"></ion-label>
-            </ion-button>
-          </ion-col>
-          <ion-col size="12">
-            <ion-button class="button-facebook" expand="full">
-              <ion-icon name="logo-facebook" class="ion-margin-end"></ion-icon>
-              <ion-label translate="Sign in with Facebook"></ion-label>
-            </ion-button>
-          </ion-col>
-        </ion-row>
-      </div>
 
-      <div class="ion-padding">
-        <ion-row>
-          <ion-col size="12" class="ion-text-center">
-            <b class="stroke before"></b>
-            <ion-label translate="Join duocun"></ion-label>
-            <b class="stroke after"></b>
-          </ion-col>
-          <ion-col size="12">
-            <ion-button
-              [routerLink]="['/tabs/register']"
-              color="success"
-              expand="full"
-              translate="Create account"
-            >
-            </ion-button>
-          </ion-col>
-        </ion-row>
-      </div>
+        <div class="ion-padding">
+          <ion-row>
+            <ion-col>
+              <ion-button class="" [disabled]="!isValidPhoneNumber() || !otp || processing" expand="full" type="submit" translate="Sign In"
+                (click)="handleSignIn()">
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </div>
+        <div class="ion-padding">
+            <ion-col size="12" class="ion-text-center">
+              <b class="stroke before"></b>
+              <ion-label class="divide-text" translate="Or sign in with"></ion-label>
+              <b class="stroke after"></b>
+            </ion-col>
+            <div class="row-sns">
+              <div class="col-sns">
+                <img id="googleLoginButton" style="cursor: pointer;" name="logo-google" class="google-icon" src="assets/img/google.jpg"/>
+              </div>
+              <div class="col-sns">
+                <img id="facebookLoginButton" (click)="handleFacebookLogin()" style="cursor: pointer;" name="logo-facebook" class="facebook-icon" src="assets/img/fb.png"/>
+              </div>
+            </div>
+        </div>
+      </ion-list>
     </form>
+
+    <div class="ion-padding">
+      <ion-row class="divide-row">
+        <ion-col size="12" class="ion-text-center">
+          <b class="stroke before"></b>
+          <ion-label class="divide-text" translate="New to Duocun?"></ion-label>
+          <b class="stroke after"></b>
+        </ion-col>
+        <ion-col size="12">
+          <ion-button [routerLink]="['/tabs/register']" color="success" expand="full" translate="Create Account">
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </div>
+
   </div>
 </ion-content>

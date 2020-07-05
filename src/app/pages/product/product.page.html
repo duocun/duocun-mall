@@ -4,7 +4,13 @@
       <ion-buttons slot="start">
         <ion-back-button defaultHref="/tabs/browse" text=""></ion-back-button>
       </ion-buttons>
-      <ion-title class="ion-text-center" *ngIf="!loading" localValue [data]="product" key="name"></ion-title>
+      <ion-title
+        class="ion-text-center"
+        *ngIf="!loading"
+        localValue
+        [data]="product"
+        key="name"
+      ></ion-title>
       <ion-buttons slot="end">
         <cart-button></cart-button>
         <language-button></language-button>
@@ -18,11 +24,17 @@
     <ng-container *ngIf="(!loading && product); Else skeleton">
       <ion-row>
         <ion-col size="12" size-lg="5">
-            <!-- BEGIN PRODUCT IMAGE SLIDER -->
+          <!-- BEGIN PRODUCT IMAGE SLIDER -->
           <div class="image-slide-container">
-            <ion-slides *ngIf="product.pictures && product.pictures.length; Else slidePlaceholder">
+            <ion-slides
+              *ngIf="product.pictures && product.pictures.length; Else slidePlaceholder"
+            >
               <ion-slide *ngFor="let image of product.pictures; index as idx">
-                <app-ion-image style="width: 100%; height: 100%; object-fit: cover;" [src]="getPictureUrl(product, idx)" [alt]="product.name"></app-ion-image>
+                <app-ion-image
+                  style="width: 100%; height: 100%; object-fit: cover;"
+                  [src]="getPictureUrl(product, idx)"
+                  [alt]="product.name"
+                ></app-ion-image>
               </ion-slide>
             </ion-slides>
           </div>
@@ -35,7 +47,7 @@
             <p localValue [data]="product" key="description"></p>
           </div>
           <!--  END TITLE AND DESCRIPTION  -->
-      
+
           <ion-row class="row-purchase">
             <!-- BEGIN PRICE LABEL -->
             <ion-col size="12">
@@ -47,80 +59,113 @@
               </ion-row>
             </ion-col>
             <!--  END PRICE LABEL  -->
-            <ng-container *ngIf="isInStock">
-              <ng-container *ngIf="isInRange && schedules">
+            <ng-container *ngIf="account; Else pleaseLogin">
+              <ng-container *ngIf="isInStock">
+                <ng-container *ngIf="isInRange && schedules">
+                  <ion-row class="ion-padding w-100">
+                    <ion-col align="center">
+                      <ion-label
+                        class="ion-text-center"
+                        translate="Please select delivery date and quantity"
+                      >
+                      </ion-label>
+                    </ion-col>
+                  </ion-row>
+                  <ion-item
+                    *ngFor="let schedule of schedules"
+                    class="w-100"
+                    lines="none"
+                  >
+                    <ion-row
+                      class="ion-no-margin ion-no-padding w-100 row-schedule"
+                    >
+                      <ion-col size="6">
+                        <ion-label
+                          >{{schedule.date | moment:"YYYY-MM-DD
+                          ddd"}}</ion-label
+                        >
+                      </ion-col>
+                      <ion-col size="6" class="ion-justify-contents-end">
+                        <ion-touchspin
+                          style="width: 96px;"
+                          size="md"
+                          [initialValue]="getItemQuantity(schedule)"
+                          minimumValue="0"
+                          (valueChange)="handleQuantityChange($event, schedule)"
+                        ></ion-touchspin>
+                      </ion-col>
+                    </ion-row>
+                  </ion-item>
+                </ng-container>
+              </ng-container>
+              <ng-container
+                *ngIf="!schedules || !schedules.length || !isInStock"
+              >
                 <ion-row class="ion-padding w-100">
-                  <ion-col align="center">
-                    <ion-label class="ion-text-center" translate="Please select delivery date and quantity">
+                  <ion-col
+                    size="12"
+                    align="center"
+                    *ngIf="!schedules || !schedules.length"
+                  >
+                    <ion-label
+                      color="danger"
+                      translate="Sorry, but this product is out of delivery range."
+                    ></ion-label>
+                  </ion-col>
+                  <ion-col size="12" align="center" *ngIf="!isInStock">
+                    <ion-label
+                      color="danger"
+                      localValue
+                      [data]="product.stock"
+                      key="outofstockMessage"
+                      fallback="This product is out of stock"
+                    ></ion-label>
+                  </ion-col>
+                  <ion-col size="12" align="center">
+                    <ion-button
+                      color="success"
+                      expand="full"
+                      [routerLink]="['/tabs/browse']"
+                      translate="Misc"
+                    ></ion-button>
+                  </ion-col>
+                </ion-row>
+              </ng-container>
+              <ion-col
+                size="12"
+                *ngIf="cart && cart.items && cart.items.length"
+              >
+                <ion-row class="ion-padding">
+                  <ion-col size="12" class="ion-text-center">
+                    <ion-button
+                      color="primary"
+                      expand="full"
+                      class="w-100"
+                      routerLink="/tabs/browse/order"
+                      [disabled]="!schedules || !schedules.length"
+                    >
+                      <ion-icon
+                        class="ion-margin-end"
+                        name="cash-outline"
+                      ></ion-icon>
+                      {{"Buy Now"|translate}}
+                    </ion-button>
+                  </ion-col>
+                </ion-row>
+              </ion-col>
+              <ion-col size="12" *ngIf="!location">
+                <ion-row class="ion-padding">
+                  <ion-col size="12" class="ion-text-center">
+                    <ion-label
+                      translate="Please select delivery address"
+                      routerLink="['/tabs/my-account/setting']"
+                      class="ion-text-danger"
+                    >
                     </ion-label>
                   </ion-col>
                 </ion-row>
-                <ion-item *ngFor="let schedule of schedules" class="w-100" lines="none">
-                  <ion-row class="ion-no-margin ion-no-padding w-100 row-schedule">
-                    <ion-col size="6">
-                      <ion-label>{{schedule.date | moment:"YYYY-MM-DD ddd"}}</ion-label>
-                    </ion-col>
-                    <ion-col size="6" class="ion-justify-contents-end">
-                      <ion-touchspin 
-                        style="width: 96px;" 
-                        size="md" 
-                        [initialValue]="getItemQuantity(schedule)" 
-                        minimumValue="0"
-                        (valueChange)="handleQuantityChange($event, schedule)"
-      
-                      ></ion-touchspin>
-                    </ion-col>
-                  </ion-row>
-                </ion-item>
-              </ng-container>
+              </ion-col>
             </ng-container>
-            <ng-container *ngIf="!schedules || !schedules.length || !isInStock">
-              <ion-row class="ion-padding w-100">
-                <ion-col size="12" align="center" *ngIf="!schedules || !schedules.length">
-                  <ion-label color="danger" translate="Sorry, but this product is out of delivery range."></ion-label>
-                </ion-col>
-                <ion-col size="12" align="center" *ngIf="!isInStock">
-                  <ion-label 
-                    color="danger"
-                    localValue
-                    [data]="product.stock"
-                    key='outofstockMessage'
-                    fallback="This product is out of stock"
-                  ></ion-label>
-                </ion-col>
-                <ion-col size="12" align="center">
-                  <ion-button color="success" expand="full" [routerLink]="['/tabs/browse']" translate="Misc"></ion-button>
-                </ion-col>
-              </ion-row>
-            </ng-container>
-            <ion-col size="12" *ngIf="cart && cart.items && cart.items.length">
-              <ion-row class="ion-padding">
-                <ion-col size="12" class="ion-text-center">
-                  <ion-button
-                    color="primary"
-                    expand="full"
-                    class="w-100"
-                    routerLink="/tabs/browse/order"
-                    [disabled]="!schedules || !schedules.length"
-                  >
-                    <ion-icon class="ion-margin-end" name="cash-outline"></ion-icon>
-                    {{"Buy Now"|translate}}
-                  </ion-button>
-                </ion-col>
-              </ion-row>
-            </ion-col>
-            <ion-col size="12" *ngIf="!location">
-              <ion-row class="ion-padding">
-                <ion-col size="12" class="ion-text-center">
-                  <ion-label 
-                    translate="Please select delivery address"
-                    routerLink="['/tabs/my-account/setting']"
-                    class="ion-text-danger"
-                  >
-                  </ion-label>
-                </ion-col>
-              </ion-row>
-            </ion-col>
           </ion-row>
         </ion-col>
       </ion-row>
@@ -129,11 +174,33 @@
   <app-footer></app-footer>
 </ion-content>
 
+<ng-template #pleaseLogin>
+  <ion-row class="ion-padding w-100">
+    <ion-col size="12" align="center" *ngIf="!isInStock">
+      <ion-label
+        color="danger"
+        localValue
+        [data]="product.stock"
+        key="outofstockMessage"
+        fallback="This product is out of stock"
+      ></ion-label>
+    </ion-col>
+  </ion-row>
+  <ion-row class="ion-padding w-100">
+    <ion-col size="12" class="ion-text-center">
+      <ion-button
+        [routerLink]="['/tabs/login']"
+        [queryParams]="{returnUrl: router.url}"
+        translate="Sign in to continue purchasing"
+      ></ion-button>
+    </ion-col>
+  </ion-row>
+</ng-template>
+
 <ng-template #slidePlaceholder>
   <ion-slides>
     <ion-slide>
-      <ion-img src="assets/img/no-image.png" [alt]="product.name">
-      </ion-img>
+      <ion-img src="assets/img/no-image.png" [alt]="product.name"> </ion-img>
     </ion-slide>
   </ion-slides>
 </ng-template>
@@ -147,9 +214,30 @@
     </ion-slides>
   </div>
   <div class="product-detail ion-padding">
-    <div><ion-skeleton-text animated style="height: 1.5rem;" class="ion-margin-bottom"></ion-skeleton-text></div>
-    <div><ion-skeleton-text animated style="width: 80%; height: 1.2rem;"></ion-skeleton-text></div>
-    <div><ion-skeleton-text animated style="width: 50%; height: 1.2rem;"></ion-skeleton-text></div>
-    <div><ion-skeleton-text animated style="width: 50%; height: 1.2rem;"></ion-skeleton-text></div>
+    <div>
+      <ion-skeleton-text
+        animated
+        style="height: 1.5rem;"
+        class="ion-margin-bottom"
+      ></ion-skeleton-text>
+    </div>
+    <div>
+      <ion-skeleton-text
+        animated
+        style="width: 80%; height: 1.2rem;"
+      ></ion-skeleton-text>
+    </div>
+    <div>
+      <ion-skeleton-text
+        animated
+        style="width: 50%; height: 1.2rem;"
+      ></ion-skeleton-text>
+    </div>
+    <div>
+      <ion-skeleton-text
+        animated
+        style="width: 50%; height: 1.2rem;"
+      ></ion-skeleton-text>
+    </div>
   </div>
 </ng-template>

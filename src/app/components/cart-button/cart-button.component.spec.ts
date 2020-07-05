@@ -1,15 +1,15 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { IonicModule } from "@ionic/angular";
 
-import { CartButtonComponent } from './cart-button.component';
+import { CartButtonComponent } from "./cart-button.component";
 
-describe('CartButtonComponent', () => {
+describe("CartButtonComponent", () => {
   let component: CartButtonComponent;
   let fixture: ComponentFixture<CartButtonComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CartButtonComponent ],
+      declarations: [CartButtonComponent],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
@@ -18,7 +18,7 @@ describe('CartButtonComponent', () => {
     fixture.detectChanges();
   }));
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

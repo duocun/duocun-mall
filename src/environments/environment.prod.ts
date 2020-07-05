@@ -15,5 +15,6 @@ export const environment = {
   monerisMode: "prod",
   monerisHTProfileId: "htV6VVM9NH24SXX",
   googleAuthClientId:
-    "53858676843-kjkp8dt8e01tktpc8pimd3vtlvkcre81.apps.googleusercontent.com"
+    "53858676843-kjkp8dt8e01tktpc8pimd3vtlvkcre81.apps.googleusercontent.com",
+  facebookAppId: "3115867368492639"
 };

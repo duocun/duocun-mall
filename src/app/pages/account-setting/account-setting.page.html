@@ -12,26 +12,24 @@
 <ion-content>
   <div class="container container-sm">
     <ng-container *ngIf="account">
-      <ion-row class="ion-padding-start ion-padding-end ion-padding-top">
-        <ion-col class="ion-no-padding" size="12">
-          <ion-label class="ion-margin-end" translate="Please select delivery address"></ion-label>
-          <ion-label 
-            color="primary"
-            routerLink="delivery-range"
-            class="ion-text-small"
-            translate="See delivery range"
-          ></ion-label>
-        </ion-col>
+      <div class="wrapper">
+      <ion-row class="ion-padding-start ion-padding-end ion-padding-top label-address">
+        <ion-label class="ion-margin-end ion-text-small" translate="Delivery Address"></ion-label>
+        <ion-label class="ion-text-small" color="primary" routerLink="delivery-range" translate="See delivery range"></ion-label>
       </ion-row>
-      <location-search (onSelect)="handleLocationSelect($event)" (onClear)="handleLocationClear()"></location-search>
+      <location-search #locationSearch (onSelect)="handleLocationSelect($event)" (onClear)="handleLocationClear()"></location-search>
+      <!-- lines="none item-address-set-default"  -->
+      <ion-row class="ion-padding-start ion-padding-end default-address">
+        <ion-checkbox class="checkbox-square ion-margin-end" mode="md" color="tertiary" [(ngModel)]="saveLocation"></ion-checkbox>
+        <ion-label>{{"Set as default delivery address"|translate}}</ion-label>
+        <ion-icon class="icon-what-is-this" (click)="showWhatisThis()" name="help-circle"></ion-icon>
+      </ion-row>
+      
       <ion-item *ngIf="location">
-        <ion-label position="stacked" translate="Address Detail"></ion-label>
-        <ion-input [(ngModel)]="location.unit"></ion-input>
+        <ion-label position="stacked" translate="Unit# (We don't deliver upstairs)"></ion-label>
+        <ion-input [(ngModel)]="location.unit" placeholder="{{'Please input unit# (Optional)' | translate}}"></ion-input>
       </ion-item>
-      <ion-item lines="none">
-        <ion-checkbox class="ion-margin-end" color="tertiary" [(ngModel)]="saveLocation"></ion-checkbox>
-        <ion-label translate="Set as default"></ion-label>
-      </ion-item>
+      
       <ion-list class="ion-margin-top">
         <ion-item *ngIf="account.phone">
           <ion-label translate="Old Phone Number"></ion-label>
@@ -39,13 +37,13 @@
         </ion-item>
         <ion-item>
           <ion-label position="floating" translate="New Phone Number"></ion-label>
-          <ion-input [(ngModel)]="model.phone" maxlength="10"></ion-input>
+          <ion-input [(ngModel)]="model.phone" maxlength="10" placeholder="{{'Please input phone number' | translate}}"></ion-input>
         </ion-item>
         <ion-item *ngIf="(model.phone && account.phone != model.phone) || !account.phone">
           <ion-row class="ion-align-items-end ion-padding-start ion-padding-end">
             <ion-col size="7">
               <ion-label position="floating" translate="Verification Code"></ion-label>
-              <ion-input [(ngModel)]="model.verificationCode"></ion-input>
+              <ion-input [(ngModel)]="model.verificationCode" placeholder="{{'Please input verification code' | translate}}"></ion-input>
             </ion-col>
             <ion-col size="5">
               <ion-button
@@ -54,24 +52,25 @@
                 size="small"
                 expand="full"
                 [disabled]="processing"
-                (click)="handleSendVerificationCode()"
-              ></ion-button>
+                (click)="handleSendVerificationCode()">
+                {{ "Send OTP Code" | translate }}
+            </ion-button>
             </ion-col>
           </ion-row>
         </ion-item>
         <ion-item>
           <ion-label position="floating" translate="Another phone number"></ion-label>
-          <ion-input [(ngModel)]="model.secondPhone" maxlength="10"></ion-input>
+          <ion-input [(ngModel)]="model.secondPhone" maxlength="10" placeholder="{{'Please input alternative phone number' | translate}}"></ion-input>
         </ion-item>
         <ion-item>
           <ion-label position="floating" translate="Username"></ion-label>
-          <ion-input [(ngModel)]="model.username" maxlength="20"></ion-input>
+          <ion-input [(ngModel)]="model.username" maxlength="20" placeholder="{{'Please input username' | translate}}"></ion-input>
         </ion-item>
       </ion-list>
       <ion-row class="ion-padding">
         <ion-col size="12" align="center">
           <ion-button 
-            [disabled]="!isValidPhoneNumber(model.phone) || (model.secondPhone && !isValidPhoneNumber(model.secondPhone)) || processing"
+            [disabled]="processing"
             color="primary"
             translate="Save"
             expand="full"
@@ -79,6 +78,7 @@
           ></ion-button>
         </ion-col>
       </ion-row>
+    </div>
     </ng-container>
   </div>
   <app-footer></app-footer>

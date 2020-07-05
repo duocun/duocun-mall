@@ -7,6 +7,10 @@ import { LocationService } from "src/app/services/location/location.service";
 import { LocationInterface } from "src/app/models/location.model";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { SeoService } from "src/app/services/seo/seo.service";
+import { AccountInterface } from "src/app/models/account.model";
+import { AuthService } from "src/app/services/auth/auth.service";
+import slugify from "slugify";
 @Component({
   selector: "app-category",
   templateUrl: "./category.page.html",
@@ -18,12 +22,15 @@ export class CategoryPage implements OnInit, OnDestroy {
   products: Array<ProductInterface>;
   availableMerchantIds: Array<string>;
   location: LocationInterface;
+  account: AccountInterface;
   private unsubscribe$ = new Subject<void>();
   constructor(
     private api: ApiService,
     private route: ActivatedRoute,
     private router: Router,
-    private locSvc: LocationService
+    private locSvc: LocationService,
+    private seo: SeoService,
+    private authSvc: AuthService
   ) {
     this.loading = true;
   }
@@ -31,18 +38,39 @@ export class CategoryPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.params.subscribe((params: { id: string }) => {
       const categoryId = params.id;
-      this.getAvailableMerchantIds().then(() => {
-        this.api.get(`Categories/G/${categoryId}`).then((observable) => {
-          observable
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((resp: { code: string; data: CategoryInterface }) => {
-              console.log("category page category subscription");
-              if (resp.code === "success") {
-                this.category = resp.data;
-                this.getProducts();
-              }
+      this.authSvc.account$.subscribe((account: AccountInterface) => {
+        this.account = account;
+        if (this.account) {
+          this.getAvailableMerchantIds().then(() => {
+            this.api.get(`Categories/G/${categoryId}`).then((observable) => {
+              observable
+                .pipe(takeUntil(this.unsubscribe$))
+                .subscribe(
+                  (resp: { code: string; data: CategoryInterface }) => {
+                    console.log("category page category subscription");
+                    if (resp.code === "success") {
+                      this.category = resp.data;
+                      this.seo.setTitle(this.category.name);
+                      this.getProducts();
+                    }
+                  }
+                );
             });
-        });
+          });
+        } else {
+          this.api.get(`Categories/G/${categoryId}`).then((observable) => {
+            observable
+              .pipe(takeUntil(this.unsubscribe$))
+              .subscribe((resp: { code: string; data: CategoryInterface }) => {
+                console.log("category page category subscription");
+                if (resp.code === "success") {
+                  this.category = resp.data;
+                  this.seo.setTitle(this.category.name);
+                  this.getProducts();
+                }
+              });
+          });
+        }
       });
     });
   }
@@ -50,6 +78,7 @@ export class CategoryPage implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+    this.seo.setDefaultSeo();
   }
 
   async getAvailableMerchantIds() {
@@ -108,6 +137,16 @@ export class CategoryPage implements OnInit, OnDestroy {
       });
   }
   onProductClick(product: ProductInterface) {
-    this.router.navigate(["/tabs/browse/products", product._id]);
+    if (product.nameEN) {
+      this.router.navigate([
+        "/tabs/browse/products",
+        slugify(product.nameEN, {
+          lower: true
+        }),
+        product._id
+      ]);
+    } else {
+      this.router.navigate(["/tabs/browse/products", product._id]);
+    }
   }
 }
