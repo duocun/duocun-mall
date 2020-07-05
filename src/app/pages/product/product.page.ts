@@ -54,7 +54,7 @@ export class ProductPage implements OnInit, OnDestroy {
     private deliverySvc: DeliveryService,
     private alert: AlertController,
     private translator: TranslateService,
-    private router: Router,
+    public router: Router,
     private authSvc: AuthService,
     private seo: SeoService
   ) {
