@@ -1,4 +1,11 @@
-import { Component, OnInit, OnDestroy, ViewChild, Directive, AfterViewInit } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  Directive,
+  AfterViewInit
+} from "@angular/core";
 import { AuthService } from "src/app/services/auth/auth.service";
 import { AccountInterface } from "src/app/models/account.model";
 import { ApiService } from "src/app/services/api/api.service";
@@ -15,12 +22,12 @@ import { environment } from "src/environments/environment";
 import { Storage } from "@ionic/storage";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
-import { LocationSearchComponent } from 'src/app/components/location-search/location-search.component';
+import { LocationSearchComponent } from "src/app/components/location-search/location-search.component";
 
 @Component({
   selector: "app-account-setting",
   templateUrl: "./account-setting.page.html",
-  styleUrls: ["./account-setting.page.scss"],
+  styleUrls: ["./account-setting.page.scss"]
 })
 export class AccountSettingPage implements AfterViewInit, OnInit, OnDestroy {
   account: AccountInterface;
@@ -30,7 +37,8 @@ export class AccountSettingPage implements AfterViewInit, OnInit, OnDestroy {
   saveLocation: boolean;
   processing: boolean;
   isOtpSent: boolean;
-  @ViewChild('locationSearch', {static: false}) locationSearch: LocationSearchComponent;
+  @ViewChild("locationSearch", { static: false })
+  locationSearch: LocationSearchComponent;
   private unsubscribe$ = new Subject<void>();
   constructor(
     private authSvc: AuthService,
@@ -53,7 +61,6 @@ export class AccountSettingPage implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.isOtpSent = false;
     this.authSvc
       .getAccount()
       .pipe(takeUntil(this.unsubscribe$))
@@ -160,7 +167,6 @@ export class AccountSettingPage implements AfterViewInit, OnInit, OnDestroy {
               "account setting page send verification code subscription"
             );
             if (resp.code === "success") {
-              this.isOtpSent = true;
               this.showAlert("Notice", "Verification code sent", "OK");
             } else {
               this.showAlert("Notice", "Verification code was not sent", "OK");

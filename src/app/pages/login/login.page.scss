@@ -29,14 +29,10 @@
 ion-list{
   padding-top: 15px;
 }
-
 ion-input{
-  margin-top: 0px;
-
-  input {
+  margin-top: 12px;
+  input{
     font-size: 16px;
-    padding-bottom: 0px;
-    --padding-bottom: 0px;
   }
 }
 ion-button.button-google {
@@ -50,7 +46,6 @@ ion-button.button-facebook {
 ion-label[size=small] {
   font-size: 0.8rem;
 }
-
 b.stroke {
   display: block;
   position: absolute;

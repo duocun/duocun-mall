@@ -93,7 +93,7 @@ export class LocationSearchComponent implements OnInit {
   }
 
   handleClear() {
-    this.search = '';
+    this.search = "";
     this.listVisible = false;
     this.placeList = [];
     this.onClear.emit();

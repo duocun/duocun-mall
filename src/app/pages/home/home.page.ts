@@ -101,7 +101,7 @@ export class HomePage implements OnInit, OnDestroy {
       console.log("login");
       this.account = await this.authSvc.login(tokenId);
     }
-    if (this.account && (!this.account.phone || !this.account.verified) ) {
+    if (this.account && (!this.account.phone || !this.account.verified)) {
       this.showAlert("Notice", "Please set phone number", "OK");
       this.router.navigate["/tabs/my-account/setting"];
     }

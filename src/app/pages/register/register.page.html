@@ -28,9 +28,10 @@
       </ion-row>
       <ion-list lines="full" class="list-input">
         <ion-item>
+          <ion-grid class="ion-no-padding ion-no-margin w-100">
             <ion-row>
               <ion-col size="12">
-                <ion-label position="stacked" translate="Username" *ngIf="model.username"></ion-label>
+                <ion-label position="stacked" translate="Username"></ion-label>
                 <ion-input 
                   required 
                   type="text" 
@@ -44,11 +45,13 @@
                 ></ion-input>
               </ion-col>
             </ion-row>
+          </ion-grid>
         </ion-item>
         <ion-item class="row-phone">
+          <ion-grid class="ion-no-padding ion-no-margin w-100">
             <ion-row>
               <ion-col size="12">
-                <ion-label position="stacked" translate="Phone Number" *ngIf="model.phone"></ion-label>
+                <ion-label position="stacked" translate="Phone Number"></ion-label>
                 <ion-input 
                   required
                   type="text"
@@ -62,11 +65,13 @@
                 ></ion-input>
               </ion-col>
             </ion-row>
+          </ion-grid>
         </ion-item>
         <ion-item class="ion-margin-top ">
+          <ion-grid class="ion-no-padding ion-no-margin w-100">
             <ion-row>
               <ion-col size="8">
-                <ion-label position="stacked" translate="OTP Code" *ngIf="model.verificationCode"></ion-label>
+                <ion-label position="stacked" translate="OTP Code"></ion-label>
                 <ion-input required type="text" name="otp" placeholder="{{'Please input verification code' | translate}}" [(ngModel)]="model.verificationCode"></ion-input>
               </ion-col>
               <ion-col size="4">
@@ -76,11 +81,13 @@
                   expand="block"
                   type="button"
                   color="tertiary"
-                  (click)="handleSendOTP()">
+                  (click)="handleSendOTP()"
+                >
                   {{ (isOtpSent ? "Resend OTP Code" : "Send OTP Code") | translate }}
                 </ion-button>
               </ion-col>
             </ion-row>
+          </ion-grid>
         </ion-item>
       </ion-list>
       <ion-item class="ion-margin-top row-agreement">

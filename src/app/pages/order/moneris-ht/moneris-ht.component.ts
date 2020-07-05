@@ -21,38 +21,37 @@ export class MonerisHtComponent implements OnInit {
   constructor(private sanitizer: DomSanitizer) {
     this.profileId = environment.monerisHTProfileId;
 
-    const bodyWidth = window.innerWidth > 1170 ?  720 : (window.innerWidth > 768 ? 540 : window.innerWidth > 576 ? 480 : 320 )
+    const bodyWidth =
+      window.innerWidth > 1170
+        ? 720
+        : window.innerWidth > 768
+        ? 540
+        : window.innerWidth > 576
+        ? 480
+        : 320;
 
-    this.cssBody = 
+    this.cssBody =
       `background: white;` +
       `width: ${bodyWidth};` +
       `margin-left: auto;` +
-      `margin-right: auto;`
-    ;
+      `margin-right: auto;`;
 
-    this.cssTextBox = 
+    this.cssTextBox =
       `border-width: 2px;` +
       `width: ${bodyWidth - 40}px;` +
       `font-size: .875rem;` +
       `padding: 5px 2px;` +
-      `margin: 4px auto;`
-    ;
+      `margin: 4px auto;`;
 
-    this.cssTextBoxExp = this.cssTextBoxCvd = 
+    this.cssTextBoxExp = this.cssTextBoxCvd =
       `width: ${(bodyWidth - 50) / 2};` +
       `display: inline-block;` +
-      `margin-left: 5px;`
-    ;
+      `margin-left: 5px;`;
 
-    this.cssTextBoxExp = this.cssTextBoxExp + 
-      `margin-left: 20px;` +
-      `margin-right: 5px;`
-    ;
+    this.cssTextBoxExp =
+      this.cssTextBoxExp + `margin-left: 20px;` + `margin-right: 5px;`;
 
-    this.cssInputLabel =
-      `margin: 12px auto 6px;` +
-      `display: block;`
-    ;
+    this.cssInputLabel = `margin: 12px auto 6px;` + `display: block;`;
 
     const panLabel = "Card Number";
     const expLabel = "Expiry Date (MMYY)";
@@ -61,18 +60,18 @@ export class MonerisHtComponent implements OnInit {
     this.iframeSrc = this.sanitizer.bypassSecurityTrustResourceUrl(
       encodeURI(
         `https://esqa.moneris.com/HPPtoken/index.php?id=${this.profileId}` +
-        `&css_body=${this.cssBody}` +
-        `&css_textbox=${this.cssTextBox}` +
-        `&css_textbox_exp=${this.cssTextBoxExp}` +
-        `&css_textbox_cvd=${this.cssTextBoxCvd}` +
-        `&css_input_label=${this.cssInputLabel}` +
-        `&pmmsg=true` +
-        `&display_labels=2` +
-        `&enable_exp=1` +
-        `&enable_cvd=1` +
-        `&pan_label=${panLabel}` +
-        `&exp_label=${expLabel}` +
-        `&cvd_label=${cvdLabel}`
+          `&css_body=${this.cssBody}` +
+          `&css_textbox=${this.cssTextBox}` +
+          `&css_textbox_exp=${this.cssTextBoxExp}` +
+          `&css_textbox_cvd=${this.cssTextBoxCvd}` +
+          `&css_input_label=${this.cssInputLabel}` +
+          `&pmmsg=true` +
+          `&display_labels=2` +
+          `&enable_exp=1` +
+          `&enable_cvd=1` +
+          `&pan_label=${panLabel}` +
+          `&exp_label=${expLabel}` +
+          `&cvd_label=${cvdLabel}`
       )
     );
   }

@@ -7,7 +7,7 @@ export const environment = {
     location: "DUOCUN-LOCATION",
     lang: "DUOCUN-I18N"
   },
-  media: "https://s3.amazonaws.com/pictures.duocun.ca/media/", // "https://duocun.com.cn/media/",
+  media: "https://duocun.com.cn/media/",
   stripe: "pk_live_vV7H1l4X9k2r8uf6JDf9lGsb",
   defaultLang: "zh",
   gmap: "AIzaSyCEd6D6vc9K-YzMH-QtQWRSs5HZkLKSWyk",
@@ -16,5 +16,5 @@ export const environment = {
   monerisHTProfileId: "htV6VVM9NH24SXX",
   googleAuthClientId:
     "53858676843-kjkp8dt8e01tktpc8pimd3vtlvkcre81.apps.googleusercontent.com",
-  facebookAppId: "3115867368492639",
+  facebookAppId: "3115867368492639"
 };
