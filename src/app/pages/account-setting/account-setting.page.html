@@ -26,7 +26,7 @@
       </ion-row>
       
       <ion-item *ngIf="location">
-        <ion-label position="stacked" translate="Unit# (We don't deliver upstairs)"></ion-label>
+        <ion-label position="stacked" translate="Unit# (We don't deliver upstairs)" *ngIf="location.unit"></ion-label>
         <ion-input [(ngModel)]="location.unit" placeholder="{{'Please input unit# (Optional)' | translate}}"></ion-input>
       </ion-item>
       
@@ -36,16 +36,16 @@
           <ion-label>{{account.phone}}</ion-label>
         </ion-item>
         <ion-item>
-          <ion-label position="floating" translate="New Phone Number"></ion-label>
+          <ion-label position="floating" translate="New Phone Number" *ngIf="model.phone"></ion-label>
           <ion-input [(ngModel)]="model.phone" maxlength="10" placeholder="{{'Please input phone number' | translate}}"></ion-input>
         </ion-item>
         <ion-item *ngIf="(model.phone && account.phone != model.phone) || !account.phone">
           <ion-row class="ion-align-items-end ion-padding-start ion-padding-end">
-            <ion-col size="7">
+            <ion-col class="col-code" size="8">
               <ion-label position="floating" translate="Verification Code"></ion-label>
-              <ion-input [(ngModel)]="model.verificationCode" placeholder="{{'Please input verification code' | translate}}"></ion-input>
+              <ion-input [(ngModel)]="model.verificationCode" *ngIf="model.verificationCode" placeholder="{{'Please input verification code' | translate}}"></ion-input>
             </ion-col>
-            <ion-col size="5">
+            <ion-col size="4">
               <ion-button
                 color="success"
                 translate="Send"
@@ -59,7 +59,7 @@
           </ion-row>
         </ion-item>
         <ion-item>
-          <ion-label position="floating" translate="Another phone number"></ion-label>
+          <ion-label position="floating" translate="Another phone number" *ngIf="model.secondPhone"></ion-label>
           <ion-input [(ngModel)]="model.secondPhone" maxlength="10" placeholder="{{'Please input alternative phone number' | translate}}"></ion-input>
         </ion-item>
         <ion-item>
