@@ -8,63 +8,65 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content fullscreen>
-  <ion-list>
-    <ion-item lines="none" class="thread in">
-      <ion-avatar slot="start">
-        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
-      </ion-avatar>
-      <label>好好</label>
-    </ion-item>
-    <ion-item lines="none" class="thread in">
-      <ion-avatar slot="start">
-        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
-      </ion-avatar>
-      <label>好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好</label>
-    </ion-item>
-    <ion-item lines="none" class="thread in">
-      <ion-avatar slot="start">
-        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
-      </ion-avatar>
-      <label>好好</label>
-    </ion-item>
-    <ion-item lines="none" class="thread in">
-      <ion-avatar slot="start">
-        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
-      </ion-avatar>
-      <label>好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好</label>
-    </ion-item><ion-item lines="none" class="thread in">
-      <ion-avatar slot="start">
-        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
-      </ion-avatar>
-      <label>好好</label>
-    </ion-item>
-    <ion-item lines="none" class="thread in">
-      <ion-avatar slot="start">
-        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
-      </ion-avatar>
-      <label>好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好好</label>
-    </ion-item>
-    <ion-item lines="none" class="thread out">
-      <label >Hello world</label>
-      <ion-avatar slot="end">
-        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
-      </ion-avatar>
-    </ion-item>
-    <ion-item lines="none" class="thread out">
-      <label>Hello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello worldHello world</label>
-      <ion-avatar slot="end">
-        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
-      </ion-avatar>
-    </ion-item>
-  </ion-list>
+<ion-content #content fullscreen>
+  <ion-infinite-scroll *ngIf = "userId !== ''" threshold="100px" (ionInfinite)="loadData($event)" [disabled]="allLoaded" position="top">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="{{ 'Loading more data...' | translate }}">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+  <ion-grid>
+    <ng-container *ngFor = "let messageItem of messages; index as index;">
+      <ion-row [class] = "messageItem.sender === userId ? 'message-right' : 'message-left'">
+        <div class="message-datetime"
+            *ngIf="index === 0 || (index > 0 && messages[index].created - messages[index - 1].created > 300000)">
+            <span *ngIf="index === 0">{{ getMessageDate(messageItem.created) }}
+                {{ messageItem.created | date: 'HH:mm' }}</span>
+            <span
+                *ngIf="index > 0 && messages[index].created - messages[index - 1].created > 300000">
+                {{ getMessageDate(messageItem.created)}}
+                {{ messageItem.created | date: 'HH:mm' }}
+            </span>
+        </div>
+        <ion-col class = "message-col">
+          <ion-avatar>
+            <ng-template [ngIf] = "messageItem.senderImg" [ngIfElse] = "originalAvatar">
+              <img [src] = "messageItem.senderImg" /> 
+            </ng-template>
+            <ng-template #originalAvatar>
+              <img src = "assets/img/user.png" />
+            </ng-template>
+          </ion-avatar>
+          <div class = "message-container">
+            <span class="arrow"></span>
+            <ng-template [ngIf] = "messageItem.imageData">
+                <div class = "message-image-container">
+                  <img class = "message-image" [src] = "messageItem.imageData">
+                  <!-- <img *ngIf = "messageItem.imageUrl" class = "message-image" [src] = "messageItem.imageUrl"> -->
+                </div>
+            </ng-template>
+            {{ messageItem.message }}
+          </div>
+        </ion-col>        
+      </ion-row>
+    </ng-container>    
+  </ion-grid>
 </ion-content>
 <ion-footer>
+  <div class="image-container">
+    <ion-button class="image-clear-btn" fill="clear" shape="round" (click)="onClearImage()" *ngIf="mediaUrl">
+        <ion-icon name="close"></ion-icon>
+    </ion-button>
+    <img [src]="mediaUrl" *ngIf="mediaUrl" />
+  </div>
   <ion-item lines="none" class="ion-no-margin ion-no-padding">
-    <ion-input
-      placeholder="Please input a message"
-    ></ion-input>
-    <ion-icon name="image-outline" slot="start"></ion-icon>
-    <ion-icon name="send" slot="end"></ion-icon>
+    <ion-textarea class="message-input" rows="1" placeholder="{{ 'Enter message ...' | translate }}"
+        auto-grow="true" [(ngModel)]="message" (keypress)="onKeyPress($event)">
+    </ion-textarea>
+    <ion-button class = "image-btn" (click) = "fileInput.click()" slot="start">
+        <ion-icon class = "chat-icon chat-image-icon" name="image-outline"></ion-icon>
+    </ion-button>
+    <input #fileInput class="image-upload" type="file" (change)="onFileChanged($event)" accept="image/*">
+    <ion-button class = "send-btn" (click) = "onSend()" slot="end">
+        <ion-icon name="send" class = "chat-icon chat-send-icon"></ion-icon>
+    </ion-button>
   </ion-item>
 </ion-footer>
