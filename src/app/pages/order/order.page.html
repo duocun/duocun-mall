@@ -182,7 +182,7 @@
                 <ion-label translate="Wechat Pay"></ion-label>
               </ion-button>
             </ion-col>
-            <ion-col class="col-payment-button col-payment-alipay" size="12" align="center">
+            <!-- <ion-col class="col-payment-button col-payment-alipay" size="12" align="center">
               <ion-button 
                 size="medium" 
                 expand="full" 
@@ -191,7 +191,7 @@
               >
                 <img src="assets/img/alipay_transparent.png" />
               </ion-button>
-            </ion-col>
+            </ion-col> -->
             <!-- <ion-col class="col-payment-button col-payment-unionpay" size="12" align="center">
               <ion-button 
                 size="medium" 
@@ -205,7 +205,7 @@
           <!--  END WECHAT PAY BUTTON  -->
           <!-- BEGIN ALPHAPAY BUTTONS IN PC BROWSER -->
           <ng-template #normalButtons>
-            <ion-col class="col-payment-button col-payment-wechat" size="12" align="center">
+            <ion-col class="col-payment-button col-payment-wechat" size="12" align="center" *ngIf="!isMobile">
               <ion-button 
                 color="success" 
                 size="medium" 

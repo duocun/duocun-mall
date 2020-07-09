@@ -3,6 +3,7 @@ import { ApiService } from "src/app/services/api/api.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AlertController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
+import { CartService } from "src/app/services/cart/cart.service";
 
 @Component({
   selector: "app-payment-success",
@@ -17,7 +18,8 @@ export class PaymentSuccessPage implements OnInit {
     private route: ActivatedRoute,
     private alert: AlertController,
     private translator: TranslateService,
-    private router: Router
+    private router: Router,
+    private cartSvc: CartService
   ) {}
 
   ngOnInit() {
@@ -32,17 +34,18 @@ export class PaymentSuccessPage implements OnInit {
           observable.toPromise().then((resp: any) => {
             if (resp.code == "success") {
               this.showAlert("Notice", "Payment success", "OK");
+              this.cartSvc.clearCart();
               this.router.navigate(["/tabs/my-account/order-history"]);
             } else {
               this.showAlert("Notice", "Payment failed", "OK");
-              this.router.navigate(["/tabs/browse"]);
+              this.router.navigate(["/tabs/browse/order"]);
             }
           });
         })
         .catch((e) => {
           console.error(e);
           this.showAlert("Notice", "Payment failed", "OK");
-          this.router.navigate(["/tabs/browse"]);
+          this.router.navigate(["/tabs/browse/order"]);
         });
     });
   }
@@ -50,6 +53,7 @@ export class PaymentSuccessPage implements OnInit {
   showAlert(header, message, button) {
     this.translator.get([header, message, button]).subscribe((dict) => {
       console.log("home page lang subscription");
+      console.log(dict);
       this.alert
         .create({
           header: dict[header],

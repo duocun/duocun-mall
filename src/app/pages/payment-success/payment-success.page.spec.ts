@@ -1,15 +1,15 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { IonicModule } from "@ionic/angular";
 
-import { PaymentSuccessPage } from './payment-success.page';
+import { PaymentSuccessPage } from "./payment-success.page";
 
-describe('PaymentSuccessPage', () => {
+describe("PaymentSuccessPage", () => {
   let component: PaymentSuccessPage;
   let fixture: ComponentFixture<PaymentSuccessPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PaymentSuccessPage ],
+      declarations: [PaymentSuccessPage],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
@@ -18,7 +18,7 @@ describe('PaymentSuccessPage', () => {
     fixture.detectChanges();
   }));
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

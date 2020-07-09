@@ -5,12 +5,15 @@
   "homepage": "https://duocun.ca/mall",
   "scripts": {
     "ng": "ng",
+    "prestart": "npm run prettify",
+    "prebuild": "npm run prettify",
+    "prettify": "prettier --write \"src/**/*.ts\"",
     "start": "ionic serve --port 5008",
     "build": "ng build --prod",
     "test": "ng test",
-    "lint": "ng lint",
+    "lint": "prettier --check \"src/**/*.ts\"",
     "e2e": "ng e2e",
-    "release": "standard-version"
+    "release": "npm run lint && standard-version"
   },
   "private": true,
   "dependencies": {
@@ -42,6 +45,7 @@
     "query-string": "^6.12.1",
     "rxjs": "~6.5.1",
     "scriptjs": "^2.5.9",
+    "slugify": "^1.4.2",
     "stripe-angular": "^1.0.2",
     "tslib": "^1.9.0",
     "zone.js": "~0.9.1"

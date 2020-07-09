@@ -11,7 +11,7 @@ export const environment = {
     location: "DUOCUN-LOCATION",
     lang: "DUOCUN-I18N"
   },
-  media: "https://duocun.com.cn/media/",
+  media: "https://s3.amazonaws.com/pictures.duocun.ca/media/",
   stripe: "pk_test_FsGoacByMF8lGNcVKveNZFSy00ATWTilJp",
   defaultLang: "zh",
   gmap: "AIzaSyCEd6D6vc9K-YzMH-QtQWRSs5HZkLKSWyk",
@@ -23,7 +23,8 @@ export const environment = {
   alphapay: {
     partnerCode: "XB20WG",
     credentialCode: "swqqHo6TrfaWp6dPNMBncPpmjifQhxiL"
-  }
+  },
+  facebookAppId: "3115867368492639"
 };
 
 /*

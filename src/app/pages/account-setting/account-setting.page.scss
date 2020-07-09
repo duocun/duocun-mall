@@ -1,3 +1,50 @@
 .ion-text-small {
   font-size: 80%;
 }
+.icon-what-is-this {
+  z-index: 3;
+}
+.item-address-set-default {
+  ion-label {
+    flex: 0 1 auto;
+  }
+}
+.col-code{
+  padding-left: 0px;
+}
+.container{
+  padding-right: 10px;
+}
+ion-checkbox{
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+.default-address{
+  height: 36px;
+  padding-top: 8px;
+}
+.icon-what-is-this{
+  font-size: 28px;
+  margin-top: -5px;
+  margin-left: 10px;
+}
+.container-sm {
+  max-width: 540px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.container-sm > .wrapper {
+  padding: 0px 15px;
+  border: 1px solid #ccc;
+  margin-top: 15px;
+}
+@media(max-width: 767px) {
+  .label-address{
+    padding-bottom: 0px;
+  }
+}
+@media(min-width: 768px) {
+  .label-address{
+    padding-bottom: 3px;
+  }
+}

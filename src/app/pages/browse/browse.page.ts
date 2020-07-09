@@ -11,6 +11,7 @@ import { getPictureUrl } from "src/app/models/product.model";
 import { SeoService } from "src/app/services/seo/seo.service";
 import { Subject } from "rxjs";
 import { takeUntil, filter } from "rxjs/operators";
+import slugify from "slugify";
 @Component({
   selector: "app-browse",
   templateUrl: "./browse.page.html",
@@ -28,7 +29,7 @@ export class BrowsePage implements OnInit, OnDestroy {
   search: string;
   page: number;
   pageSize = 12;
-  categoryDisplayLimit = 10;
+  categoryDisplayLimit = 20;
   scrollDisabled: boolean;
   outofRange: boolean;
   private unsubscribe$ = new Subject<void>();
@@ -218,7 +219,26 @@ export class BrowsePage implements OnInit, OnDestroy {
     });
   }
   onProductClick(product: ProductInterface) {
-    this.router.navigate(["/tabs/browse/products", product._id]);
+    if (product.nameEN) {
+      this.router.navigate([
+        "/tabs/browse/products",
+        slugify(product.nameEN, {
+          lower: true
+        }),
+        product._id
+      ]);
+    } else {
+      this.router.navigate(["/tabs/browse/products", product._id]);
+    }
+  }
+  getProductSlug(product: ProductInterface) {
+    if (product.nameEN) {
+      return slugify(product.nameEN, {
+        lower: true
+      });
+    } else {
+      return "";
+    }
   }
   getPictureUrl(product: ProductInterface) {
     return getPictureUrl(product);
