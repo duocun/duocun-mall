@@ -4,6 +4,9 @@ import { SocketService } from "src/app/services/socket/socket.service";
 import { TranslateService } from "@ngx-translate/core";
 import { formatDate } from "@angular/common";
 import { AuthService } from "src/app/services/auth/auth.service";
+import { ApiService } from 'src/app/services/api/api.service';
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
   selector: "support-desk",
@@ -24,30 +27,48 @@ export class SupportDeskComponent implements OnInit {
   sendButtonDisabled: boolean = false;
   userId: string = "";
   messages: Array<any> = [];
+  messageList: Array<any> = [];
 
   // for Infinite scroll
   allLoaded: Boolean = false;
   pageIndex: number = 0;
 
   today: Date = new Date();
+  senderImageUrl: string = "";
+
+  // for api
+  private unsubscribe$ = new Subject<void>();
 
   constructor(
     private modalController: ModalController,
     private socketio: SocketService,
     private alert: AlertController,
     private translator: TranslateService,
-    private auth: AuthService
+    private auth: AuthService,
+    private api: ApiService
   ) {
+    this.socketio.csUserid.subscribe((csUserId) => {
+      if(csUserId){        
+        this.userId = csUserId;
+        this.getMessages(null);
+        console.log(`user id is ${this.userId}`);
+      }
+    })
     this.auth.getAccount().subscribe((account) => {
       if (account) {
-        console.log(account);
-        this.userId = account._id;
-        this.getMessages(null);
+        this.senderImageUrl = account.imageurl;
+        localStorage.setItem('cs-userid', account._id);
+        this.socketio.csUserid.next(account._id);
       }
     });
   }
 
   ngOnInit() {}
+
+  ngOnDestroy(){
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 
   dismiss() {
     this.modalController.dismiss({
@@ -56,13 +77,57 @@ export class SupportDeskComponent implements OnInit {
   }
 
   getMessages(event: any) {
+    console.log(`now getting messages of user ${this.userId}`);
     // if logged in, get messages
     if (this.userId !== "") {
-      if (event === null) {
-        setTimeout(() => {
-          this.content.scrollToBottom(-1);
-        });
-      }
+      this.api.get(`/Messages/${this.userId}/${this.pageIndex}`).then((observable) => {
+        observable
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe((res: any) => {
+            if(res.code === 'success'){
+              if (event === null) {
+                setTimeout(() => {
+                  this.content.scrollToBottom(-1);
+                }, 2000);
+              }
+              if (res.data.length < 1) {
+                this.allLoaded = true;                        
+              } else {
+                if (this.pageIndex === 0 && res.data.length < 20) {
+                  this.allLoaded = true;
+                }
+                if(res.data.length > 0){
+                  // check if any overlapping messages
+                  let item: any;
+                  let done = false;
+                  let orgLength = this.messages.length;
+                  while(!done){
+                      item = res.data.shift();
+                      if(!item)
+                          break;
+                      done = true;                            
+                      for(let i = 0; i < orgLength; i++){
+                          if(this.messages[orgLength - 1 - i].sender === item.sender && this.messages[orgLength - 1 - i].createdAt === item.createdAt){
+                              done = false;
+                          }
+                      }
+                      if(done){
+                          this.messages.push(item);
+                      }                        
+                  }
+                  if(done){
+                      this.messages.push(...res.data);
+                  }
+                  console.log(this.messages);
+                  this.messageList = JSON.parse(JSON.stringify(this.messages)).reverse();
+                  this.pageIndex++;
+                }
+              }
+            }
+
+            if(event) event.target.complete();
+          });
+      });
     }
 
     this.allLoaded = true;
@@ -81,28 +146,24 @@ export class SupportDeskComponent implements OnInit {
           this.showAlert("Notice", "Maximum message length is 1000", "OK");
           return;
         }
-        // const formData = new FormData();
-        // formData.append('id', this.userId);
-        // formData.append('content', this.message);
-        // if (this.media) {
-        //     formData.append('media', this.media);
-        // }
+
         let sentData: any = {};
-        sentData.id = this.userId;
+        sentData.sender = this.userId;
         sentData.message = this.message;
+        sentData.senderImg = this.senderImageUrl;
         sentData.image = this.mediaUrl;
         sentData.createdAt = Date.now();
         console.log(sentData);
-
+        
+        // send message via socket
         this.socketio.sendMessage(sentData);
 
-        this.messages.push({
-          sender: sentData.id,
-          message: sentData.message,
-          imageData: sentData.image,
-          created: sentData.createdAt
-        });
-        console.log(this.messages);
+        this.messages.unshift(sentData);
+        this.messageList.push(sentData);
+        // scroll down to the element
+        setTimeout(() => {
+          this.content.scrollToBottom(300);
+        }, 500);
 
         // after sending message
         this.sendButtonDisabled = false;

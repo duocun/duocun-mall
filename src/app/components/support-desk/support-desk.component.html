@@ -14,16 +14,16 @@
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
   <ion-grid>
-    <ng-container *ngFor = "let messageItem of messages; index as index;">
+    <ng-container *ngFor = "let messageItem of messageList; index as index;">
       <ion-row [class] = "messageItem.sender === userId ? 'message-right' : 'message-left'">
         <div class="message-datetime"
-            *ngIf="index === 0 || (index > 0 && messages[index].created - messages[index - 1].created > 300000)">
-            <span *ngIf="index === 0">{{ getMessageDate(messageItem.created) }}
-                {{ messageItem.created | date: 'HH:mm' }}</span>
+            *ngIf="index === 0 || (index > 0 && messageList[index].createdAt - messageList[index - 1].createdAt > 300000)">
+            <span *ngIf="index === 0">{{ getMessageDate(messageItem.createdAt) }}
+                {{ messageItem.createdAt | date: 'HH:mm' }}</span>
             <span
-                *ngIf="index > 0 && messages[index].created - messages[index - 1].created > 300000">
-                {{ getMessageDate(messageItem.created)}}
-                {{ messageItem.created | date: 'HH:mm' }}
+                *ngIf="index > 0 && messageList[index].createdAt - messageList[index - 1].createdAt > 300000">
+                {{ getMessageDate(messageItem.createdAt)}}
+                {{ messageItem.createdAt | date: 'HH:mm' }}
             </span>
         </div>
         <ion-col class = "message-col">
@@ -37,9 +37,9 @@
           </ion-avatar>
           <div class = "message-container">
             <span class="arrow"></span>
-            <ng-template [ngIf] = "messageItem.imageData">
+            <ng-template [ngIf] = "messageItem.image">
                 <div class = "message-image-container">
-                  <img class = "message-image" [src] = "messageItem.imageData">
+                  <img class = "message-image" [src] = "messageItem.image">
                   <!-- <img *ngIf = "messageItem.imageUrl" class = "message-image" [src] = "messageItem.imageUrl"> -->
                 </div>
             </ng-template>
