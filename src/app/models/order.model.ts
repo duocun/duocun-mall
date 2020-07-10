@@ -161,6 +161,7 @@ export function getCartItemGroups(cart: CartInterface) {
     if (group) {
       group.items.push({
         productId: cartItem.productId,
+        productName: cartItem.productName,
         quantity: cartItem.quantity,
         price: cartItem.price,
         cost: cartItem.cost,
@@ -175,6 +176,7 @@ export function getCartItemGroups(cart: CartInterface) {
           {
             productId: cartItem.productId,
             quantity: cartItem.quantity,
+            productName: cartItem.productName,
             price: cartItem.price,
             cost: cartItem.cost,
             taxRate: cartItem.product.taxRate
