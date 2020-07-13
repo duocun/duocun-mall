@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import * as io from "socket.io-client";
 import { environment } from "src/environments/environment";
 import { AuthService } from "../auth/auth.service";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Subject } from "rxjs";
 import { Storage } from "@ionic/storage";
 @Injectable({
   providedIn: "root"
@@ -11,11 +11,15 @@ export class SocketService {
   socket: any;
   mSocket: any;
   csUserid: BehaviorSubject<string>;
+  receivedMessage: Subject<any>;
 
   constructor(private authSvc: AuthService, private storage: Storage) {
-    this.csUserid = new BehaviorSubject<string>(localStorage.getItem('cs-userid'));
+    this.receivedMessage = new Subject();
+    this.csUserid = new BehaviorSubject<string>(
+      localStorage.getItem("cs-userid")
+    );
     this.mSocket = io(environment.socket);
-    this.receiveSocket(this.mSocket);    
+    this.receiveSocket(this.mSocket);
   }
 
   async getToken() {
@@ -37,15 +41,24 @@ export class SocketService {
     });
 
     mSocket.on("id", (data) => {
-      if(!localStorage.getItem('cs-userid')){
-        localStorage.setItem('cs-userid', data);
+      if (!localStorage.getItem("cs-userid")) {
+        localStorage.setItem("cs-userid", data);
         this.csUserid.next(data);
       }
     });
+
+    mSocket.on("to_customer", (data) => {
+      this.receivedMessage.next(data);
+    })
   }
 
   sendMessage(data: any) {
-    console.log("now sending data");
     this.mSocket.emit("customer_send", data);
+  }
+
+  joinCustomerServiceRoom(roomId: string){
+    this.mSocket.emit("customer_init", {
+      roomId: roomId
+    });
   }
 }

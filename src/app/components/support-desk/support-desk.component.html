@@ -32,7 +32,8 @@
               <img [src] = "messageItem.senderImg" /> 
             </ng-template>
             <ng-template #originalAvatar>
-              <img src = "assets/img/user.png" />
+              <img src = "assets/img/user.png" *ngIf = "messageItem.sender === userId" />
+              <img src = "assets/img/manager.png" *ngIf = "messageItem.sender !== userId" />
             </ng-template>
           </ion-avatar>
           <div class = "message-container">
@@ -58,7 +59,7 @@
     <img [src]="mediaUrl" *ngIf="mediaUrl" />
   </div>
   <ion-item lines="none" class="ion-no-margin ion-no-padding">
-    <ion-textarea class="message-input" rows="1" placeholder="{{ 'Enter message ...' | translate }}"
+    <ion-textarea class="message-input" placeholder="{{ 'Enter message ...' | translate }}"
         auto-grow="true" [(ngModel)]="message" (keypress)="onKeyPress($event)">
     </ion-textarea>
     <ion-button class = "image-btn" (click) = "fileInput.click()" slot="start">
