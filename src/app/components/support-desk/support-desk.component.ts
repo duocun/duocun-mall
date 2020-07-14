@@ -60,16 +60,18 @@ export class SupportDeskComponent implements OnInit {
         // join in that room
         this.socketio.joinCustomerServiceRoom(csUserId);
 
-        if(this.receivedMessageSubscriber === null){
-          this.receivedMessageSubscriber = this.socketio.receivedMessage.subscribe((data) => {
-            console.log("message arrived");
-            console.log(data);
-            this.messages.unshift(data);
-            this.messageList.push(data);
-            setTimeout(() => {
-              this.content.scrollToBottom(300);
-            }, 500);
-          });
+        if (this.receivedMessageSubscriber === null) {
+          this.receivedMessageSubscriber = this.socketio.receivedMessage.subscribe(
+            (data) => {
+              console.log("message arrived");
+              console.log(data);
+              this.messages.unshift(data);
+              this.messageList.push(data);
+              setTimeout(() => {
+                this.content.scrollToBottom(300);
+              }, 500);
+            }
+          );
         }
       }
     });
@@ -79,7 +81,7 @@ export class SupportDeskComponent implements OnInit {
         this.senderImageUrl = account.imageurl;
         this.userName = account.username;
         localStorage.setItem("cs-userid", account._id);
-        this.socketio.csUserid.next(account._id);        
+        this.socketio.csUserid.next(account._id);
       }
     });
   }

@@ -49,14 +49,14 @@ export class SocketService {
 
     mSocket.on("to_customer", (data) => {
       this.receivedMessage.next(data);
-    })
+    });
   }
 
   sendMessage(data: any) {
     this.mSocket.emit("customer_send", data);
   }
 
-  joinCustomerServiceRoom(roomId: string){
+  joinCustomerServiceRoom(roomId: string) {
     this.mSocket.emit("customer_init", {
       roomId: roomId
     });
