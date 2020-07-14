@@ -65,6 +65,20 @@ export class SupportDeskComponent implements OnInit {
             (data) => {
               console.log("message arrived");
               console.log(data);
+
+              // update message to read state
+              this.api
+                .get(`/Messages/chatmessages/reset/${data._id}`)
+                .then((observable) => {
+                  observable
+                    .pipe(takeUntil(this.unsubscribe$))
+                    .subscribe((res: any) => {
+                      if (res.code === "success") {
+                        // reset message ok
+                      }
+                    });
+                  });
+
               this.messages.unshift(data);
               this.messageList.push(data);
               setTimeout(() => {
