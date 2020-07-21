@@ -531,6 +531,8 @@ export class OrderPage implements OnInit, OnDestroy {
     });
   }
 
+
+
   payBySnappay(
     appCode: string,
     accountId: string,
@@ -702,6 +704,14 @@ export class OrderPage implements OnInit, OnDestroy {
 
   isWechatBrowser() {
     return /micromessenger/i.test(navigator.userAgent);
+  }
+
+  isMobile() {
+    if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) { 
+      return true;
+    } else {
+      return false;
+    }
   }
 
   prefersDark() {
