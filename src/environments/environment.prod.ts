@@ -7,7 +7,7 @@ export const environment = {
     location: "DUOCUN-LOCATION",
     lang: "DUOCUN-I18N"
   },
-  media: "https://duocun.com.cn/media/",
+  media: "https://d27ftifr2ocsa6.cloudfront.net/media/",
   stripe: "pk_live_vV7H1l4X9k2r8uf6JDf9lGsb",
   defaultLang: "zh",
   gmap: "AIzaSyCEd6D6vc9K-YzMH-QtQWRSs5HZkLKSWyk",
