@@ -43,7 +43,7 @@
           <ion-row class="ion-align-items-end ion-padding-start ion-padding-end">
             <ion-col class="col-code" size="8">
               <ion-label position="floating" translate="Verification Code"></ion-label>
-              <ion-input [(ngModel)]="model.verificationCode" *ngIf="model.verificationCode" placeholder="{{'Please input verification code' | translate}}"></ion-input>
+              <ion-input #otpInput [(ngModel)]="model.verificationCode" placeholder="{{'Please input verification code' | translate}}"></ion-input>
             </ion-col>
             <ion-col size="4">
               <ion-button
