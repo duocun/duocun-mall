@@ -6,8 +6,9 @@
       </ion-buttons>
       <ion-title class="ion-text-center" translate="Home_Title"></ion-title>
       <ion-buttons slot="end">
-        <cart-button></cart-button>
-        <language-button></language-button>
+        <signin-button class="item" [account]="account"></signin-button>
+        <cart-button class="item"></cart-button>
+        <language-button class="item"></language-button>
       </ion-buttons>
     </ion-toolbar>
   </div>

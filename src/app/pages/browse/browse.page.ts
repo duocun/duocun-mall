@@ -12,6 +12,8 @@ import { SeoService } from "src/app/services/seo/seo.service";
 import { Subject } from "rxjs";
 import { takeUntil, filter } from "rxjs/operators";
 import slugify from "slugify";
+import { AuthService } from "src/app/services/auth/auth.service";
+import { AccountInterface } from "src/app/models/account.model";
 @Component({
   selector: "app-browse",
   templateUrl: "./browse.page.html",
@@ -32,6 +34,7 @@ export class BrowsePage implements OnInit, OnDestroy {
   categoryDisplayLimit = 20;
   scrollDisabled: boolean;
   outofRange: boolean;
+  account: AccountInterface;
   private unsubscribe$ = new Subject<void>();
   constructor(
     private loc: LocationService,
@@ -39,7 +42,8 @@ export class BrowsePage implements OnInit, OnDestroy {
     private translator: TranslateService,
     private router: Router,
     private api: ApiService,
-    private seo: SeoService
+    private seo: SeoService,
+    private authSvc: AuthService
   ) {
     this.page = 0;
     this.viewSegment = "merchant";
@@ -82,6 +86,13 @@ export class BrowsePage implements OnInit, OnDestroy {
               });
           });
         });
+      });
+
+    this.authSvc
+      .getAccount()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((account) => {
+        this.account = account;
       });
   }
 

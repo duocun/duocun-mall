@@ -38,8 +38,9 @@ export class AccountSettingPage implements AfterViewInit, OnInit, OnDestroy {
   processing: boolean;
   isOtpSent: boolean;
   @ViewChild("locationSearch", { static: false })
-  @ViewChild('otpInput', {static: false}) otpInput: IonInput;
-  
+  @ViewChild("otpInput", { static: false })
+  otpInput: IonInput;
+
   locationSearch: LocationSearchComponent;
   private unsubscribe$ = new Subject<void>();
   constructor(

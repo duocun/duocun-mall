@@ -18,6 +18,7 @@ import { CategoryListModule } from "./category-list/category-list.module";
 import { LanguageButtonModule } from "src/app/components/language-button/language-button.module";
 import { FooterModule } from "src/app/components/footer/footer.module";
 import { CartButtonModule } from "src/app/components/cart-button/cart-button.module";
+import { ComponentsModule } from "src/app/components/components.module";
 
 @NgModule({
   imports: [
@@ -34,6 +35,7 @@ import { CartButtonModule } from "src/app/components/cart-button/cart-button.mod
     CategoryListModule,
     LanguageButtonModule,
     CartButtonModule,
+    ComponentsModule,
     FooterModule
   ],
   declarations: [BrowsePage, MerchantListComponent]

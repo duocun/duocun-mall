@@ -24,8 +24,8 @@ export class RegisterPage implements OnInit, OnDestroy {
   otpSentCount: number;
   lang: string;
   private unsubscribe$ = new Subject<void>();
-  @ViewChild('otpInput', {static: false}) otpInput: IonInput;
-  
+  @ViewChild("otpInput", { static: false }) otpInput: IonInput;
+
   constructor(
     private api: ApiService,
     private translator: TranslateService,

@@ -13,6 +13,7 @@ import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { HttpClientModule, HttpClient } from "@angular/common/http";
 import { IonicStorageModule } from "@ionic/storage";
 import { SideMenuModule } from "./components/side-menu/side-menu.module";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
@@ -33,7 +34,8 @@ export function createTranslateLoader(http: HttpClient) {
       }
     }),
     IonicStorageModule.forRoot(),
-    SideMenuModule
+    SideMenuModule,
+    BrowserAnimationsModule
   ],
   providers: [
     StatusBar,
