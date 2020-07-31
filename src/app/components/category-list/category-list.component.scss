@@ -3,6 +3,9 @@ $primary-color: #3f51b5;
     .category-area{
         display: block;
     }
+    .category-list{
+        display: none;
+        }
 }
 
 @media(min-width: 992px) {
