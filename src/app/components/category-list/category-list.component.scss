@@ -1,0 +1,31 @@
+$primary-color: #3f51b5;
+@media(min-width: 768px) {
+    .category-area{
+        display: block;
+    }
+}
+
+@media(min-width: 992px) {
+    .category-area{
+        display: none;
+    }
+
+    .category-list{
+    display: block;
+    }
+    .category-item{
+    display: inline-block;
+    list-style: none;
+    padding: 4px 12px;
+    border-right: 1px solid #bbb;
+    }
+    .category-item:last-child{
+    border-right: none;
+    }
+    .category-item:hover{
+    color: $primary-color;
+    }
+    .selected{
+    color: $primary-color;
+    }
+}

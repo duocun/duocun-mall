@@ -81,6 +81,7 @@ ion-searchbar {
       --padding-top: .75rem!important;
     }
   }
+
 }
 @media(min-width: 992px) {
   [size-lg="2.4"] {
@@ -91,27 +92,7 @@ ion-searchbar {
   .container{
     padding-top: 0px;
   }
-  .category-area{
-    display: none;
-  }
-  .category-list{
-    display: block;
-  }
-  .category-item{
-    display: inline-block;
-    list-style: none;
-    padding: 4px 12px;
-    border-right: 1px solid #bbb;
-  }
-  .category-item:last-child{
-    border-right: none;
-  }
-  .category-item:hover{
-    color: $primary-color;
-  }
-  .selected{
-    color: $primary-color;
-  }
+
   ion-card {
     box-shadow: none;
     border-radius: 0px;

@@ -8,7 +8,6 @@ import { CategoriesPageRoutingModule } from "./categories-routing.module";
 
 import { CategoriesPage } from "./categories.page";
 import { TranslateModule } from "@ngx-translate/core";
-import { CategoryListModule } from "src/app/pages/browse/category-list/category-list.module";
 import { LanguageButtonModule } from "src/app/components/language-button/language-button.module";
 import { CartButtonModule } from "src/app/components/cart-button/cart-button.module";
 
@@ -19,7 +18,6 @@ import { CartButtonModule } from "src/app/components/cart-button/cart-button.mod
     IonicModule,
     CategoriesPageRoutingModule,
     TranslateModule.forChild(),
-    CategoryListModule,
     LanguageButtonModule,
     CartButtonModule
   ],

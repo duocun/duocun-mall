@@ -8,17 +8,20 @@ import { HeaderComponent } from "./header/header.component";
 import { LanguageButtonModule } from "./language-button/language-button.module";
 import { CartButtonModule } from "./cart-button/cart-button.module";
 import { RouterModule } from "@angular/router";
+import { LocalValueDirectiveModule } from "../directives/local-value.module";
+import { CategoryListComponent } from "./category-list/category-list.component";
 @NgModule({
-  declarations: [SigninButtonComponent, HeaderComponent],
+  declarations: [SigninButtonComponent, HeaderComponent, CategoryListComponent],
   imports: [
     CommonModule,
     IonicModule,
     MatMenuModule,
     RouterModule,
     TranslateModule.forChild(),
+    LocalValueDirectiveModule,
     LanguageButtonModule,
     CartButtonModule
   ],
-  exports: [SigninButtonComponent, HeaderComponent]
+  exports: [SigninButtonComponent, HeaderComponent, CategoryListComponent]
 })
 export class ComponentsModule {}
