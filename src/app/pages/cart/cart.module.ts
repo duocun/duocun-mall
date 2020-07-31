@@ -14,7 +14,7 @@ import { PricePipeModule } from "src/app/pipes/price/price.module";
 import { MomentPipeModule } from "src/app/pipes/moment/moment.module";
 import { TouchspinModule } from "src/app/components/touchspin/touchspin.module";
 import { FooterModule } from "src/app/components/footer/footer.module";
-import { ComponentsModule } from 'src/app/components/components.module';
+import { ComponentsModule } from "src/app/components/components.module";
 
 @NgModule({
   imports: [

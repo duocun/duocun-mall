@@ -13,6 +13,7 @@ export class CategoryListComponent implements OnInit {
   @Output() onShowAll = new EventEmitter();
   @Output() onSelect = new EventEmitter();
   lang;
+  categoryDisplayLimit = 20;
   constructor(private translator: TranslateService) {
     this.lang = this.translator.currentLang || "en";
   }

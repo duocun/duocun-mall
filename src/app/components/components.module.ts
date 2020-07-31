@@ -9,13 +9,14 @@ import { CartButtonModule } from "./cart-button/cart-button.module";
 import { RouterModule } from "@angular/router";
 import { LocalValueDirectiveModule } from "../directives/local-value.module";
 import { CategoryListComponent } from "./category-list/category-list.component";
-import { LanguageButtonComponent } from './language-button/language-button.component';
+import { LanguageButtonComponent } from "./language-button/language-button.component";
 @NgModule({
   declarations: [
     LanguageButtonComponent,
-    SigninButtonComponent, 
+    SigninButtonComponent,
     HeaderComponent,
-    CategoryListComponent],
+    CategoryListComponent
+  ],
   imports: [
     CommonModule,
     IonicModule,
@@ -25,8 +26,6 @@ import { LanguageButtonComponent } from './language-button/language-button.compo
     LocalValueDirectiveModule,
     CartButtonModule
   ],
-  exports: [
-    HeaderComponent, 
-    CategoryListComponent]
+  exports: [HeaderComponent, CategoryListComponent]
 })
 export class ComponentsModule {}

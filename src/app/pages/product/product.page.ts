@@ -45,7 +45,7 @@ export class ProductPage implements OnInit, OnDestroy {
   schedules: Array<DeliveryDateTimeInterface>;
   deliveryIdx: number; // schedule index
   account: AccountInterface;
-  backBtn = {url:"/tabs/browse", text: ""};
+  backBtn = { url: "/tabs/browse", text: "" };
   private unsubscribe$ = new Subject<void>();
   constructor(
     private route: ActivatedRoute,
