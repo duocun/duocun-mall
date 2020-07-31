@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "category-list",
@@ -13,9 +13,7 @@ export class CategoryListComponent implements OnInit {
   @Output() onShowAll = new EventEmitter();
   @Output() onSelect = new EventEmitter();
   lang;
-  constructor(
-    private translator: TranslateService
-  ) {
+  constructor(private translator: TranslateService) {
     this.lang = this.translator.currentLang || "en";
   }
 

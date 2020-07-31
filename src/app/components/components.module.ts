@@ -5,13 +5,17 @@ import { IonicModule } from "@ionic/angular";
 import { MatMenuModule } from "@angular/material/menu";
 import { TranslateModule } from "@ngx-translate/core";
 import { HeaderComponent } from "./header/header.component";
-import { LanguageButtonModule } from "./language-button/language-button.module";
 import { CartButtonModule } from "./cart-button/cart-button.module";
 import { RouterModule } from "@angular/router";
 import { LocalValueDirectiveModule } from "../directives/local-value.module";
 import { CategoryListComponent } from "./category-list/category-list.component";
+import { LanguageButtonComponent } from './language-button/language-button.component';
 @NgModule({
-  declarations: [SigninButtonComponent, HeaderComponent, CategoryListComponent],
+  declarations: [
+    LanguageButtonComponent,
+    SigninButtonComponent, 
+    HeaderComponent,
+    CategoryListComponent],
   imports: [
     CommonModule,
     IonicModule,
@@ -19,9 +23,10 @@ import { CategoryListComponent } from "./category-list/category-list.component";
     RouterModule,
     TranslateModule.forChild(),
     LocalValueDirectiveModule,
-    LanguageButtonModule,
     CartButtonModule
   ],
-  exports: [SigninButtonComponent, HeaderComponent, CategoryListComponent]
+  exports: [
+    HeaderComponent, 
+    CategoryListComponent]
 })
 export class ComponentsModule {}

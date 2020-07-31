@@ -14,6 +14,7 @@ import { takeUntil } from "rxjs/operators";
 export class StaticPage implements OnInit, OnDestroy {
   loading: boolean;
   page: PageInterface;
+  backBtn = {url:"/tabs/browse", text: ""};
   private unsubscribe$ = new Subject<void>();
   constructor(
     private route: ActivatedRoute,
