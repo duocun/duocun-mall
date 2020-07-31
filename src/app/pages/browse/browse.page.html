@@ -12,7 +12,7 @@
 
     <!-- *ngIf="viewMode === 'category-only'; Else segmentMode" -->
     <ng-container>
-      <category-list [loading]="loading" [categories]="categories" [selectedId]="selectedCategoryId" (onShowAll)="showAll($event)" (onSelect)="handleSelectCategory($event)">
+      <category-list [loading]="loading" [categories]="categories" [selectedId]="selectedCategoryId" (onShowAll)="showAll()" (onSelect)="handleSelectCategory($event)">
       </category-list>
       <ion-row class="ion-padding-start ion-padding-end">
         <ng-container *ngIf="!loading; Else skeleton">
