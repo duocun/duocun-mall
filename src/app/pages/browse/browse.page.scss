@@ -1,4 +1,3 @@
-$primary-color: #3f51b5;
 
 ion-searchbar {
   padding: 1rem;
@@ -85,12 +84,7 @@ ion-searchbar {
     width: calc(calc(2.4 / var(--ion-grid-columns, 12)) * 100%)!important;
     max-width: calc(calc(2.4 / var(--ion-grid-columns, 12)) * 100%)!important;
   }
-  .header-md::after {
-    background-image: none;
-  }
-  .item:hover{
-    color: $primary-color;
-  }
+
 }
 @media(min-width: 1170px) {
   .card-product {

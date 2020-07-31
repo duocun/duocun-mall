@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { Router } from "@angular/router";
-import { AuthService } from 'src/app/services/auth/auth.service';
+import { AuthService } from "src/app/services/auth/auth.service";
 
 @Component({
   selector: "signin-button",
@@ -9,10 +9,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 })
 export class SigninButtonComponent implements OnInit {
   @Input() account: any;
-  constructor(
-    private router: Router,
-    private authSvc: AuthService
-    ) {}
+  constructor(private router: Router, private authSvc: AuthService) {}
 
   ngOnInit() {}
 
@@ -32,6 +29,16 @@ export class SigninButtonComponent implements OnInit {
   }
 
   myAccount() {
+    this.router.navigate(["/tabs/my-account"], {
+      replaceUrl: true
+    });
+  }
+  myTransactions() {
+    this.router.navigate(["/tabs/my-account/transaction-history"], {
+      replaceUrl: true
+    });
+  }
+  accountSetting() {
     this.router.navigate(["/tabs/my-account/setting"], {
       replaceUrl: true
     });

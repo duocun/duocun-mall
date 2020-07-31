@@ -6,7 +6,9 @@
     <ion-button *ngIf="account" mat-button [matMenuTriggerFor]="menu">Hi, {{account.username}}</ion-button>
     <mat-menu #menu="matMenu">
       <button mat-menu-item translate="My Orders" (click)="myOrders()">My Orders</button>
-      <button mat-menu-item translate="Account Setting" (click)="myAccount()">Account Setting</button>
+      <button mat-menu-item translate="My Account" (click)="myAccount()">My Account</button>
+      <button mat-menu-item translate="Transaction History" (click)="myTransactions()">My Transactions</button>
+      <button mat-menu-item translate="Account Setting" (click)="accountSetting()">Account Setting</button>
       <button mat-menu-item translate="Logout" (click)="logout()">Logout</button>
     </mat-menu>
   </div>

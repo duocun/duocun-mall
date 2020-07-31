@@ -24,6 +24,7 @@ export class MyAccountPage implements OnInit, AfterViewInit, OnDestroy {
   account: AccountInterface;
   lang: string;
   appCode: string;
+  title = "My Account";
   @ViewChild("selectLang", { static: false }) selectLangRef: IonSelect;
   private unsubscribe$ = new Subject<void>();
   constructor(

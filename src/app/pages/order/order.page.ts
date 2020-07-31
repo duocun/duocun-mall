@@ -57,6 +57,8 @@ export class OrderPage implements OnInit, OnDestroy {
   cc: string;
   exp: string;
   cvd: string;
+  title = "Confirm Order";
+  backBtn = { url: "/tabs/cart", text: "" };
   private unsubscribe$ = new Subject<void>();
   constructor(
     private cartSvc: CartService,

@@ -1,18 +1,6 @@
-<ion-header>
-  <div class="container">
-    <ion-toolbar>
-      <ion-buttons slot="start">
-        <ion-back-button defaultHref="/tabs/my-account" text=""></ion-back-button>
-      </ion-buttons>
-      <ion-title class="ion-text-center" translate="Order History"></ion-title>
-      <ion-buttons slot="end">
-        <!-- <signin-button class="item" [account]="account"></signin-button> -->
-        <cart-button></cart-button>
-        <language-button></language-button>
-      </ion-buttons>
-    </ion-toolbar>
-  </div>
-</ion-header>
+
+<header [menu]="false" [title]="title" [back]="backBtn" [search]="false"></header>
+
 
 <ion-content>
   <div class="container container-sm">

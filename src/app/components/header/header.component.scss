@@ -1,0 +1,19 @@
+$primary-color: #3f51b5;
+
+@media(min-width: 992px) {
+    .header-md::after {
+      background-image: none;
+    }
+    .item:hover{
+      color: $primary-color;
+    }
+    .sc-ion-searchbar-md-h {
+        box-shadow: none;
+        --box-shadow: none;
+    }
+    .searchbar-input-container.sc-ion-searchbar-md{
+        border: 1px solid #bbb !important;
+        // border-image: none;
+    }
+
+}
