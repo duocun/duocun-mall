@@ -1,5 +1,5 @@
 $primary-color: #3f51b5;
-@media(min-width: 768px) {
+@media(max-width: 768px) {
     .category-area{
         display: block;
     }
