@@ -20,8 +20,8 @@ export class CategoryListComponent implements OnInit {
 
   ngOnInit() {}
 
-  showAll($event) {
-    this.onShowAll.emit($event);
+  showAll() {
+    this.onShowAll.emit();
   }
 
   handleSelectCategory(cat) {
