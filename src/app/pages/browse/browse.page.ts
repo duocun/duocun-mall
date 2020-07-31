@@ -35,6 +35,7 @@ export class BrowsePage implements OnInit, OnDestroy {
   outofRange: boolean;
   bSearchOnTitle: boolean = false;
   title = "Home_Title";
+  lang;
   private unsubscribe$ = new Subject<void>();
   constructor(
     private loc: LocationService,
@@ -59,6 +60,7 @@ export class BrowsePage implements OnInit, OnDestroy {
       this.bSearchOnTitle = true;
       this.title = "";
     }
+    this.lang = this.translator.currentLang || "en";
   }
   ngOnInit() {
     this.seo.setDefaultSeo();

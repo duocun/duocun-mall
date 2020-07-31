@@ -37,7 +37,7 @@
             expand="full"
             localValue
             [data]="category"
-            key="name"
+            key="{{lang === 'en' ? 'nameEN' : 'name'}}"
             (click)="handleSelectCategory(category)"
           >
           </ion-button>

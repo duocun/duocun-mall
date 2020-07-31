@@ -2,6 +2,10 @@ $primary-color: #3f51b5;
 .home-icon{
   display: none;
 }
+ion-header {
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+}
 @media(min-width: 992px) {
     .header-md::after {
       background-image: none;
@@ -12,6 +16,7 @@ $primary-color: #3f51b5;
     .sc-ion-searchbar-md-h {
         box-shadow: none;
         --box-shadow: none;
+        border: 1px solid #bbb !important;
     }
     .searchbar-input-container.sc-ion-searchbar-md{
         border: 1px solid #bbb !important;
@@ -19,5 +24,8 @@ $primary-color: #3f51b5;
     }
     .home-icon{
       display: block;
+    }
+    .toolbar-background, .toolbar-container{
+      background-color: #fff;
     }
 }
