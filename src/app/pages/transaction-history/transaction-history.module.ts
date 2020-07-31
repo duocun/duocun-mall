@@ -15,7 +15,7 @@ import { LocalValueDirectiveModule } from "src/app/directives/local-value.module
 import { FooterModule } from "src/app/components/footer/footer.module";
 import { LanguageButtonModule } from "src/app/components/language-button/language-button.module";
 import { CartButtonModule } from "src/app/components/cart-button/cart-button.module";
-import { ComponentsModule } from 'src/app/components/components.module';
+import { ComponentsModule } from "src/app/components/components.module";
 
 @NgModule({
   imports: [

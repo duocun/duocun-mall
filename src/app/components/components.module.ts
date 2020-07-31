@@ -7,12 +7,14 @@ import { TranslateModule } from "@ngx-translate/core";
 import { HeaderComponent } from "./header/header.component";
 import { LanguageButtonModule } from "./language-button/language-button.module";
 import { CartButtonModule } from "./cart-button/cart-button.module";
+import { RouterModule } from '@angular/router';
 @NgModule({
   declarations: [SigninButtonComponent, HeaderComponent],
   imports: [
     CommonModule,
     IonicModule,
     MatMenuModule,
+    RouterModule,
     TranslateModule.forChild(),
     LanguageButtonModule,
     CartButtonModule

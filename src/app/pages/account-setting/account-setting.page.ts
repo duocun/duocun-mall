@@ -37,7 +37,7 @@ export class AccountSettingPage implements AfterViewInit, OnInit, OnDestroy {
   saveLocation: boolean;
   processing: boolean;
   isOtpSent: boolean;
-  backBtn = {url: "/tabs/my-account", text: ""};
+  backBtn = { url: "/tabs/my-account", text: "" };
   title = "Account Setting";
   @ViewChild("locationSearch", { static: false })
   @ViewChild("otpInput", { static: false })
