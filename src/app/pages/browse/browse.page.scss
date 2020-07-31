@@ -1,3 +1,4 @@
+$primary-color: #3f51b5;
 
 ion-searchbar {
   padding: 1rem;
@@ -7,6 +8,9 @@ ion-searchbar {
   padding-inline-start: 1rem;
   -webkit-padding-end: 1rem;
   padding-inline-end: 1rem;
+}
+.category-list{
+  display: none;
 }
 .card-product {
   cursor: pointer;
@@ -84,7 +88,34 @@ ion-searchbar {
     width: calc(calc(2.4 / var(--ion-grid-columns, 12)) * 100%)!important;
     max-width: calc(calc(2.4 / var(--ion-grid-columns, 12)) * 100%)!important;
   }
-
+  .container{
+    padding-top: 0px;
+  }
+  .category-area{
+    display: none;
+  }
+  .category-list{
+    display: block;
+  }
+  .category-item{
+    display: inline-block;
+    list-style: none;
+    padding: 4px 12px;
+    border-right: 1px solid #bbb;
+  }
+  .category-item:last-child{
+    border-right: none;
+  }
+  .category-item:hover{
+    color: $primary-color;
+  }
+  .selected{
+    color: $primary-color;
+  }
+  ion-card {
+    box-shadow: none;
+    border-radius: 0px;
+  }
 }
 @media(min-width: 1170px) {
   .card-product {

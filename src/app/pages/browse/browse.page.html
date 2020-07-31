@@ -9,9 +9,15 @@
       (ionChange)="handleSearch($event)"
       [value]="search"
     ></ion-searchbar>
+    <ul class="category-list">
+      <li class="category-item" translate="All" (click)="showAll()" [ngClass]="{selected : selectedCategoryId === ''}">All</li>
+      <li *ngFor="let c of categories" class="category-item" (click)="handleSelectCategory(c)" [ngClass]="{selected : selectedCategoryId === c._id}">
+          {{lang === 'en' ? c.nameEN : c.name}}
+      </li>
+    </ul>
     <ng-container *ngIf="viewMode === 'category-only'; Else segmentMode">
       <ion-row
-        class="ion-padding-start ion-padding-end ion-margin-bottom row-category"
+        class="ion-padding-start ion-padding-end ion-margin-bottom row-category category-area"
       >
         <ion-col size-xs="3" size-lg="2.4" class="ion-no-margin ion-no-padding">
           <ion-button
