@@ -1,4 +1,4 @@
-<ion-button *ngIf="account" [routerLink]="['/tabs/my-account']" [queryParams]="{action: 'change-lang'}">
+<!-- <ion-button *ngIf="account" [routerLink]="['/tabs/my-account']" [queryParams]="{action: 'change-lang'}">
   <ion-label>
     <ng-container *ngIf="lang === 'zh'">En</ng-container>
     <ng-container *ngIf="lang === 'en'">中文</ng-container>
@@ -9,4 +9,10 @@
     <ng-container *ngIf="lang === 'zh'">En</ng-container>
     <ng-container *ngIf="lang === 'en'">中文</ng-container>
   </ion-label>
-</ion-button>
+</ion-button> -->
+
+<ion-button mat-button [matMenuTriggerFor]="menu" >{{lang === 'zh'? 'EN' : '中' }}</ion-button>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item (click)="switchLanguage()">English</button>
+  <button mat-menu-item (click)="switchLanguage()">中文</button>
+</mat-menu>

@@ -1,0 +1,21 @@
+<ion-header>
+  <div class="container">
+    <!-- <ion-toolbar [ngStyle]="{ '--background': '#fff', 'border-bottom': '1px solid #eee' }"> -->
+      <ion-toolbar  class="ion-color" [style.background-color]="'#fff'" >
+      <ion-buttons slot="start">
+        <ion-menu-button *ngIf="menu"></ion-menu-button>
+        <img class="cursor-pointer home-icon" width="240px" height="80px" [routerLink]="['/tabs/browse']" src="assets/icon/duocun.png" alt="多村 - Duocun" />
+        <ion-back-button *ngIf="back" defaultHref={{back.url}} text={{back.text}}></ion-back-button>
+      </ion-buttons>
+      <ion-searchbar *ngIf="search" placeholder="{{'Search'|translate}}" debounce="1000"
+        (ionChange)="handleSearch($event)" [value]="searchKeyword">
+      </ion-searchbar>
+      <ion-title *ngIf="title" class="ion-text-center" translate={{title}}></ion-title>
+      <ion-buttons slot="end">
+        <signin-button class="item" [account]="account"></signin-button>
+        <cart-button class="item"></cart-button>
+        <language-button class="item"></language-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </div>
+</ion-header>

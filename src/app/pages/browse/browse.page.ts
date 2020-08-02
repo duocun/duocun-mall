@@ -12,6 +12,7 @@ import { SeoService } from "src/app/services/seo/seo.service";
 import { Subject } from "rxjs";
 import { takeUntil, filter } from "rxjs/operators";
 import slugify from "slugify";
+
 @Component({
   selector: "app-browse",
   templateUrl: "./browse.page.html",
@@ -19,7 +20,7 @@ import slugify from "slugify";
 })
 export class BrowsePage implements OnInit, OnDestroy {
   location: LocationInterface;
-  viewMode: "segment" | "category-only";
+  // viewMode: "segment" | "category-only";
   viewSegment: string;
   categories: Array<CategoryInterface>;
   selectedCategoryId: string;
@@ -32,6 +33,8 @@ export class BrowsePage implements OnInit, OnDestroy {
   categoryDisplayLimit = 20;
   scrollDisabled: boolean;
   outofRange: boolean;
+  bSearchOnTitle: boolean = false;
+  title = "Home_Title";
   private unsubscribe$ = new Subject<void>();
   constructor(
     private loc: LocationService,
@@ -43,7 +46,7 @@ export class BrowsePage implements OnInit, OnDestroy {
   ) {
     this.page = 0;
     this.viewSegment = "merchant";
-    this.viewMode = "category-only";
+    // this.viewMode = "category-only";
     this.categories = [];
     this.selectedCategoryId = "";
     this.availableMerchantIds = null;
@@ -53,6 +56,8 @@ export class BrowsePage implements OnInit, OnDestroy {
     this.outofRange = false;
     if (window.innerWidth >= 992) {
       this.pageSize = 15;
+      this.bSearchOnTitle = true;
+      this.title = "";
     }
   }
   ngOnInit() {

@@ -15,6 +15,7 @@ import { IonicStorageModule } from "@ionic/storage";
 import { DeviceDetectorModule } from "ngx-device-detector";
 
 import { SideMenuModule } from "./components/side-menu/side-menu.module";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, "./assets/i18n/", ".json");

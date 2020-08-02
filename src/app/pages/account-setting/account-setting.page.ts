@@ -10,7 +10,7 @@ import { AuthService } from "src/app/services/auth/auth.service";
 import { AccountInterface } from "src/app/models/account.model";
 import { ApiService } from "src/app/services/api/api.service";
 import { TranslateService } from "@ngx-translate/core";
-import { AlertController } from "@ionic/angular";
+import { AlertController, IonInput } from "@ionic/angular";
 import { LocationService } from "src/app/services/location/location.service";
 import {
   LocationInterface,
@@ -37,7 +37,12 @@ export class AccountSettingPage implements AfterViewInit, OnInit, OnDestroy {
   saveLocation: boolean;
   processing: boolean;
   isOtpSent: boolean;
+  backBtn = { url: "/tabs/my-account", text: "" };
+  title = "Account Setting";
   @ViewChild("locationSearch", { static: false })
+  @ViewChild("otpInput", { static: false })
+  otpInput: IonInput;
+
   locationSearch: LocationSearchComponent;
   private unsubscribe$ = new Subject<void>();
   constructor(
@@ -168,6 +173,7 @@ export class AccountSettingPage implements AfterViewInit, OnInit, OnDestroy {
             );
             if (resp.code === "success") {
               this.showAlert("Notice", "Verification code sent", "OK");
+              this.otpInput.setFocus();
             } else {
               this.showAlert("Notice", "Verification code was not sent", "OK");
             }

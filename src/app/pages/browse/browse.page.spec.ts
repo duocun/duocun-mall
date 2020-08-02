@@ -10,11 +10,9 @@ import { LocalValueDirectiveModule } from "src/app/directives/local-value.module
 import { IonicStorageModule } from "@ionic/storage";
 import { RouterTestingModule } from "@angular/router/testing";
 import { FormsModule } from "@angular/forms";
-import { CategoryListComponent } from "./category-list/category-list.component";
 import { MerchantListComponent } from "./merchant-list/merchant-list.component";
 import { ProductListModule } from "src/app/components/product-list/product-list.module";
 import { PricePipeModule } from "src/app/pipes/price/price.module";
-import { LanguageButtonModule } from "src/app/components/language-button/language-button.module";
 import { FooterModule } from "src/app/components/footer/footer.module";
 
 describe("BrowsePage", () => {
@@ -23,7 +21,7 @@ describe("BrowsePage", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [BrowsePage, CategoryListComponent, MerchantListComponent],
+      declarations: [BrowsePage, MerchantListComponent],
       imports: [
         IonicModule.forRoot(),
         TranslateModule.forRoot(),
@@ -43,7 +41,6 @@ describe("BrowsePage", () => {
         FormsModule,
         ProductListModule,
         PricePipeModule,
-        LanguageButtonModule,
         FooterModule
       ]
     }).compileComponents();

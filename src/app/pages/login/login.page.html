@@ -22,7 +22,7 @@
           <ion-grid class="ion-no-padding ion-no-margin w-100">
             <ion-row class="row-phone">
               <ion-col size="12">
-                <ion-label position="stacked" translate="Phone Number"></ion-label>
+                <ion-label position="stacked" translate="Phone Number" *ngIf="phone"></ion-label>
                 <ion-input required type="text" name="phone" autocomplete="off" autofocus=true inputmode="tel"
                   minlength="6" maxlength="20" placeholder="{{'Please input phone number'|translate}}"
                   [(ngModel)]="phone">
@@ -35,7 +35,7 @@
           <ion-grid class="ion-no-padding ion-no-margin w-100">
             <ion-row class="row-otp">
               <ion-col size="7">
-                <ion-label position="stacked" translate="OTP Code"></ion-label>
+                <ion-label position="stacked" translate="OTP Code" *ngIf="otp"></ion-label>
                 <ion-input required type="text" name="otp" [(ngModel)]="otp" placeholder="{{'Input verification code'|translate}}"></ion-input>
               </ion-col>
               <ion-col size="5" class="ion-padding-horizontal">

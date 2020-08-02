@@ -3,6 +3,8 @@
   "Home_Title": "免运费免小费",
   "Cart": "购物车",
   "My Account": "我的帐户",
+  "My Orders": "我的订单",
+  "Logout": "退出",
   "Please input delivery address": "请输入收货地址(街道号, 街道名), 并在提示列表里选择",
   "Please input unit# (Optional)": "请输入Unit#(可选填)",
   "Please input alternative phone number": "请输入备用手机号码",

@@ -95,7 +95,7 @@ export class LoginPage implements OnInit, OnDestroy {
     if (!FB) {
       return;
     }
-    FB.getLoginStatus((response) => {
+    FB.login((response) => {
       if (response.status === "connected") {
         this.api
           .post("Accounts/fbLogin", response.authResponse)

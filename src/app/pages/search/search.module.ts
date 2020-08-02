@@ -9,8 +9,7 @@ import { SearchPageRoutingModule } from "./search-routing.module";
 import { SearchPage } from "./search.page";
 import { TranslateModule } from "@ngx-translate/core";
 import { ProductListModule } from "src/app/components/product-list/product-list.module";
-import { LanguageButtonModule } from "src/app/components/language-button/language-button.module";
-import { CartButtonModule } from "src/app/components/cart-button/cart-button.module";
+import { ComponentsModule } from "src/app/components/components.module";
 
 @NgModule({
   imports: [
@@ -20,8 +19,7 @@ import { CartButtonModule } from "src/app/components/cart-button/cart-button.mod
     SearchPageRoutingModule,
     TranslateModule.forChild(),
     ProductListModule,
-    LanguageButtonModule,
-    CartButtonModule
+    ComponentsModule
   ],
   declarations: [SearchPage]
 })
