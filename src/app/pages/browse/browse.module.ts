@@ -33,7 +33,7 @@ import { ComponentsModule } from "src/app/components/components.module";
     ProductListModule,
     CartButtonModule,
     ComponentsModule,
-    FooterModule
+    FooterModule,
     ChatButtonModule
   ],
   declarations: [BrowsePage, MerchantListComponent]

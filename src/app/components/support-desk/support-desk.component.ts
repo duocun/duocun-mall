@@ -77,7 +77,7 @@ export class SupportDeskComponent implements OnInit {
                         // reset message ok
                       }
                     });
-                  });
+                });
 
               this.messages.unshift(data);
               this.messageList.push(data);
