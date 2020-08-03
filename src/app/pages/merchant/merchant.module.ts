@@ -11,7 +11,6 @@ import { LocalValueDirectiveModule } from "src/app/directives/local-value.module
 import { IonImageModule } from "src/app/components/ion-image/ion-image.module";
 import { PricePipeModule } from "src/app/pipes/price/price.module";
 import { ProductListModule } from "src/app/components/product-list/product-list.module";
-import { LanguageButtonModule } from "src/app/components/language-button/language-button.module";
 import { CartButtonModule } from "src/app/components/cart-button/cart-button.module";
 @NgModule({
   imports: [
@@ -23,7 +22,6 @@ import { CartButtonModule } from "src/app/components/cart-button/cart-button.mod
     IonImageModule,
     PricePipeModule,
     ProductListModule,
-    LanguageButtonModule,
     CartButtonModule
   ],
   declarations: [MerchantPage]

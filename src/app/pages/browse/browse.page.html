@@ -1,78 +1,20 @@
-<ion-header>
-  <div class="container">
-    <ion-toolbar>
-      <ion-buttons slot="start">
-        <ion-menu-button></ion-menu-button>
-      </ion-buttons>
-      <ion-title class="ion-text-center" translate="Home_Title"></ion-title>
-      <ion-buttons slot="end">
-        <cart-button></cart-button>
-        <language-button></language-button>
-      </ion-buttons>
-    </ion-toolbar>
-  </div>
-</ion-header>
+
+<header [menu]="true" [title]="title" [search]="bSearchOnTitle" [searchKeyword]="search" (onSearch)="handleSearch($event)"></header>
 
 <ion-content>
   <chat-button></chat-button>
   <div class="container">
-    <ion-searchbar
+    <ion-searchbar *ngIf="!bSearchOnTitle"
       placeholder="{{'Search'|translate}}"
       debounce="1000"
       (ionChange)="handleSearch($event)"
       [value]="search"
     ></ion-searchbar>
-    <ng-container *ngIf="viewMode === 'category-only'; Else segmentMode">
-      <ion-row
-        class="ion-padding-start ion-padding-end ion-margin-bottom row-category"
-      >
-        <ion-col size-xs="3" size-lg="2.4" class="ion-no-margin ion-no-padding">
-          <ion-button
-            [disabled]="loading"
-            [color]="selectedCategoryId === '' ? 'success' : 'light' "
-            size="small"
-            expand="full"
-            translate="All"
-            (click)="showAll()"
-          >
-          </ion-button>
-        </ion-col>
-        <ion-col
-          *ngFor="let category of categories.slice(0,categoryDisplayLimit)"
-          size-xs="3"
-          size-lg="2.4"
-          class="ion-no-margin ion-no-padding"
-        >
-          <ion-button
-            [disabled]="loading"
-            [color]="selectedCategoryId === category._id ? 'success' : 'light'"
-            size="small"
-            expand="full"
-            localValue
-            [data]="category"
-            key="name"
-            (click)="handleSelectCategory(category)"
-          >
-          </ion-button>
-        </ion-col>
-        <ion-col
-          *ngIf="categories.length >= (categoryDisplayLimit + 1)"
-          size-xs="3"
-          size-lg="2.4"
-          class="ion-no-margin ion-no-padding"
-        >
-          <ion-button
-            color="tertiary"
-            size="small"
-            expand="full"
-            style="text-align: center; font-weight: 600;"
-            localValue
-            routerLink="/tabs/browse/all-categories"
-          >
-            ...
-          </ion-button>
-        </ion-col>
-      </ion-row>
+
+    <!-- *ngIf="viewMode === 'category-only'; Else segmentMode" -->
+    <ng-container>
+      <category-list [loading]="loading" [categories]="categories" [selectedId]="selectedCategoryId" (onShowAll)="showAll()" (onSelect)="handleSelectCategory($event)">
+      </category-list>
       <ion-row class="ion-padding-start ion-padding-end">
         <ng-container *ngIf="!loading; Else skeleton">
           <ng-container *ngIf="products.length; Else empty">

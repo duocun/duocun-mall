@@ -57,6 +57,8 @@ export class OrderPage implements OnInit, OnDestroy {
   cc: string;
   exp: string;
   cvd: string;
+  title = "Confirm Order";
+  backBtn = { url: "/tabs/cart", text: "" };
   private unsubscribe$ = new Subject<void>();
   constructor(
     private cartSvc: CartService,
@@ -702,6 +704,18 @@ export class OrderPage implements OnInit, OnDestroy {
 
   isWechatBrowser() {
     return /micromessenger/i.test(navigator.userAgent);
+  }
+
+  isMobile() {
+    if (
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      )
+    ) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   prefersDark() {

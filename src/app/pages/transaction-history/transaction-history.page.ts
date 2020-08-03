@@ -19,6 +19,7 @@ export class TransactionHistoryPage implements OnInit, OnDestroy {
   page: number;
   pageLength: number;
   scrollDisabled: boolean;
+  backBtn = { url: "/tabs/my-account", text: "" };
   private unsubscribe$ = new Subject<void>();
   constructor(
     private authSvc: AuthService,

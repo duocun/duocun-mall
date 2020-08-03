@@ -1,13 +1,6 @@
-<ion-header>
-  <div class="container">
-    <ion-toolbar>
-      <ion-buttons slot="start">
-        <ion-back-button defaultHref="/tabs/my-account" text=""></ion-back-button>
-      </ion-buttons>
-      <ion-title class="ion-text-center" translate="Account Setting"></ion-title>
-    </ion-toolbar>
-  </div>
-</ion-header>
+
+<header [menu]="false" [title]="title" [back]="backBtn" [search]="false"></header>
+
 
 <ion-content>
   <div class="container container-sm">
@@ -43,7 +36,7 @@
           <ion-row class="ion-align-items-end ion-padding-start ion-padding-end">
             <ion-col class="col-code" size="8">
               <ion-label position="floating" translate="Verification Code"></ion-label>
-              <ion-input [(ngModel)]="model.verificationCode" *ngIf="model.verificationCode" placeholder="{{'Please input verification code' | translate}}"></ion-input>
+              <ion-input #otpInput [(ngModel)]="model.verificationCode" placeholder="{{'Please input verification code' | translate}}"></ion-input>
             </ion-col>
             <ion-col size="4">
               <ion-button

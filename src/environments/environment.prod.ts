@@ -9,7 +9,7 @@ export const environment = {
   },
   media: "https://d27ftifr2ocsa6.cloudfront.net/media/",
   stripe: "pk_live_vV7H1l4X9k2r8uf6JDf9lGsb",
-  defaultLang: "zh",
+  defaultLang: "en",
   gmap: "AIzaSyCEd6D6vc9K-YzMH-QtQWRSs5HZkLKSWyk",
   timezone: "America/Toronto",
   monerisMode: "prod",

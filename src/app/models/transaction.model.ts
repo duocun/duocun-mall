@@ -110,15 +110,26 @@ export function getTransactionDescription(
       return t.note ? t.note : "";
     }
     const order = t.orders[0];
-    if (order.items) {
-      const item = order.items[0];
-      const productName =
-        lang === "en" ? (item.nameEN ? item.nameEN : item.name) : item.name;
-      if (order.items.length && order.items.length > 1) {
-        return productName + (lang === "en" ? " etc." : " 等");
-      } else {
-        return productName;
-      }
+    if (order.items && order.items.length) {
+      // const item = order.items[0];
+      // const productName =
+      //   lang === "en" ? (item.nameEN ? item.nameEN : item.name) : item.name;
+      // if (order.items.length && order.items.length > 1) {
+      //   return productName + (lang === "en" ? " etc." : " 等");
+      // } else {
+      //   return productName;
+      // }
+      let description = "";
+      order.items.forEach((item, index) => {
+        const productName =
+          lang === "en" ? (item.nameEN ? item.nameEN : item.name) : item.name;
+        let nextDescription = `${productName} x ${item.quantity}`;
+        if (index > 0) {
+          nextDescription = ", " + nextDescription;
+        }
+        description = description + nextDescription;
+      });
+      return description;
     } else {
       return t.note ? t.note : "";
     }

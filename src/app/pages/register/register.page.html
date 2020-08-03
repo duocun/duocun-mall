@@ -72,7 +72,7 @@
             <ion-row>
               <ion-col size="8">
                 <ion-label position="stacked" translate="OTP Code"></ion-label>
-                <ion-input required type="text" name="otp" placeholder="{{'Please input verification code' | translate}}" [(ngModel)]="model.verificationCode"></ion-input>
+                <ion-input #otpInput required type="text" name="otp" placeholder="{{'Please input verification code' | translate}}" [(ngModel)]="model.verificationCode"></ion-input>
               </ion-col>
               <ion-col size="4">
                 <ion-button

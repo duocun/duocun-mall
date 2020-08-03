@@ -14,8 +14,8 @@ import { PricePipeModule } from "src/app/pipes/price/price.module";
 import { TranslateModule } from "@ngx-translate/core";
 import { MomentPipeModule } from "src/app/pipes/moment/moment.module";
 import { FooterModule } from "src/app/components/footer/footer.module";
-import { LanguageButtonModule } from "src/app/components/language-button/language-button.module";
 import { CartButtonModule } from "src/app/components/cart-button/cart-button.module";
+import { ComponentsModule } from "src/app/components/components.module";
 
 @NgModule({
   imports: [
@@ -30,8 +30,8 @@ import { CartButtonModule } from "src/app/components/cart-button/cart-button.mod
     TranslateModule.forChild(),
     MomentPipeModule,
     FooterModule,
-    LanguageButtonModule,
-    CartButtonModule
+    CartButtonModule,
+    ComponentsModule
   ],
   declarations: [ProductPage]
 })

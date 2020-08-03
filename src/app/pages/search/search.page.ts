@@ -19,6 +19,9 @@ export class SearchPage implements OnInit, OnDestroy {
   products: Array<ProductInterface>;
   availableMerchantIds: Array<string>;
   location: LocationInterface;
+  bSearchOnTitle = false;
+  title = "Search";
+
   private unsubscribe$ = new Subject<void>();
   constructor(
     private route: ActivatedRoute,
@@ -29,6 +32,10 @@ export class SearchPage implements OnInit, OnDestroy {
   ) {
     this.search = "";
     this.loading = true;
+    if (window.innerWidth >= 992) {
+      this.bSearchOnTitle = true;
+      this.title = "";
+    }
   }
 
   ngOnInit() {

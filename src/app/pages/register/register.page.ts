@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
 import { RegisterAccountInterface } from "src/app/models/account.model";
 import { ApiService } from "src/app/services/api/api.service";
 import { TranslateService } from "@ngx-translate/core";
-import { AlertController } from "@ionic/angular";
+import { AlertController, IonInput } from "@ionic/angular";
 import { AuthService } from "src/app/services/auth/auth.service";
 import { Router } from "@angular/router";
 import { Subject } from "rxjs";
@@ -24,6 +24,8 @@ export class RegisterPage implements OnInit, OnDestroy {
   otpSentCount: number;
   lang: string;
   private unsubscribe$ = new Subject<void>();
+  @ViewChild("otpInput", { static: false }) otpInput: IonInput;
+
   constructor(
     private api: ApiService,
     private translator: TranslateService,
@@ -154,9 +156,11 @@ export class RegisterPage implements OnInit, OnDestroy {
           .subscribe((res: { code: string; message?: string }) => {
             if (res.code === "success") {
               this.showAlert("Notice", "Verification code sent", "OK");
+              this.otpInput.setFocus();
             } else {
               if (res.message === "phone number already exists") {
                 this.showAlert("Notice", "Phone number already exists", "OK");
+                this.otpInput.setFocus();
               } else {
                 this.showAlert(
                   "Notice",

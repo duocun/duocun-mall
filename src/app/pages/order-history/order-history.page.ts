@@ -18,6 +18,8 @@ export class OrderHistoryPage implements OnInit, OnDestroy {
   accountId: string;
   scrollDisabled: boolean;
   OrderTypes = OrderType;
+  title = "Order History";
+  backBtn = { url: "/tabs/my-account", text: "" };
   private unsubscribe$ = new Subject<void>();
   constructor(private api: ApiService, private authSvc: AuthService) {
     this.loading = true;

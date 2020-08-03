@@ -1,0 +1,9 @@
+ion-button {
+    text-transform: none;
+}
+
+@media(max-width: 768px) {
+    ion-button {
+        display: none;
+    }
+}
