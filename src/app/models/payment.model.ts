@@ -36,3 +36,17 @@ export const PaymentStatus = {
   UNPAID: "U",
   PAID: "P"
 };
+
+export type AlphapayResponseType = {
+  code: 'success' | 'fail',
+  data?: {
+    partner_order_id: string;
+    code_url: string;
+    order_id: string;
+    return_code: string;
+    pay_url: string;
+    qrcode_img: string;
+    channel: string;
+  },
+  redirect_url?: string;
+};

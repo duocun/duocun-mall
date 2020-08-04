@@ -1,8 +1,5 @@
 
 <header [menu]="false" [title]="title" [back]="backBtn" [search]="false"></header>
-
-
-
 <ion-content>
   <div class="container container-sm">
     <ion-row class="ion-padding">
@@ -106,7 +103,7 @@
     <!--  END ORDER FORM  -->
     <!-- BEGIN PAYMENT FORM -->
     <ng-container *ngIf="!error; Else errorMsg">
-      <ion-row class="ion-padding" *ngIf="account && charge && !loading">
+      <ion-row class="ion-padding" *ngIf="account && charge && !loading && !alphaPayResponse">
         <ng-container *ngIf="paymentMethod !== PaymentMethod.PREPAY">
           <!-- BEGIN MONERIS PAY BUTTON -->
           <ion-col size="12" class="ion-text-center ion-margin-top">
@@ -149,7 +146,7 @@
                     [disabled]="loading || processing"
                     (click)="monerisPay()"
                   >
-                    <ion-icon src="assets/img/moneris.svg"></ion-icon>
+                    <ion-icon src="{{getPaymentGatewayLogo('moneris')}}"></ion-icon>
                     <ion-label translate="Pay by Credit Card"></ion-label>
                   </ion-button>
                 </ion-col>
@@ -168,7 +165,7 @@
                 [disabled]="loading || processing"
                 (click)="alphaPayJSApi()"
               >
-                <img src="assets/img/wechat_pay_light.png" />
+                <img src="{{getPaymentGatewayLogo('wechat')}}" />
                 <ion-label translate="Wechat Pay"></ion-label>
               </ion-button>
             </ion-col>
@@ -204,7 +201,7 @@
                 [disabled]="loading || processing"
                 (click)="alphaPayByQRCode('wechat')"
               >
-                <img src="assets/img/wechat_pay_light.png" />
+                <img src="{{getPaymentGatewayLogo('wechat')}}" />
                 <ion-label translate="Wechat Pay"></ion-label>
               </ion-button>
             </ion-col>
@@ -215,7 +212,7 @@
                 [disabled]="loading || processing"
                 (click)="alphaPayByQRCode('alipay')"
               >
-                <img src="assets/img/alipay_transparent.png" />
+                <img src="{{getPaymentGatewayLogo('alipay')}}" />
               </ion-button>
             </ion-col>
             <ion-col class="col-payment-button col-payment-unionpay" size="12" align="center" *ngIf="!isMobile">
@@ -225,7 +222,7 @@
                 [disabled]="loading || processing"
                 (click)="alphaPayByQRCode('unionpay')"
               >
-                <img src="assets/img/union_pay_small.png" />
+                <img src="{{getPaymentGatewayLogo('unionpay')}}" />
                 <ion-label translate="UnionPay"></ion-label>
               </ion-button>
             </ion-col>
@@ -247,6 +244,30 @@
         <!--  END PAY BY DEPOSIT BUTTON  -->
         
       </ion-row>
+      <!--  BEGIN ALPHAPAY QRCODE IMAGE  -->
+      <ion-row class="ion-padding" *ngIf="alphaPayResponse">
+        <ion-col size="12" class="ion-text-center">
+          <img class="payment-logo" src="{{getPaymentGatewayLogo(alphaPayResponse.data.channel, 'large')}}" />
+        </ion-col>
+        <ion-col size="12" class="ion-text-center">
+          <img src="{{alphaPayResponse.data.qrcode_img}}" />
+        </ion-col>
+        <ion-col size="12">
+          <p class="ion-text-center">{{ (alphaPayResponse.total).toFixed(2) }} CAD</p>
+        </ion-col>
+        <ion-col size="12">
+          <ion-button
+            color=""
+            size="medium"
+            expand="full"
+            translate="Cancel"
+            (click)="cancelAlphaPay()"
+          >
+          </ion-button>
+        </ion-col>
+
+      </ion-row>
+      <!--   END  ALPHAPAY QRCODE IMAGE  -->
     </ng-container>
     <!--  END PAYMENT FORM  -->
   </div>
