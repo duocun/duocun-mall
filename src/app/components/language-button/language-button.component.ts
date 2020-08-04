@@ -44,8 +44,7 @@ export class LanguageButtonComponent implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
-  switchLanguage() {
-    const lang = this.lang === "zh" ? "en" : "zh";
+  setLanguage(lang) {
     this.storage.set(environment.storageKey.lang, lang);
     this.translator.use(lang);
     window.location.reload();
