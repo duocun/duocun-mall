@@ -24,6 +24,7 @@ import { Subject } from "rxjs";
 import { takeUntil, filter } from "rxjs/operators";
 import * as moment from "moment";
 import { DeviceDetectorService } from "ngx-device-detector";
+import { SocketService } from "src/app/services/socket/socket.service";
 interface OrderErrorInterface {
   type: "order" | "payment";
   message: string;
@@ -58,7 +59,7 @@ export class OrderPage implements OnInit, OnDestroy {
   exp: string;
   cvd: string;
   isMobile: boolean;
-  alphaPayResponse: AlphapayResponseType|null;
+  alphaPayResponse: AlphapayResponseType | null;
   private unsubscribe$ = new Subject<void>();
   constructor(
     private cartSvc: CartService,
@@ -70,7 +71,8 @@ export class OrderPage implements OnInit, OnDestroy {
     private contextSvc: ContextService,
     private router: Router,
     private loader: LoadingController,
-    private deviceDetector: DeviceDetectorService
+    private deviceDetector: DeviceDetectorService,
+    private socketSvc: SocketService
   ) {
     this.loading = true;
     this.error = null;
@@ -84,12 +86,27 @@ export class OrderPage implements OnInit, OnDestroy {
         console.log("order page context subscription");
         this.appCode = context.get("appCode");
       });
-    // this.alphaPayChannel = "wechat";
-    // this.qrCodeImage =
-    //   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAEsAQAAAABRBrPYAAACHklEQVR42u2awY6DMAxEzSmfwZ8S+FM+YY85JZuZMa1aWGmvsRKhqktfD03G9tistf+sH5vYxCY2sYlFwKph5XZu6cytHe3MZW3txN0UC8N7MefSAVy2NHylRsNOS34Tl619Tzq2mW0RMdy0dccrVwqLSdgQeVl3yiAiRpFjN7Ahmcnq+CsWhsZ41D2cv67H/DY05ovJatHOJN+Kh5o1MlYZvNbzVVmrhF2sa77/eUTD+qcoQF52sTPU+fUmDMaf71G8Q944d+Su8pG4gmB4Xfunh4u8Ow2efguFVf521tm3yM2zWSgMJ27yiqtr23fjXFosrKDaLnL+ZlkwK+9HMQqBVboLmgr3VBv5Gg5TmnJhyyHf7HEMjCmLce0i9yT2JfLhMYQz6xFD+HKM7NlTLAyHvqrgaiIB65i8q42FaRaBQwdTlL7grCwWplLLLC2v6L7i7qKHxzxHIT/bq7NjC7+nUJhEjn4nobmDu9CErT3EwtAYJmkwjdTAu7mzW18/PsZT1uRQx32oGD00AuNjPlzS1BSa11j4KxbGxyhmboLaOkvNxRAN8zGahL29DCSdVSRMq17FaFfbzugOhtXL/2cfwpzZreOnyANg9IpXh+6djp7j1GiYfIWbxuxj/4diFAQzH8LAPapnv0V9GIylFlJXaCtLx8KaT11UfMFz8v/8PGtkzBOXC5sTJ47XytPzrJGx+S8uE5vYxCYWH/sFYkDntNM0WSAAAAAASUVORK5CYII=";
   }
 
   async ngOnInit() {
+    await this.socketSvc.joinPaymentRoom();
+    this.socketSvc.alphaPayResp.subscribe(
+      (payload: { success: boolean; paymentId: string }) => {
+        if (!payload) {
+          return;
+        }
+        if (payload.success) {
+          this.router.navigate(["/payment-success"], {
+            queryParams: {
+              paymentId: payload.paymentId
+            }
+          });
+        } else {
+          console.warn("Payment failed");
+          console.log(payload);
+        }
+      }
+    );
     await this.presentLoading();
     this.paymentMethod = PaymentMethod.CREDIT_CARD;
     this.authSvc
@@ -586,7 +603,7 @@ export class OrderPage implements OnInit, OnDestroy {
           })
           .then((observable) => {
             observable.toPromise().then((resp: any) => {
-              this.handleAlphapayResponse(resp);
+              this.handleAlphapayQRCodeResponse(resp);
             });
           })
           .catch((e) => {
@@ -619,7 +636,12 @@ export class OrderPage implements OnInit, OnDestroy {
           })
           .then((observable) => {
             observable.toPromise().then((resp: any) => {
-              this.handleAlphapayResponse(resp);
+              if (resp && resp.code === 'success') {
+                window.location.href = resp.redirect_url;
+              } else {
+                this.alphaPayResponse = null;
+                this.showAlert("Notice", "Payment failed", "OK");
+              }
             });
           })
           .catch((e) => {
@@ -649,7 +671,12 @@ export class OrderPage implements OnInit, OnDestroy {
           })
           .then((observable) => {
             observable.toPromise().then((resp: any) => {
-              this.handleAlphapayResponse(resp);
+              if (resp && resp.code === "success") {
+                window.location.href = resp.redirect_url;
+              } else {
+                this.alphaPayResponse = null;
+                this.showAlert("Notice", "Payment failed", "OK");
+              }
             });
           })
           .catch((e) => {
@@ -662,7 +689,7 @@ export class OrderPage implements OnInit, OnDestroy {
     });
   }
 
-  handleAlphapayResponse(resp: AlphapayResponseType) {
+  handleAlphapayQRCodeResponse(resp: AlphapayResponseType) {
     console.log(resp);
     if (resp.code == "success") {
       this.alphaPayResponse = resp;
@@ -684,11 +711,17 @@ export class OrderPage implements OnInit, OnDestroy {
       case "moneris":
         return "assets/img/moneris.svg";
       case "wechat":
-        return size === 'small' ? "assets/img/wechat_pay_light.png" : "assets/img/wechat_pay.png";
-      case "alipay": 
-        return size === 'small' ? "assets/img/alipay_transparent.png" : "assets/img/alipay.svg";
+        return size === "small"
+          ? "assets/img/wechat_pay_light.png"
+          : "assets/img/wechat_pay.png";
+      case "alipay":
+        return size === "small"
+          ? "assets/img/alipay_transparent.png"
+          : "assets/img/alipay.svg";
       case "unionpay":
-        return size === 'small' ? "assets/img/union_pay_small.png" : "assets/img/union_pay.png";
+        return size === "small"
+          ? "assets/img/union_pay_small.png"
+          : "assets/img/union_pay.png";
       case "unionpayonline":
         return "assets/img/union_pay.png";
     }
