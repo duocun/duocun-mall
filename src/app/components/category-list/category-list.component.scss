@@ -1,4 +1,10 @@
 $primary-color: #3f51b5;
+
+.row-category{
+    margin-bottom: 0px;
+    padding-left: 0.7rem;
+    padding-right: 0.7rem;
+}
 // mobile
 @media(max-width: 767px) {
     .category-area{
