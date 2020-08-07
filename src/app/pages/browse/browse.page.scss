@@ -56,12 +56,25 @@ ion-searchbar {
     }
   }
 }
+
 @media(max-width: 767px) {
   .wrapper-product-img {
     height: 108px!important;
   }
+  ion-searchbar{
+    display: block;
+  }
+  app-footer{
+    display: none;
+  }
 }
 @media(min-width: 768px) {
+  app-footer{
+    display: block;
+  }
+  ion-searchbar{
+    display: none;
+  }
   ion-button {
     --padding-top: 1rem;
     --padding-bottom: 1rem;

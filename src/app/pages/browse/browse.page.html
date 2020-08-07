@@ -1,19 +1,22 @@
 
 <header [menu]="true" [title]="title" [search]="bSearchOnTitle" [searchKeyword]="search" (onSearch)="handleSearch($event)"></header>
 
+<div class="container category-wrap">
+  <ion-searchbar *ngIf="!bSearchOnTitle"
+  placeholder="{{'Search'|translate}}"
+  debounce="1000"
+  (ionChange)="handleSearch($event)"
+  [value]="search"
+  ></ion-searchbar>
+  
+  <category-list [loading]="loading" [categories]="categories" [selectedId]="selectedCategoryId" (onShowAll)="showAll()" (onSelect)="handleSelectCategory($event)">
+  </category-list>
+</div>
+
 <ion-content>
   <div class="container">
-    <ion-searchbar *ngIf="!bSearchOnTitle"
-      placeholder="{{'Search'|translate}}"
-      debounce="1000"
-      (ionChange)="handleSearch($event)"
-      [value]="search"
-    ></ion-searchbar>
-
     <!-- *ngIf="viewMode === 'category-only'; Else segmentMode" -->
     <ng-container>
-      <category-list [loading]="loading" [categories]="categories" [selectedId]="selectedCategoryId" (onShowAll)="showAll()" (onSelect)="handleSelectCategory($event)">
-      </category-list>
       <ion-row class="ion-padding-start ion-padding-end">
         <ng-container *ngIf="!loading; Else skeleton">
           <ng-container *ngIf="products.length; Else empty">
