@@ -21,7 +21,7 @@ export class SearchPage implements OnInit, OnDestroy {
   location: LocationInterface;
   bSearchOnTitle = false;
   title = "Search";
-
+  backBtn = { url: "/tabs/browse", text: "" };
   private unsubscribe$ = new Subject<void>();
   constructor(
     private route: ActivatedRoute,
@@ -61,6 +61,18 @@ export class SearchPage implements OnInit, OnDestroy {
     this.search = event.detail.value;
     if (this.search) {
       this.getProducts();
+    }else{
+      this.api
+      .get("Products", {type: 'G'})
+      .then((observable) => {
+        observable
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe((resp: Array<ProductInterface>) => {
+            console.log("search page product subscription");
+            this.products = resp;
+            this.loading = false;
+          });
+      });
     }
   }
   async getAvailableMerchantIds() {

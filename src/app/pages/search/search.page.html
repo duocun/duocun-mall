@@ -1,14 +1,16 @@
-<header [menu]="true" [title]="title" [search]="bSearchOnTitle" [searchKeyword]="search" (onSearch)="handleSearch($event)">
-
+<header [menu]="false" [title]="title" [back]="backBtn" [search]="bSearchOnTitle" [searchKeyword]="search" (onSearch)="handleSearch($event)">
 </header>
+<div class="container category-wrap">
+  <ion-searchbar *ngIf="!bSearchOnTitle"
+  placeholder="{{'Search'|translate}}"
+  debounce="1000"
+  (ionChange)="handleSearch($event)"
+  [value]="search"
+  ></ion-searchbar>
+</div>
+
 <ion-content>
   <div class="container">
-    <ion-searchbar *ngIf="!bSearchOnTitle"
-    placeholder="{{'Search'|translate}}"
-    debounce="1000"
-    (ionChange)="handleSearch($event)"
-    [value]="search"
-    ></ion-searchbar>
     <product-list
       [loading]="loading"
       [products]="products"

@@ -1,0 +1,31 @@
+
+ion-searchbar {
+    padding: 0.3rem 0.8rem;
+} 
+
+ion-row{
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.sc-ion-searchbar-ios-h {
+    -webkit-padding-start: 1rem;
+    padding-inline-start: 1rem;
+    -webkit-padding-end: 1rem;
+    padding-inline-end: 1rem;
+  }
+
+.category-wrap{
+    width: 100%;
+}
+
+  
+@media(max-width: 767px) {
+    ion-searchbar{
+        display: block;
+        height: 44px;
+    }
+    app-footer{
+        display: none;
+    }
+}
