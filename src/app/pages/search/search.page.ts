@@ -61,10 +61,8 @@ export class SearchPage implements OnInit, OnDestroy {
     this.search = event.detail.value;
     if (this.search) {
       this.getProducts();
-    }else{
-      this.api
-      .get("Products", {type: 'G'})
-      .then((observable) => {
+    } else {
+      this.api.get("Products", { type: "G" }).then((observable) => {
         observable
           .pipe(takeUntil(this.unsubscribe$))
           .subscribe((resp: Array<ProductInterface>) => {
@@ -119,7 +117,13 @@ export class SearchPage implements OnInit, OnDestroy {
     });
   }
   getProducts() {
-    const query: any = { name: { $regex: this.search } };
+    const query: any = {
+      $or: [
+        { name: { $regex: this.search } },
+        { nameEN: { $regex: this.search } }
+      ]
+    };
+
     if (this.availableMerchantIds && this.availableMerchantIds.length) {
       query.merchantId = { $in: this.availableMerchantIds };
     }
