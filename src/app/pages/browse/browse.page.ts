@@ -124,6 +124,8 @@ export class BrowsePage implements OnInit, OnDestroy {
       this.router.navigate(["/tabs/browse/search"], {
         queryParams: { q: search }
       });
+    }else{
+      this.showAll();
     }
   }
 

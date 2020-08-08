@@ -6,7 +6,24 @@ ion-header {
   background-color: #fff;
   border-bottom: 1px solid #ddd;
 }
-@media(min-width: 992px) {
+@media(max-width: 767px) {
+  ion-searchbar{
+    display: none;
+  }
+  .ion-text-center{
+    display: block;
+    padding-top: 10px;
+  }
+}
+// ipad and desktop
+@media(min-width: 768px) {
+  ion-searchbar{
+    display: block;
+  }
+  .ion-text-center{
+    display: none;
+  }
+
     .header-md::after {
       background-image: none;
     }
