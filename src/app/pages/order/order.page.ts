@@ -188,6 +188,8 @@ export class OrderPage implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.cartSubscription.unsubscribe();
+    // this.socketSvc.alphaPayResp.unsubscribe();
+    this.alphaPayResponse = null;
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
@@ -636,7 +638,7 @@ export class OrderPage implements OnInit, OnDestroy {
           })
           .then((observable) => {
             observable.toPromise().then((resp: any) => {
-              if (resp && resp.code === 'success') {
+              if (resp && resp.code === "success") {
                 window.location.href = resp.redirect_url;
               } else {
                 this.alphaPayResponse = null;

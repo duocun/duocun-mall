@@ -34,8 +34,8 @@ export class PaymentSuccessPage implements OnInit {
           observable.toPromise().then((resp: any) => {
             if (resp.code == "success") {
               this.showAlert("Notice", "Payment success", "OK");
-              this.cartSvc.clearCart();
               this.router.navigate(["/tabs/my-account/order-history"]);
+              this.cartSvc.clearCart();
             } else {
               this.showAlert("Notice", "Payment failed", "OK");
               this.router.navigate(["/tabs/browse/order"]);

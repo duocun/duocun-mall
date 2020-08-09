@@ -45,10 +45,9 @@ export class SocketService {
     });
 
     mSocket.on("to_customer", (data) => {
-      console.log('to_customer', data);
+      console.log("to_customer", data);
       this.receivedMessage.next(data);
     });
-
   }
 
   sendMessage(data: any) {
@@ -66,6 +65,7 @@ export class SocketService {
       console.log("Connected to payment", data);
     });
     this.mSocket.on("alphapay", (data) => {
+      console.log("alphapay event payload", data);
       this.alphaPayResp.next(data);
     });
     this.mSocket.emit("payment_init", {

@@ -61,10 +61,8 @@ export class SearchPage implements OnInit, OnDestroy {
     this.search = event.detail.value;
     if (this.search) {
       this.getProducts();
-    }else{
-      this.api
-      .get("Products", {type: 'G'})
-      .then((observable) => {
+    } else {
+      this.api.get("Products", { type: "G" }).then((observable) => {
         observable
           .pipe(takeUntil(this.unsubscribe$))
           .subscribe((resp: Array<ProductInterface>) => {
