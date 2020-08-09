@@ -117,7 +117,13 @@ export class SearchPage implements OnInit, OnDestroy {
     });
   }
   getProducts() {
-    const query: any = { name: { $regex: this.search } };
+    const query: any = {
+      $or: [
+        { name: { $regex: this.search } },
+        { nameEN: { $regex: this.search } }
+      ]
+    };
+
     if (this.availableMerchantIds && this.availableMerchantIds.length) {
       query.merchantId = { $in: this.availableMerchantIds };
     }
