@@ -60,6 +60,8 @@ export class OrderPage implements OnInit, OnDestroy {
   cvd: string;
   isMobile: boolean;
   alphaPayResponse: AlphapayResponseType | null;
+  title = "Confirm Order";
+  backBtn = { url: "/tabs/cart", text: "" };
   private unsubscribe$ = new Subject<void>();
   constructor(
     private cartSvc: CartService,

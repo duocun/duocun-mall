@@ -48,5 +48,6 @@ export type AlphapayResponseType = {
     qrcode_img: string;
     channel: string;
   };
+  total?: number;
   redirect_url?: string;
 };
