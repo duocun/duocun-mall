@@ -20,7 +20,8 @@ export const environment = {
   monerisHTProfileId: "ht4E3Z1H87Y3327",
   googleAuthClientId:
     "53858676843-kjkp8dt8e01tktpc8pimd3vtlvkcre81.apps.googleusercontent.com",
-  facebookAppId: "3115867368492639"
+  facebookAppId: "3115867368492639",
+  socket: "http://localhost:8000"
 };
 
 /*

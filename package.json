@@ -50,6 +50,7 @@
     "rxjs": "~6.5.1",
     "scriptjs": "^2.5.9",
     "slugify": "^1.4.5",
+    "socket.io-client": "^2.3.0",
     "stripe-angular": "^1.0.2",
     "tslib": "^1.9.0",
     "zone.js": "~0.9.1"
