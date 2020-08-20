@@ -6,7 +6,8 @@ cache:
   directories:
     - node_modules
 
-# script:
+script:
+  - echo "skipping tests"
   # - npm run test
   # - npm run build
 
@@ -18,6 +19,7 @@ cache:
 #   on:
 #     branch: master
 #   local_dir: build
+
 before_deploy:
   - npm run build
 
