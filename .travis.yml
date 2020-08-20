@@ -6,9 +6,9 @@ cache:
   directories:
     - node_modules
 
-script:
+# script:
   # - npm run test
-  - npm run build
+  # - npm run build
 
 # deploy:
 #   provider: pages
@@ -18,6 +18,8 @@ script:
 #   on:
 #     branch: master
 #   local_dir: build
+before_deploy:
+  - npm run build
 
 deploy:
   - provider: s3
