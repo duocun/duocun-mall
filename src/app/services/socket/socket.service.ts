@@ -33,8 +33,9 @@ export class SocketService {
   }
 
   receiveSocket(mSocket): void {
+    console.log('trying to connect to socket');
     mSocket.on("connect", (data) => {
-      console.log("auto connect");
+      console.log("socket connected");
     });
 
     mSocket.on("id", (data) => {
@@ -61,6 +62,7 @@ export class SocketService {
   }
 
   async joinPaymentRoom() {
+    console.log('joining payment room');
     this.mSocket.on("connected_to_payment", (data) => {
       console.log("Connected to payment", data);
     });
