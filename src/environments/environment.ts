@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  api: "https://api.duocun.ca/v1dev",
+  api: "https://api.duocun.ca/v1",
   storageKey: {
     auth: "DUOCUN-AUTH-TOKEN",
     cart: "DUOCUN-CART",
