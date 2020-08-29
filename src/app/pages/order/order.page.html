@@ -192,6 +192,18 @@
             ></ion-button>
           </ion-col>
           <!--  END WECHAT PAY BUTTON  -->
+
+          <ion-col class="col-payment-button col-payment-ali" size="12" align="center">
+            <ion-button 
+              color="success" 
+              size="medium" 
+              expand="full" 
+              translate="Ali Pay"
+              [disabled]="loading || processing"
+              (click)="snappayWebPay('ALIPAY')"
+            ></ion-button>
+          </ion-col>
+
         </ng-container>
         <!-- BEGIN PAY BY DEPOSIT BUTTON -->
         <ion-col size="12" align="center" *ngIf="paymentMethod === PaymentMethod.PREPAY">

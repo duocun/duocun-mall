@@ -22,6 +22,8 @@ import { Subscription } from "rxjs";
 import { Subject } from "rxjs";
 import { takeUntil, filter } from "rxjs/operators";
 import * as moment from "moment";
+import { PaymentService } from 'src/app/services/payment';
+
 interface OrderErrorInterface {
   type: "order" | "payment";
   message: string;
@@ -68,6 +70,7 @@ export class OrderPage implements OnInit, OnDestroy {
     private translator: TranslateService,
     private locSvc: LocationService,
     private contextSvc: ContextService,
+    private paymentSvc: PaymentService,
     private router: Router,
     private loader: LoadingController
   ) {
@@ -357,6 +360,38 @@ export class OrderPage implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   *  paymentMethod --- ALIPAY WECHATPAY UNIONPAY
+   * 
+   * 
+   */ 
+  snappayWebPay(paymentMethod: string) {
+    this.paymentMethod = paymentMethod;
+    this.processing = true;
+    this.presentLoading();
+    this.saveOrders(this.orders).then((observable) => {
+      observable
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(
+          (resp: { code: string; data: Array<Order.OrderInterface> }) => {
+            console.log("order page save order subscription");
+            if (resp.code !== "success") {
+              return this.handleInvalidOrders(resp.data);
+            }
+
+            this.payBySnappayV2(
+              this.appCode,
+              'pay.webpay',
+              paymentMethod,
+              resp.data,
+              this.charge.payable,
+              'my description'
+            );
+          }
+        );
+    });
+  }
+
   payByDeposit() {
     this.saveOrders(this.orders).then((observable) => {
       observable
@@ -531,6 +566,50 @@ export class OrderPage implements OnInit, OnDestroy {
       paymentId: orders ? orders[0].paymentId : null,
       merchantNames: orders.map((order) => order.merchantName)
     });
+  }
+
+  payBySnappayV2(
+    appCode: string,
+    method: string,
+    paymentMethod: string,
+    // accountId: string,
+    orders: Array<Order.OrderInterface>,
+    amount: number,
+    description: string
+  ) {
+    const returnUrl = `${window.location.origin}/tabs/my-account/transaction-history?state=${appCode}`;
+    this.paymentSvc.pay(
+      'snappay',
+      method,
+      paymentMethod,
+      orders,
+      amount,
+      description,
+      returnUrl
+    ).then((observable) => {
+        observable.pipe(takeUntil(this.unsubscribe$)).subscribe((resp: any) => {
+          console.log("order page pay by snappay subscription");
+          if (resp.err === PaymentError.NONE) {
+            this.cartSubscription.unsubscribe();
+            this.cartSvc.clearCart();
+            window.location.href = resp.url;
+          } else {
+            if (resp.data) {
+              this.handleInvalidOrders(resp.data);
+            } else {
+              this.showAlert("Notice", "Payment failed", "OK");
+              this.processing = false;
+              this.dismissLoading();
+            }
+          }
+        });
+      })
+      .catch((e) => {
+        console.error(e);
+        this.showAlert("Notice", "Payment failed", "OK");
+        this.processing = false;
+        this.dismissLoading();
+      });
   }
 
   payBySnappay(
