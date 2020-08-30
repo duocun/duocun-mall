@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { SnappayService } from "./snappay.service";
 
-
 export const ResponseStatus = {
   SUCCESS: "S",
   FAIL: "F"
