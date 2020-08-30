@@ -101,25 +101,24 @@ export class OrderPage implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    // fix me
-    // await this.socketSvc.joinPaymentRoom();
-    // this.socketSvc.alphaPayResp.subscribe(
-    //   (payload: { success: boolean; paymentId: string }) => {
-    //     if (!payload) {
-    //       return;
-    //     }
-    //     if (payload.success) {
-    //       this.router.navigate(["/payment-success"], {
-    //         queryParams: {
-    //           paymentId: payload.paymentId
-    //         }
-    //       });
-    //     } else {
-    //       console.warn("Payment failed");
-    //       console.log(payload);
-    //     }
-    //   }
-    // );
+    await this.socketSvc.joinPaymentRoom();
+    this.socketSvc.alphaPayResp.subscribe(
+      (payload: { success: boolean; paymentId: string }) => {
+        if (!payload) {
+          return;
+        }
+        if (payload.success) {
+          this.router.navigate(["/payment-success"], {
+            queryParams: {
+              paymentId: payload.paymentId
+            }
+          });
+        } else {
+          console.warn("Payment socket init failed");
+          console.log(payload);
+        }
+      }
+    );
 
     await this.presentLoading();
     this.paymentMethod = PaymentMethod.CREDIT_CARD;
