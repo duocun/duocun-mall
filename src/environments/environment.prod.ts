@@ -14,16 +14,9 @@ export const environment = {
   GOOGLE_MAP_KEY: "AIzaSyCpOl3ou-sgPg5vfHQO0jWXkS1gJ4SDg8M",
   timezone: "America/Toronto",
   monerisMode: "prod",
-<<<<<<< HEAD
-  monerisHTProfileId: "htV6VVM9NH24SXX",
-  googleAuthClientId:
-    "53858676843-kjkp8dt8e01tktpc8pimd3vtlvkcre81.apps.googleusercontent.com",
-  facebookAppId: "3115867368492639",
-  socket: "https://duocun.com.cn/api"
-=======
+
   monerisHTProfileId: "",
   googleAuthClientId: "",
   facebookAppId: "",
   socket: "https://api.duocun.ca/v1"
->>>>>>> snappay-ali
 };

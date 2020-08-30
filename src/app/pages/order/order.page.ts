@@ -4,7 +4,8 @@ import * as Order from "src/app/models/order.model";
 import {
   PaymentMethod,
   PaymentError,
-  AlphapayResponseType
+  AlphapayResponseType,
+  IPaymentResponse
 } from "src/app/models/payment.model";
 import { getPictureUrl, ProductInterface } from "src/app/models/product.model";
 import { AccountInterface } from "src/app/models/account.model";
@@ -25,11 +26,13 @@ import { takeUntil, filter } from "rxjs/operators";
 import * as moment from "moment";
 import { DeviceDetectorService } from "ngx-device-detector";
 import { SocketService } from "src/app/services/socket/socket.service";
+
 import {
-  PaymentService,
-  IPaymentResponse,
-  ResponseStatus
-} from "src/app/services/payment";
+  SnappayPaymentMethod,
+  SnappayMethod
+} from "../../models/payment.model";
+
+import { PaymentService } from "src/app/services/payment";
 
 interface OrderErrorInterface {
   type: "order" | "payment";
@@ -98,24 +101,26 @@ export class OrderPage implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    await this.socketSvc.joinPaymentRoom();
-    this.socketSvc.alphaPayResp.subscribe(
-      (payload: { success: boolean; paymentId: string }) => {
-        if (!payload) {
-          return;
-        }
-        if (payload.success) {
-          this.router.navigate(["/payment-success"], {
-            queryParams: {
-              paymentId: payload.paymentId
-            }
-          });
-        } else {
-          console.warn("Payment failed");
-          console.log(payload);
-        }
-      }
-    );
+    // fix me
+    // await this.socketSvc.joinPaymentRoom();
+    // this.socketSvc.alphaPayResp.subscribe(
+    //   (payload: { success: boolean; paymentId: string }) => {
+    //     if (!payload) {
+    //       return;
+    //     }
+    //     if (payload.success) {
+    //       this.router.navigate(["/payment-success"], {
+    //         queryParams: {
+    //           paymentId: payload.paymentId
+    //         }
+    //       });
+    //     } else {
+    //       console.warn("Payment failed");
+    //       console.log(payload);
+    //     }
+    //   }
+    // );
+
     await this.presentLoading();
     this.paymentMethod = PaymentMethod.CREDIT_CARD;
     this.authSvc
@@ -239,97 +244,6 @@ export class OrderPage implements OnInit, OnDestroy {
     return getPictureUrl(item);
   }
 
-  stripePay(token: StripeToken) {
-    throw new Error("Stripe payment is disabled. Use Moneris instead");
-    this.paymentMethod = PaymentMethod.CREDIT_CARD;
-    this.processing = true;
-    this.presentLoading();
-    this.stripe
-      .createPaymentMethod({
-        type: "card",
-        card: {
-          token: token.id
-        },
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        billing_details: { name: this.account.username }
-      })
-      .then((res) => {
-        if (res.error) {
-          this.showAlert("Notice", "Payment failed", "OK");
-          return;
-        }
-        const paymentMethodId = res.paymentMethod.id;
-        this.saveOrders(this.orders)
-          .then((observable) => {
-            observable
-              .pipe(takeUntil(this.unsubscribe$))
-              .subscribe(
-                (resp: { code: string; data: Array<Order.OrderInterface> }) => {
-                  console.log("order page save order subscription");
-                  if (resp.code !== "success") {
-                    return this.handleInvalidOrders(resp.data);
-                  }
-                  const newOrders = resp.data;
-                  this.savePayment(newOrders, paymentMethodId)
-                    .then((observable) => {
-                      observable
-                        .pipe(takeUntil(this.unsubscribe$))
-                        .subscribe(async (resp: any) => {
-                          console.log("order page save payment subscription");
-                          if (resp.err === PaymentError.NONE) {
-                            this.showAlert("Notice", "Payment success", "OK");
-                            this.cartSubscription.unsubscribe();
-                            this.cartSvc.clearCart();
-                            await this.authSvc.updateData();
-                            this.processing = false;
-                            await this.dismissLoading();
-                            console.log("navigate to order history");
-                            this.router.navigate(
-                              ["/tabs/my-account/order-history"],
-                              {
-                                replaceUrl: true
-                              }
-                            );
-                          } else {
-                            if (resp.data) {
-                              this.handleInvalidOrders(resp.data);
-                            } else {
-                              this.showAlert("Notice", "Payment failed", "OK");
-                              this.processing = false;
-                              this.dismissLoading();
-                            }
-                          }
-                        });
-                    })
-                    .catch((e) => {
-                      console.error(e);
-                      this.error = {
-                        type: "payment",
-                        message: "Cannot save payment"
-                      };
-                      this.processing = false;
-                      this.dismissLoading();
-                    });
-                }
-              );
-          })
-          .catch((e) => {
-            console.error(e);
-            this.error = {
-              type: "order",
-              message: "Cannot save orders"
-            };
-            this.processing = false;
-            this.dismissLoading();
-          });
-      })
-      .catch((e) => {
-        console.error(e);
-        this.processing = false;
-        this.dismissLoading();
-      });
-  }
-
   wechatPay() {
     this.paymentMethod = PaymentMethod.WECHAT;
     this.processing = true;
@@ -355,12 +269,11 @@ export class OrderPage implements OnInit, OnDestroy {
   }
 
   /**
-   *  paymentMethod --- ALIPAY WECHATPAY UNIONPAY
-   *
+   *  paymentMethod --- SnappayPaymentMethod: ALIPAY WECHATPAY UNIONPAY
+   *  method --- SnappayMethod
    *
    */
-
-  snappayWebPay(paymentMethod: string) {
+  handleSnappay(paymentMethod: string, method: string) {
     this.paymentMethod = paymentMethod;
     this.processing = true;
     this.presentLoading();
@@ -376,15 +289,27 @@ export class OrderPage implements OnInit, OnDestroy {
 
             this.payBySnappayV2(
               this.appCode,
-              "pay.webpay",
+              method,
               paymentMethod,
               resp.data,
               this.charge.payable,
-              "my description"
+              "Description"
             );
           }
         );
     });
+  }
+
+  snappayByAliQrcode() {
+    this.handleSnappay(SnappayPaymentMethod.ALI, SnappayMethod.QRCODE);
+  }
+
+  snappayByWechatQrcode() {
+    this.handleSnappay(SnappayPaymentMethod.WECHAT, SnappayMethod.QRCODE);
+  }
+
+  snappayByWechatH5() {
+    this.handleSnappay(SnappayPaymentMethod.WECHAT, SnappayMethod.H5);
   }
 
   payByDeposit() {

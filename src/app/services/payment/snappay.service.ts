@@ -18,6 +18,7 @@ export class SnappayService {
     returnUrl: string // `${window.location.origin}/tabs/my-account/transaction-history?state=${appCode}`;
   ) {
     const paymentId = orders ? orders[0].paymentId : null;
+
     return this.api.post("payments/snappay/pay", {
       // paymentActionCode: "P",
       method,

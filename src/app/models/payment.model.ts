@@ -53,3 +53,25 @@ export type AlphapayResponseType = {
   total?: number;
   redirect_url?: string;
 };
+
+export interface IPaymentResponse {
+  status: string; // ResponseStatus
+  code: string; // stripe/snappay return code
+  decline_code: string; // strip only
+  msg: string; // stripe/snappay retrun message
+  chargeId: string; // stripe only { chargeId:x }
+  url: string; // snappay {url: data[0].h5pay_url} //  { code, data, msg, total, psn, sign }
+  err: string;
+}
+
+export const SnappayMethod = {
+  WEB: "pay.webpay",
+  H5: "pay.h5pay",
+  QRCODE: "pay.qrcodepay"
+};
+
+export const SnappayPaymentMethod = {
+  ALI: "ALIPAY",
+  WECHAT: "WECHATPAY",
+  UNIONPAY: "UNIONPAY_QR"
+};

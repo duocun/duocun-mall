@@ -157,7 +157,7 @@
           </ion-col>
           <!-- BEGIN WECHAT PAY BUTTON IN WECHAT APP -->
           <ng-container *ngIf="isWechatBrowser(); Else normalButtons">
-            <ion-col class="col-payment-button col-payment-wechat" size="12" align="center">
+            <!-- <ion-col class="col-payment-button col-payment-wechat" size="12" align="center">
               <ion-button 
                 color="success" 
                 size="medium" 
@@ -168,7 +168,7 @@
                 <img src="{{getPaymentGatewayLogo('wechat')}}" />
                 <ion-label translate="Wechat Pay"></ion-label>
               </ion-button>
-            </ion-col>
+            </ion-col> -->
             <!-- <ion-col class="col-payment-button col-payment-alipay" size="12" align="center">
               <ion-button 
                 size="medium" 
@@ -190,10 +190,9 @@
             </ion-col> -->
           </ng-container>
           <!--  END WECHAT PAY BUTTON  -->
-<<<<<<< HEAD
           <!-- BEGIN ALPHAPAY BUTTONS IN PC BROWSER -->
           <ng-template #normalButtons>
-            <ion-col class="col-payment-button col-payment-wechat" size="12" align="center" *ngIf="!isMobile">
+            <!-- <ion-col class="col-payment-button col-payment-wechat" size="12" align="center" *ngIf="!isMobile">
               <ion-button 
                 color="success" 
                 size="medium" 
@@ -226,13 +225,47 @@
                 <img src="{{getPaymentGatewayLogo('unionpay')}}" />
                 <ion-label translate="UnionPay"></ion-label>
               </ion-button>
-            </ion-col>
+            </ion-col> -->
           </ng-template>
           <!--  END ALPHAPAY BUTTONS IN PC BROWSER  -->
-=======
+
+          <!-- translate="Wechat Pay" -->
+          <ion-col class="col-payment-button col-payment-wechat" size="12" align="center" *ngIf="isWechatBrowser()">
+            <ion-button 
+              color="success" 
+              size="medium" 
+              expand="full" 
+              [disabled]="loading || processing"
+              (click)="snappayByWechatH5()"
+            >
+            Snappay Wechat H5 pay
+            </ion-col>
+
+            <ion-col class="col-payment-button col-payment-wechat" size="12" align="center" *ngIf="!isWechatBrowser()">
+              <ion-button 
+                color="success" 
+                size="medium" 
+                expand="full" 
+                [disabled]="loading || processing"
+                (click)="snappayByWechatH5()"
+              >
+              Snappay Wechat QrCode pay
+            </ion-col>
 
           <!-- translate="Ali Pay" -->
           <ion-col class="col-payment-button col-payment-ali" size="12" align="center">
+            <ion-button 
+              color="success" 
+              size="medium" 
+              expand="full" 
+              [disabled]="loading || processing"
+              (click)="snappayByAliQrcode()"
+            >
+            Snappay Ali QrCode pay
+          </ion-button>
+
+
+          <!-- <ion-col class="col-payment-button col-payment-ali" size="12" align="center">
             <ion-button 
               color="success" 
               size="medium" 
@@ -250,19 +283,18 @@
               [disabled]="loading || processing"
               (click)="alphapayH5('ALIPAY')"
             >Alpha Ali web h5</ion-button>
-          </ion-col>
+          </ion-col> -->
 
-          <ion-col class="col-payment-button col-payment-ali" size="12" align="center">
+          <!-- <ion-col class="col-payment-button col-payment-ali" size="12" align="center">
             <ion-button 
               color="success" 
               size="medium" 
               expand="full" 
               [disabled]="loading || processing"
-              (click)="snappayWebPay('ALIPAY')"
+              (click)="snappayByWeb('ALIPAY')"
             >Snappay Ali web pay</ion-button>
-          </ion-col>
+          </ion-col> -->
 
->>>>>>> snappay-ali
         </ng-container>
         <!-- BEGIN PAY BY DEPOSIT BUTTON -->
         <ion-col size="12" align="center" *ngIf="paymentMethod === PaymentMethod.PREPAY">
