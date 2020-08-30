@@ -22,7 +22,11 @@ import { Subscription } from "rxjs";
 import { Subject } from "rxjs";
 import { takeUntil, filter } from "rxjs/operators";
 import * as moment from "moment";
-import { PaymentService } from 'src/app/services/payment';
+import {
+  PaymentService,
+  IPaymentResponse,
+  ResponseStatus
+} from "src/app/services/payment";
 
 interface OrderErrorInterface {
   type: "order" | "payment";
@@ -362,9 +366,10 @@ export class OrderPage implements OnInit, OnDestroy {
 
   /**
    *  paymentMethod --- ALIPAY WECHATPAY UNIONPAY
-   * 
-   * 
-   */ 
+   *
+   *
+   */
+
   snappayWebPay(paymentMethod: string) {
     this.paymentMethod = paymentMethod;
     this.processing = true;
@@ -381,11 +386,11 @@ export class OrderPage implements OnInit, OnDestroy {
 
             this.payBySnappayV2(
               this.appCode,
-              'pay.webpay',
+              "pay.webpay",
               paymentMethod,
               resp.data,
               this.charge.payable,
-              'my description'
+              "my description"
             );
           }
         );
@@ -578,31 +583,35 @@ export class OrderPage implements OnInit, OnDestroy {
     description: string
   ) {
     const returnUrl = `${window.location.origin}/tabs/my-account/transaction-history?state=${appCode}`;
-    this.paymentSvc.pay(
-      'snappay',
-      method,
-      paymentMethod,
-      orders,
-      amount,
-      description,
-      returnUrl
-    ).then((observable) => {
-        observable.pipe(takeUntil(this.unsubscribe$)).subscribe((resp: any) => {
-          console.log("order page pay by snappay subscription");
-          if (resp.err === PaymentError.NONE) {
-            this.cartSubscription.unsubscribe();
-            this.cartSvc.clearCart();
-            window.location.href = resp.url;
-          } else {
-            if (resp.data) {
-              this.handleInvalidOrders(resp.data);
+    this.paymentSvc
+      .pay(
+        "snappay",
+        method,
+        paymentMethod,
+        orders,
+        amount,
+        description,
+        returnUrl
+      )
+      .then((observable) => {
+        observable
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe((resp: IPaymentResponse) => {
+            if (resp.err === PaymentError.NONE) {
+              this.cartSubscription.unsubscribe();
+              this.cartSvc.clearCart();
+              window.location.href = resp.url;
             } else {
+              // fix me
+              // if (resp.data) {
+              //   this.handleInvalidOrders(resp.data);
+              // } else {
               this.showAlert("Notice", "Payment failed", "OK");
               this.processing = false;
               this.dismissLoading();
+              //}
             }
-          }
-        });
+          });
       })
       .catch((e) => {
         console.error(e);

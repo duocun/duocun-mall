@@ -18,6 +18,7 @@ export const environment = {
   timezone: "Asia/Shanghai",
   monerisMode: "prod",
   monerisHTProfileId: "ht4E3Z1H87Y3327",
+  GOOGLE_MAP_KEY: "AIzaSyCpOl3ou-sgPg5vfHQO0jWXkS1gJ4SDg8M",
   googleAuthClientId:
     "53858676843-kjkp8dt8e01tktpc8pimd3vtlvkcre81.apps.googleusercontent.com",
   facebookAppId: "3115867368492639",

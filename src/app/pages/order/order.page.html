@@ -193,15 +193,35 @@
           </ion-col>
           <!--  END WECHAT PAY BUTTON  -->
 
+          <!-- translate="Ali Pay" -->
           <ion-col class="col-payment-button col-payment-ali" size="12" align="center">
             <ion-button 
               color="success" 
               size="medium" 
               expand="full" 
-              translate="Ali Pay"
+              [disabled]="loading || processing"
+              (click)="alphapayWeb('ALIPAY')"
+            >Alpha Ali web pay</ion-button>
+          </ion-col>
+
+          <ion-col class="col-payment-button col-payment-ali" size="12" align="center">
+            <ion-button 
+              color="success" 
+              size="medium" 
+              expand="full" 
+              [disabled]="loading || processing"
+              (click)="alphapayH5('ALIPAY')"
+            >Alpha Ali web h5</ion-button>
+          </ion-col>
+
+          <ion-col class="col-payment-button col-payment-ali" size="12" align="center">
+            <ion-button 
+              color="success" 
+              size="medium" 
+              expand="full" 
               [disabled]="loading || processing"
               (click)="snappayWebPay('ALIPAY')"
-            ></ion-button>
+            >Snappay Ali web pay</ion-button>
           </ion-col>
 
         </ng-container>
