@@ -23,17 +23,14 @@ import { Subscription } from "rxjs";
 import { Subject } from "rxjs";
 import { takeUntil, filter } from "rxjs/operators";
 import * as moment from "moment";
-<<<<<<< HEAD
 import { DeviceDetectorService } from "ngx-device-detector";
 import { SocketService } from "src/app/services/socket/socket.service";
-=======
 import {
   PaymentService,
   IPaymentResponse,
   ResponseStatus
 } from "src/app/services/payment";
 
->>>>>>> snappay-ali
 interface OrderErrorInterface {
   type: "order" | "payment";
   message: string;
@@ -241,8 +238,6 @@ export class OrderPage implements OnInit, OnDestroy {
   getPictureUrl(item: ProductInterface) {
     return getPictureUrl(item);
   }
-<<<<<<< HEAD
-=======
 
   stripePay(token: StripeToken) {
     throw new Error("Stripe payment is disabled. Use Moneris instead");
@@ -392,7 +387,6 @@ export class OrderPage implements OnInit, OnDestroy {
     });
   }
 
->>>>>>> snappay-ali
   payByDeposit() {
     this.saveOrders(this.orders).then((observable) => {
       observable
