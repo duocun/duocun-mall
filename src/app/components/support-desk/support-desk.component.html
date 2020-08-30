@@ -1,0 +1,73 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title class="ion-text-center" translate="Help Center"></ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content #content fullscreen>
+  <ion-infinite-scroll *ngIf = "userId !== ''" threshold="100px" (ionInfinite)="loadData($event)" [disabled]="allLoaded" position="top">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="{{ 'Loading more data...' | translate }}">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+  <ion-grid>
+    <ng-container *ngFor = "let messageItem of messageList; index as index;">
+      <ion-row [class] = "messageItem.sender === userId ? 'message-right' : 'message-left'">
+        <div class="message-datetime"
+            *ngIf="index === 0 || (index > 0 && messageList[index].createdAt - messageList[index - 1].createdAt > 300000)">
+            <span *ngIf="index === 0">{{ getMessageDate(messageItem.createdAt) }}
+                {{ messageItem.createdAt | date: 'HH:mm' }}</span>
+            <span
+                *ngIf="index > 0 && messageList[index].createdAt - messageList[index - 1].createdAt > 300000">
+                {{ getMessageDate(messageItem.createdAt)}}
+                {{ messageItem.createdAt | date: 'HH:mm' }}
+            </span>
+        </div>
+        <ion-col class = "message-col">
+          <ion-avatar>
+            <ng-template [ngIf] = "messageItem.senderImg" [ngIfElse] = "originalAvatar">
+              <img [src] = "messageItem.senderImg" /> 
+            </ng-template>
+            <ng-template #originalAvatar>
+              <img src = "assets/img/user.png" *ngIf = "messageItem.sender === userId" />
+              <img src = "assets/img/manager.png" *ngIf = "messageItem.sender !== userId" />
+            </ng-template>
+          </ion-avatar>
+          <div class = "message-container">
+            <span class="arrow"></span>
+            <ng-template [ngIf] = "messageItem.image">
+                <div class = "message-image-container">
+                  <img class = "message-image" [src] = "messageItem.image">
+                  <!-- <img *ngIf = "messageItem.imageUrl" class = "message-image" [src] = "messageItem.imageUrl"> -->
+                </div>
+            </ng-template>
+            {{ messageItem.message }}
+          </div>
+        </ion-col>        
+      </ion-row>
+    </ng-container>    
+  </ion-grid>
+</ion-content>
+<ion-footer>
+  <div class="image-container">
+    <ion-button class="image-clear-btn" fill="clear" shape="round" (click)="onClearImage()" *ngIf="mediaUrl">
+        <ion-icon name="close"></ion-icon>
+    </ion-button>
+    <img [src]="mediaUrl" *ngIf="mediaUrl" />
+  </div>
+  <ion-item lines="none" class="ion-no-margin ion-no-padding">
+    <ion-textarea class="message-input" placeholder="{{ 'Enter message ...' | translate }}"
+        auto-grow="true" [(ngModel)]="message" (keypress)="onKeyPress($event)">
+    </ion-textarea>
+    <ion-button class = "image-btn" (click) = "fileInput.click()" slot="start">
+        <ion-icon class = "chat-icon chat-image-icon" name="image-outline"></ion-icon>
+    </ion-button>
+    <input #fileInput class="image-upload" type="file" (change)="onFileChanged($event)" accept="image/*">
+    <ion-button class = "send-btn" (click) = "onSend()" slot="end">
+        <ion-icon name="send" class = "chat-icon chat-send-icon"></ion-icon>
+    </ion-button>
+  </ion-item>
+</ion-footer>

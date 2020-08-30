@@ -71,6 +71,7 @@ export class AuthService {
       this.account = null;
       this.account$.next(this.account);
       this.authState.next(false);
+      localStorage.removeItem("cs-userid");
     });
   }
 

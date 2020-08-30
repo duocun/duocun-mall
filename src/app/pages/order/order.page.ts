@@ -23,8 +23,17 @@ import { Subscription } from "rxjs";
 import { Subject } from "rxjs";
 import { takeUntil, filter } from "rxjs/operators";
 import * as moment from "moment";
+<<<<<<< HEAD
 import { DeviceDetectorService } from "ngx-device-detector";
 import { SocketService } from "src/app/services/socket/socket.service";
+=======
+import {
+  PaymentService,
+  IPaymentResponse,
+  ResponseStatus
+} from "src/app/services/payment";
+
+>>>>>>> snappay-ali
 interface OrderErrorInterface {
   type: "order" | "payment";
   message: string;
@@ -71,6 +80,7 @@ export class OrderPage implements OnInit, OnDestroy {
     private translator: TranslateService,
     private locSvc: LocationService,
     private contextSvc: ContextService,
+    private paymentSvc: PaymentService,
     private router: Router,
     private loader: LoadingController,
     private deviceDetector: DeviceDetectorService,
@@ -231,6 +241,158 @@ export class OrderPage implements OnInit, OnDestroy {
   getPictureUrl(item: ProductInterface) {
     return getPictureUrl(item);
   }
+<<<<<<< HEAD
+=======
+
+  stripePay(token: StripeToken) {
+    throw new Error("Stripe payment is disabled. Use Moneris instead");
+    this.paymentMethod = PaymentMethod.CREDIT_CARD;
+    this.processing = true;
+    this.presentLoading();
+    this.stripe
+      .createPaymentMethod({
+        type: "card",
+        card: {
+          token: token.id
+        },
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        billing_details: { name: this.account.username }
+      })
+      .then((res) => {
+        if (res.error) {
+          this.showAlert("Notice", "Payment failed", "OK");
+          return;
+        }
+        const paymentMethodId = res.paymentMethod.id;
+        this.saveOrders(this.orders)
+          .then((observable) => {
+            observable
+              .pipe(takeUntil(this.unsubscribe$))
+              .subscribe(
+                (resp: { code: string; data: Array<Order.OrderInterface> }) => {
+                  console.log("order page save order subscription");
+                  if (resp.code !== "success") {
+                    return this.handleInvalidOrders(resp.data);
+                  }
+                  const newOrders = resp.data;
+                  this.savePayment(newOrders, paymentMethodId)
+                    .then((observable) => {
+                      observable
+                        .pipe(takeUntil(this.unsubscribe$))
+                        .subscribe(async (resp: any) => {
+                          console.log("order page save payment subscription");
+                          if (resp.err === PaymentError.NONE) {
+                            this.showAlert("Notice", "Payment success", "OK");
+                            this.cartSubscription.unsubscribe();
+                            this.cartSvc.clearCart();
+                            await this.authSvc.updateData();
+                            this.processing = false;
+                            await this.dismissLoading();
+                            console.log("navigate to order history");
+                            this.router.navigate(
+                              ["/tabs/my-account/order-history"],
+                              {
+                                replaceUrl: true
+                              }
+                            );
+                          } else {
+                            if (resp.data) {
+                              this.handleInvalidOrders(resp.data);
+                            } else {
+                              this.showAlert("Notice", "Payment failed", "OK");
+                              this.processing = false;
+                              this.dismissLoading();
+                            }
+                          }
+                        });
+                    })
+                    .catch((e) => {
+                      console.error(e);
+                      this.error = {
+                        type: "payment",
+                        message: "Cannot save payment"
+                      };
+                      this.processing = false;
+                      this.dismissLoading();
+                    });
+                }
+              );
+          })
+          .catch((e) => {
+            console.error(e);
+            this.error = {
+              type: "order",
+              message: "Cannot save orders"
+            };
+            this.processing = false;
+            this.dismissLoading();
+          });
+      })
+      .catch((e) => {
+        console.error(e);
+        this.processing = false;
+        this.dismissLoading();
+      });
+  }
+
+  wechatPay() {
+    this.paymentMethod = PaymentMethod.WECHAT;
+    this.processing = true;
+    this.presentLoading();
+    this.saveOrders(this.orders).then((observable) => {
+      observable
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(
+          (resp: { code: string; data: Array<Order.OrderInterface> }) => {
+            console.log("order page save order subscription");
+            if (resp.code !== "success") {
+              return this.handleInvalidOrders(resp.data);
+            }
+            this.payBySnappay(
+              this.appCode,
+              this.account._id,
+              resp.data,
+              this.charge.payable
+            );
+          }
+        );
+    });
+  }
+
+  /**
+   *  paymentMethod --- ALIPAY WECHATPAY UNIONPAY
+   *
+   *
+   */
+
+  snappayWebPay(paymentMethod: string) {
+    this.paymentMethod = paymentMethod;
+    this.processing = true;
+    this.presentLoading();
+    this.saveOrders(this.orders).then((observable) => {
+      observable
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(
+          (resp: { code: string; data: Array<Order.OrderInterface> }) => {
+            console.log("order page save order subscription");
+            if (resp.code !== "success") {
+              return this.handleInvalidOrders(resp.data);
+            }
+
+            this.payBySnappayV2(
+              this.appCode,
+              "pay.webpay",
+              paymentMethod,
+              resp.data,
+              this.charge.payable,
+              "my description"
+            );
+          }
+        );
+    });
+  }
+
+>>>>>>> snappay-ali
   payByDeposit() {
     this.saveOrders(this.orders).then((observable) => {
       observable
@@ -401,6 +563,54 @@ export class OrderPage implements OnInit, OnDestroy {
       paymentId: orders ? orders[0].paymentId : null,
       merchantNames: orders.map((order) => order.merchantName)
     });
+  }
+
+  payBySnappayV2(
+    appCode: string,
+    method: string,
+    paymentMethod: string,
+    // accountId: string,
+    orders: Array<Order.OrderInterface>,
+    amount: number,
+    description: string
+  ) {
+    const returnUrl = `${window.location.origin}/tabs/my-account/transaction-history?state=${appCode}`;
+    this.paymentSvc
+      .pay(
+        "snappay",
+        method,
+        paymentMethod,
+        orders,
+        amount,
+        description,
+        returnUrl
+      )
+      .then((observable) => {
+        observable
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe((resp: IPaymentResponse) => {
+            if (resp.err === PaymentError.NONE) {
+              this.cartSubscription.unsubscribe();
+              this.cartSvc.clearCart();
+              window.location.href = resp.url;
+            } else {
+              // fix me
+              // if (resp.data) {
+              //   this.handleInvalidOrders(resp.data);
+              // } else {
+              this.showAlert("Notice", "Payment failed", "OK");
+              this.processing = false;
+              this.dismissLoading();
+              //}
+            }
+          });
+      })
+      .catch((e) => {
+        console.error(e);
+        this.showAlert("Notice", "Payment failed", "OK");
+        this.processing = false;
+        this.dismissLoading();
+      });
   }
 
   payBySnappay(

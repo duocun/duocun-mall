@@ -16,6 +16,7 @@ import { MerchantListComponent } from "./merchant-list/merchant-list.component";
 import { ProductListModule } from "src/app/components/product-list/product-list.module";
 import { FooterModule } from "src/app/components/footer/footer.module";
 import { CartButtonModule } from "src/app/components/cart-button/cart-button.module";
+import { ChatButtonModule } from "src/app/components/chat-button/chat-button.module";
 import { ComponentsModule } from "src/app/components/components.module";
 
 @NgModule({
@@ -32,7 +33,8 @@ import { ComponentsModule } from "src/app/components/components.module";
     ProductListModule,
     CartButtonModule,
     ComponentsModule,
-    FooterModule
+    FooterModule,
+    ChatButtonModule
   ],
   declarations: [BrowsePage, MerchantListComponent]
 })

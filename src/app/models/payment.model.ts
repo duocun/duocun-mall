@@ -25,6 +25,8 @@ export const PaymentError = {
 export const PaymentMethod = {
   CASH: "CA",
   WECHAT: "W",
+  ALI: "A",
+  UNIONPAY: "UP",
   CREDIT_CARD: "CC",
   PREPAY: "P",
   ALPHA_WECHAT: "AW",

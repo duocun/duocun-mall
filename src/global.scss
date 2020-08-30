@@ -82,6 +82,17 @@ ion-content > .container {
 .cursor-pointer {
   cursor: pointer;
 }
+@media(min-width: 768px) {
+  .modal-support-desk {
+    --max-width: 480px;
+    .modal-wrapper.sc-ion-modal-md {
+      display: block;
+      position: fixed;
+      right: 30px;
+      bottom: 120px;
+    }
+  }
+}
 @media(prefers-color-scheme: dark) {
   ion-searchbar {
     --background: var(--ion-color-light)!important;

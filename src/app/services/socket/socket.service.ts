@@ -12,10 +12,9 @@ export class SocketService {
   mSocket: any;
   csUserid: BehaviorSubject<string>;
   receivedMessage: Subject<any>;
-  alphaPayResp: Subject<any>;
+
   constructor(private authSvc: AuthService, private storage: Storage) {
     this.receivedMessage = new Subject();
-    this.alphaPayResp = new Subject();
     this.csUserid = new BehaviorSubject<string>(
       localStorage.getItem("cs-userid")
     );
@@ -25,6 +24,10 @@ export class SocketService {
 
   async getToken() {
     let token = await this.authSvc.getToken();
+    if (token) {
+      return token;
+    }
+    token = await this.storage.get("duocun-socket-client-id");
     return token;
   }
 
@@ -33,9 +36,8 @@ export class SocketService {
   }
 
   receiveSocket(mSocket): void {
-    console.log('trying to connect to socket');
     mSocket.on("connect", (data) => {
-      console.log("socket connected");
+      console.log("auto connect");
     });
 
     mSocket.on("id", (data) => {
@@ -46,7 +48,6 @@ export class SocketService {
     });
 
     mSocket.on("to_customer", (data) => {
-      console.log("to_customer", data);
       this.receivedMessage.next(data);
     });
   }
@@ -58,20 +59,6 @@ export class SocketService {
   joinCustomerServiceRoom(roomId: string) {
     this.mSocket.emit("customer_init", {
       roomId: roomId
-    });
-  }
-
-  async joinPaymentRoom() {
-    console.log('joining payment room');
-    this.mSocket.on("connected_to_payment", (data) => {
-      console.log("Connected to payment", data);
-    });
-    this.mSocket.on("alphapay", (data) => {
-      console.log("alphapay event payload", data);
-      this.alphaPayResp.next(data);
-    });
-    this.mSocket.emit("payment_init", {
-      token: await this.getToken()
     });
   }
 }
