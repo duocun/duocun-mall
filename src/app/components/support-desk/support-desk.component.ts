@@ -36,6 +36,11 @@ export class SupportDeskComponent implements OnInit {
 
   today: Date = new Date();
   senderImageUrl: string = "";
+  isCategorySelectionVisible: boolean = false;
+
+  // for displaying welcome message
+  welcomeMessage: string = "";
+  messageCategory: string = "other";
 
   // for api
   private unsubscribe$ = new Subject<void>();
@@ -63,8 +68,6 @@ export class SupportDeskComponent implements OnInit {
         if (this.receivedMessageSubscriber === null) {
           this.receivedMessageSubscriber = this.socketio.receivedMessage.subscribe(
             (data) => {
-              console.log("message arrived");
-              console.log(data);
 
               // update message to read state
               this.api
@@ -100,7 +103,37 @@ export class SupportDeskComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.getSetting();
+  }
+
+  getSetting(): void{
+    this.api.get(`/Setting`).then((observable) => {
+      observable
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((res: any) => {          
+          if(res.code === "success"){
+            this.welcomeMessage = res.data.welcome_message;
+            const curMessage = {
+              message: this.welcomeMessage,
+              read: true,
+              receiver: this.userId,
+              receiverImg: "",
+              sender: "manager",
+              senderImg: "assets/img/manager.png",
+              senderName: "hi",
+              createdAt: Date.now().toString()
+            };
+            this.messages.push(curMessage);
+            this.messageList.unshift(curMessage);
+
+            setTimeout(() => {
+              this.content.scrollToBottom(-1);
+            }, 2000);
+          }
+        })
+    })
+  }
 
   ngOnDestroy() {
     this.unsubscribe$.next();
@@ -115,7 +148,6 @@ export class SupportDeskComponent implements OnInit {
   }
 
   getMessages(event: any) {
-    console.log(`now getting messages of user ${this.userId}`);
     // if logged in, get messages
     if (this.userId !== "") {
       this.api
@@ -129,7 +161,14 @@ export class SupportDeskComponent implements OnInit {
                   setTimeout(() => {
                     this.content.scrollToBottom(-1);
                   }, 2000);
+
+                  // get last category from messages
+                  const lastIndex = res.data.findIndex(item => item.receiver === this.userId);
+                  if(lastIndex > -1){
+                    this.messageCategory = res.data[lastIndex].category;
+                  }
                 }
+
                 if (res.data.length < 1) {
                   this.allLoaded = true;
                 } else {
@@ -167,8 +206,10 @@ export class SupportDeskComponent implements OnInit {
                     ).reverse();
                     this.pageIndex++;
                   }
-                }
+                }                
               }
+
+              console.log(this.messages);
 
               if (event) event.target.complete();
             });
@@ -199,7 +240,7 @@ export class SupportDeskComponent implements OnInit {
         sentData.senderImg = this.senderImageUrl;
         sentData.image = this.mediaUrl;
         sentData.createdAt = Date.now();
-        console.log(sentData);
+        sentData.category = this.messageCategory;
 
         // send message via socket
         this.socketio.sendMessage(sentData);
@@ -270,5 +311,9 @@ export class SupportDeskComponent implements OnInit {
   loadData(event) {
     console.log("Load Messages...");
     this.getMessages(event);
+  }
+
+  showCategorySelector(): void{
+    this.isCategorySelectionVisible = !this.isCategorySelectionVisible;
   }
 }
