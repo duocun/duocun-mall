@@ -14,8 +14,7 @@ export const environment = {
   timezone: "America/Toronto",
   monerisMode: "prod",
   monerisHTProfileId: "",
-  googleAuthClientId:
-    "",
+  googleAuthClientId: "",
   facebookAppId: "",
   socket: "https://api.duocun.ca/v1"
 };
