@@ -267,6 +267,17 @@
           </ion-button>
           </ion-col>
 
+          <ion-col class="col-payment-button col-payment-ali" size="12" align="center">
+            <ion-button 
+              color="success" 
+              size="medium" 
+              expand="full" 
+              [disabled]="loading || processing"
+              (click)="snappayByAliWeb()"
+            >
+            Snappay Ali Web pay
+          </ion-button>
+          </ion-col>
 
           <!-- <ion-col class="col-payment-button col-payment-ali" size="12" align="center">
             <ion-button 

@@ -298,6 +298,10 @@ export class OrderPage implements OnInit, OnDestroy {
         );
     });
   }
+  
+  snappayByAliWeb() {
+    this.handleSnappay(SnappayPaymentMethod.ALI, SnappayMethod.WEB);
+  }
 
   snappayByAliQrcode() {
     this.handleSnappay(SnappayPaymentMethod.ALI, SnappayMethod.QRCODE);
@@ -493,6 +497,7 @@ export class OrderPage implements OnInit, OnDestroy {
     description: string
   ) {
     const returnUrl = `${window.location.origin}/tabs/my-account/transaction-history?state=${appCode}`;
+    // const returnUrl = `https://dev.duocun.ca/tabs/my-account/transaction-history?state=${appCode}`; // for test
     this.paymentSvc
       .pay(
         "snappay",

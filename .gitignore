@@ -34,3 +34,5 @@ npm-debug.log*
 .env.development
 .env.local
 .env.production
+
+/environments
