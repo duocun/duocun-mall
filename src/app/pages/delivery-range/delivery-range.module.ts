@@ -10,7 +10,7 @@ import { DeliveryRangePage } from "./delivery-range.page";
 import { TranslateModule } from "@ngx-translate/core";
 import { AgmCoreModule } from "@agm/core";
 import { FooterModule } from "src/app/components/footer/footer.module";
-import { environment } from 'src/environments/environment';
+import { environment } from "src/environments/environment";
 
 @NgModule({
   imports: [
