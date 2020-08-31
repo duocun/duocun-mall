@@ -298,7 +298,7 @@ export class OrderPage implements OnInit, OnDestroy {
         );
     });
   }
-  
+
   snappayByAliWeb() {
     this.handleSnappay(SnappayPaymentMethod.ALI, SnappayMethod.WEB);
   }
