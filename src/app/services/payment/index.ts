@@ -21,7 +21,8 @@ export class PaymentService {
     orders: Array<any>, // Array<Order.OrderInterface>,
     amount: number,
     description: string,
-    returnUrl: string
+    returnUrl: string,
+    browserType: string
   ) {
     if (vendor === "snappay") {
       return this.snappaySvc.pay(
@@ -31,7 +32,8 @@ export class PaymentService {
         orders,
         amount,
         description,
-        returnUrl
+        returnUrl,
+        browserType
       );
     } else if (vendor === "alphapay") {
     } else if (vendor === "moneris") {

@@ -242,7 +242,7 @@
             </ion-button>
             </ion-col>
 
-            <ion-col class="col-payment-button col-payment-wechat" size="12" align="center">
+            <!-- <ion-col class="col-payment-button col-payment-wechat" size="12" align="center">
               <ion-button 
                 color="success" 
                 size="medium" 
@@ -252,10 +252,10 @@
               >
               Snappay Wechat QrCode pay
               </ion-button>
-            </ion-col>
+            </ion-col> -->
 
           <!-- translate="Ali Pay" -->
-          <ion-col class="col-payment-button col-payment-ali" size="12" align="center">
+          <!-- <ion-col class="col-payment-button col-payment-ali" size="12" align="center" *ngIf="!isWechatBrowser()">
             <ion-button 
               color="success" 
               size="medium" 
@@ -265,9 +265,21 @@
             >
             Snappay Ali QrCode pay
           </ion-button>
+          </ion-col> -->
+
+          <ion-col class="col-payment-button col-payment-ali" size="12" align="center" *ngIf="!isWechatBrowser()">
+            <ion-button 
+              color="success" 
+              size="medium" 
+              expand="full"
+              [disabled]="loading || processing"
+              (click)="snappayByWechatWeb()"
+            >
+            Snappay Wechat Web pay
+          </ion-button>
           </ion-col>
 
-          <ion-col class="col-payment-button col-payment-ali" size="12" align="center">
+          <ion-col class="col-payment-button col-payment-ali" size="12" align="center" *ngIf="!isWechatBrowser()">
             <ion-button 
               color="success" 
               size="medium" 

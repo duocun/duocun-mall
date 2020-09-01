@@ -15,7 +15,8 @@ export class SnappayService {
     orders: Array<any>, // Array<Order.OrderInterface>,
     amount: number,
     description: string,
-    returnUrl: string // `${window.location.origin}/tabs/my-account/transaction-history?state=${appCode}`;
+    returnUrl: string, // `${window.location.origin}/tabs/my-account/transaction-history?state=${appCode}`;
+    browserType: string
   ) {
     const paymentId = orders ? orders[0].paymentId : null;
 
@@ -27,6 +28,7 @@ export class SnappayService {
       description,
       returnUrl,
       paymentId,
+      browserType,
       merchantNames: orders.map((order) => order.merchantName)
     });
   }

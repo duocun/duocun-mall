@@ -272,7 +272,7 @@ export class OrderPage implements OnInit, OnDestroy {
    *  method --- SnappayMethod
    *
    */
-  handleSnappay(paymentMethod: string, method: string) {
+  handleSnappay(paymentMethod: string, method: string, browserType: string) {
     this.paymentMethod = paymentMethod;
     this.processing = true;
     this.presentLoading();
@@ -292,27 +292,46 @@ export class OrderPage implements OnInit, OnDestroy {
               paymentMethod,
               resp.data,
               this.charge.payable,
-              "Description"
+              "Description",
+              browserType
             );
           }
         );
     });
   }
 
+  snappayByWechatWeb() {
+    const browserType = this.isMobile ? "WAP" : "PC";
+    this.handleSnappay(
+      SnappayPaymentMethod.WECHAT,
+      SnappayMethod.WEB,
+      browserType
+    );
+  }
+
   snappayByAliWeb() {
-    this.handleSnappay(SnappayPaymentMethod.ALI, SnappayMethod.WEB);
+    const browserType = this.isMobile ? "WAP" : "PC";
+    this.handleSnappay(
+      SnappayPaymentMethod.ALI,
+      SnappayMethod.WEB,
+      browserType
+    );
   }
 
   snappayByAliQrcode() {
-    this.handleSnappay(SnappayPaymentMethod.ALI, SnappayMethod.QRCODE);
+    this.handleSnappay(SnappayPaymentMethod.ALI, SnappayMethod.QRCODE, "WAP");
   }
 
   snappayByWechatQrcode() {
-    this.handleSnappay(SnappayPaymentMethod.WECHAT, SnappayMethod.QRCODE);
+    this.handleSnappay(
+      SnappayPaymentMethod.WECHAT,
+      SnappayMethod.QRCODE,
+      "WAP"
+    );
   }
 
   snappayByWechatH5() {
-    this.handleSnappay(SnappayPaymentMethod.WECHAT, SnappayMethod.H5);
+    this.handleSnappay(SnappayPaymentMethod.WECHAT, SnappayMethod.H5, "WAP");
   }
 
   payByDeposit() {
@@ -494,7 +513,8 @@ export class OrderPage implements OnInit, OnDestroy {
     // accountId: string,
     orders: Array<Order.OrderInterface>,
     amount: number,
-    description: string
+    description: string,
+    browserType: string
   ) {
     const returnUrl = `${window.location.origin}/tabs/my-account/transaction-history?state=${appCode}`;
     // const returnUrl = `https://dev.duocun.ca/tabs/my-account/transaction-history?state=${appCode}`; // for test
@@ -506,7 +526,8 @@ export class OrderPage implements OnInit, OnDestroy {
         orders,
         amount,
         description,
-        returnUrl
+        returnUrl,
+        browserType
       )
       .then((observable) => {
         observable
