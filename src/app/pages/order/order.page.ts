@@ -292,7 +292,7 @@ export class OrderPage implements OnInit, OnDestroy {
               paymentMethod,
               resp.data,
               this.charge.payable,
-              "Description",
+              "Duocun Inc.",
               browserType
             );
           }
