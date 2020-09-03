@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  api: "https://api.duocun.ca/v1", // "https://duocun.com.cn/api",
+  api: "https://api.duocun.ca/v1dev", // "https://duocun.com.cn/api",
   storageKey: {
     auth: "DUOCUN-AUTH-TOKEN",
     cart: "DUOCUN-CART",
@@ -11,10 +11,12 @@ export const environment = {
   stripe: "",
   defaultLang: "en",
   gmap: "",
+  GOOGLE_MAP_KEY: "",
   timezone: "America/Toronto",
   monerisMode: "prod",
+
   monerisHTProfileId: "",
   googleAuthClientId: "",
   facebookAppId: "",
-  socket: "https://api.duocun.ca/v1"
+  socket: "https://api.duocun.ca/v1dev"
 };
