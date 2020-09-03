@@ -243,30 +243,6 @@ export class OrderPage implements OnInit, OnDestroy {
     return getPictureUrl(item);
   }
 
-  wechatPay() {
-    this.paymentMethod = PaymentMethod.WECHAT;
-    this.processing = true;
-    this.presentLoading();
-    this.saveOrders(this.orders).then((observable) => {
-      observable
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe(
-          (resp: { code: string; data: Array<Order.OrderInterface> }) => {
-            console.log("order page save order subscription");
-            if (resp.code !== "success") {
-              return this.handleInvalidOrders(resp.data);
-            }
-            this.payBySnappay(
-              this.appCode,
-              this.account._id,
-              resp.data,
-              this.charge.payable
-            );
-          }
-        );
-    });
-  }
-
   /**
    *  paymentMethod --- SnappayPaymentMethod: ALIPAY WECHATPAY UNIONPAY
    *  method --- SnappayMethod
@@ -286,7 +262,7 @@ export class OrderPage implements OnInit, OnDestroy {
               return this.handleInvalidOrders(resp.data);
             }
 
-            this.payBySnappayV2(
+            this.payBySnappay(
               this.appCode,
               method,
               paymentMethod,
@@ -492,25 +468,12 @@ export class OrderPage implements OnInit, OnDestroy {
     return this.api.post("Orders/bulk", orders);
   }
 
-  savePayment(orders: Array<Order.OrderInterface>, paymentMethodId: string) {
-    return this.api.post("ClientPayments/payByCreditCard", {
-      paymentActionCode: "P",
-      appCode: this.appCode,
-      paymentMethodId,
-      accountId: this.account._id,
-      accountName: this.account.username,
-      amount: this.charge.payable,
-      note: "",
-      paymentId: orders ? orders[0].paymentId : null,
-      merchantNames: orders.map((order) => order.merchantName)
-    });
-  }
 
-  payBySnappayV2(
+
+  payBySnappay(
     appCode: string,
     method: string,
     paymentMethod: string,
-    // accountId: string,
     orders: Array<Order.OrderInterface>,
     amount: number,
     description: string,
@@ -548,53 +511,6 @@ export class OrderPage implements OnInit, OnDestroy {
               //}
             }
           });
-      })
-      .catch((e) => {
-        console.error(e);
-        this.showAlert("Notice", "Payment failed", "OK");
-        this.processing = false;
-        this.dismissLoading();
-      });
-  }
-
-  payBySnappay(
-    appCode: string,
-    accountId: string,
-    orders: Array<Order.OrderInterface>,
-    amount: number
-  ) {
-    const returnUrl =
-      window.location.origin +
-      `/tabs/my-account/transaction-history?state=${this.appCode}`;
-    const paymentId = orders ? orders[0].paymentId : null;
-    this.api
-      .post("ClientPayments/payBySnappay", {
-        paymentActionCode: "P",
-        appCode,
-        accountId,
-        amount,
-        returnUrl,
-        note: "",
-        paymentId,
-        merchantNames: orders.map((order) => order.merchantName)
-      })
-      .then((observable) => {
-        observable.pipe(takeUntil(this.unsubscribe$)).subscribe((resp: any) => {
-          console.log("order page pay by snappay subscription");
-          if (resp.err === PaymentError.NONE) {
-            this.cartSubscription.unsubscribe();
-            this.cartSvc.clearCart();
-            window.location.href = resp.url;
-          } else {
-            if (resp.data) {
-              this.handleInvalidOrders(resp.data);
-            } else {
-              this.showAlert("Notice", "Payment failed", "OK");
-              this.processing = false;
-              this.dismissLoading();
-            }
-          }
-        });
       })
       .catch((e) => {
         console.error(e);

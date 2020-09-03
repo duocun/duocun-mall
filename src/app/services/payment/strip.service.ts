@@ -29,7 +29,7 @@
 //                     return this.handleInvalidOrders(resp.data);
 //                   }
 //                   const newOrders = resp.data;
-//                   this.savePayment(newOrders, paymentMethodId)
+//                   this.stripePay(newOrders, paymentMethodId)
 //                     .then((observable) => {
 //                       observable
 //                         .pipe(takeUntil(this.unsubscribe$))

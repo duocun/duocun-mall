@@ -229,7 +229,7 @@
           </ng-template>
           <!--  END ALPHAPAY BUTTONS IN PC BROWSER  -->
 
-          <!-- translate="Wechat Pay" -->
+          <!-- Snappay -->
           <ion-col class="col-payment-button col-payment-wechat" size="12" align="center" *ngIf="isWechatBrowser()">
             <ion-button 
               color="success" 
@@ -240,44 +240,7 @@
               translate="Wechat Pay"
             >
             </ion-button>
-            </ion-col>
-
-            <!-- <ion-col class="col-payment-button col-payment-wechat" size="12" align="center">
-              <ion-button 
-                color="success" 
-                size="medium" 
-                expand="full" 
-                [disabled]="loading || processing"
-                (click)="snappayByWechatH5()"
-              >
-              Snappay Wechat QrCode pay
-              </ion-button>
-            </ion-col> -->
-
-          <!-- translate="Ali Pay" -->
-          <!-- <ion-col class="col-payment-button col-payment-ali" size="12" align="center" *ngIf="!isWechatBrowser()">
-            <ion-button 
-              color="success" 
-              size="medium" 
-              expand="full" 
-              [disabled]="loading || processing"
-              (click)="snappayByAliQrcode()"
-            >
-            Snappay Ali QrCode pay
-          </ion-button>
-          </ion-col> -->
-
-          <!-- <ion-col class="col-payment-button col-payment-ali" size="12" align="center" *ngIf="!isWechatBrowser()">
-            <ion-button 
-              color="success" 
-              size="medium" 
-              expand="full"
-              [disabled]="loading || processing"
-              (click)="snappayByWechatWeb()"
-            >
-            Snappay Wechat Web pay
-          </ion-button>
-          </ion-col> -->
+          </ion-col>
 
           <ion-col class="col-payment-button col-payment-ali" size="12" align="center" *ngIf="!isWechatBrowser()">
             <ion-button 
@@ -309,16 +272,6 @@
               [disabled]="loading || processing"
               (click)="alphapayH5('ALIPAY')"
             >Alpha Ali web h5</ion-button>
-          </ion-col> -->
-
-          <!-- <ion-col class="col-payment-button col-payment-ali" size="12" align="center">
-            <ion-button 
-              color="success" 
-              size="medium" 
-              expand="full" 
-              [disabled]="loading || processing"
-              (click)="snappayByWeb('ALIPAY')"
-            >Snappay Ali web pay</ion-button>
           </ion-col> -->
 
         </ng-container>
