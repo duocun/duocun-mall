@@ -73,5 +73,5 @@ export const SnappayMethod = {
 export const SnappayPaymentMethod = {
   ALI: "ALIPAY",
   WECHAT: "WECHATPAY",
-  UNIONPAY: "UNIONPAY_QR"
+  UNIONPAY: "UNIONPAY"
 };

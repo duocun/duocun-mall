@@ -272,7 +272,7 @@ export class OrderPage implements OnInit, OnDestroy {
    *  method --- SnappayMethod
    *
    */
-  handleSnappay(paymentMethod: string, method: string, browserType: string) {
+  handleSnappay(paymentMethod: string, method: string, browserType: string = null) {
     this.paymentMethod = paymentMethod;
     this.processing = true;
     this.presentLoading();
@@ -300,15 +300,6 @@ export class OrderPage implements OnInit, OnDestroy {
     });
   }
 
-  snappayByWechatWeb() {
-    const browserType = this.isMobile ? "WAP" : "PC";
-    this.handleSnappay(
-      SnappayPaymentMethod.WECHAT,
-      SnappayMethod.WEB,
-      browserType
-    );
-  }
-
   snappayByAliWeb() {
     const browserType = this.isMobile ? "WAP" : "PC";
     this.handleSnappay(
@@ -318,15 +309,19 @@ export class OrderPage implements OnInit, OnDestroy {
     );
   }
 
+  snappayByUnionWeb() {
+    this.handleSnappay(SnappayPaymentMethod.UNIONPAY, SnappayMethod.WEB, "PC");
+  }
+
   snappayByAliQrcode() {
     this.handleSnappay(SnappayPaymentMethod.ALI, SnappayMethod.QRCODE, "WAP");
   }
 
+  // web.pay don't support wechat
   snappayByWechatQrcode() {
     this.handleSnappay(
       SnappayPaymentMethod.WECHAT,
-      SnappayMethod.QRCODE,
-      "WAP"
+      SnappayMethod.QRCODE
     );
   }
 
@@ -516,8 +511,8 @@ export class OrderPage implements OnInit, OnDestroy {
     description: string,
     browserType: string
   ) {
-    const returnUrl = `${window.location.origin}/tabs/my-account/transaction-history?state=${appCode}`;
-    // const returnUrl = `https://dev.duocun.ca/tabs/my-account/transaction-history?state=${appCode}`; // for test
+    // const returnUrl = `${window.location.origin}/tabs/my-account/transaction-history?state=${appCode}`;
+    const returnUrl = `https://dev.duocun.ca/tabs/my-account/transaction-history?state=${appCode}`; // for test
     this.paymentSvc
       .pay(
         "snappay",
