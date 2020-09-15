@@ -1,5 +1,8 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { from } from "rxjs";
+import { concatMap } from "rxjs/operators";
+
 import * as queryString from "query-string";
 import { AuthService } from "src/app/services/auth/auth.service";
 import { environment } from "src/environments/environment";
@@ -111,6 +114,33 @@ export class ApiService {
       return this.http.delete(url, authHeader);
     } else {
       return this.http.delete(url);
+    }
+  }
+
+  // v2 observable
+  getV2(url, param = null, auth = true, isRelative = true) {
+    if (isRelative) {
+      url = this.buildUrl(url, param);
+    }
+    if (auth) {
+      return from(this.buildAuthHeader()).pipe(
+        concatMap((authHeader) => this.http.get(url, authHeader))
+      );
+    } else {
+      return this.http.get(url);
+    }
+  }
+
+  postV2(url, param = null, auth = true, isRelative = true) {
+    if (isRelative) {
+      url = this.buildUrl(url);
+    }
+    if (auth) {
+      return from(this.buildAuthHeader()).pipe(
+        concatMap((authHeader) => this.http.post(url, param, authHeader))
+      );
+    } else {
+      return this.http.post(url, param);
     }
   }
 }
