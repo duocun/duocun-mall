@@ -68,7 +68,6 @@ export class SupportDeskComponent implements OnInit {
         if (this.receivedMessageSubscriber === null) {
           this.receivedMessageSubscriber = this.socketio.receivedMessage.subscribe(
             (data) => {
-
               // update message to read state
               this.api
                 .get(`/Messages/chatmessages/reset/${data._id}`)
@@ -107,32 +106,30 @@ export class SupportDeskComponent implements OnInit {
     this.getSetting();
   }
 
-  getSetting(): void{
+  getSetting(): void {
     this.api.get(`/Setting`).then((observable) => {
-      observable
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((res: any) => {          
-          if(res.code === "success"){
-            this.welcomeMessage = res.data.welcome_message;
-            const curMessage = {
-              message: this.welcomeMessage,
-              read: true,
-              receiver: this.userId,
-              receiverImg: "",
-              sender: "manager",
-              senderImg: "assets/img/manager.png",
-              senderName: "hi",
-              createdAt: Date.now().toString()
-            };
-            this.messages.push(curMessage);
-            this.messageList.unshift(curMessage);
+      observable.pipe(takeUntil(this.unsubscribe$)).subscribe((res: any) => {
+        if (res.code === "success") {
+          this.welcomeMessage = res.data.welcome_message;
+          const curMessage = {
+            message: this.welcomeMessage,
+            read: true,
+            receiver: this.userId,
+            receiverImg: "",
+            sender: "manager",
+            senderImg: "assets/img/manager.png",
+            senderName: "hi",
+            createdAt: Date.now().toString()
+          };
+          this.messages.push(curMessage);
+          this.messageList.unshift(curMessage);
 
-            setTimeout(() => {
-              this.content.scrollToBottom(-1);
-            }, 2000);
-          }
-        })
-    })
+          setTimeout(() => {
+            this.content.scrollToBottom(-1);
+          }, 2000);
+        }
+      });
+    });
   }
 
   ngOnDestroy() {
@@ -163,8 +160,10 @@ export class SupportDeskComponent implements OnInit {
                   }, 2000);
 
                   // get last category from messages
-                  const lastIndex = res.data.findIndex(item => item.receiver === this.userId);
-                  if(lastIndex > -1){
+                  const lastIndex = res.data.findIndex(
+                    (item) => item.receiver === this.userId
+                  );
+                  if (lastIndex > -1) {
                     this.messageCategory = res.data[lastIndex].category;
                   }
                 }
@@ -206,7 +205,7 @@ export class SupportDeskComponent implements OnInit {
                     ).reverse();
                     this.pageIndex++;
                   }
-                }                
+                }
               }
 
               console.log(this.messages);
@@ -313,7 +312,7 @@ export class SupportDeskComponent implements OnInit {
     this.getMessages(event);
   }
 
-  showCategorySelector(): void{
+  showCategorySelector(): void {
     this.isCategorySelectionVisible = !this.isCategorySelectionVisible;
   }
 }
