@@ -12,6 +12,8 @@ import { AppComponent } from "./app.component";
 import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
 import { HttpClientModule, HttpClient } from "@angular/common/http";
 import { IonicStorageModule } from "@ionic/storage";
+import { DeviceDetectorModule } from "ngx-device-detector";
+
 import { SideMenuModule } from "./components/side-menu/side-menu.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
@@ -35,7 +37,7 @@ export function createTranslateLoader(http: HttpClient) {
     }),
     IonicStorageModule.forRoot(),
     SideMenuModule,
-    BrowserAnimationsModule
+    DeviceDetectorModule
   ],
   providers: [
     StatusBar,

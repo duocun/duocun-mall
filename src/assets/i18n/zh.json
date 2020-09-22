@@ -35,6 +35,8 @@
   "Payable": "总共应付",
   "Notes": "备注",
   "Wechat Pay": "微信支付",
+  "Ali Pay": "支付宝支付",
+  "Union Pay": "银联支付",
   "Stripe": "Stripe",
   "Pay by Credit Card": "信用卡支付",
   "Login failed": "登陆失败",
@@ -165,4 +167,8 @@
   "Technical Support": "技术支持",
   "Other": "其他",
   "Category Selection": "分类选择"
+  "Alipay": "支付宝",
+  "UnionPay": "中国银联",
+  "Checking payment, please wait...": "正在验证付款，请稍等。。。",
+  "Sign in to continue purchasing": "请先登录"
 }

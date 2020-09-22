@@ -8,14 +8,14 @@ export const environment = {
     lang: "DUOCUN-I18N"
   },
   media: "https://d27ftifr2ocsa6.cloudfront.net/media/",
-  stripe: "pk_live_vV7H1l4X9k2r8uf6JDf9lGsb",
+  stripe: "",
   defaultLang: "en",
-  gmap: "AIzaSyCEd6D6vc9K-YzMH-QtQWRSs5HZkLKSWyk",
+  gmap: "",
+  GOOGLE_MAP_KEY: "",
   timezone: "America/Toronto",
   monerisMode: "prod",
-  monerisHTProfileId: "htV6VVM9NH24SXX",
-  googleAuthClientId:
-    "53858676843-kjkp8dt8e01tktpc8pimd3vtlvkcre81.apps.googleusercontent.com",
-  facebookAppId: "3115867368492639",
-  socket: "https://api.duocun.ca"
+  monerisHTProfileId: "",
+  googleAuthClientId: "",
+  facebookAppId: "",
+  socket: "https://api.duocun.ca/v1dev"
 };
