@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  api: "https://duocun.com.cn/api", // "https://duocun.com.cn/api",
+  api: "https://api.duocun.ca/v1dev", // "https://duocun.com.cn/api",
   storageKey: {
     auth: "DUOCUN-AUTH-TOKEN",
     cart: "DUOCUN-CART",
@@ -17,5 +17,5 @@ export const environment = {
   googleAuthClientId:
     "53858676843-kjkp8dt8e01tktpc8pimd3vtlvkcre81.apps.googleusercontent.com",
   facebookAppId: "3115867368492639",
-  socket: "https://duocun.com.cn/api"
+  socket: "https://api.duocun.ca"
 };
