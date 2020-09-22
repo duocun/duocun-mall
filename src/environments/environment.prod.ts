@@ -14,7 +14,6 @@ export const environment = {
   GOOGLE_MAP_KEY: "",
   timezone: "America/Toronto",
   monerisMode: "prod",
-
   monerisHTProfileId: "",
   googleAuthClientId: "",
   facebookAppId: "",

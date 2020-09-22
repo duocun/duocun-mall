@@ -52,22 +52,42 @@
   </ion-grid>
 </ion-content>
 <ion-footer>
-  <div class="image-container">
-    <ion-button class="image-clear-btn" fill="clear" shape="round" (click)="onClearImage()" *ngIf="mediaUrl">
-        <ion-icon name="close"></ion-icon>
+  <ion-toolbar>
+    <div class = "category-selection" *ngIf = "isCategorySelectionVisible">
+      <ion-item lines = "none">
+        <ion-label>
+          {{ "Category Selection" | translate }}
+        </ion-label>
+        <ion-select [(ngModel)]="messageCategory">
+          <ion-select-option value="problem"> {{ "Product / Delivery problems" | translate }}</ion-select-option>
+          <ion-select-option value="order"> {{ "Change or Cancel Order" | translate }} </ion-select-option>
+          <ion-select-option value="support"> {{ "Technical Support" | translate }} </ion-select-option>
+          <ion-select-option value="other"> {{ "Other" | translate }} </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </div>
+    <div class="image-container">
+      <ion-button class="image-clear-btn" fill="clear" shape="round" (click)="onClearImage()" *ngIf="mediaUrl">
+          <ion-icon name="close"></ion-icon>
+      </ion-button>
+      <img [src]="mediaUrl" *ngIf="mediaUrl" />
+    </div>
+    
+    <div class="controllers-container">
+      <ion-button class = "image-btn" (click) = "showCategorySelector()" slot="start">
+        <ion-icon class = "chat-icon chat-image-icon" name="bookmark-outline"></ion-icon>
     </ion-button>
-    <img [src]="mediaUrl" *ngIf="mediaUrl" />
-  </div>
-  <ion-item lines="none" class="ion-no-margin ion-no-padding">
-    <ion-textarea class="message-input" placeholder="{{ 'Enter message ...' | translate }}"
-        auto-grow="true" [(ngModel)]="message" (keypress)="onKeyPress($event)">
-    </ion-textarea>
-    <ion-button class = "image-btn" (click) = "fileInput.click()" slot="start">
-        <ion-icon class = "chat-icon chat-image-icon" name="image-outline"></ion-icon>
-    </ion-button>
-    <input #fileInput class="image-upload" type="file" (change)="onFileChanged($event)" accept="image/*">
-    <ion-button class = "send-btn" (click) = "onSend()" slot="end">
-        <ion-icon name="send" class = "chat-icon chat-send-icon"></ion-icon>
-    </ion-button>
-  </ion-item>
+      <ion-textarea class="message-input" placeholder="{{ 'Enter message ...' | translate }}"
+          [autoGrow]="true" [(ngModel)]="message" (keypress)="onKeyPress($event)" [rows] = "1">
+      </ion-textarea>
+      <ion-button class = "image-btn" (click) = "fileInput.click()" slot="start">
+          <ion-icon class = "chat-icon chat-image-icon" name="image-outline"></ion-icon>
+      </ion-button>
+      <input #fileInput class="image-upload" type="file" (change)="onFileChanged($event)" accept="image/*">
+      <ion-button class = "send-btn" (click) = "onSend()" slot="end">
+          <ion-icon name="send" class = "chat-icon chat-send-icon"></ion-icon>
+      </ion-button>
+    </div>
+
+  </ion-toolbar>
 </ion-footer>
