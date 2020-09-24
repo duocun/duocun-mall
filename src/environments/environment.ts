@@ -21,7 +21,7 @@ export const environment = {
   GOOGLE_MAP_KEY: "",
   googleAuthClientId: "",
   facebookAppId: "",
-  socket: "http://localhost:8001/v1" // "https://api.duocun.ca/v1dev", //
+  socket: "http://localhost:8000" // "https://api.duocun.ca/v1dev", //
 
 };
 
