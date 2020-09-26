@@ -110,7 +110,7 @@ export class SupportDeskComponent implements OnInit {
     this.api.get(`/Setting`).then((observable) => {
       observable.pipe(takeUntil(this.unsubscribe$)).subscribe((res: any) => {
         if (res.code === "success") {
-          this.welcomeMessage = res.data.welcome_message;
+          this.welcomeMessage = res.data.welcomeMessage;
           const curMessage = {
             message: this.welcomeMessage,
             read: true,

@@ -163,7 +163,7 @@
                 size="medium" 
                 expand="full" 
                 [disabled]="loading || processing"
-                (click)="alphaPayJSApi()"
+                (click)="paymentGateway === 'alphapay' ? alphaPayJSApi() : wechatPay()"
               >
                 <img src="{{getPaymentGatewayLogo('wechat')}}" />
                 <ion-label translate="Wechat Pay"></ion-label>
@@ -199,33 +199,35 @@
                 expand="full" 
                 translate="Wechat Pay"
                 [disabled]="loading || processing"
-                (click)="alphaPayByQRCode('wechat')"
+                (click)="paymentGateway === 'alphapay' ? alphaPayByQRCode('wechat') : wechatPay()"
               >
                 <img src="{{getPaymentGatewayLogo('wechat')}}" />
                 <ion-label translate="Wechat Pay"></ion-label>
               </ion-button>
             </ion-col>
-            <ion-col class="col-payment-button col-payment-alipay" size="12" align="center">
-              <ion-button 
-                size="medium" 
-                expand="full" 
-                [disabled]="loading || processing"
-                (click)="alphaPayByQRCode('alipay')"
-              >
-                <img src="{{getPaymentGatewayLogo('alipay')}}" />
-              </ion-button>
-            </ion-col>
-            <ion-col class="col-payment-button col-payment-unionpay" size="12" align="center" *ngIf="!isMobile">
-              <ion-button 
-                size="medium" 
-                expand="full" 
-                [disabled]="loading || processing"
-                (click)="alphaPayByQRCode('unionpay')"
-              >
-                <img src="{{getPaymentGatewayLogo('unionpay')}}" />
-                <ion-label translate="UnionPay"></ion-label>
-              </ion-button>
-            </ion-col> -->
+            <ng-container *ngIf="paymentGateway === 'alphapay'">
+              <ion-col class="col-payment-button col-payment-alipay" size="12" align="center">
+                <ion-button
+                  size="medium" 
+                  expand="full" 
+                  [disabled]="loading || processing"
+                  (click)="alphaPayByQRCode('alipay')"
+                >
+                  <img src="{{getPaymentGatewayLogo('alipay')}}" />
+                </ion-button>
+              </ion-col>
+              <ion-col class="col-payment-button col-payment-unionpay" size="12" align="center" *ngIf="!isMobile">
+                <ion-button 
+                  size="medium" 
+                  expand="full" 
+                  [disabled]="loading || processing"
+                  (click)="alphaPayByQRCode('unionpay')"
+                >
+                  <img src="{{getPaymentGatewayLogo('unionpay')}}" />
+                  <ion-label translate="UnionPay"></ion-label>
+                </ion-button>
+              </ion-col>
+            </ng-container> -->
           </ng-template>
           <!--  END ALPHAPAY BUTTONS IN PC BROWSER  -->
 
