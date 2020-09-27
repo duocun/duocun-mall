@@ -152,8 +152,14 @@
   "Moneris_card_declined": "Credit card is declined",
   "Moneris_cvv_invalid": "Cvd number is the three-digit security code on the back of your credit card. Please check again.",
   "Moneris_payment_failed": "Payment failed",
+  "Product / Delivery problems": "Product / Delivery problems",
+  "Change or Cancel Order": "Change or Cancel Order",
+  "Technical Support": "Technical Support",
+  "Other": "Other",
+  "Category Selection": "Category Selection",
   "Alipay": "Alipay",
   "UnionPay": "UnionPay",
   "Checking payment, please wait...": "Checking payment, please wait...",
-  "Sign in to continue purchasing": "Sign in to continue purchasing"
+  "Sign in to continue purchasing": "Sign in to continue purchasing",
+  "Enter message ...": "Enter message ..."
 }

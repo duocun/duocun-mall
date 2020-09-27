@@ -37,7 +37,8 @@ export function createTranslateLoader(http: HttpClient) {
     }),
     IonicStorageModule.forRoot(),
     SideMenuModule,
-    DeviceDetectorModule
+    DeviceDetectorModule,
+    BrowserAnimationsModule
   ],
   providers: [
     StatusBar,

@@ -161,8 +161,14 @@
   "Moneris_card_declined": "此信用卡使用受限，请联系发卡公司",
   "Moneris_cvv_invalid": "信用卡背面三位数支付码错误，请重新确认",
   "Moneris_payment_failed": "支付失败",
+  "Product / Delivery problems": "产品/运输问题",
+  "Change or Cancel Order": "更改或者取消订单",
+  "Technical Support": "技术支持",
+  "Other": "其他",
+  "Category Selection": "分类选择",
   "Alipay": "支付宝",
   "UnionPay": "中国银联",
   "Checking payment, please wait...": "正在验证付款，请稍等。。。",
-  "Sign in to continue purchasing": "请先登录"
+  "Sign in to continue purchasing": "请先登录",
+  "Enter message ...": "请输入。。。"
 }

@@ -71,6 +71,7 @@ export class OrderPage implements OnInit, OnDestroy {
   alphaPayResponse: AlphapayResponseType | null;
   title = "Confirm Order";
   backBtn = { url: "/tabs/cart", text: "" };
+  paymentGateway = "snappay";
   private unsubscribe$ = new Subject<void>();
   constructor(
     private cartSvc: CartService,
@@ -192,6 +193,17 @@ export class OrderPage implements OnInit, OnDestroy {
                 }
                 this.summary = Order.getOrderSummary(this.cartItemGroups, 0);
                 this.setCharge();
+                try {
+                  const paymentGatewayData: any = await (
+                    await this.api.get("Orders/paymentGateway")
+                  ).toPromise();
+                  if (paymentGatewayData.paymentGatewayVendor) {
+                    this.paymentGateway =
+                      paymentGatewayData.paymentGatewayVendor;
+                  }
+                } catch (e) {
+                  console.warn(e);
+                }
                 this.loading = false;
                 await this.dismissLoading();
               });
