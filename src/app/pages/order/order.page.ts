@@ -500,8 +500,8 @@ export class OrderPage implements OnInit, OnDestroy {
     description: string,
     browserType: string
   ) {
-    // const returnUrl = `${window.location.origin}/tabs/my-account/transaction-history?state=${appCode}`;
-    const returnUrl = `https://dev.duocun.ca/tabs/my-account/transaction-history?state=${appCode}`; // for test
+    const returnUrl = `${window.location.origin}/tabs/my-account/transaction-history?state=${appCode}`;
+    // const returnUrl = `https://dev.duocun.ca/tabs/my-account/transaction-history?state=${appCode}`; // for test
     this.paymentSvc
       .payBySnappay(
         method,
@@ -520,7 +520,7 @@ export class OrderPage implements OnInit, OnDestroy {
             this.cartSvc.clearCart();
             window.location.href = resp.url;
           } else {
-            // fix me
+            // fix meAuthorization
             // if (resp.data) {
             //   this.handleInvalidOrders(resp.data);
             // } else {

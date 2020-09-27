@@ -76,19 +76,18 @@ export class AuthService {
   }
 
   async getToken() {
-    return await localStorage.getItem(environment.storageKey.auth);
     // const token = await this.storage.get(environment.storageKey.auth);
     // return token;
-    // return new Promise((resolve) => {
-    //   this.storage
-    //     .get(environment.storageKey.auth)
-    //     .then((token) => {
-    //       resolve(token);
-    //     })
-    //     .catch(() => {
-    //       resolve("");
-    //     });
-    // });
+    return new Promise((resolve) => {
+      this.storage
+        .get(environment.storageKey.auth)
+        .then((token) => {
+          resolve(token);
+        })
+        .catch(() => {
+          resolve("");
+        });
+    });
   }
 
   getAccount() {

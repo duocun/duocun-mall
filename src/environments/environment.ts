@@ -14,11 +14,10 @@ export const environment = {
   media: "https://d27ftifr2ocsa6.cloudfront.net/media/",
   stripe: "",
   defaultLang: "en",
-  gmap: "",
-  timezone: "Asia/Shanghai",
+  GOOGLE_MAP_KEY: "",
+  timezone: "America/Toronto",
   monerisMode: "prod",
   monerisHTProfileId: "",
-  GOOGLE_MAP_KEY: "",
   googleAuthClientId: "",
   facebookAppId: "",
   socket: "http://localhost:8001" // "https://api.duocun.ca/v1dev", //
