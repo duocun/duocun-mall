@@ -255,36 +255,16 @@ export class OrderPage implements OnInit, OnDestroy {
     return getPictureUrl(item);
   }
 
-  wechatPay() {
-    this.paymentMethod = PaymentMethod.WECHAT;
-    this.processing = true;
-    this.presentLoading();
-    this.saveOrders(this.orders).then((observable) => {
-      observable
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe(
-          (resp: { code: string; data: Array<Order.OrderInterface> }) => {
-            console.log("order page save order subscription");
-            if (resp.code !== "success") {
-              return this.handleInvalidOrders(resp.data);
-            }
-            this.payBySnappay(
-              this.appCode,
-              this.account._id,
-              resp.data,
-              this.charge.payable
-            );
-          }
-        );
-    });
-  }
-
   /**
    *  paymentMethod --- SnappayPaymentMethod: ALIPAY WECHATPAY UNIONPAY
    *  method --- SnappayMethod
    *
    */
-  handleSnappay(paymentMethod: string, method: string, browserType: string) {
+  handleSnappay(
+    paymentMethod: string,
+    method: string,
+    browserType: string = null
+  ) {
     this.paymentMethod = paymentMethod;
     this.processing = true;
     this.presentLoading();
@@ -312,15 +292,6 @@ export class OrderPage implements OnInit, OnDestroy {
     });
   }
 
-  snappayByWechatWeb() {
-    const browserType = this.isMobile ? "WAP" : "PC";
-    this.handleSnappay(
-      SnappayPaymentMethod.WECHAT,
-      SnappayMethod.WEB,
-      browserType
-    );
-  }
-
   snappayByAliWeb() {
     const browserType = this.isMobile ? "WAP" : "PC";
     this.handleSnappay(
@@ -330,16 +301,17 @@ export class OrderPage implements OnInit, OnDestroy {
     );
   }
 
+  snappayByUnionWeb() {
+    this.handleSnappay(SnappayPaymentMethod.UNIONPAY, SnappayMethod.WEB, "PC");
+  }
+
   snappayByAliQrcode() {
     this.handleSnappay(SnappayPaymentMethod.ALI, SnappayMethod.QRCODE, "WAP");
   }
 
+  // web.pay don't support wechat
   snappayByWechatQrcode() {
-    this.handleSnappay(
-      SnappayPaymentMethod.WECHAT,
-      SnappayMethod.QRCODE,
-      "WAP"
-    );
+    this.handleSnappay(SnappayPaymentMethod.WECHAT, SnappayMethod.QRCODE);
   }
 
   snappayByWechatH5() {
@@ -531,8 +503,7 @@ export class OrderPage implements OnInit, OnDestroy {
     const returnUrl = `${window.location.origin}/tabs/my-account/transaction-history?state=${appCode}`;
     // const returnUrl = `https://dev.duocun.ca/tabs/my-account/transaction-history?state=${appCode}`; // for test
     this.paymentSvc
-      .pay(
-        "snappay",
+      .payBySnappay(
         method,
         paymentMethod,
         orders,
@@ -541,79 +512,31 @@ export class OrderPage implements OnInit, OnDestroy {
         returnUrl,
         browserType
       )
-      .then((observable) => {
-        observable
-          .pipe(takeUntil(this.unsubscribe$))
-          .subscribe((resp: IPaymentResponse) => {
-            if (resp.err === PaymentError.NONE) {
-              this.cartSubscription.unsubscribe();
-              this.cartSvc.clearCart();
-              window.location.href = resp.url;
-            } else {
-              // fix me
-              // if (resp.data) {
-              //   this.handleInvalidOrders(resp.data);
-              // } else {
-              this.showAlert("Notice", "Payment failed", "OK");
-              this.processing = false;
-              this.dismissLoading();
-              //}
-            }
-          });
-      })
-      .catch((e) => {
-        console.error(e);
-        this.showAlert("Notice", "Payment failed", "OK");
-        this.processing = false;
-        this.dismissLoading();
-      });
-  }
-
-  payBySnappay(
-    appCode: string,
-    accountId: string,
-    orders: Array<Order.OrderInterface>,
-    amount: number
-  ) {
-    const returnUrl =
-      window.location.origin +
-      `/tabs/my-account/transaction-history?state=${this.appCode}`;
-    const paymentId = orders ? orders[0].paymentId : null;
-    this.api
-      .post("ClientPayments/payBySnappay", {
-        paymentActionCode: "P",
-        appCode,
-        accountId,
-        amount,
-        returnUrl,
-        note: "",
-        paymentId,
-        merchantNames: orders.map((order) => order.merchantName)
-      })
-      .then((observable) => {
-        observable.pipe(takeUntil(this.unsubscribe$)).subscribe((resp: any) => {
-          console.log("order page pay by snappay subscription");
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(
+        (resp: IPaymentResponse) => {
           if (resp.err === PaymentError.NONE) {
             this.cartSubscription.unsubscribe();
             this.cartSvc.clearCart();
             window.location.href = resp.url;
           } else {
-            if (resp.data) {
-              this.handleInvalidOrders(resp.data);
-            } else {
-              this.showAlert("Notice", "Payment failed", "OK");
-              this.processing = false;
-              this.dismissLoading();
-            }
+            // fix meAuthorization
+            // if (resp.data) {
+            //   this.handleInvalidOrders(resp.data);
+            // } else {
+            this.showAlert("Notice", "Payment failed", "OK");
+            this.processing = false;
+            this.dismissLoading();
+            //}
           }
-        });
-      })
-      .catch((e) => {
-        console.error(e);
-        this.showAlert("Notice", "Payment failed", "OK");
-        this.processing = false;
-        this.dismissLoading();
-      });
+        },
+        (e) => {
+          console.error(e);
+          this.showAlert("Notice", "Payment failed", "OK");
+          this.processing = false;
+          this.dismissLoading();
+        }
+      );
   }
 
   async monerisPay() {
@@ -625,6 +548,7 @@ export class OrderPage implements OnInit, OnDestroy {
     this.paymentMethod = PaymentMethod.CREDIT_CARD;
     this.processing = true;
     await this.presentLoading();
+
     this.saveOrders(this.orders).then((observable) => {
       observable
         .pipe(takeUntil(this.unsubscribe$))
@@ -635,86 +559,85 @@ export class OrderPage implements OnInit, OnDestroy {
               return this.handleInvalidOrders(resp.data);
             }
             const order: Order.OrderInterface = resp.data[0];
-            this.api
-              .post("ClientPayments/moneris/htpay", {
-                paymentId: order.paymentId,
-                cc: this.cc,
-                exp: this.exp,
-                cvd: this.cvd
-              })
-              .then((observable) => {
-                observable.toPromise().then(async (resp: any) => {
-                  if (resp.err == PaymentError.NONE) {
-                    this.showAlert("Notice", "Payment success", "OK");
-                    this.cartSubscription.unsubscribe();
-                    this.cartSvc.clearCart();
-                    await this.authSvc.updateData();
-                    this.processing = false;
-                    await this.dismissLoading();
-                    console.log("navigate to order history");
-                    this.router.navigate(["/tabs/my-account/order-history"], {
-                      replaceUrl: true
-                    });
+
+            this.paymentSvc
+              .payByCreditCard(order.paymentId, this.cc, this.exp, this.cvd)
+              .pipe(takeUntil(this.unsubscribe$))
+              .subscribe((resp: any) => {
+                if (resp.err == PaymentError.NONE) {
+                  this.showAlert("Notice", "Payment success", "OK");
+                  this.cartSubscription.unsubscribe();
+                  this.cartSvc.clearCart();
+
+                  // await this.authSvc.updateData(); // try re-login
+
+                  this.processing = false;
+                  this.dismissLoading().then(() => {});
+
+                  console.log("navigate to order history");
+
+                  this.router.navigate(["/tabs/my-account/order-history"], {
+                    replaceUrl: true
+                  });
+                } else {
+                  if (resp.data) {
+                    this.handleInvalidOrders(resp.data);
                   } else {
-                    if (resp.data) {
-                      this.handleInvalidOrders(resp.data);
+                    if (resp.msg) {
+                      const message = "Moneris_" + resp.msg;
+                      this.showAlert("Notice", message, "OK");
                     } else {
-                      if (resp.msg) {
-                        const message = "Moneris_" + resp.msg;
-                        this.showAlert("Notice", message, "OK");
-                      } else {
-                        this.showAlert("Notice", "Payment failed", "OK");
-                      }
-                      this.processing = false;
-                      this.dismissLoading();
+                      this.showAlert("Notice", "Payment failed", "OK");
                     }
+                    this.processing = false;
+                    this.dismissLoading().then(() => {});
                   }
-                });
+                }
               });
           }
         );
     });
   }
 
-  getMonerisTicket(
-    appCode: string,
-    accountId: string,
-    orders: Array<Order.OrderInterface>,
-    payable: number
-  ) {
-    throw new Error("Use moneris ht payment instead");
-    const paymentId = orders[0].paymentId;
-    this.api
-      .post("ClientPayments/moneris/preload", {
-        paymentId
-      })
-      .then((observable) => {
-        observable
-          .pipe(takeUntil(this.unsubscribe$))
-          .subscribe((resp: { code: string; data?: string }) => {
-            console.log("order page moneris preload subscription");
-            if (resp.code === "success") {
-              this.processing = false;
-              this.dismissLoading();
-              this.router.navigate(
-                [`/tabs/browse/order/pay/moneris/${paymentId}/${resp.data}`],
-                {
-                  replaceUrl: true
-                }
-              );
-            } else {
-              this.showAlert("Notice", "Payment failed", "OK");
-              this.processing = false;
-              this.dismissLoading();
-            }
-          });
-      })
-      .catch((e) => {
-        console.error(e);
-        this.showAlert("Notice", "Payment failed", "OK");
-        this.processing = false;
-      });
-  }
+  // getMonerisTicket(
+  //   appCode: string,
+  //   accountId: string,
+  //   orders: Array<Order.OrderInterface>,
+  //   payable: number
+  // ) {
+  //   throw new Error("Use moneris ht payment instead");
+  //   const paymentId = orders[0].paymentId;
+  //   this.api
+  //     .post("ClientPayments/moneris/preload", {
+  //       paymentId
+  //     })
+  //     .then((observable) => {
+  //       observable
+  //         .pipe(takeUntil(this.unsubscribe$))
+  //         .subscribe((resp: { code: string; data?: string }) => {
+  //           console.log("order page moneris preload subscription");
+  //           if (resp.code === "success") {
+  //             this.processing = false;
+  //             this.dismissLoading();
+  //             this.router.navigate(
+  //               [`/tabs/browse/order/pay/moneris/${paymentId}/${resp.data}`],
+  //               {
+  //                 replaceUrl: true
+  //               }
+  //             );
+  //           } else {
+  //             this.showAlert("Notice", "Payment failed", "OK");
+  //             this.processing = false;
+  //             this.dismissLoading();
+  //           }
+  //         });
+  //     })
+  //     .catch((e) => {
+  //       console.error(e);
+  //       this.showAlert("Notice", "Payment failed", "OK");
+  //       this.processing = false;
+  //     });
+  // }
 
   isCardValid() {
     if (!this.cc || this.cc.length < 10) {
@@ -766,22 +689,20 @@ export class OrderPage implements OnInit, OnDestroy {
           return this.handleInvalidOrders(resp.data);
         }
         const order: Order.OrderInterface = resp.data[0];
-        this.api
-          .post("ClientPayments/alphapay/qrcode", {
-            paymentId: order.paymentId,
-            channel
-          })
-          .then((observable) => {
-            observable.toPromise().then((resp: any) => {
+        this.paymentSvc
+          .payByAlphapay(order.paymentId, channel, "qrcode")
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe(
+            (resp: any) => {
               this.handleAlphapayQRCodeResponse(resp);
-            });
-          })
-          .catch((e) => {
-            console.error(e);
-            this.showAlert("Notice", "Payment failed", "OK");
-            this.processing = false;
-            this.dismissLoading();
-          });
+            },
+            (e) => {
+              console.error(e);
+              this.showAlert("Notice", "Payment failed", "OK");
+              this.processing = false;
+              this.dismissLoading();
+            }
+          );
       });
     });
   }
@@ -799,27 +720,27 @@ export class OrderPage implements OnInit, OnDestroy {
           return this.handleInvalidOrders(resp.data);
         }
         const order: Order.OrderInterface = resp.data[0];
-        this.api
-          .post("ClientPayments/alphapay/h5", {
-            paymentId: order.paymentId,
-            channel
-          })
-          .then((observable) => {
-            observable.toPromise().then((resp: any) => {
-              if (resp && resp.code === "success") {
-                window.location.href = resp.redirect_url;
-              } else {
-                this.alphaPayResponse = null;
-                this.showAlert("Notice", "Payment failed", "OK");
-              }
-            });
-          })
-          .catch((e) => {
-            console.error(e);
-            this.showAlert("Notice", "Payment failed", "OK");
-            this.processing = false;
-            this.dismissLoading();
-          });
+        this.paymentSvc
+          .payByAlphapay(order.paymentId, channel, "h5")
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe(
+            (resp: any) => {
+              (resp: any) => {
+                if (resp && resp.code === "success") {
+                  window.location.href = resp.redirect_url;
+                } else {
+                  this.alphaPayResponse = null;
+                  this.showAlert("Notice", "Payment failed", "OK");
+                }
+              };
+            },
+            (e) => {
+              console.error(e);
+              this.showAlert("Notice", "Payment failed", "OK");
+              this.processing = false;
+              this.dismissLoading();
+            }
+          );
       });
     });
   }
@@ -834,27 +755,27 @@ export class OrderPage implements OnInit, OnDestroy {
           return this.handleInvalidOrders(resp.data);
         }
         const order: Order.OrderInterface = resp.data[0];
-        this.api
-          .post("ClientPayments/alphapay/jsapi", {
-            paymentId: order.paymentId,
-            channel
-          })
-          .then((observable) => {
-            observable.toPromise().then((resp: any) => {
-              if (resp && resp.code === "success") {
-                window.location.href = resp.redirect_url;
-              } else {
-                this.alphaPayResponse = null;
-                this.showAlert("Notice", "Payment failed", "OK");
-              }
-            });
-          })
-          .catch((e) => {
-            console.error(e);
-            this.showAlert("Notice", "Payment failed", "OK");
-            this.processing = false;
-            this.dismissLoading();
-          });
+        this.paymentSvc
+          .payByAlphapay(order.paymentId, channel, "jsapi")
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe(
+            (resp: any) => {
+              (resp: any) => {
+                if (resp && resp.code === "success") {
+                  window.location.href = resp.redirect_url;
+                } else {
+                  this.alphaPayResponse = null;
+                  this.showAlert("Notice", "Payment failed", "OK");
+                }
+              };
+            },
+            (e) => {
+              console.error(e);
+              this.showAlert("Notice", "Payment failed", "OK");
+              this.processing = false;
+              this.dismissLoading();
+            }
+          );
       });
     });
   }
