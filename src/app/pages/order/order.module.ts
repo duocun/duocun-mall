@@ -17,12 +17,17 @@ import { FooterModule } from "src/app/components/footer/footer.module";
 import { MonerisCheckoutComponent } from "src/app/pages/order/moneris-checkout/moneris-checkout.component";
 import { MonerisHtComponent } from "src/app/pages/order/moneris-ht/moneris-ht.component";
 import { ComponentsModule } from "src/app/components/components.module";
+import {
+  DeviceDetectorModule,
+  DeviceDetectorService
+} from "ngx-device-detector";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    DeviceDetectorModule,
     OrderPageRoutingModule,
     TranslateModule.forChild(),
     LocalValueDirectiveModule,
@@ -32,6 +37,7 @@ import { ComponentsModule } from "src/app/components/components.module";
     FooterModule,
     ComponentsModule
   ],
-  declarations: [OrderPage, MonerisCheckoutComponent, MonerisHtComponent]
+  declarations: [OrderPage, MonerisCheckoutComponent, MonerisHtComponent],
+  providers: [DeviceDetectorService]
 })
 export class OrderPageModule {}

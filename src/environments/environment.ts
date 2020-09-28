@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  api: "http://localhost:8001/v1", // "https://api.duocun.ca/v1",
+  api: "http://localhost:8001/v1", // "https://api.duocun.ca/v1dev",
   storageKey: {
     auth: "DUOCUN-AUTH-TOKEN",
     cart: "DUOCUN-CART",
@@ -14,13 +14,13 @@ export const environment = {
   media: "https://d27ftifr2ocsa6.cloudfront.net/media/",
   stripe: "",
   defaultLang: "en",
-  gmap: "",
-  timezone: "Asia/Shanghai",
+  GOOGLE_MAP_KEY: "",
+  timezone: "America/Toronto",
   monerisMode: "prod",
   monerisHTProfileId: "",
-  googleAuthClientId:"",
+  googleAuthClientId: "",
   facebookAppId: "",
-  socket: "http://localhost:8000"
+  socket: "http://localhost:8001" // "https://api.duocun.ca/v1dev", //
 };
 
 /*

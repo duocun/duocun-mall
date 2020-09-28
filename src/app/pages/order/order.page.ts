@@ -1,17 +1,19 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { CartService } from "src/app/services/cart/cart.service";
 import * as Order from "src/app/models/order.model";
-import { PaymentMethod, PaymentError } from "src/app/models/payment.model";
+import {
+  PaymentMethod,
+  PaymentError,
+  AlphapayResponseType,
+  IPaymentResponse
+} from "src/app/models/payment.model";
 import { getPictureUrl, ProductInterface } from "src/app/models/product.model";
 import { AccountInterface } from "src/app/models/account.model";
 import { AuthService } from "src/app/services/auth/auth.service";
 import { ApiService } from "src/app/services/api/api.service";
 import { AlertController, LoadingController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
-import { StripeToken } from "stripe-angular";
 import { CartInterface } from "src/app/models/cart.model";
-import { environment } from "src/environments/environment";
-import { loadStripe, Stripe, StripeError } from "@stripe/stripe-js";
 import { MerchantInterface } from "src/app/models/merchant.model";
 import { LocationInterface } from "src/app/models/location.model";
 import { formatLocation } from "src/app/models/location.model";
@@ -22,6 +24,16 @@ import { Subscription } from "rxjs";
 import { Subject } from "rxjs";
 import { takeUntil, filter } from "rxjs/operators";
 import * as moment from "moment";
+import { DeviceDetectorService } from "ngx-device-detector";
+import { SocketService } from "src/app/services/socket/socket.service";
+
+import {
+  SnappayPaymentMethod,
+  SnappayMethod
+} from "../../models/payment.model";
+
+import { PaymentService } from "src/app/services/payment";
+
 interface OrderErrorInterface {
   type: "order" | "payment";
   message: string;
@@ -41,12 +53,10 @@ export class OrderPage implements OnInit, OnDestroy {
   summary: Order.OrderSummaryInterface;
   notes: string;
   account: AccountInterface;
-  stripeError: StripeError;
   charge: Order.ChargeInterface;
   cart: CartInterface;
   cartSubscription: Subscription;
   paymentMethod: string;
-  stripe: Stripe;
   loading: boolean;
   processing: boolean;
   error: OrderErrorInterface | null;
@@ -57,8 +67,11 @@ export class OrderPage implements OnInit, OnDestroy {
   cc: string;
   exp: string;
   cvd: string;
+  isMobile: boolean;
+  alphaPayResponse: AlphapayResponseType | null;
   title = "Confirm Order";
   backBtn = { url: "/tabs/cart", text: "" };
+  paymentGateway = "snappay";
   private unsubscribe$ = new Subject<void>();
   constructor(
     private cartSvc: CartService,
@@ -68,16 +81,17 @@ export class OrderPage implements OnInit, OnDestroy {
     private translator: TranslateService,
     private locSvc: LocationService,
     private contextSvc: ContextService,
+    private paymentSvc: PaymentService,
     private router: Router,
-    private loader: LoadingController
+    private loader: LoadingController,
+    private deviceDetector: DeviceDetectorService,
+    private socketSvc: SocketService
   ) {
     this.loading = true;
     this.error = null;
     this.processing = false;
     this.cartSanitized = false;
-    loadStripe(environment.stripe).then((stripe) => {
-      this.stripe = stripe;
-    });
+    this.isMobile = this.deviceDetector.isMobile();
     this.contextSvc
       .getContext()
       .pipe(takeUntil(this.unsubscribe$))
@@ -88,6 +102,25 @@ export class OrderPage implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+    await this.socketSvc.joinPaymentRoom();
+    this.socketSvc.alphaPayResp.subscribe(
+      (payload: { success: boolean; paymentId: string }) => {
+        if (!payload) {
+          return;
+        }
+        if (payload.success) {
+          this.router.navigate(["/payment-success"], {
+            queryParams: {
+              paymentId: payload.paymentId
+            }
+          });
+        } else {
+          console.warn("Payment socket init failed");
+          console.log(payload);
+        }
+      }
+    );
+
     await this.presentLoading();
     this.paymentMethod = PaymentMethod.CREDIT_CARD;
     this.authSvc
@@ -160,6 +193,17 @@ export class OrderPage implements OnInit, OnDestroy {
                 }
                 this.summary = Order.getOrderSummary(this.cartItemGroups, 0);
                 this.setCharge();
+                try {
+                  const paymentGatewayData: any = await (
+                    await this.api.get("Orders/paymentGateway")
+                  ).toPromise();
+                  if (paymentGatewayData.paymentGatewayVendor) {
+                    this.paymentGateway =
+                      paymentGatewayData.paymentGatewayVendor;
+                  }
+                } catch (e) {
+                  console.warn(e);
+                }
                 this.loading = false;
                 await this.dismissLoading();
               });
@@ -169,28 +213,10 @@ export class OrderPage implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.cartSubscription.unsubscribe();
+    // this.socketSvc.alphaPayResp.unsubscribe();
+    this.alphaPayResponse = null;
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
-  }
-
-  createStripeToken(stripeCard) {
-    this.processing = true;
-    this.presentLoading();
-    stripeCard
-      .createToken()
-      .then((token) => {
-        if (!token) {
-          this.processing = false;
-          this.dismissLoading();
-          this.showAlert("Notice", "Invalid payment input", "OK");
-        }
-      })
-      .catch((e) => {
-        console.error(e);
-        this.processing = false;
-        this.dismissLoading();
-        this.showAlert("Notice", "Invalid payment input", "OK");
-      });
   }
 
   async presentLoading() {
@@ -211,19 +237,6 @@ export class OrderPage implements OnInit, OnDestroy {
     }
   }
 
-  canPayStripe() {
-    if (!this.stripe) {
-      return false;
-    }
-    if (this.processing) {
-      return false;
-    }
-    if (this.loading) {
-      return false;
-    }
-    return true;
-  }
-
   setCharge() {
     if (this.account && this.summary) {
       const amount = this.summary.total;
@@ -242,99 +255,28 @@ export class OrderPage implements OnInit, OnDestroy {
     return getPictureUrl(item);
   }
 
-  stripePay(token: StripeToken) {
-    throw new Error("Stripe payment is disabled. Use Moneris instead");
-    this.paymentMethod = PaymentMethod.CREDIT_CARD;
-    this.processing = true;
-    this.presentLoading();
-    this.stripe
-      .createPaymentMethod({
-        type: "card",
-        card: {
-          token: token.id
-        },
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        billing_details: { name: this.account.username }
-      })
-      .then((res) => {
-        if (res.error) {
-          this.showAlert("Notice", "Payment failed", "OK");
-          return;
-        }
-        const paymentMethodId = res.paymentMethod.id;
-        this.saveOrders(this.orders)
-          .then((observable) => {
-            observable
-              .pipe(takeUntil(this.unsubscribe$))
-              .subscribe(
-                (resp: { code: string; data: Array<Order.OrderInterface> }) => {
-                  console.log("order page save order subscription");
-                  if (resp.code !== "success") {
-                    return this.handleInvalidOrders(resp.data);
-                  }
-                  const newOrders = resp.data;
-                  this.savePayment(newOrders, paymentMethodId)
-                    .then((observable) => {
-                      observable
-                        .pipe(takeUntil(this.unsubscribe$))
-                        .subscribe(async (resp: any) => {
-                          console.log("order page save payment subscription");
-                          if (resp.err === PaymentError.NONE) {
-                            this.showAlert("Notice", "Payment success", "OK");
-                            this.cartSubscription.unsubscribe();
-                            this.cartSvc.clearCart();
-                            await this.authSvc.updateData();
-                            this.processing = false;
-                            await this.dismissLoading();
-                            console.log("navigate to order history");
-                            this.router.navigate(
-                              ["/tabs/my-account/order-history"],
-                              {
-                                replaceUrl: true
-                              }
-                            );
-                          } else {
-                            if (resp.data) {
-                              this.handleInvalidOrders(resp.data);
-                            } else {
-                              this.showAlert("Notice", "Payment failed", "OK");
-                              this.processing = false;
-                              this.dismissLoading();
-                            }
-                          }
-                        });
-                    })
-                    .catch((e) => {
-                      console.error(e);
-                      this.error = {
-                        type: "payment",
-                        message: "Cannot save payment"
-                      };
-                      this.processing = false;
-                      this.dismissLoading();
-                    });
-                }
-              );
-          })
-          .catch((e) => {
-            console.error(e);
-            this.error = {
-              type: "order",
-              message: "Cannot save orders"
-            };
-            this.processing = false;
-            this.dismissLoading();
-          });
-      })
-      .catch((e) => {
-        console.error(e);
-        this.processing = false;
-        this.dismissLoading();
-      });
+  getSnappayPaymentMethod(paymentMethod) {
+    if (paymentMethod === PaymentMethod.WECHAT) {
+      return SnappayPaymentMethod.WECHAT;
+    } else if (paymentMethod === PaymentMethod.ALI) {
+      return SnappayPaymentMethod.ALI;
+    } else if (paymentMethod === PaymentMethod.UNIONPAY) {
+      return SnappayPaymentMethod.UNIONPAY;
+    }
+    return null;
   }
 
-  wechatPay() {
-    this.paymentMethod = PaymentMethod.WECHAT;
+  /**
+   *  paymentMethod --- SnappayPaymentMethod: ALIPAY WECHATPAY UNIONPAY
+   *  method --- SnappayMethod
+   *
+   */
+  handleSnappay(
+    paymentMethod: string,
+    method: string,
+    browserType: string = null
+  ) {
+    this.paymentMethod = paymentMethod;
     this.processing = true;
     this.presentLoading();
     this.saveOrders(this.orders).then((observable) => {
@@ -346,15 +288,44 @@ export class OrderPage implements OnInit, OnDestroy {
             if (resp.code !== "success") {
               return this.handleInvalidOrders(resp.data);
             }
-            this.payBySnappay(
+
+            const snappayPaymentMethod = this.getSnappayPaymentMethod(
+              paymentMethod
+            );
+            this.payBySnappayV2(
               this.appCode,
-              this.account._id,
+              method,
+              snappayPaymentMethod,
               resp.data,
-              this.charge.payable
+              this.charge.payable,
+              "Duocun Inc.",
+              browserType
             );
           }
         );
     });
+  }
+
+  snappayByAliWeb() {
+    const browserType = this.isMobile ? "WAP" : "PC";
+    this.handleSnappay(PaymentMethod.ALI, SnappayMethod.WEB, browserType);
+  }
+
+  snappayByUnionWeb() {
+    this.handleSnappay(PaymentMethod.UNIONPAY, SnappayMethod.WEB, "PC");
+  }
+
+  snappayByAliQrcode() {
+    this.handleSnappay(PaymentMethod.ALI, SnappayMethod.QRCODE, "WAP");
+  }
+
+  // web.pay don't support wechat
+  snappayByWechatQrcode() {
+    this.handleSnappay(PaymentMethod.WECHAT, SnappayMethod.QRCODE);
+  }
+
+  snappayByWechatH5() {
+    this.handleSnappay(PaymentMethod.WECHAT, SnappayMethod.H5, "WAP");
   }
 
   payByDeposit() {
@@ -504,15 +475,11 @@ export class OrderPage implements OnInit, OnDestroy {
       order.note = this.notes;
       order.paymentMethod = this.paymentMethod;
       switch (order.paymentMethod) {
-        case PaymentMethod.CREDIT_CARD:
-        case PaymentMethod.WECHAT:
-          order.status = Order.OrderStatus.TEMP;
-          break;
         case PaymentMethod.PREPAY:
           order.status = Order.OrderStatus.NEW;
           break;
         default:
-          order.status = Order.OrderStatus.NEW;
+          order.status = Order.OrderStatus.TEMP;
           break;
       }
     }
@@ -533,51 +500,53 @@ export class OrderPage implements OnInit, OnDestroy {
     });
   }
 
-  payBySnappay(
+  payBySnappayV2(
     appCode: string,
-    accountId: string,
+    method: string,
+    paymentMethod: string,
+    // accountId: string,
     orders: Array<Order.OrderInterface>,
-    amount: number
+    amount: number,
+    description: string,
+    browserType: string
   ) {
-    const returnUrl =
-      window.location.origin +
-      `/tabs/my-account/transaction-history?state=${this.appCode}`;
-    const paymentId = orders ? orders[0].paymentId : null;
-    this.api
-      .post("ClientPayments/payBySnappay", {
-        paymentActionCode: "P",
-        appCode,
-        accountId,
+    const returnUrl = `${window.location.origin}/tabs/my-account/transaction-history?state=${appCode}`;
+    // const returnUrl = `https://dev.duocun.ca/tabs/my-account/transaction-history?state=${appCode}`; // for test
+    this.paymentSvc
+      .payBySnappay(
+        method,
+        paymentMethod,
+        orders,
         amount,
+        description,
         returnUrl,
-        note: "",
-        paymentId,
-        merchantNames: orders.map((order) => order.merchantName)
-      })
-      .then((observable) => {
-        observable.pipe(takeUntil(this.unsubscribe$)).subscribe((resp: any) => {
-          console.log("order page pay by snappay subscription");
+        browserType
+      )
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(
+        (resp: IPaymentResponse) => {
           if (resp.err === PaymentError.NONE) {
             this.cartSubscription.unsubscribe();
             this.cartSvc.clearCart();
             window.location.href = resp.url;
           } else {
-            if (resp.data) {
-              this.handleInvalidOrders(resp.data);
-            } else {
-              this.showAlert("Notice", "Payment failed", "OK");
-              this.processing = false;
-              this.dismissLoading();
-            }
+            // fix meAuthorization
+            // if (resp.data) {
+            //   this.handleInvalidOrders(resp.data);
+            // } else {
+            this.showAlert("Notice", "Payment failed", "OK");
+            this.processing = false;
+            this.dismissLoading();
+            //}
           }
-        });
-      })
-      .catch((e) => {
-        console.error(e);
-        this.showAlert("Notice", "Payment failed", "OK");
-        this.processing = false;
-        this.dismissLoading();
-      });
+        },
+        (e) => {
+          console.error(e);
+          this.showAlert("Notice", "Payment failed", "OK");
+          this.processing = false;
+          this.dismissLoading();
+        }
+      );
   }
 
   async monerisPay() {
@@ -589,6 +558,7 @@ export class OrderPage implements OnInit, OnDestroy {
     this.paymentMethod = PaymentMethod.CREDIT_CARD;
     this.processing = true;
     await this.presentLoading();
+
     this.saveOrders(this.orders).then((observable) => {
       observable
         .pipe(takeUntil(this.unsubscribe$))
@@ -599,86 +569,85 @@ export class OrderPage implements OnInit, OnDestroy {
               return this.handleInvalidOrders(resp.data);
             }
             const order: Order.OrderInterface = resp.data[0];
-            this.api
-              .post("ClientPayments/moneris/htpay", {
-                paymentId: order.paymentId,
-                cc: this.cc,
-                exp: this.exp,
-                cvd: this.cvd
-              })
-              .then((observable) => {
-                observable.toPromise().then(async (resp: any) => {
-                  if (resp.err == PaymentError.NONE) {
-                    this.showAlert("Notice", "Payment success", "OK");
-                    this.cartSubscription.unsubscribe();
-                    this.cartSvc.clearCart();
-                    await this.authSvc.updateData();
-                    this.processing = false;
-                    await this.dismissLoading();
-                    console.log("navigate to order history");
-                    this.router.navigate(["/tabs/my-account/order-history"], {
-                      replaceUrl: true
-                    });
+
+            this.paymentSvc
+              .payByCreditCard(order.paymentId, this.cc, this.exp, this.cvd)
+              .pipe(takeUntil(this.unsubscribe$))
+              .subscribe((resp: any) => {
+                if (resp.err == PaymentError.NONE) {
+                  this.showAlert("Notice", "Payment success", "OK");
+                  this.cartSubscription.unsubscribe();
+                  this.cartSvc.clearCart();
+
+                  // await this.authSvc.updateData(); // try re-login
+
+                  this.processing = false;
+                  this.dismissLoading().then(() => {});
+
+                  console.log("navigate to order history");
+
+                  this.router.navigate(["/tabs/my-account/order-history"], {
+                    replaceUrl: true
+                  });
+                } else {
+                  if (resp.data) {
+                    this.handleInvalidOrders(resp.data);
                   } else {
-                    if (resp.data) {
-                      this.handleInvalidOrders(resp.data);
+                    if (resp.msg) {
+                      const message = "Moneris_" + resp.msg;
+                      this.showAlert("Notice", message, "OK");
                     } else {
-                      if (resp.msg) {
-                        const message = "Moneris_" + resp.msg;
-                        this.showAlert("Notice", message, "OK");
-                      } else {
-                        this.showAlert("Notice", "Payment failed", "OK");
-                      }
-                      this.processing = false;
-                      this.dismissLoading();
+                      this.showAlert("Notice", "Payment failed", "OK");
                     }
+                    this.processing = false;
+                    this.dismissLoading().then(() => {});
                   }
-                });
+                }
               });
           }
         );
     });
   }
 
-  getMonerisTicket(
-    appCode: string,
-    accountId: string,
-    orders: Array<Order.OrderInterface>,
-    payable: number
-  ) {
-    throw new Error("Use moneris ht payment instead");
-    const paymentId = orders[0].paymentId;
-    this.api
-      .post("ClientPayments/moneris/preload", {
-        paymentId
-      })
-      .then((observable) => {
-        observable
-          .pipe(takeUntil(this.unsubscribe$))
-          .subscribe((resp: { code: string; data?: string }) => {
-            console.log("order page moneris preload subscription");
-            if (resp.code === "success") {
-              this.processing = false;
-              this.dismissLoading();
-              this.router.navigate(
-                [`/tabs/browse/order/pay/moneris/${paymentId}/${resp.data}`],
-                {
-                  replaceUrl: true
-                }
-              );
-            } else {
-              this.showAlert("Notice", "Payment failed", "OK");
-              this.processing = false;
-              this.dismissLoading();
-            }
-          });
-      })
-      .catch((e) => {
-        console.error(e);
-        this.showAlert("Notice", "Payment failed", "OK");
-        this.processing = false;
-      });
-  }
+  // getMonerisTicket(
+  //   appCode: string,
+  //   accountId: string,
+  //   orders: Array<Order.OrderInterface>,
+  //   payable: number
+  // ) {
+  //   throw new Error("Use moneris ht payment instead");
+  //   const paymentId = orders[0].paymentId;
+  //   this.api
+  //     .post("ClientPayments/moneris/preload", {
+  //       paymentId
+  //     })
+  //     .then((observable) => {
+  //       observable
+  //         .pipe(takeUntil(this.unsubscribe$))
+  //         .subscribe((resp: { code: string; data?: string }) => {
+  //           console.log("order page moneris preload subscription");
+  //           if (resp.code === "success") {
+  //             this.processing = false;
+  //             this.dismissLoading();
+  //             this.router.navigate(
+  //               [`/tabs/browse/order/pay/moneris/${paymentId}/${resp.data}`],
+  //               {
+  //                 replaceUrl: true
+  //               }
+  //             );
+  //           } else {
+  //             this.showAlert("Notice", "Payment failed", "OK");
+  //             this.processing = false;
+  //             this.dismissLoading();
+  //           }
+  //         });
+  //     })
+  //     .catch((e) => {
+  //       console.error(e);
+  //       this.showAlert("Notice", "Payment failed", "OK");
+  //       this.processing = false;
+  //     });
+  // }
 
   isCardValid() {
     if (!this.cc || this.cc.length < 10) {
@@ -706,22 +675,156 @@ export class OrderPage implements OnInit, OnDestroy {
     return /micromessenger/i.test(navigator.userAgent);
   }
 
-  isMobile() {
-    if (
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        navigator.userAgent
-      )
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   prefersDark() {
     return (
       window.matchMedia("(prefers-color-scheme: dark)").matches ||
       document.body.classList.contains("dark")
     );
+  }
+
+  async alphaPayByQRCode(channel: "wechat" | "alipay" | "unionpay") {
+    if (this.isMobile && channel != "wechat") {
+      return this.alphaPayH5(channel);
+    }
+    if (channel == "wechat") this.paymentMethod = PaymentMethod.ALPHA_WECHAT;
+    if (channel == "alipay") this.paymentMethod = PaymentMethod.ALPHA_ALIPAY;
+    if (channel == "unionpay") {
+      this.paymentMethod = PaymentMethod.ALPHA_UNIONPAY;
+    }
+    this.processing = true;
+    await this.presentLoading();
+    this.saveOrders(this.orders).then((observable) => {
+      observable.toPromise().then(async (resp: any) => {
+        if (resp.code !== "success") {
+          return this.handleInvalidOrders(resp.data);
+        }
+        const order: Order.OrderInterface = resp.data[0];
+        this.paymentSvc
+          .payByAlphapay(order.paymentId, channel, "qrcode")
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe(
+            (resp: any) => {
+              this.handleAlphapayQRCodeResponse(resp);
+            },
+            (e) => {
+              console.error(e);
+              this.showAlert("Notice", "Payment failed", "OK");
+              this.processing = false;
+              this.dismissLoading();
+            }
+          );
+      });
+    });
+  }
+
+  async alphaPayH5(channel: "alipay" | "unionpay") {
+    this.paymentMethod =
+      channel == "alipay"
+        ? PaymentMethod.ALPHA_ALIPAY
+        : PaymentMethod.ALPHA_UNIONPAY;
+    this.processing = true;
+    await this.presentLoading();
+    this.saveOrders(this.orders).then((observable) => {
+      observable.toPromise().then(async (resp: any) => {
+        if (resp.code !== "success") {
+          return this.handleInvalidOrders(resp.data);
+        }
+        const order: Order.OrderInterface = resp.data[0];
+        this.paymentSvc
+          .payByAlphapay(order.paymentId, channel, "h5")
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe(
+            (resp: any) => {
+              (resp: any) => {
+                if (resp && resp.code === "success") {
+                  window.location.href = resp.redirect_url;
+                } else {
+                  this.alphaPayResponse = null;
+                  this.showAlert("Notice", "Payment failed", "OK");
+                }
+              };
+            },
+            (e) => {
+              console.error(e);
+              this.showAlert("Notice", "Payment failed", "OK");
+              this.processing = false;
+              this.dismissLoading();
+            }
+          );
+      });
+    });
+  }
+
+  async alphaPayJSApi(channel = "wechat") {
+    this.paymentMethod = PaymentMethod.ALPHA_WECHAT;
+    this.processing = true;
+    await this.presentLoading();
+    this.saveOrders(this.orders).then((observable) => {
+      observable.toPromise().then(async (resp: any) => {
+        if (resp.code !== "success") {
+          return this.handleInvalidOrders(resp.data);
+        }
+        const order: Order.OrderInterface = resp.data[0];
+        this.paymentSvc
+          .payByAlphapay(order.paymentId, channel, "jsapi")
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe(
+            (resp: any) => {
+              (resp: any) => {
+                if (resp && resp.code === "success") {
+                  window.location.href = resp.redirect_url;
+                } else {
+                  this.alphaPayResponse = null;
+                  this.showAlert("Notice", "Payment failed", "OK");
+                }
+              };
+            },
+            (e) => {
+              console.error(e);
+              this.showAlert("Notice", "Payment failed", "OK");
+              this.processing = false;
+              this.dismissLoading();
+            }
+          );
+      });
+    });
+  }
+
+  handleAlphapayQRCodeResponse(resp: AlphapayResponseType) {
+    console.log(resp);
+    if (resp.code == "success") {
+      this.alphaPayResponse = resp;
+    } else {
+      this.alphaPayResponse = null;
+      this.showAlert("Notice", "Payment failed", "OK");
+    }
+    this.processing = false;
+    this.dismissLoading();
+  }
+
+  cancelAlphaPay() {
+    this.alphaPayResponse = null;
+  }
+
+  getPaymentGatewayLogo(gateway = "", size: "small" | "large" = "small") {
+    gateway = String(gateway).toLowerCase();
+    switch (gateway) {
+      case "moneris":
+        return "assets/img/moneris.svg";
+      case "wechat":
+        return size === "small"
+          ? "assets/img/wechat_pay_light.png"
+          : "assets/img/wechat_pay.png";
+      case "alipay":
+        return size === "small"
+          ? "assets/img/alipay_transparent.png"
+          : "assets/img/alipay.svg";
+      case "unionpay":
+        return size === "small"
+          ? "assets/img/union_pay_small.png"
+          : "assets/img/union_pay.png";
+      case "unionpayonline":
+        return "assets/img/union_pay.png";
+    }
   }
 }

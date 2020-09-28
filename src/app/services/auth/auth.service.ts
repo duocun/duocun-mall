@@ -28,13 +28,13 @@ export class AuthService {
   }
 
   checkToken() {
-    this.storage.get(environment.storageKey.auth).then((res) => {
-      if (res) {
-        this.authState.next(true);
-      } else {
-        this.authState.next(false);
-      }
-    });
+    // this.storage.get(environment.storageKey.auth).then((res) => {
+    //   if (res) {
+    //     this.authState.next(true);
+    //   } else {
+    //     this.authState.next(false);
+    //   }
+    // });
   }
 
   login(token: unknown) {
@@ -76,6 +76,8 @@ export class AuthService {
   }
 
   async getToken() {
+    // const token = await this.storage.get(environment.storageKey.auth);
+    // return token;
     return new Promise((resolve) => {
       this.storage
         .get(environment.storageKey.auth)
