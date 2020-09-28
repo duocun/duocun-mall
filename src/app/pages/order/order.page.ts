@@ -255,6 +255,17 @@ export class OrderPage implements OnInit, OnDestroy {
     return getPictureUrl(item);
   }
 
+  getSnappayPaymentMethod(paymentMethod) {
+    if (paymentMethod === PaymentMethod.WECHAT) {
+      return SnappayPaymentMethod.WECHAT;
+    } else if (paymentMethod === PaymentMethod.ALI) {
+      return SnappayPaymentMethod.ALI;
+    } else if (paymentMethod === PaymentMethod.UNIONPAY) {
+      return SnappayPaymentMethod.UNIONPAY;
+    }
+    return null;
+  }
+
   /**
    *  paymentMethod --- SnappayPaymentMethod: ALIPAY WECHATPAY UNIONPAY
    *  method --- SnappayMethod
@@ -278,10 +289,13 @@ export class OrderPage implements OnInit, OnDestroy {
               return this.handleInvalidOrders(resp.data);
             }
 
+            const snappayPaymentMethod = this.getSnappayPaymentMethod(
+              paymentMethod
+            );
             this.payBySnappayV2(
               this.appCode,
               method,
-              paymentMethod,
+              snappayPaymentMethod,
               resp.data,
               this.charge.payable,
               "Duocun Inc.",
@@ -294,28 +308,24 @@ export class OrderPage implements OnInit, OnDestroy {
 
   snappayByAliWeb() {
     const browserType = this.isMobile ? "WAP" : "PC";
-    this.handleSnappay(
-      SnappayPaymentMethod.ALI,
-      SnappayMethod.WEB,
-      browserType
-    );
+    this.handleSnappay(PaymentMethod.ALI, SnappayMethod.WEB, browserType);
   }
 
   snappayByUnionWeb() {
-    this.handleSnappay(SnappayPaymentMethod.UNIONPAY, SnappayMethod.WEB, "PC");
+    this.handleSnappay(PaymentMethod.UNIONPAY, SnappayMethod.WEB, "PC");
   }
 
   snappayByAliQrcode() {
-    this.handleSnappay(SnappayPaymentMethod.ALI, SnappayMethod.QRCODE, "WAP");
+    this.handleSnappay(PaymentMethod.ALI, SnappayMethod.QRCODE, "WAP");
   }
 
   // web.pay don't support wechat
   snappayByWechatQrcode() {
-    this.handleSnappay(SnappayPaymentMethod.WECHAT, SnappayMethod.QRCODE);
+    this.handleSnappay(PaymentMethod.WECHAT, SnappayMethod.QRCODE);
   }
 
   snappayByWechatH5() {
-    this.handleSnappay(SnappayPaymentMethod.WECHAT, SnappayMethod.H5, "WAP");
+    this.handleSnappay(PaymentMethod.WECHAT, SnappayMethod.H5, "WAP");
   }
 
   payByDeposit() {
