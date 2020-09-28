@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  api: "http://localhost:8000/v1", // "https://api.duocun.ca/v1",
+  api: "http://localhost:8001/v1", // "https://api.duocun.ca/v1dev",
   storageKey: {
     auth: "DUOCUN-AUTH-TOKEN",
     cart: "DUOCUN-CART",
@@ -15,12 +15,12 @@ export const environment = {
   stripe: "",
   defaultLang: "en",
   GOOGLE_MAP_KEY: "",
-  timezone: "Asia/Shanghai",
+  timezone: "America/Toronto",
   monerisMode: "prod",
   monerisHTProfileId: "",
   googleAuthClientId: "",
   facebookAppId: "",
-  socket: "http://localhost:8000"
+  socket: "http://localhost:8001" // "https://api.duocun.ca/v1dev", //
 };
 
 /*

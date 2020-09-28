@@ -1,8 +1,5 @@
 
 <header [menu]="false" [title]="title" [back]="backBtn" [search]="false"></header>
-
-
-
 <ion-content>
   <div class="container container-sm">
     <ion-row class="ion-padding">
@@ -106,30 +103,8 @@
     <!--  END ORDER FORM  -->
     <!-- BEGIN PAYMENT FORM -->
     <ng-container *ngIf="!error; Else errorMsg">
-      <ion-row class="ion-padding" *ngIf="account && charge && !loading">
+      <ion-row class="ion-padding" *ngIf="account && charge && !loading && !alphaPayResponse">
         <ng-container *ngIf="paymentMethod !== PaymentMethod.PREPAY">
-          <!-- BEGIN STRIPE FORM [DISABLED]-->
-          <ng-container *ngIf="false">
-            <ion-col size="12" align="center" class="ion-margin-top">
-              <stripe-card
-                #stripeCard
-                (tokenChange)="stripePay($event)"
-                [options]="prefersDark() ? {hidePostalCode: true, style: {base: {color: '#eee'}}} : {hidePostalCode: true}"
-              ></stripe-card>
-            </ion-col>
-            <ion-col size="12" align="center">
-              <ion-button 
-                color="primary" 
-                size="medium" 
-                expand="full"
-                translate="Stripe"
-                [disabled]="!canPayStripe()"
-                (click)="createStripeToken(stripeCard)"
-              >
-              </ion-button>
-            </ion-col>
-          </ng-container>
-          <!--  END STRIPE FORM [DISABLED] -->
           <!-- BEGIN MONERIS PAY BUTTON -->
           <ion-col size="12" class="ion-text-center ion-margin-top">
             <!-- BEGIN MONERIS CREDIT CARD FORM -->
@@ -166,13 +141,12 @@
               <ion-row class="ion-no-padding">
                 <ion-col class="col-payment-button col-payment-cc">
                   <ion-button
-                    color="primary"
                     size="medium"
                     expand="full"
-                    translate="Pay by Credit Card"
                     [disabled]="loading || processing"
                     (click)="monerisPay()"
                   >
+                    <ion-label translate="Pay by Credit Card"></ion-label>
                   </ion-button>
                 </ion-col>
               </ion-row>
@@ -180,18 +154,186 @@
             <!-- END MONERIS CREDIT CARD FORM -->
             
           </ion-col>
-          <!-- BEGIN WECHAT PAY BUTTON -->
+          <!-- BEGIN WECHAT PAY BUTTON IN WECHAT APP -->
+          <ng-container *ngIf="isWechatBrowser(); Else normalButtons">
+            <!-- <ion-col class="col-payment-button col-payment-wechat" size="12" align="center">
+              <ion-button 
+                color="success" 
+                size="medium" 
+                expand="full" 
+                [disabled]="loading || processing"
+                (click)="paymentGateway === 'alphapay' ? alphaPayJSApi() : wechatPay()"
+              >
+                <img src="{{getPaymentGatewayLogo('wechat')}}" />
+                <ion-label translate="Wechat Pay"></ion-label>
+              </ion-button>
+            </ion-col> -->
+            <!-- <ion-col class="col-payment-button col-payment-alipay" size="12" align="center">
+              <ion-button 
+                size="medium" 
+                expand="full" 
+                [disabled]="loading || processing"
+                (click)="alphaPayH5('alipay')"
+              >
+                <img src="assets/img/alipay_transparent.png" />
+              </ion-button>
+            </ion-col> -->
+            <!-- <ion-col class="col-payment-button col-payment-unionpay" size="12" align="center">
+              <ion-button 
+                size="medium" 
+                expand="full" 
+                translate="UnionPay"
+                [disabled]="loading || processing"
+                (click)="alphaPayH5('unionpay')"
+              ></ion-button>
+            </ion-col> -->
+          </ng-container>
+          <!--  END WECHAT PAY BUTTON  -->
+          <!-- BEGIN ALPHAPAY BUTTONS IN PC BROWSER -->
+          <ng-template #normalButtons>
+            <!-- <ion-col class="col-payment-button col-payment-wechat" size="12" align="center" *ngIf="!isMobile">
+              <ion-button 
+                color="success" 
+                size="medium" 
+                expand="full" 
+                translate="Wechat Pay"
+                [disabled]="loading || processing"
+                (click)="paymentGateway === 'alphapay' ? alphaPayByQRCode('wechat') : wechatPay()"
+              >
+                <img src="{{getPaymentGatewayLogo('wechat')}}" />
+                <ion-label translate="Wechat Pay"></ion-label>
+              </ion-button>
+            </ion-col>
+            <ng-container *ngIf="paymentGateway === 'alphapay'">
+              <ion-col class="col-payment-button col-payment-alipay" size="12" align="center">
+                <ion-button
+                  size="medium" 
+                  expand="full" 
+                  [disabled]="loading || processing"
+                  (click)="alphaPayByQRCode('alipay')"
+                >
+                  <img src="{{getPaymentGatewayLogo('alipay')}}" />
+                </ion-button>
+              </ion-col>
+              <ion-col class="col-payment-button col-payment-unionpay" size="12" align="center" *ngIf="!isMobile">
+                <ion-button 
+                  size="medium" 
+                  expand="full" 
+                  [disabled]="loading || processing"
+                  (click)="alphaPayByQRCode('unionpay')"
+                >
+                  <img src="{{getPaymentGatewayLogo('unionpay')}}" />
+                  <ion-label translate="UnionPay"></ion-label>
+                </ion-button>
+              </ion-col>
+            </ng-container> -->
+          </ng-template>
+          <!--  END ALPHAPAY BUTTONS IN PC BROWSER  -->
+
+          <!-- translate="Wechat Pay" -->
           <ion-col class="col-payment-button col-payment-wechat" size="12" align="center" *ngIf="isWechatBrowser()">
             <ion-button 
               color="success" 
               size="medium" 
               expand="full" 
-              translate="Wechat Pay"
               [disabled]="loading || processing"
-              (click)="wechatPay()"
-            ></ion-button>
+              (click)="snappayByWechatH5()"
+              translate="Wechat Pay"
+            >
+            </ion-button>
+            </ion-col>
+
+            <!-- <ion-col class="col-payment-button col-payment-wechat" size="12" align="center">
+              <ion-button 
+                color="success" 
+                size="medium" 
+                expand="full" 
+                [disabled]="loading || processing"
+                (click)="snappayByWechatH5()"
+              >
+              Snappay Wechat QrCode pay
+              </ion-button>
+            </ion-col> -->
+
+          <!-- translate="Ali Pay" -->
+          <!-- <ion-col class="col-payment-button col-payment-ali" size="12" align="center" *ngIf="!isWechatBrowser()">
+            <ion-button 
+              color="success" 
+              size="medium" 
+              expand="full" 
+              [disabled]="loading || processing"
+              (click)="snappayByAliQrcode()"
+            >
+            Snappay Ali QrCode pay
+          </ion-button>
+          </ion-col> -->
+
+          <!-- <ion-col class="col-payment-button col-payment-ali" size="12" align="center" *ngIf="!isWechatBrowser()">
+            <ion-button 
+              color="success" 
+              size="medium" 
+              expand="full"
+              [disabled]="loading || processing"
+              (click)="snappayByWechatQrcode()"
+              translate="Wechat Pay"
+            >
+            </ion-button>
           </ion-col>
-          <!--  END WECHAT PAY BUTTON  -->
+
+          <ion-col class="col-payment-button col-payment-ali" size="12" align="center" *ngIf="!isWechatBrowser()">
+            <ion-button 
+              color="success" 
+              size="medium" 
+              expand="full" 
+              [disabled]="loading || processing"
+              (click)="snappayByAliWeb()"
+              translate="Ali Pay"
+            >
+            </ion-button>
+          </ion-col>
+
+          <ion-col class="col-payment-button col-payment-union" size="12" align="center" *ngIf="!isWechatBrowser()">
+            <ion-button 
+              color="success" 
+              size="medium" 
+              expand="full" 
+              [disabled]="loading || processing"
+              (click)="snappayByUnionWeb()"
+              translate="Union Pay"
+            >
+            </ion-button>
+          </ion-col> -->
+
+          <!-- <ion-col class="col-payment-button col-payment-ali" size="12" align="center">
+            <ion-button 
+              color="success" 
+              size="medium" 
+              expand="full" 
+              [disabled]="loading || processing"
+              (click)="alphapayWeb('ALIPAY')"
+            >Alpha Ali web pay</ion-button>
+          </ion-col>
+
+          <ion-col class="col-payment-button col-payment-ali" size="12" align="center">
+            <ion-button 
+              color="success" 
+              size="medium" 
+              expand="full" 
+              [disabled]="loading || processing"
+              (click)="alphapayH5('ALIPAY')"
+            >Alpha Ali web h5</ion-button>
+          </ion-col> -->
+
+          <!-- <ion-col class="col-payment-button col-payment-ali" size="12" align="center">
+            <ion-button 
+              color="success" 
+              size="medium" 
+              expand="full" 
+              [disabled]="loading || processing"
+              (click)="snappayByWeb('ALIPAY')"
+            >Snappay Ali web pay</ion-button>
+          </ion-col> -->
+
         </ng-container>
         <!-- BEGIN PAY BY DEPOSIT BUTTON -->
         <ion-col size="12" align="center" *ngIf="paymentMethod === PaymentMethod.PREPAY">
@@ -208,6 +350,30 @@
         <!--  END PAY BY DEPOSIT BUTTON  -->
         
       </ion-row>
+      <!--  BEGIN ALPHAPAY QRCODE IMAGE  -->
+      <ion-row class="ion-padding" *ngIf="alphaPayResponse">
+        <ion-col size="12" class="ion-text-center">
+          <img class="payment-logo" src="{{getPaymentGatewayLogo(alphaPayResponse.data.channel, 'large')}}" />
+        </ion-col>
+        <ion-col size="12" class="ion-text-center">
+          <img src="{{alphaPayResponse.data.qrcode_img}}" />
+        </ion-col>
+        <ion-col size="12">
+          <p class="ion-text-center">{{ (alphaPayResponse.total).toFixed(2) }} CAD</p>
+        </ion-col>
+        <ion-col size="12">
+          <ion-button
+            color=""
+            size="medium"
+            expand="full"
+            translate="Cancel"
+            (click)="cancelAlphaPay()"
+          >
+          </ion-button>
+        </ion-col>
+
+      </ion-row>
+      <!--   END  ALPHAPAY QRCODE IMAGE  -->
     </ng-container>
     <!--  END PAYMENT FORM  -->
   </div>

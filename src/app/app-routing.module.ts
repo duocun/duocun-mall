@@ -3,6 +3,13 @@ import { PreloadAllModules, RouterModule, Routes } from "@angular/router";
 
 const routes: Routes = [
   {
+    path: "payment-success",
+    loadChildren: () =>
+      import("./pages/payment-success/payment-success.module").then(
+        (m) => m.PaymentSuccessPageModule
+      )
+  },
+  {
     path: "",
     loadChildren: () =>
       import("./pages/home/home.module").then((m) => m.HomePageModule)

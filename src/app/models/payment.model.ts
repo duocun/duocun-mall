@@ -25,11 +25,53 @@ export const PaymentError = {
 export const PaymentMethod = {
   CASH: "CA",
   WECHAT: "W",
+  ALI: "A",
+  UNIONPAY: "UP",
   CREDIT_CARD: "CC",
-  PREPAY: "P"
+  PREPAY: "P",
+  ALPHA_WECHAT: "AW",
+  ALPHA_ALIPAY: "AA",
+  ALPHA_UNIONPAY: "AU"
 };
 
 export const PaymentStatus = {
   UNPAID: "U",
   PAID: "P"
+};
+
+export type AlphapayResponseType = {
+  code: "success" | "fail";
+  data?: {
+    partner_order_id: string;
+    code_url: string;
+    order_id: string;
+    return_code: string;
+    pay_url: string;
+    qrcode_img: string;
+    channel: string;
+  };
+  total?: number;
+  redirect_url?: string;
+};
+
+export interface IPaymentResponse {
+  status: string; // ResponseStatus
+  code: string; // stripe/snappay return code
+  decline_code: string; // strip only
+  msg: string; // stripe/snappay retrun message
+  chargeId: string; // stripe only { chargeId:x }
+  url: string; // snappay {url: data[0].h5pay_url} //  { code, data, msg, total, psn, sign }
+  err: string;
+}
+
+export const SnappayMethod = {
+  WEB: "pay.webpay",
+  H5: "pay.h5pay",
+  QRCODE: "pay.qrcodepay"
+};
+
+export const SnappayPaymentMethod = {
+  ALI: "ALIPAY",
+  WECHAT: "WECHATPAY",
+  UNIONPAY: "UNIONPAY"
 };
