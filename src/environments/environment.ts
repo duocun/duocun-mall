@@ -22,7 +22,6 @@ export const environment = {
   googleAuthClientId: "",
   facebookAppId: "",
   socket: "http://localhost:8000" // "https://api.duocun.ca/v1dev", //
-
 };
 
 /*
