@@ -20,7 +20,7 @@ export class SnappayService {
   ) {
     const paymentId = orders ? orders[0].paymentId : null;
 
-    return this.api.post("payments/snappay/pay", {
+    return this.api.postV2("payments/snappay/pay", {
       // paymentActionCode: "P",
       method,
       paymentMethod,
