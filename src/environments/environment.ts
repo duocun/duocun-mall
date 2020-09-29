@@ -20,7 +20,7 @@ export const environment = {
   monerisHTProfileId: "",
   googleAuthClientId: "",
   facebookAppId: "",
-  socket: "http://localhost:8001" // "https://api.duocun.ca/v1dev", //
+  socket: "http://localhost:8000" // "https://api.duocun.ca/v1dev", //
 };
 
 /*
