@@ -1,6 +1,6 @@
 import { Component, ElementRef } from "@angular/core";
 
-import { Platform } from "@ionic/angular";
+import { Platform, ToastController } from "@ionic/angular";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
 import { TranslateService } from "@ngx-translate/core";
@@ -12,6 +12,7 @@ import { Router } from "@angular/router";
 import { AuthService } from "src/app/services/auth/auth.service";
 import { AlertController } from "@ionic/angular";
 import { ContextService } from "src/app/services/context/context.service";
+import { SocketService } from "./services/socket/socket.service";
 
 @Component({
   selector: "app-root",
@@ -36,7 +37,9 @@ export class AppComponent {
     private router: Router,
     private authSvc: AuthService,
     private context: ContextService,
-    private alert: AlertController
+    private alert: AlertController,
+    private toast: ToastController,
+    private socketio: SocketService
   ) {
     this.initializeApp();
     this.stroage.get(environment.storageKey.lang).then((lang: any) => {
@@ -46,6 +49,23 @@ export class AppComponent {
         this.stroage.set(environment.storageKey.lang, environment.defaultLang);
         this.translator.use(environment.defaultLang);
       }
+    });
+
+    this.socketio.receivedMessage.subscribe((data) => {
+      if(!this.socketio.tabOpened){
+        this.presentToast();
+      }
+    });
+  }
+
+  async presentToast() {
+    const original_word = "A message from customer service arrived";
+    this.translator.get([original_word]).subscribe(async (dict) => {
+      const toast = await this.toast.create({
+        message: dict[original_word],
+        duration: 2000
+      });
+      toast.present();
     });
   }
 

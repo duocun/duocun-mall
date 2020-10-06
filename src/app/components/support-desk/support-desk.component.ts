@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, OnDestroy } from "@angular/core";
 import { ModalController, AlertController } from "@ionic/angular";
 import { SocketService } from "src/app/services/socket/socket.service";
 import { TranslateService } from "@ngx-translate/core";
@@ -13,7 +13,7 @@ import { takeUntil } from "rxjs/operators";
   templateUrl: "./support-desk.component.html",
   styleUrls: ["./support-desk.component.scss"]
 })
-export class SupportDeskComponent implements OnInit {
+export class SupportDeskComponent implements OnInit, OnDestroy {
   @ViewChild("content", { static: false }) private content: any;
   @ViewChild("fileInput", { static: false }) private fileInput: any;
 
@@ -104,6 +104,7 @@ export class SupportDeskComponent implements OnInit {
 
   ngOnInit() {
     this.getSetting();
+    this.socketio.tabOpened = true;
   }
 
   getSetting(): void {
@@ -136,6 +137,7 @@ export class SupportDeskComponent implements OnInit {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
     this.receivedMessageSubscriber.unsubscribe();
+    this.socketio.tabOpened = false;
   }
 
   dismiss() {
