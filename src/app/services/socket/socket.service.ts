@@ -13,6 +13,7 @@ export class SocketService {
   csUserid: BehaviorSubject<string>;
   receivedMessage: Subject<any>;
   alphaPayResp: Subject<any>;
+  tabOpened: boolean = false;
 
   constructor(private authSvc: AuthService, private storage: Storage) {
     this.receivedMessage = new Subject();
