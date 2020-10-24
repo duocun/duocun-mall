@@ -10,11 +10,17 @@ import { SupportDeskComponent } from "../support-desk/support-desk.component";
 export class ChatButtonComponent implements OnInit {
   unread: number;
   modal: any;
+  isWechatBrowser = false;
+
   constructor(private modalController: ModalController) {}
 
   ngOnInit() {
     this.unread = 0;
     this.modal = null;
+    const ua = navigator.userAgent.toLowerCase();
+    if (ua.match(/micromessenger/i) && ua.match(/micromessenger/i).length > 0) {
+      this.isWechatBrowser = true;
+    }
   }
 
   async showSupportDesk() {
