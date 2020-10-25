@@ -1,4 +1,4 @@
-import { Component, ElementRef } from "@angular/core";
+import { Component } from "@angular/core";
 
 import { Platform, ToastController } from "@ionic/angular";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
@@ -52,7 +52,7 @@ export class AppComponent {
     });
 
     this.socketio.receivedMessage.subscribe((data) => {
-      if(!this.socketio.tabOpened){
+      if (!this.socketio.tabOpened) {
         this.presentToast();
       }
     });
