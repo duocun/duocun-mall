@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  api: "http://localhost:8001/v1", // "https://api.duocun.ca/v1dev",
+  api: "http://localhost:8000/v1", // "https://api.duocun.ca/v1dev",
   storageKey: {
     auth: "DUOCUN-AUTH-TOKEN",
     cart: "DUOCUN-CART",
@@ -16,5 +16,5 @@ export const environment = {
   monerisHTProfileId: "",
   googleAuthClientId: "",
   facebookAppId: "",
-  socket: "http://localhost:8001" // "https://api.duocun.ca/v1dev", //
+  socket: "http://localhost:8000" // "https://api.duocun.ca/v1dev", //
 };
