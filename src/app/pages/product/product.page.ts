@@ -47,6 +47,7 @@ export class ProductPage implements OnInit, OnDestroy {
   account: AccountInterface;
   backBtn = { url: "/tabs/browse", text: "" };
   private unsubscribe$ = new Subject<void>();
+
   constructor(
     private route: ActivatedRoute,
     private api: ApiService,
@@ -142,36 +143,60 @@ export class ProductPage implements OnInit, OnDestroy {
                         quantity: 0,
                         product: this.product
                       };
+
                       this.api
-                        .get("MerchantSchedules/availables-v2", {
-                          merchantId: data.merchantId,
-                          location: JSON.stringify(this.location)
+                        .get(`Products/G/${productId}/schedules`, {
+                          lat: this.location.lat,
+                          lng: this.location.lng
                         })
                         .then((observable) => {
                           observable
                             .pipe(takeUntil(this.unsubscribe$))
-                            .subscribe((schedules: any[]) => {
-                              console.log("product page schedule subscription");
-                              if (schedules && schedules.length > 0) {
-                                this.isInRange = true;
-                                const dows = schedules[0].rules.map(
-                                  (r) => +r.deliver.dow
-                                );
-                                const bs = this.getBaseDateList(
-                                  orderEndList,
-                                  dows
-                                );
-                                this.getDeliverySchedule(
-                                  this.merchant,
-                                  bs,
-                                  baseTimeList
-                                );
-                              } else {
-                                this.isInRange = false;
+                            .subscribe(
+                              (res: {
+                                code: string;
+                                data: DeliveryDateTimeInterface[];
+                              }) => {
+                                if (res.code === "success") {
+                                  this.schedules = res.data;
+                                  if (res.data.length > 0) {
+                                    this.isInRange = true;
+                                  }
+                                }
                                 this.loading = false;
                               }
-                            });
+                            );
                         });
+                      // this.api
+                      //   .get("MerchantSchedules/availables-v2", {
+                      //     merchantId: data.merchantId,
+                      //     location: JSON.stringify(this.location)
+                      //   })
+                      //   .then((observable) => {
+                      //     observable
+                      //       .pipe(takeUntil(this.unsubscribe$))
+                      //       .subscribe((schedules: any[]) => {
+                      //         console.log("product page schedule subscription");
+                      //         if (schedules && schedules.length > 0) {
+                      //           this.isInRange = true;
+                      //           const dows = schedules[0].rules.map(
+                      //             (r) => +r.deliver.dow
+                      //           );
+                      //           const bs = this.getBaseDateList(
+                      //             orderEndList,
+                      //             dows
+                      //           );
+                      //           this.getDeliverySchedule(
+                      //             this.merchant,
+                      //             bs,
+                      //             baseTimeList
+                      //           );
+                      //         } else {
+                      //           this.isInRange = false;
+                      //           this.loading = false;
+                      //         }
+                      //       });
+                      //   });
                     }
                   });
               } else {
@@ -274,35 +299,35 @@ export class ProductPage implements OnInit, OnDestroy {
     return bs.map((b) => b.toISOString());
   }
 
-  getDeliverySchedule(merchant, baseList, deliverTimeList) {
-    console.log("getDeliverySchedule");
-    this.api
-      .get("Merchants/G/deliverSchedules", {
-        merchantId: this.merchant._id,
-        lat: this.location.lat,
-        lng: this.location.lng,
-        dt: moment().format("YYYY-MM-DDTHH:mm:ss")
-      })
-      .then((observable) =>
-        observable
-          .pipe(takeUntil(this.unsubscribe$))
-          .subscribe(
-            (resp: {
-              code: string;
-              data: Array<DeliveryDateTimeInterface>;
-            }) => {
-              console.log("product page schedule subscription");
-              if (resp.code === "success") {
-                this.schedules = resp.data.filter((schedule: any) => {
-                  return schedule.date > moment().format("YYYY-MM-DD");
-                });
-                // this.initItems();
-              }
-              this.loading = false;
-            }
-          )
-      );
-  }
+  // getDeliverySchedule(merchant, baseList, deliverTimeList) {
+  //   console.log("getDeliverySchedule");
+  //   this.api
+  //     .get("Merchants/G/deliverSchedules", {
+  //       merchantId: this.merchant._id,
+  //       lat: this.location.lat,
+  //       lng: this.location.lng,
+  //       dt: moment().format("YYYY-MM-DDTHH:mm:ss")
+  //     })
+  //     .then((observable) =>
+  //       observable
+  //         .pipe(takeUntil(this.unsubscribe$))
+  //         .subscribe(
+  //           (resp: {
+  //             code: string;
+  //             data: Array<DeliveryDateTimeInterface>;
+  //           }) => {
+  //             console.log("product page schedule subscription");
+  //             if (resp.code === "success") {
+  //               this.schedules = resp.data.filter((schedule: any) => {
+  //                 return schedule.date > moment().format("YYYY-MM-DD");
+  //               });
+  //               // this.initItems();
+  //             }
+  //             this.loading = false;
+  //           }
+  //         )
+  //     );
+  // }
 
   // initItems() {
   //   this.items = [];

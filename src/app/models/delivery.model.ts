@@ -1,6 +1,7 @@
 export interface DeliveryDateTimeInterface {
   date: string;
   time: string;
+  margin?: number;
 }
 
 export function areEqualDeliveryDateTime(
