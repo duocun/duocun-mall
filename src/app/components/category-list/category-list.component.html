@@ -16,7 +16,7 @@
     <ion-col *ngFor="let category of categories.slice(0,categoryDisplayLimit)" size-xs="3" size-lg="2.4"
       class="ion-no-margin ion-no-padding">
       <ion-button [disabled]="loading" [color]="selectedId === category._id ? 'success' : 'light'" size="small"
-        expand="full" localValue [data]="category" key="{{lang === 'en' ? 'nameEN' : 'name'}}"
+        expand="full" localValue [data]="category" [key]="'name'"
         (click)="handleSelectCategory(category)">
       </ion-button>
     </ion-col>

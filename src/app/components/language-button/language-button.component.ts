@@ -45,8 +45,9 @@ export class LanguageButtonComponent implements OnInit, OnDestroy {
   }
 
   setLanguage(lang) {
-    this.storage.set(environment.storageKey.lang, lang);
-    this.translator.use(lang);
-    window.location.reload();
+    this.storage.set(environment.storageKey.lang, lang).then((lang) => {
+      this.translator.use(lang);
+      window.location.reload();
+    });
   }
 }
