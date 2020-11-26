@@ -13,6 +13,6 @@
 
 <ion-button mat-button [matMenuTriggerFor]="menu" >{{lang === 'zh'? 'EN' : '中' }}</ion-button>
 <mat-menu #menu="matMenu">
-  <button mat-menu-item (click)="setLanguage('end')">English</button>
+  <button mat-menu-item (click)="setLanguage('en')">English</button>
   <button mat-menu-item (click)="setLanguage('zh')">中文</button>
 </mat-menu>
