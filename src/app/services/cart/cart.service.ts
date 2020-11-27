@@ -119,22 +119,29 @@ export class CartService {
     this.cart.items = this.cart.items.filter((item) => {
       if (item.delivery && item.delivery.date) {
         if (item.delivery.margin && item.delivery.margin < 0) {
-          if (item.delivery.date === moment().add(1, 'd').format('YYYY-MM-DD')) {
-            if (parseInt(moment().format('HH'), 10) < 24 + item.delivery.margin) {
+          if (
+            item.delivery.date === moment().add(1, "d").format("YYYY-MM-DD")
+          ) {
+            if (
+              parseInt(moment().format("HH"), 10) <
+              24 + item.delivery.margin
+            ) {
               return true;
             }
             return false;
           }
-          return item.delivery.date > moment().add(1, 'd').format('YYYY-MM-DD');
+          return item.delivery.date > moment().add(1, "d").format("YYYY-MM-DD");
         } else if (item.delivery.margin && item.delivery.margin > -1) {
-          if (item.delivery.date === moment().format('YYYY-MM-DD')) {
-            if (parseInt(moment().format('HH'), 10) < item.delivery.margin) {
+          if (item.delivery.date === moment().format("YYYY-MM-DD")) {
+            if (parseInt(moment().format("HH"), 10) < item.delivery.margin) {
               return true;
             }
             return false;
           }
         }
-        return item.delivery && item.delivery.date > moment().format('YYYY-MM-dd');
+        return (
+          item.delivery && item.delivery.date > moment().format("YYYY-MM-dd")
+        );
       }
       return true;
     });
