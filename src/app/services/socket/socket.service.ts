@@ -21,7 +21,9 @@ export class SocketService {
     this.csUserid = new BehaviorSubject<string>(
       localStorage.getItem("cs-userid")
     );
-    this.mSocket = io(environment.socket);
+    this.mSocket = io(environment.socket, {
+      path: `${environment.svcPath}/socket.io`
+    });
     this.receiveSocket(this.mSocket);
   }
 
