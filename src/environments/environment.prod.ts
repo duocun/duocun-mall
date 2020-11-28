@@ -1,5 +1,5 @@
 export const environment = {
-  production: false,
+  production: true,
   api: "http://localhost:8001/v1", // "https://api.duocun.ca/v1dev",
   storageKey: {
     auth: "DUOCUN-AUTH-TOKEN",
@@ -9,12 +9,13 @@ export const environment = {
   },
   media: "https://d27ftifr2ocsa6.cloudfront.net/media/",
   stripe: "",
-  defaultLang: "en",
+  defaultLang: "zh",
   GOOGLE_MAP_KEY: "",
   timezone: "America/Toronto",
   monerisMode: "prod",
   monerisHTProfileId: "",
   googleAuthClientId: "",
   facebookAppId: "",
-  socket: "http://localhost:8001" // "https://api.duocun.ca/v1dev", //
+  socket: "http://localhost:8001", // "https://api.duocun.ca/v1dev", //
+  svcPath: "/v1"
 };
