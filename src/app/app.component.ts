@@ -52,7 +52,7 @@ export class AppComponent {
     });
 
     this.socketio.receivedMessage.subscribe((data) => {
-      if(!this.socketio.tabOpened){
+      if (!this.socketio.tabOpened) {
         this.presentToast();
       }
     });
