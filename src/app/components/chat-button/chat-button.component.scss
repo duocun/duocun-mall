@@ -27,7 +27,8 @@ ion-button {
   }
 }
 @media(max-width: 480px) {
-  ion-button.common-button {
+  ion-button.common-button,
+  ion-button.wechat-button.ios {
     bottom: 66px;
     right: 20px;
     height: 56px;
