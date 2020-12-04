@@ -13,7 +13,7 @@ export const environment = {
   },
   media: "https://d27ftifr2ocsa6.cloudfront.net/media/",
   stripe: "",
-  defaultLang: "en",
+  defaultLang: "zh",
   GOOGLE_MAP_KEY: "",
   timezone: "America/Toronto",
   monerisMode: "prod",
