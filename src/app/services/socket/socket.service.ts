@@ -14,6 +14,7 @@ export class SocketService {
   receivedMessage: Subject<any>;
   alphaPayResp: Subject<any>;
   tabOpened: boolean = false;
+  unread = 0;
 
   constructor(private authSvc: AuthService, private storage: Storage) {
     this.receivedMessage = new Subject();

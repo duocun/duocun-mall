@@ -1,4 +1,6 @@
 <ion-button [class]="isWechatBrowser ? 'wechat-button' : 'common-button'" (click)="showSupportDesk()">
   <ion-icon slot="icon-only" name="chatbox-ellipses-outline"></ion-icon>
-  <ion-badge *ngIf="unread > 0" [class.badge-one]="unread < 10" [class.badge-two]="unread >= 10" color="danger">{{unread}}</ion-badge>
+  <ion-badge *ngIf="getUnread() > 0" [class.badge-one]="getUnread() < 10" [class.badge-two]="getUnread() >= 10" color="danger">
+    {{ getUnread() }}
+  </ion-badge>
 </ion-button>

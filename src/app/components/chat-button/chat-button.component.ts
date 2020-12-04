@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ModalController } from "@ionic/angular";
+import { SocketService } from "src/app/services/socket/socket.service";
 import { SupportDeskComponent } from "../support-desk/support-desk.component";
 
 @Component({
@@ -8,19 +9,24 @@ import { SupportDeskComponent } from "../support-desk/support-desk.component";
   styleUrls: ["./chat-button.component.scss"]
 })
 export class ChatButtonComponent implements OnInit {
-  unread: number;
   modal: any;
   isWechatBrowser = false;
 
-  constructor(private modalController: ModalController) {}
+  constructor(
+    private modalController: ModalController,
+    private socketio: SocketService
+  ) {}
 
   ngOnInit() {
-    this.unread = 0;
     this.modal = null;
     const ua = navigator.userAgent.toLowerCase();
     if (ua.match(/micromessenger/i) && ua.match(/micromessenger/i).length > 0) {
       this.isWechatBrowser = true;
     }
+  }
+
+  getUnread(): number {
+    return this.socketio.unread;
   }
 
   async showSupportDesk() {

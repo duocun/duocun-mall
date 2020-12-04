@@ -13,6 +13,7 @@ import { AuthService } from "src/app/services/auth/auth.service";
 import { AlertController } from "@ionic/angular";
 import { ContextService } from "src/app/services/context/context.service";
 import { SocketService } from "./services/socket/socket.service";
+import { ApiService } from "./services/api/api.service";
 
 @Component({
   selector: "app-root",
@@ -39,7 +40,8 @@ export class AppComponent {
     private context: ContextService,
     private alert: AlertController,
     private toast: ToastController,
-    private socketio: SocketService
+    private socketio: SocketService,
+    private api: ApiService
   ) {
     this.initializeApp();
     this.stroage.get(environment.storageKey.lang).then((lang: any) => {
@@ -50,11 +52,27 @@ export class AppComponent {
         this.translator.use(environment.defaultLang);
       }
     });
-
+    this.socketio.csUserid.subscribe((csUserId) => {
+      if (csUserId) {
+        this.getUnreadMessagesCount(csUserId);
+        this.socketio.joinCustomerServiceRoom(csUserId);
+      }
+    });
     this.socketio.receivedMessage.subscribe((data) => {
       if (!this.socketio.tabOpened) {
+        this.socketio.unread++;
         this.presentToast();
       }
+    });
+  }
+
+  getUnreadMessagesCount(userId: string): void {
+    this.api.get(`/Messages/users/${userId}/unread`).then((observable) => {
+      observable.subscribe((res: any) => {
+        if (res.code) {
+          this.socketio.unread = res.data;
+        }
+      });
     });
   }
 

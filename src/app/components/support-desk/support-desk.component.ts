@@ -1,8 +1,15 @@
-import { Component, OnInit, ViewChild, OnDestroy } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  OnDestroy,
+  Inject,
+  PLATFORM_ID
+} from "@angular/core";
 import { ModalController, AlertController } from "@ionic/angular";
 import { SocketService } from "src/app/services/socket/socket.service";
 import { TranslateService } from "@ngx-translate/core";
-import { formatDate } from "@angular/common";
+import { formatDate, isPlatformBrowser } from "@angular/common";
 import { AuthService } from "src/app/services/auth/auth.service";
 import { ApiService } from "src/app/services/api/api.service";
 import { Subject } from "rxjs";
@@ -49,6 +56,7 @@ export class SupportDeskComponent implements OnInit, OnDestroy {
   receivedMessageSubscriber: any = null;
 
   constructor(
+    @Inject(PLATFORM_ID) platformID: object,
     private modalController: ModalController,
     private socketio: SocketService,
     private alert: AlertController,
@@ -59,27 +67,24 @@ export class SupportDeskComponent implements OnInit, OnDestroy {
     this.socketio.csUserid.subscribe((csUserId) => {
       if (csUserId) {
         this.userId = csUserId;
-        this.getMessages(null);
-        console.log(`user id is ${this.userId}`);
-
-        // join in that room
-        this.socketio.joinCustomerServiceRoom(csUserId);
-
+        if (isPlatformBrowser(platformID)) {
+          if (!/like Mac OS X/.test(window.navigator.userAgent)) {
+            this.getMessages(null);
+          }
+        }
         if (this.receivedMessageSubscriber === null) {
           this.receivedMessageSubscriber = this.socketio.receivedMessage.subscribe(
             (data) => {
               // update message to read state
-              this.api
-                .get(`/Messages/chatmessages/reset/${data._id}`)
-                .then((observable) => {
-                  observable
-                    .pipe(takeUntil(this.unsubscribe$))
-                    .subscribe((res: any) => {
-                      if (res.code === "success") {
-                        // reset message ok
-                      }
-                    });
-                });
+              this.api.get(`/Messages/reset/${data._id}`).then((observable) => {
+                observable
+                  .pipe(takeUntil(this.unsubscribe$))
+                  .subscribe((res: any) => {
+                    if (res.code === "success") {
+                      // reset message ok
+                    }
+                  });
+              });
 
               this.messages.unshift(data);
               this.messageList.push(data);
@@ -93,7 +98,6 @@ export class SupportDeskComponent implements OnInit, OnDestroy {
     });
     this.auth.getAccount().subscribe((account) => {
       if (account) {
-        console.log(account);
         this.senderImageUrl = account.imageurl;
         this.userName = account.username;
         localStorage.setItem("cs-userid", account._id);
@@ -104,6 +108,7 @@ export class SupportDeskComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getSetting();
+    this.resetMessages();
     this.socketio.tabOpened = true;
   }
 
@@ -133,11 +138,18 @@ export class SupportDeskComponent implements OnInit, OnDestroy {
     });
   }
 
+  resetMessages(): void {
+    this.api.get(`/Messages/users/${this.userId}/reset`).then((observable) => {
+      observable.pipe(takeUntil(this.unsubscribe$)).subscribe();
+    });
+  }
+
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
     this.receivedMessageSubscriber.unsubscribe();
     this.socketio.tabOpened = false;
+    this.socketio.unread = 0;
   }
 
   dismiss() {
@@ -209,15 +221,12 @@ export class SupportDeskComponent implements OnInit, OnDestroy {
                   }
                 }
               }
-
-              console.log(this.messages);
-
               if (event) event.target.complete();
             });
         });
     }
 
-    this.allLoaded = true;
+    // this.allLoaded = true;
   }
 
   onClearImage(): void {
@@ -310,7 +319,6 @@ export class SupportDeskComponent implements OnInit, OnDestroy {
 
   // for infinite scroll
   loadData(event) {
-    console.log("Load Messages...");
     this.getMessages(event);
   }
 
