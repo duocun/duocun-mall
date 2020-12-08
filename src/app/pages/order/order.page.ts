@@ -72,7 +72,10 @@ export class OrderPage implements OnInit, OnDestroy {
   title = "Confirm Order";
   backBtn = { url: "/tabs/cart", text: "" };
   paymentGateway = "snappay";
+  isCaptchaResolved = false;
+  zipCode = "";
   private unsubscribe$ = new Subject<void>();
+
   constructor(
     private cartSvc: CartService,
     private authSvc: AuthService,
@@ -550,63 +553,75 @@ export class OrderPage implements OnInit, OnDestroy {
   }
 
   async monerisPay() {
-    const valid = this.isCardValid();
-    if (!valid.isValid) {
-      this.showAlert("Notice", valid.message, "OK");
-      return;
-    }
-    this.paymentMethod = PaymentMethod.CREDIT_CARD;
-    this.processing = true;
-    await this.presentLoading();
+    if (this.isCaptchaResolved) {
+      const valid = this.isCardValid();
+      if (!valid.isValid) {
+        this.showAlert("Notice", valid.message, "OK");
+        return;
+      }
+      if (this.zipCode.trim() === "") {
+        this.showAlert("Notice", "Please input zip code", "OK");
+        return;
+      }
+      if (this.zipCode.trim().length !== 6) {
+        this.showAlert("Notice", "Zip code length must be 6", "OK");
+        return;
+      }
+      this.paymentMethod = PaymentMethod.CREDIT_CARD;
+      this.processing = true;
+      await this.presentLoading();
 
-    this.saveOrders(this.orders).then((observable) => {
-      observable
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe(
-          (resp: { code: string; data: Array<Order.OrderInterface> }) => {
-            console.log("order page save order subscription");
-            if (resp.code !== "success") {
-              return this.handleInvalidOrders(resp.data);
-            }
-            const order: Order.OrderInterface = resp.data[0];
+      this.saveOrders(this.orders).then((observable) => {
+        observable
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe(
+            (resp: { code: string; data: Array<Order.OrderInterface> }) => {
+              console.log("order page save order subscription");
+              if (resp.code !== "success") {
+                return this.handleInvalidOrders(resp.data);
+              }
+              const order: Order.OrderInterface = resp.data[0];
 
-            this.paymentSvc
-              .payByCreditCard(order.paymentId, this.cc, this.exp, this.cvd)
-              .pipe(takeUntil(this.unsubscribe$))
-              .subscribe((resp: any) => {
-                if (resp.err == PaymentError.NONE) {
-                  this.showAlert("Notice", "Payment success", "OK");
-                  this.cartSubscription.unsubscribe();
-                  this.cartSvc.clearCart();
+              this.paymentSvc
+                .payByCreditCard(order.paymentId, this.cc, this.exp, this.cvd)
+                .pipe(takeUntil(this.unsubscribe$))
+                .subscribe((resp: any) => {
+                  if (resp.err == PaymentError.NONE) {
+                    this.showAlert("Notice", "Payment success", "OK");
+                    this.cartSubscription.unsubscribe();
+                    this.cartSvc.clearCart();
 
-                  // await this.authSvc.updateData(); // try re-login
+                    // await this.authSvc.updateData(); // try re-login
 
-                  this.processing = false;
-                  this.dismissLoading().then(() => {});
-
-                  console.log("navigate to order history");
-
-                  this.router.navigate(["/tabs/my-account/order-history"], {
-                    replaceUrl: true
-                  });
-                } else {
-                  if (resp.data) {
-                    this.handleInvalidOrders(resp.data);
-                  } else {
-                    if (resp.msg) {
-                      const message = "Moneris_" + resp.msg;
-                      this.showAlert("Notice", message, "OK");
-                    } else {
-                      this.showAlert("Notice", "Payment failed", "OK");
-                    }
                     this.processing = false;
                     this.dismissLoading().then(() => {});
+
+                    console.log("navigate to order history");
+
+                    this.router.navigate(["/tabs/my-account/order-history"], {
+                      replaceUrl: true
+                    });
+                  } else {
+                    if (resp.data) {
+                      this.handleInvalidOrders(resp.data);
+                    } else {
+                      if (resp.msg) {
+                        const message = "Moneris_" + resp.msg;
+                        this.showAlert("Notice", message, "OK");
+                      } else {
+                        this.showAlert("Notice", "Payment failed", "OK");
+                      }
+                      this.processing = false;
+                      this.dismissLoading().then(() => {});
+                    }
                   }
-                }
-              });
-          }
-        );
-    });
+                });
+            }
+          );
+      });
+    } else {
+      this.showAlert("Notice", 'Please check "I\'m not a robot" first', "OK");
+    }
   }
 
   // getMonerisTicket(
@@ -825,6 +840,14 @@ export class OrderPage implements OnInit, OnDestroy {
           : "assets/img/union_pay.png";
       case "unionpayonline":
         return "assets/img/union_pay.png";
+    }
+  }
+
+  resolved(captchaResponse: string) {
+    if (captchaResponse === null) {
+      this.isCaptchaResolved = false;
+    } else {
+      this.isCaptchaResolved = true;
     }
   }
 }

@@ -138,6 +138,19 @@
                   </ion-item>
                 </ion-col>
               </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-item class="ion-no-padding ion-no-margin">
+                    <ion-input [placeholder]="'ZIP CODE' | translate" [(ngModel)]="zipCode"></ion-input>
+                    <ion-icon size="12" name="newspaper-outline" slot="start"></ion-icon>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col style="display: flex; justify-content: center;">
+                  <re-captcha (resolved)="resolved($event)" siteKey="6Lf7rP0ZAAAAADpvL5gnU9so6HWYtxDhVdtl4M_J"></re-captcha>
+                </ion-col>
+              </ion-row>
               <ion-row class="ion-no-padding">
                 <ion-col class="col-payment-button col-payment-cc">
                   <ion-button

@@ -21,6 +21,7 @@ import {
   DeviceDetectorModule,
   DeviceDetectorService
 } from "ngx-device-detector";
+import { RecaptchaModule } from "ng-recaptcha";
 
 @NgModule({
   imports: [
@@ -35,7 +36,8 @@ import {
     PricePipeModule,
     StripeModule.forRoot(environment.stripe),
     FooterModule,
-    ComponentsModule
+    ComponentsModule,
+    RecaptchaModule
   ],
   declarations: [OrderPage, MonerisCheckoutComponent, MonerisHtComponent],
   providers: [DeviceDetectorService]
