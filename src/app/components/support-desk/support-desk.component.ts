@@ -115,7 +115,7 @@ export class SupportDeskComponent implements OnInit, OnDestroy {
   getSetting(): void {
     this.api.get(`/Setting`).then((observable) => {
       observable.pipe(takeUntil(this.unsubscribe$)).subscribe((res: any) => {
-        if (res.code === "success") {
+        if (res.code === "success" && res.data.welcomeMessage.trim() !== "") {
           this.welcomeMessage = res.data.welcomeMessage;
           const curMessage = {
             message: this.welcomeMessage,
