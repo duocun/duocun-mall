@@ -107,7 +107,7 @@
   "Save failed": "保存失败",
   "Please adjust the quantity of the product": "请调整产品数量: {{value}}。",
   "Max quantity": "最大数量: {{value}}",
-  "Product is out of stock": "{{value}}已售罄",
+  "Product is out of stock": "{{value}}已售完",
   "Cart item delivery has expired": "交货日期已过期",
   "This product is out of stock": "此产品缺货",
   "Please select delivery date and quantity": "请选择送货时间和商品数量",
@@ -175,5 +175,6 @@
   "Please check \"I'm not a robot\" first": "请先进行人机身份验证",
   "ZIP CODE": "邮编",
   "Zip code length must be 6": "邮编样式必须是：xxxxxx",
-  "Please input zip code": "请输入邮编"
+  "Please input zip code": "请输入邮编",
+  "The product is off the shelf, please empty the shopping cart and select the product again": "货品已下架，请清空购物车，重新选择货品"
 }

@@ -395,6 +395,13 @@ export class OrderPage implements OnInit, OnDestroy {
     } else if (resp.message === "delivery expired") {
       this.showAlert("Notice", "Cart item delivery has expired", "OK");
       this.router.navigate(["/tabs/cart"]);
+    } else if (resp.message === "product not found") {
+      this.showAlert(
+        "Notice",
+        "The product is off the shelf, please empty the shopping cart and select the product again",
+        "OK"
+      );
+      this.router.navigate(["/tabs/cart"]);
     }
   }
 
