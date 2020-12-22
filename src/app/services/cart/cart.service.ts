@@ -118,7 +118,7 @@ export class CartService {
   sanitize() {
     this.cart.items = this.cart.items.filter((item) => {
       if (item.delivery && item.delivery.date) {
-        if (item.delivery.margin && item.delivery.margin < 0) {
+        if (item.delivery.margin !== undefined && item.delivery.margin < 0) {
           if (
             item.delivery.date === moment().add(1, "d").format("YYYY-MM-DD")
           ) {
@@ -131,7 +131,10 @@ export class CartService {
             return false;
           }
           return item.delivery.date > moment().add(1, "d").format("YYYY-MM-DD");
-        } else if (item.delivery.margin && item.delivery.margin > -1) {
+        } else if (
+          item.delivery.margin !== undefined &&
+          item.delivery.margin > -1
+        ) {
           if (item.delivery.date === moment().format("YYYY-MM-DD")) {
             if (parseInt(moment().format("HH"), 10) < item.delivery.margin) {
               return true;
@@ -140,7 +143,7 @@ export class CartService {
           }
         }
         return (
-          item.delivery && item.delivery.date > moment().format("YYYY-MM-dd")
+          item.delivery && item.delivery.date > moment().format("YYYY-MM-DD")
         );
       }
       return true;
