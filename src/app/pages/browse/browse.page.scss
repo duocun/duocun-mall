@@ -58,7 +58,12 @@ ion-row{
       }
       p {
         font-size: 0.75rem;
+        span {
+          font-size: 0.75rem;
+          text-decoration: line-through;
+        }
       }
+      
     }
   }
 }

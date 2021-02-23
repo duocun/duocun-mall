@@ -1,15 +1,12 @@
-
-<header [menu]="true" [title]="title" [search]="bSearchOnTitle" [searchKeyword]="search" (onSearch)="handleSearch($event)"></header>
+<header [menu]="true" [title]="title" [search]="bSearchOnTitle" [searchKeyword]="search"
+  (onSearch)="handleSearch($event)"></header>
 
 <div class="container category-wrap">
-  <ion-searchbar *ngIf="!bSearchOnTitle"
-  placeholder="{{'Search'|translate}}"
-  debounce="1000"
-  (ionChange)="handleSearch($event)"
-  [value]="search"
-  ></ion-searchbar>
-  
-  <category-list [loading]="loading" [categories]="categories" [selectedId]="selectedCategoryId" (onShowAll)="showAll()" (onSelect)="handleSelectCategory($event)">
+  <ion-searchbar *ngIf="!bSearchOnTitle" placeholder="{{'Search'|translate}}" debounce="1000"
+    (ionChange)="handleSearch($event)" [value]="search"></ion-searchbar>
+
+  <category-list [loading]="loading" [categories]="categories" [selectedId]="selectedCategoryId" (onShowAll)="showAll()"
+    (onSelect)="handleSelectCategory($event)">
   </category-list>
 </div>
 
@@ -21,51 +18,29 @@
       <ion-row class="ion-padding-start ion-padding-end">
         <ng-container *ngIf="!loading; Else skeleton">
           <ng-container *ngIf="products.length; Else empty">
-            <ion-col
-              size-xs="4"
-              size-md="3"
-              size-lg="2.4"
-              *ngFor="let product of products"
-            >
-              <ion-card
-                class="ion-no-margin card-product"
-                [routerLink]="getProductSlug(product) ? ['/tabs/browse/products', getProductSlug(product), product._id] : ['/tabs/browse/products', product._id]"
-              >
+            <ion-col size-xs="4" size-md="3" size-lg="2.4" *ngFor="let product of products">
+              <ion-card class="ion-no-margin card-product"
+                [routerLink]="getProductSlug(product) ? ['/tabs/browse/products', getProductSlug(product), product._id] : ['/tabs/browse/products', product._id]">
                 <ion-card-content>
                   <div class="wrapper-product-img">
-                    <app-ion-image
-                      [src]="getPictureUrl(product)"
-                      [alt]="product.name"
-                      style="object-fit: cover; height: 100%;"
-                    ></app-ion-image>
-                    <div
-                      class="overlay-product-img"
-                      *ngIf="isDepleted(product)"
-                    >
-                      <ion-badge
-                        class="badge-out-of-stock"
-                        color="danger"
-                        translate="badge_out_of_stock"
-                      >
+                    <app-ion-image [src]="getPictureUrl(product)" [alt]="product.name"
+                      style="object-fit: cover; height: 100%;"></app-ion-image>
+                    <div class="overlay-product-img" *ngIf="isDepleted(product)">
+                      <ion-badge class="badge-out-of-stock" color="danger" translate="badge_out_of_stock">
                       </ion-badge>
                     </div>
                   </div>
                   <div class="label-product-name">
                     <h3 localValue [data]="product" [key]="'name'"></h3>
-                    <p>{{product.price | currency:'USD':'symbol' }}</p>
+                    <p>{{product.price | currency:'USD':'symbol' }}
+                      <span>{{product.original_price | currency:'USD':'symbol' }}</span>
+                    </p>
                   </div>
                 </ion-card-content>
               </ion-card>
             </ion-col>
-            <ion-infinite-scroll
-              threshold="1px"
-              (ionInfinite)="loadData($event)"
-              [disabled]="scrollDisabled"
-            >
-              <ion-infinite-scroll-content
-                loadingSpinner="bubbles"
-                [loadingText]="'Loading...'|translate"
-              >
+            <ion-infinite-scroll threshold="1px" (ionInfinite)="loadData($event)" [disabled]="scrollDisabled">
+              <ion-infinite-scroll-content loadingSpinner="bubbles" [loadingText]="'Loading...'|translate">
               </ion-infinite-scroll-content>
             </ion-infinite-scroll>
           </ng-container>
@@ -98,19 +73,11 @@
 </ng-template>
 
 <ng-template #skeleton>
-  <ion-col
-    *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]"
-    size-xs="4"
-    size-md="3"
-    size-lg="2.4"
-  >
+  <ion-col *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]" size-xs="4" size-md="3" size-lg="2.4">
     <ion-card class="ion-no-margin card-product">
       <ion-card-content>
         <div class="wrapper-product-img">
-          <app-ion-image
-            src="assets/img/no-image.png"
-            alt="awesome product"
-          ></app-ion-image>
+          <app-ion-image src="assets/img/no-image.png" alt="awesome product"></app-ion-image>
         </div>
         <ion-skeleton-text animated style="height: 0.5rem;"></ion-skeleton-text>
         <ion-skeleton-text animated style="height: 0.5rem;"></ion-skeleton-text>

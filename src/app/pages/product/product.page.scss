@@ -26,6 +26,13 @@
   padding-top: 1rem;
 }
 
+.product-original-price {
+  font-size: 0.75rem !important;
+  margin-left: 0.5rem;
+  color: gray;
+  text-decoration: line-through;
+}
+
 @media(max-width: 280px) {
   .row-schedule {
     justify-content: center;
