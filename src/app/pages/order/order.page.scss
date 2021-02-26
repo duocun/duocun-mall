@@ -128,3 +128,35 @@ ion-item {
 #cardContainer ion-item {
   margin-left: -10px;
 }
+
+.modify-card-inform {
+  margin-left: 1rem;
+  margin-right: 0.5rem;
+}
+
+.save-card-inform {
+  margin-left: 0.5rem;
+  color: #808080
+}
+
+.cancel {
+  color: red; 
+}
+
+.save-checkbox-container {
+  margin-left: 4px;
+  float: left;
+
+  label {
+    margin-left: 5px;
+  }
+}
+
+.save-btn-container {
+  float: right;
+}
+
+.balance {
+  color: red;
+  font-weight: 600;
+}

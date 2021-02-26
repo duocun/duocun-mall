@@ -18,6 +18,12 @@ export interface AccountInterface {
   verified?: boolean;
   pickup?: any;
   verificationCode?: string;
+  cardInfo?: {
+    cc: string;
+    exp: string;
+    cvd: string;
+    zipCode: string;
+  };
 }
 
 export interface RegisterAccountInterface {

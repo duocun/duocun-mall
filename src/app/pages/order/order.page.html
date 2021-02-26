@@ -54,7 +54,7 @@
           <ion-col size="5">{{charge.total|currency:'USD':'symbol'}}</ion-col>
         </ion-row>
         <ion-row *ngIf="charge.balance">
-          <ion-col size="7" translate="Balance"></ion-col>
+          <ion-col size="7" translate="Balance" class="balance"></ion-col>
           <ion-col size="5">{{charge.balance|currency:'USD':'symbol'}}</ion-col>
         </ion-row>
         <ion-row class="border">
@@ -118,31 +118,59 @@
               <ion-row class="ion-no-padding">
                 <ion-col size="12">
                   <ion-item class="ion-no-padding ion-no-margin">
-                    <ion-input [placeholder]="'Credit Card Number'|translate" [(ngModel)]="cc"></ion-input>
+                    <ion-input [placeholder]="'Credit Card Number'|translate" [(ngModel)]="cc" *ngIf="editing"
+                      [disabled]="!editing">
+                    </ion-input>
+                    <ion-input [placeholder]="'Credit Card Number'|translate" value="{{formatCardNum(cc)}}"
+                      *ngIf="!editing" [disabled]="!editing">
+
+                    </ion-input>
                     <ion-icon size="12" name="cash-outline" slot="start"></ion-icon>
                   </ion-item>
                 </ion-col>
               </ion-row>
-              <ion-row>
+              <ion-row *ngIf="editing">
                 <ion-col size="6">
                   <ion-item class="ion-no-padding ion-no-margin">
-                    <ion-input [placeholder]="'Expiry Date'|translate" [(ngModel)]="exp"></ion-input>
+                    <ion-input [placeholder]="'Expiry Date'|translate" [(ngModel)]="exp" [disabled]="!editing">
+                    </ion-input>
                     <ion-icon size="12" name="today-outline" slot="start"></ion-icon>
                   </ion-item>
                 </ion-col>
                 <ion-col size="6">
                   <ion-item class="ion-no-padding ion-no-margin">
-                    <ion-input [placeholder]="'CVD'|translate" [(ngModel)]="cvd"></ion-input>
+                    <ion-input [placeholder]="'CVD'|translate" [(ngModel)]="cvd" [disabled]="!editing"></ion-input>
                     <ion-icon size="12" name="lock-closed-outline" slot="start"></ion-icon>
                   </ion-item>
                 </ion-col>
               </ion-row>
-              <ion-row>
+              <ion-row *ngIf="editing">
                 <ion-col>
                   <ion-item class="ion-no-padding ion-no-margin">
-                    <ion-input [placeholder]="'ZIP CODE' | translate" [(ngModel)]="zipCode"></ion-input>
+                    <ion-input [placeholder]="'ZIP CODE' | translate" [(ngModel)]="zipCode" [disabled]="!editing">
+                    </ion-input>
                     <ion-icon size="12" name="newspaper-outline" slot="start"></ion-icon>
                   </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="6">
+                  <!-- <ion-item *ngIf="editing">
+                    <ion-checkbox class="save-card-inform" [(ngModel)]="saveCheck"></ion-checkbox>
+                    <ion-label class="save-card-inform">{{"Save"| translate}}</ion-label>
+                  </ion-item> -->
+                  <div class="save-checkbox-container" *ngIf="editing">
+                    <input type="checkbox" id="saveCheckBox" [(ngModel)]="saveCheck" />
+                    <label for="saveCheckbox">{{"Save"| translate}}</label>
+                  </div>
+                </ion-col>
+                <ion-col size="6">
+                  <div class="save-btn-container">
+                    <a (click)="enableEditing()">
+                      <span class=" modify-card-inform" *ngIf="!editing">{{"Edit" | translate}}</span>
+                      <span class="modify-card-inform cancel" *ngIf="editing">{{"Cancel" | translate}}</span>
+                    </a>
+                  </div>
                 </ion-col>
               </ion-row>
               <ion-row>

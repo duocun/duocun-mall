@@ -74,6 +74,9 @@ export class OrderPage implements OnInit, OnDestroy {
   paymentGateway = "snappay";
   isCaptchaResolved = false;
   zipCode = "";
+  saveCheck: boolean;
+  editing = true;
+
   private unsubscribe$ = new Subject<void>();
 
   constructor(
@@ -142,6 +145,15 @@ export class OrderPage implements OnInit, OnDestroy {
           });
         }
         this.account = account;
+        if (account.cardInfo.cc == "") {
+          this.editing = true;
+        } else {
+          this.editing = false;
+        }
+        this.cc = account.cardInfo.cc;
+        this.exp = account.cardInfo.exp;
+        this.cvd = account.cardInfo.cvd;
+        this.zipCode = account.cardInfo.zipCode;
         this.setCharge();
         this.locSvc
           .getLocation()
@@ -590,10 +602,25 @@ export class OrderPage implements OnInit, OnDestroy {
               const order: Order.OrderInterface = resp.data[0];
 
               this.paymentSvc
-                .payByCreditCard(order.paymentId, this.cc, this.exp, this.cvd)
+                .payByCreditCard(
+                  order.paymentId,
+                  this.cc,
+                  this.exp,
+                  this.cvd,
+                  this.zipCode,
+                  this.saveCheck
+                )
                 .pipe(takeUntil(this.unsubscribe$))
                 .subscribe((resp: any) => {
                   if (resp.err == PaymentError.NONE) {
+                    if (this.saveCheck) {
+                      this.account.cardInfo = {
+                        cc: this.cc,
+                        exp: this.exp,
+                        cvd: this.cvd,
+                        zipCode: this.zipCode
+                      };
+                    }
                     this.showAlert("Notice", "Payment success", "OK");
                     this.cartSubscription.unsubscribe();
                     this.cartSvc.clearCart();
@@ -601,7 +628,7 @@ export class OrderPage implements OnInit, OnDestroy {
                     // await this.authSvc.updateData(); // try re-login
 
                     this.processing = false;
-                    this.dismissLoading().then(() => {});
+                    this.dismissLoading().then(() => { });
 
                     console.log("navigate to order history");
 
@@ -619,7 +646,7 @@ export class OrderPage implements OnInit, OnDestroy {
                         this.showAlert("Notice", "Payment failed", "OK");
                       }
                       this.processing = false;
-                      this.dismissLoading().then(() => {});
+                      this.dismissLoading().then(() => { });
                     }
                   }
                 });
@@ -855,6 +882,32 @@ export class OrderPage implements OnInit, OnDestroy {
       this.isCaptchaResolved = false;
     } else {
       this.isCaptchaResolved = true;
+    }
+  }
+
+  encryptCardNum(cardNum: string) {
+    return cardNum.replace(/.(?=.{3})/g, "*");
+  }
+
+  formatCardNum(cardNum: string) {
+    return (
+      "⁎⁎⁎⁎ ⁎⁎⁎⁎ ⁎⁎⁎⁎ ⁎⁎⁎⁎ " +
+      cardNum.substring(cardNum.length - 3, cardNum.length)
+    );
+  }
+
+  enableEditing() {
+    this.editing = !this.editing;
+    if (this.editing) {
+      this.cc = "";
+      this.exp = "";
+      this.cvd = "";
+      this.zipCode = "";
+    } else {
+      this.cc = this.account.cardInfo.cc;
+      this.exp = this.account.cardInfo.exp;
+      this.cvd = this.account.cardInfo.cvd;
+      this.zipCode = this.account.cardInfo.zipCode;
     }
   }
 }

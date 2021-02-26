@@ -13,6 +13,7 @@ export interface ProductInterface {
   nameEN: string;
   description?: string;
   price: number;
+  original_price: number;
   cost?: number;
   merchantId: string;
   categoryId: string;

@@ -66,7 +66,14 @@ export class PaymentService {
     );
   }
 
-  payByCreditCard(paymentId: string, cc: string, exp: string, cvd: string) {
-    return this.monerisSvc.pay(paymentId, cc, exp, cvd);
+  payByCreditCard(
+    paymentId: string,
+    cc: string,
+    exp: string,
+    cvd: string,
+    zipCode: string,
+    save: boolean = false
+  ) {
+    return this.monerisSvc.pay(paymentId, cc, exp, cvd, zipCode, save);
   }
 }

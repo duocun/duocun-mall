@@ -32,9 +32,8 @@
                   </div>
                   <div class="label-product-name">
                     <h3 localValue [data]="product" [key]="'name'"></h3>
-                    <p>{{product.price | currency:'USD':'symbol' }}
-                      <span>{{product.original_price | currency:'USD':'symbol' }}</span>
-                    </p>
+                    <p>{{product.price | currency:'USD':'symbol' }}</p>
+                    <p class="original-price">{{product.original_price | currency:'USD':'symbol' }}</p>
                   </div>
                 </ion-card-content>
               </ion-card>

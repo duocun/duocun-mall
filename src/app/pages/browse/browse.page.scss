@@ -56,16 +56,21 @@ ion-row{
         font-size: 0.75rem;
         font-weight: 600;
       }
-      p {
-        font-size: 0.75rem;
-        span {
-          font-size: 0.75rem;
-          text-decoration: line-through;
-        }
+
+      p:not(.original-price) {
+        font-size: .9rem;
+        color: red;
+        font-weight: 600;
       }
-      
     }
   }
+}
+
+.original-price {
+  font-size: 0.75rem;
+  text-decoration: line-through;
+  color: #888888;
+  font-weight: 400;
 }
 
 @media(max-width: 767px) {

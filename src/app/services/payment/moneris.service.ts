@@ -9,12 +9,21 @@ export class MonerisService {
   constructor(private api: ApiService) {}
 
   // return observable
-  pay(paymentId: string, cc: string, exp: string, cvd: string) {
+  pay(
+    paymentId: string,
+    cc: string,
+    exp: string,
+    cvd: string,
+    zipCode: string,
+    save: boolean = false
+  ) {
     return this.api.postV2("payments/moneris/pay", {
       paymentId,
       cc,
       exp,
-      cvd
+      cvd,
+      zipCode,
+      save
     });
   }
 }

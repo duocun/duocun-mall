@@ -33,6 +33,10 @@
   text-decoration: line-through;
 }
 
+.price {
+  color: red;
+}
+
 @media(max-width: 280px) {
   .row-schedule {
     justify-content: center;
