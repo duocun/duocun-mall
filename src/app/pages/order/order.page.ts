@@ -145,15 +145,15 @@ export class OrderPage implements OnInit, OnDestroy {
           });
         }
         this.account = account;
-        if (account.cardInfo.cc == "") {
+        if (!account.cardInfo || account.cardInfo.cc == "") {
           this.editing = true;
         } else {
           this.editing = false;
         }
-        this.cc = account.cardInfo.cc;
-        this.exp = account.cardInfo.exp;
-        this.cvd = account.cardInfo.cvd;
-        this.zipCode = account.cardInfo.zipCode;
+        this.cc = account.cardInfo ? account.cardInfo.cc : "";
+        this.exp = account.cardInfo ? account.cardInfo.exp : "";
+        this.cvd = account.cardInfo ? account.cardInfo.cvd : "";
+        this.zipCode = account.cardInfo ? account.cardInfo.zipCode : "";
         this.setCharge();
         this.locSvc
           .getLocation()
@@ -532,7 +532,7 @@ export class OrderPage implements OnInit, OnDestroy {
     description: string,
     browserType: string
   ) {
-    const returnUrl = `${window.location.origin}/tabs/my-account/transaction-history?state=${appCode}`;
+    const returnUrl = `${window.location.origin}/tabs/my-account/transaction- history?state=${appCode}`;
     // const returnUrl = `https://dev.duocun.ca/tabs/my-account/transaction-history?state=${appCode}`; // for test
     this.paymentSvc
       .payBySnappay(
@@ -628,7 +628,7 @@ export class OrderPage implements OnInit, OnDestroy {
                     // await this.authSvc.updateData(); // try re-login
 
                     this.processing = false;
-                    this.dismissLoading().then(() => { });
+                    this.dismissLoading().then(() => {});
 
                     console.log("navigate to order history");
 
@@ -646,7 +646,7 @@ export class OrderPage implements OnInit, OnDestroy {
                         this.showAlert("Notice", "Payment failed", "OK");
                       }
                       this.processing = false;
-                      this.dismissLoading().then(() => { });
+                      this.dismissLoading().then(() => {});
                     }
                   }
                 });
